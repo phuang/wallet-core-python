@@ -159,12 +159,8 @@ class Enum(Entity):
             line = line.strip()
             if line == '};':
                 break
-            result = re.findall(r'^(\w+) = (\d+|0x[0-9A-Fa-f]+),', line)
-            if result:
-                self._constants.append(result[0][0])
-                continue
 
-            result = re.findall(r'^(\w+)\s*.*', line)
+            result = re.findall(r'^(\w+)\s*.*,?', line)
             if result:
                 print(result[0])
                 self._constants.append(result[0])
