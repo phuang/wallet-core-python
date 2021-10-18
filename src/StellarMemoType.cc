@@ -43,27 +43,27 @@ static PyTypeObject PyStellarMemoTypeType = {
 };
 
 PyObject* PyStellarMemoType_FromTWStellarMemoType(TWStellarMemoType value) {
-    ValuePair* p = nullptr;
+    ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {
-            p = &constant;
+            value_pair = &constant;
             break;
         }
     }
 
-    if (!p) {
+    if (!value_pair) {
         PyErr_Format(PyExc_ValueError, "Invalid StellarMemoType value: %d", value);
         return nullptr;
     }
 
-    if (!p->pyvalue) {
+    if (!value_pair->pyvalue) {
         auto* pyvalue = PyObject_New(PyStellarMemoTypeObject, &PyStellarMemoTypeType);
         *const_cast<TWStellarMemoType*>(&pyvalue->value) = value;
-        p->pyvalue = (PyObject*)pyvalue;
+        value_pair->pyvalue = (PyObject*)pyvalue;
     }
 
-    Py_INCREF(p->pyvalue);
-    return p->pyvalue;
+    Py_INCREF(value_pair->pyvalue);
+    return value_pair->pyvalue;
 }
 
 static int PyStellarMemoType_init(PyStellarMemoTypeObject *self, PyObject *args, PyObject *kwds) {

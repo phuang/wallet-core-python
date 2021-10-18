@@ -40,27 +40,27 @@ static PyTypeObject PySS58AddressTypeType = {
 };
 
 PyObject* PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value) {
-    ValuePair* p = nullptr;
+    ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {
-            p = &constant;
+            value_pair = &constant;
             break;
         }
     }
 
-    if (!p) {
+    if (!value_pair) {
         PyErr_Format(PyExc_ValueError, "Invalid SS58AddressType value: %d", value);
         return nullptr;
     }
 
-    if (!p->pyvalue) {
+    if (!value_pair->pyvalue) {
         auto* pyvalue = PyObject_New(PySS58AddressTypeObject, &PySS58AddressTypeType);
         *const_cast<TWSS58AddressType*>(&pyvalue->value) = value;
-        p->pyvalue = (PyObject*)pyvalue;
+        value_pair->pyvalue = (PyObject*)pyvalue;
     }
 
-    Py_INCREF(p->pyvalue);
-    return p->pyvalue;
+    Py_INCREF(value_pair->pyvalue);
+    return value_pair->pyvalue;
 }
 
 static int PySS58AddressType_init(PySS58AddressTypeObject *self, PyObject *args, PyObject *kwds) {
