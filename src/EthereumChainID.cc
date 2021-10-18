@@ -1,9 +1,9 @@
 #include "EthereumChainID.h"
 
-static PyTypeObject EthereumChainIDType = {
+static PyTypeObject PyEthereumChainIDType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.EthereumChainID",      /* tp_name */
-    sizeof(EthereumChainIDObject),     /* tp_basicsize */
+    sizeof(PyEthereumChainIDObject),   /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,27 +24,26 @@ static PyTypeObject EthereumChainIDType = {
     nullptr,                   /* tp_doc */
 };
 
-int EthereumChainID_init(EthereumChainIDObject *self, PyObject *args, PyObject *kwds) {
+int PyEthereumChainID_init(PyEthereumChainIDObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool EthereumChainID_enum_init(PyObject *module) {
-    
-    EthereumChainIDType.tp_init = (initproc)EthereumChainID_init;
-    EthereumChainIDType.tp_new = PyType_GenericNew;
+bool PyInit_EthereumChainID(PyObject *module) {
+    PyEthereumChainIDType.tp_init = (initproc)PyEthereumChainID_init;
+    PyEthereumChainIDType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&EthereumChainIDType) < 0)
+    if (PyType_Ready(&PyEthereumChainIDType) < 0)
         return false;
-    
-    Py_INCREF(&EthereumChainIDType);
-    if (PyModule_AddObject(module, "EthereumChainID", (PyObject *) &EthereumChainIDType) < 0) {
-        Py_DECREF(&EthereumChainIDType);
+
+    Py_INCREF(&PyEthereumChainIDType);
+    if (PyModule_AddObject(module, "EthereumChainID", (PyObject *) &PyEthereumChainIDType) < 0) {
+        Py_DECREF(&PyEthereumChainIDType);
         return false;
     }
 
-    // auto* o = PyObject_New(EthereumChainIDObject, &EthereumChainIDType);
+    // auto* o = PyObject_New(PyEthereumChainIDObject, &PyEthereumChainIDType);
 
-    PyObject* dict = EthereumChainIDType.tp_dict;
+    PyObject* dict = PyEthereumChainIDType.tp_dict;
     (void)dict;
 
     PyDict_SetItemString(dict, "Ethereum", PyLong_FromLong(TWEthereumChainIDEthereum));

@@ -1,9 +1,9 @@
 #include "Blockchain.h"
 
-static PyTypeObject BlockchainType = {
+static PyTypeObject PyBlockchainType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.Blockchain",      /* tp_name */
-    sizeof(BlockchainObject),     /* tp_basicsize */
+    sizeof(PyBlockchainObject),   /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,27 +24,26 @@ static PyTypeObject BlockchainType = {
     nullptr,                   /* tp_doc */
 };
 
-int Blockchain_init(BlockchainObject *self, PyObject *args, PyObject *kwds) {
+int PyBlockchain_init(PyBlockchainObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool Blockchain_enum_init(PyObject *module) {
-    
-    BlockchainType.tp_init = (initproc)Blockchain_init;
-    BlockchainType.tp_new = PyType_GenericNew;
+bool PyInit_Blockchain(PyObject *module) {
+    PyBlockchainType.tp_init = (initproc)PyBlockchain_init;
+    PyBlockchainType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&BlockchainType) < 0)
+    if (PyType_Ready(&PyBlockchainType) < 0)
         return false;
-    
-    Py_INCREF(&BlockchainType);
-    if (PyModule_AddObject(module, "Blockchain", (PyObject *) &BlockchainType) < 0) {
-        Py_DECREF(&BlockchainType);
+
+    Py_INCREF(&PyBlockchainType);
+    if (PyModule_AddObject(module, "Blockchain", (PyObject *) &PyBlockchainType) < 0) {
+        Py_DECREF(&PyBlockchainType);
         return false;
     }
 
-    // auto* o = PyObject_New(BlockchainObject, &BlockchainType);
+    // auto* o = PyObject_New(PyBlockchainObject, &PyBlockchainType);
 
-    PyObject* dict = BlockchainType.tp_dict;
+    PyObject* dict = PyBlockchainType.tp_dict;
     (void)dict;
 
     PyDict_SetItemString(dict, "Bitcoin", PyLong_FromLong(TWBlockchainBitcoin));

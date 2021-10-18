@@ -1,9 +1,9 @@
 #include "BitcoinSigHashType.h"
 
-static PyTypeObject BitcoinSigHashTypeType = {
+static PyTypeObject PyBitcoinSigHashTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.BitcoinSigHashType",      /* tp_name */
-    sizeof(BitcoinSigHashTypeObject),     /* tp_basicsize */
+    sizeof(PyBitcoinSigHashTypeObject),   /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,27 +24,26 @@ static PyTypeObject BitcoinSigHashTypeType = {
     nullptr,                   /* tp_doc */
 };
 
-int BitcoinSigHashType_init(BitcoinSigHashTypeObject *self, PyObject *args, PyObject *kwds) {
+int PyBitcoinSigHashType_init(PyBitcoinSigHashTypeObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool BitcoinSigHashType_enum_init(PyObject *module) {
-    
-    BitcoinSigHashTypeType.tp_init = (initproc)BitcoinSigHashType_init;
-    BitcoinSigHashTypeType.tp_new = PyType_GenericNew;
+bool PyInit_BitcoinSigHashType(PyObject *module) {
+    PyBitcoinSigHashTypeType.tp_init = (initproc)PyBitcoinSigHashType_init;
+    PyBitcoinSigHashTypeType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&BitcoinSigHashTypeType) < 0)
+    if (PyType_Ready(&PyBitcoinSigHashTypeType) < 0)
         return false;
-    
-    Py_INCREF(&BitcoinSigHashTypeType);
-    if (PyModule_AddObject(module, "BitcoinSigHashType", (PyObject *) &BitcoinSigHashTypeType) < 0) {
-        Py_DECREF(&BitcoinSigHashTypeType);
+
+    Py_INCREF(&PyBitcoinSigHashTypeType);
+    if (PyModule_AddObject(module, "BitcoinSigHashType", (PyObject *) &PyBitcoinSigHashTypeType) < 0) {
+        Py_DECREF(&PyBitcoinSigHashTypeType);
         return false;
     }
 
-    // auto* o = PyObject_New(BitcoinSigHashTypeObject, &BitcoinSigHashTypeType);
+    // auto* o = PyObject_New(PyBitcoinSigHashTypeObject, &PyBitcoinSigHashTypeType);
 
-    PyObject* dict = BitcoinSigHashTypeType.tp_dict;
+    PyObject* dict = PyBitcoinSigHashTypeType.tp_dict;
     (void)dict;
 
     PyDict_SetItemString(dict, "All", PyLong_FromLong(TWBitcoinSigHashTypeAll));

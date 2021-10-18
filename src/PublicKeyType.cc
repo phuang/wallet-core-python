@@ -1,9 +1,9 @@
 #include "PublicKeyType.h"
 
-static PyTypeObject PublicKeyTypeType = {
+static PyTypeObject PyPublicKeyTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.PublicKeyType",      /* tp_name */
-    sizeof(PublicKeyTypeObject),     /* tp_basicsize */
+    sizeof(PyPublicKeyTypeObject),   /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,27 +24,26 @@ static PyTypeObject PublicKeyTypeType = {
     nullptr,                   /* tp_doc */
 };
 
-int PublicKeyType_init(PublicKeyTypeObject *self, PyObject *args, PyObject *kwds) {
+int PyPublicKeyType_init(PyPublicKeyTypeObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool PublicKeyType_enum_init(PyObject *module) {
-    
-    PublicKeyTypeType.tp_init = (initproc)PublicKeyType_init;
-    PublicKeyTypeType.tp_new = PyType_GenericNew;
+bool PyInit_PublicKeyType(PyObject *module) {
+    PyPublicKeyTypeType.tp_init = (initproc)PyPublicKeyType_init;
+    PyPublicKeyTypeType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&PublicKeyTypeType) < 0)
+    if (PyType_Ready(&PyPublicKeyTypeType) < 0)
         return false;
-    
-    Py_INCREF(&PublicKeyTypeType);
-    if (PyModule_AddObject(module, "PublicKeyType", (PyObject *) &PublicKeyTypeType) < 0) {
-        Py_DECREF(&PublicKeyTypeType);
+
+    Py_INCREF(&PyPublicKeyTypeType);
+    if (PyModule_AddObject(module, "PublicKeyType", (PyObject *) &PyPublicKeyTypeType) < 0) {
+        Py_DECREF(&PyPublicKeyTypeType);
         return false;
     }
 
-    // auto* o = PyObject_New(PublicKeyTypeObject, &PublicKeyTypeType);
+    // auto* o = PyObject_New(PyPublicKeyTypeObject, &PyPublicKeyTypeType);
 
-    PyObject* dict = PublicKeyTypeType.tp_dict;
+    PyObject* dict = PyPublicKeyTypeType.tp_dict;
     (void)dict;
 
     PyDict_SetItemString(dict, "SECP256k1", PyLong_FromLong(TWPublicKeyTypeSECP256k1));

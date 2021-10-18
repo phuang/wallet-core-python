@@ -1,9 +1,9 @@
 #include "StellarVersionByte.h"
 
-static PyTypeObject StellarVersionByteType = {
+static PyTypeObject PyStellarVersionByteType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.StellarVersionByte",      /* tp_name */
-    sizeof(StellarVersionByteObject),     /* tp_basicsize */
+    sizeof(PyStellarVersionByteObject),   /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,27 +24,26 @@ static PyTypeObject StellarVersionByteType = {
     nullptr,                   /* tp_doc */
 };
 
-int StellarVersionByte_init(StellarVersionByteObject *self, PyObject *args, PyObject *kwds) {
+int PyStellarVersionByte_init(PyStellarVersionByteObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool StellarVersionByte_enum_init(PyObject *module) {
-    
-    StellarVersionByteType.tp_init = (initproc)StellarVersionByte_init;
-    StellarVersionByteType.tp_new = PyType_GenericNew;
+bool PyInit_StellarVersionByte(PyObject *module) {
+    PyStellarVersionByteType.tp_init = (initproc)PyStellarVersionByte_init;
+    PyStellarVersionByteType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&StellarVersionByteType) < 0)
+    if (PyType_Ready(&PyStellarVersionByteType) < 0)
         return false;
-    
-    Py_INCREF(&StellarVersionByteType);
-    if (PyModule_AddObject(module, "StellarVersionByte", (PyObject *) &StellarVersionByteType) < 0) {
-        Py_DECREF(&StellarVersionByteType);
+
+    Py_INCREF(&PyStellarVersionByteType);
+    if (PyModule_AddObject(module, "StellarVersionByte", (PyObject *) &PyStellarVersionByteType) < 0) {
+        Py_DECREF(&PyStellarVersionByteType);
         return false;
     }
 
-    // auto* o = PyObject_New(StellarVersionByteObject, &StellarVersionByteType);
+    // auto* o = PyObject_New(PyStellarVersionByteObject, &PyStellarVersionByteType);
 
-    PyObject* dict = StellarVersionByteType.tp_dict;
+    PyObject* dict = PyStellarVersionByteType.tp_dict;
     (void)dict;
 
     PyDict_SetItemString(dict, "AccountID", PyLong_FromLong(TWStellarVersionByteAccountID));

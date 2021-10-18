@@ -26,7 +26,7 @@ class Generator:
         names.sort()
         
         includes = '\n'.join(['#include "{}.h"'.format(f) for f in names])
-        functions = '\n'.join(['    {}_enum_init,'.format(f) for f in names])
+        functions = '\n'.join(['    PyInit_{},'.format(f) for f in names])
 
         values = { 'functions' : functions, 'includes' : includes }
         with open(os.path.join(OUTPUT_DIR, 'module.cc'), 'w') as out:

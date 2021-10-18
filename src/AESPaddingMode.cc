@@ -1,9 +1,9 @@
 #include "AESPaddingMode.h"
 
-static PyTypeObject AESPaddingModeType = {
+static PyTypeObject PyAESPaddingModeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.AESPaddingMode",      /* tp_name */
-    sizeof(AESPaddingModeObject),     /* tp_basicsize */
+    sizeof(PyAESPaddingModeObject),   /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,27 +24,26 @@ static PyTypeObject AESPaddingModeType = {
     nullptr,                   /* tp_doc */
 };
 
-int AESPaddingMode_init(AESPaddingModeObject *self, PyObject *args, PyObject *kwds) {
+int PyAESPaddingMode_init(PyAESPaddingModeObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool AESPaddingMode_enum_init(PyObject *module) {
-    
-    AESPaddingModeType.tp_init = (initproc)AESPaddingMode_init;
-    AESPaddingModeType.tp_new = PyType_GenericNew;
+bool PyInit_AESPaddingMode(PyObject *module) {
+    PyAESPaddingModeType.tp_init = (initproc)PyAESPaddingMode_init;
+    PyAESPaddingModeType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&AESPaddingModeType) < 0)
+    if (PyType_Ready(&PyAESPaddingModeType) < 0)
         return false;
-    
-    Py_INCREF(&AESPaddingModeType);
-    if (PyModule_AddObject(module, "AESPaddingMode", (PyObject *) &AESPaddingModeType) < 0) {
-        Py_DECREF(&AESPaddingModeType);
+
+    Py_INCREF(&PyAESPaddingModeType);
+    if (PyModule_AddObject(module, "AESPaddingMode", (PyObject *) &PyAESPaddingModeType) < 0) {
+        Py_DECREF(&PyAESPaddingModeType);
         return false;
     }
 
-    // auto* o = PyObject_New(AESPaddingModeObject, &AESPaddingModeType);
+    // auto* o = PyObject_New(PyAESPaddingModeObject, &PyAESPaddingModeType);
 
-    PyObject* dict = AESPaddingModeType.tp_dict;
+    PyObject* dict = PyAESPaddingModeType.tp_dict;
     (void)dict;
 
     PyDict_SetItemString(dict, "Zero", PyLong_FromLong(TWAESPaddingModeZero));

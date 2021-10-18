@@ -1,9 +1,9 @@
 #include "HDVersion.h"
 
-static PyTypeObject HDVersionType = {
+static PyTypeObject PyHDVersionType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.HDVersion",      /* tp_name */
-    sizeof(HDVersionObject),     /* tp_basicsize */
+    sizeof(PyHDVersionObject),   /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,27 +24,26 @@ static PyTypeObject HDVersionType = {
     nullptr,                   /* tp_doc */
 };
 
-int HDVersion_init(HDVersionObject *self, PyObject *args, PyObject *kwds) {
+int PyHDVersion_init(PyHDVersionObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool HDVersion_enum_init(PyObject *module) {
-    
-    HDVersionType.tp_init = (initproc)HDVersion_init;
-    HDVersionType.tp_new = PyType_GenericNew;
+bool PyInit_HDVersion(PyObject *module) {
+    PyHDVersionType.tp_init = (initproc)PyHDVersion_init;
+    PyHDVersionType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&HDVersionType) < 0)
+    if (PyType_Ready(&PyHDVersionType) < 0)
         return false;
-    
-    Py_INCREF(&HDVersionType);
-    if (PyModule_AddObject(module, "HDVersion", (PyObject *) &HDVersionType) < 0) {
-        Py_DECREF(&HDVersionType);
+
+    Py_INCREF(&PyHDVersionType);
+    if (PyModule_AddObject(module, "HDVersion", (PyObject *) &PyHDVersionType) < 0) {
+        Py_DECREF(&PyHDVersionType);
         return false;
     }
 
-    // auto* o = PyObject_New(HDVersionObject, &HDVersionType);
+    // auto* o = PyObject_New(PyHDVersionObject, &PyHDVersionType);
 
-    PyObject* dict = HDVersionType.tp_dict;
+    PyObject* dict = PyHDVersionType.tp_dict;
     (void)dict;
 
     PyDict_SetItemString(dict, "None", PyLong_FromLong(TWHDVersionNone));

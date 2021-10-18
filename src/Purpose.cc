@@ -1,9 +1,9 @@
 #include "Purpose.h"
 
-static PyTypeObject PurposeType = {
+static PyTypeObject PyPurposeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.Purpose",      /* tp_name */
-    sizeof(PurposeObject),     /* tp_basicsize */
+    sizeof(PyPurposeObject),   /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,27 +24,26 @@ static PyTypeObject PurposeType = {
     nullptr,                   /* tp_doc */
 };
 
-int Purpose_init(PurposeObject *self, PyObject *args, PyObject *kwds) {
+int PyPurpose_init(PyPurposeObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool Purpose_enum_init(PyObject *module) {
-    
-    PurposeType.tp_init = (initproc)Purpose_init;
-    PurposeType.tp_new = PyType_GenericNew;
+bool PyInit_Purpose(PyObject *module) {
+    PyPurposeType.tp_init = (initproc)PyPurpose_init;
+    PyPurposeType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&PurposeType) < 0)
+    if (PyType_Ready(&PyPurposeType) < 0)
         return false;
-    
-    Py_INCREF(&PurposeType);
-    if (PyModule_AddObject(module, "Purpose", (PyObject *) &PurposeType) < 0) {
-        Py_DECREF(&PurposeType);
+
+    Py_INCREF(&PyPurposeType);
+    if (PyModule_AddObject(module, "Purpose", (PyObject *) &PyPurposeType) < 0) {
+        Py_DECREF(&PyPurposeType);
         return false;
     }
 
-    // auto* o = PyObject_New(PurposeObject, &PurposeType);
+    // auto* o = PyObject_New(PyPurposeObject, &PyPurposeType);
 
-    PyObject* dict = PurposeType.tp_dict;
+    PyObject* dict = PyPurposeType.tp_dict;
     (void)dict;
 
     PyDict_SetItemString(dict, "BIP44", PyLong_FromLong(TWPurposeBIP44));

@@ -1,9 +1,9 @@
 #include "HRP.h"
 
-static PyTypeObject HRPType = {
+static PyTypeObject PyHRPType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.HRP",      /* tp_name */
-    sizeof(HRPObject),     /* tp_basicsize */
+    sizeof(PyHRPObject),   /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,27 +24,26 @@ static PyTypeObject HRPType = {
     nullptr,                   /* tp_doc */
 };
 
-int HRP_init(HRPObject *self, PyObject *args, PyObject *kwds) {
+int PyHRP_init(PyHRPObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool HRP_enum_init(PyObject *module) {
-    
-    HRPType.tp_init = (initproc)HRP_init;
-    HRPType.tp_new = PyType_GenericNew;
+bool PyInit_HRP(PyObject *module) {
+    PyHRPType.tp_init = (initproc)PyHRP_init;
+    PyHRPType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&HRPType) < 0)
+    if (PyType_Ready(&PyHRPType) < 0)
         return false;
-    
-    Py_INCREF(&HRPType);
-    if (PyModule_AddObject(module, "HRP", (PyObject *) &HRPType) < 0) {
-        Py_DECREF(&HRPType);
+
+    Py_INCREF(&PyHRPType);
+    if (PyModule_AddObject(module, "HRP", (PyObject *) &PyHRPType) < 0) {
+        Py_DECREF(&PyHRPType);
         return false;
     }
 
-    // auto* o = PyObject_New(HRPObject, &HRPType);
+    // auto* o = PyObject_New(PyHRPObject, &PyHRPType);
 
-    PyObject* dict = HRPType.tp_dict;
+    PyObject* dict = PyHRPType.tp_dict;
     (void)dict;
 
 

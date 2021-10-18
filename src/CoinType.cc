@@ -1,9 +1,9 @@
 #include "CoinType.h"
 
-static PyTypeObject CoinTypeType = {
+static PyTypeObject PyCoinTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.CoinType",      /* tp_name */
-    sizeof(CoinTypeObject),     /* tp_basicsize */
+    sizeof(PyCoinTypeObject),   /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,27 +24,26 @@ static PyTypeObject CoinTypeType = {
     nullptr,                   /* tp_doc */
 };
 
-int CoinType_init(CoinTypeObject *self, PyObject *args, PyObject *kwds) {
+int PyCoinType_init(PyCoinTypeObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool CoinType_enum_init(PyObject *module) {
-    
-    CoinTypeType.tp_init = (initproc)CoinType_init;
-    CoinTypeType.tp_new = PyType_GenericNew;
+bool PyInit_CoinType(PyObject *module) {
+    PyCoinTypeType.tp_init = (initproc)PyCoinType_init;
+    PyCoinTypeType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&CoinTypeType) < 0)
+    if (PyType_Ready(&PyCoinTypeType) < 0)
         return false;
-    
-    Py_INCREF(&CoinTypeType);
-    if (PyModule_AddObject(module, "CoinType", (PyObject *) &CoinTypeType) < 0) {
-        Py_DECREF(&CoinTypeType);
+
+    Py_INCREF(&PyCoinTypeType);
+    if (PyModule_AddObject(module, "CoinType", (PyObject *) &PyCoinTypeType) < 0) {
+        Py_DECREF(&PyCoinTypeType);
         return false;
     }
 
-    // auto* o = PyObject_New(CoinTypeObject, &CoinTypeType);
+    // auto* o = PyObject_New(PyCoinTypeObject, &PyCoinTypeType);
 
-    PyObject* dict = CoinTypeType.tp_dict;
+    PyObject* dict = PyCoinTypeType.tp_dict;
     (void)dict;
 
     PyDict_SetItemString(dict, "Aeternity", PyLong_FromLong(TWCoinTypeAeternity));

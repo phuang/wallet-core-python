@@ -1,9 +1,9 @@
 #include "StellarMemoType.h"
 
-static PyTypeObject StellarMemoTypeType = {
+static PyTypeObject PyStellarMemoTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.StellarMemoType",      /* tp_name */
-    sizeof(StellarMemoTypeObject),     /* tp_basicsize */
+    sizeof(PyStellarMemoTypeObject),   /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,27 +24,26 @@ static PyTypeObject StellarMemoTypeType = {
     nullptr,                   /* tp_doc */
 };
 
-int StellarMemoType_init(StellarMemoTypeObject *self, PyObject *args, PyObject *kwds) {
+int PyStellarMemoType_init(PyStellarMemoTypeObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool StellarMemoType_enum_init(PyObject *module) {
-    
-    StellarMemoTypeType.tp_init = (initproc)StellarMemoType_init;
-    StellarMemoTypeType.tp_new = PyType_GenericNew;
+bool PyInit_StellarMemoType(PyObject *module) {
+    PyStellarMemoTypeType.tp_init = (initproc)PyStellarMemoType_init;
+    PyStellarMemoTypeType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&StellarMemoTypeType) < 0)
+    if (PyType_Ready(&PyStellarMemoTypeType) < 0)
         return false;
-    
-    Py_INCREF(&StellarMemoTypeType);
-    if (PyModule_AddObject(module, "StellarMemoType", (PyObject *) &StellarMemoTypeType) < 0) {
-        Py_DECREF(&StellarMemoTypeType);
+
+    Py_INCREF(&PyStellarMemoTypeType);
+    if (PyModule_AddObject(module, "StellarMemoType", (PyObject *) &PyStellarMemoTypeType) < 0) {
+        Py_DECREF(&PyStellarMemoTypeType);
         return false;
     }
 
-    // auto* o = PyObject_New(StellarMemoTypeObject, &StellarMemoTypeType);
+    // auto* o = PyObject_New(PyStellarMemoTypeObject, &PyStellarMemoTypeType);
 
-    PyObject* dict = StellarMemoTypeType.tp_dict;
+    PyObject* dict = PyStellarMemoTypeType.tp_dict;
     (void)dict;
 
     PyDict_SetItemString(dict, "None", PyLong_FromLong(TWStellarMemoTypeNone));

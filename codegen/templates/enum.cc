@@ -1,9 +1,9 @@
 #include "${name}.h"
 
-static PyTypeObject ${name}Type = {
+static PyTypeObject Py${name}Type = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.${name}",      /* tp_name */
-    sizeof(${name}Object),     /* tp_basicsize */
+    sizeof(Py${name}Object),   /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,26 +24,26 @@ static PyTypeObject ${name}Type = {
     nullptr,                   /* tp_doc */
 };
 
-int ${name}_init(${name}Object *self, PyObject *args, PyObject *kwds) {
+int Py${name}_init(Py${name}Object *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool ${name}_enum_init(PyObject *module) {
-    ${name}Type.tp_init = (initproc)${name}_init;
-    ${name}Type.tp_new = PyType_GenericNew;
+bool PyInit_${name}(PyObject *module) {
+    Py${name}Type.tp_init = (initproc)Py${name}_init;
+    Py${name}Type.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&${name}Type) < 0)
+    if (PyType_Ready(&Py${name}Type) < 0)
         return false;
 
-    Py_INCREF(&${name}Type);
-    if (PyModule_AddObject(module, "${name}", (PyObject *) &${name}Type) < 0) {
-        Py_DECREF(&${name}Type);
+    Py_INCREF(&Py${name}Type);
+    if (PyModule_AddObject(module, "${name}", (PyObject *) &Py${name}Type) < 0) {
+        Py_DECREF(&Py${name}Type);
         return false;
     }
 
-    // auto* o = PyObject_New(${name}Object, &${name}Type);
+    // auto* o = PyObject_New(Py${name}Object, &Py${name}Type);
 
-    PyObject* dict = ${name}Type.tp_dict;
+    PyObject* dict = Py${name}Type.tp_dict;
     (void)dict;
 
 ${constants}

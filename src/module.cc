@@ -18,20 +18,20 @@
 
 typedef bool (*InitProc)(PyObject* module);
 const InitProc init_functions[]= {
-    AESPaddingMode_enum_init,
-    BitcoinSigHashType_enum_init,
-    Blockchain_enum_init,
-    CoinType_enum_init,
-    Curve_enum_init,
-    EthereumChainID_enum_init,
-    HDVersion_enum_init,
-    HRP_enum_init,
-    PublicKeyType_enum_init,
-    Purpose_enum_init,
-    SS58AddressType_enum_init,
-    StellarMemoType_enum_init,
-    StellarPassphrase_enum_init,
-    StellarVersionByte_enum_init,
+    PyInit_AESPaddingMode,
+    PyInit_BitcoinSigHashType,
+    PyInit_Blockchain,
+    PyInit_CoinType,
+    PyInit_Curve,
+    PyInit_EthereumChainID,
+    PyInit_HDVersion,
+    PyInit_HRP,
+    PyInit_PublicKeyType,
+    PyInit_Purpose,
+    PyInit_SS58AddressType,
+    PyInit_StellarMemoType,
+    PyInit_StellarPassphrase,
+    PyInit_StellarVersionByte,
 };
 
 PyMODINIT_FUNC
