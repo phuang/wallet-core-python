@@ -1,9 +1,9 @@
-#include "${name}.h"
+#include "Purpose.h"
 
-static PyTypeObject ${name}Type = {
+static PyTypeObject PurposeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "walletcore.${name}",      /* tp_name */
-    sizeof(${name}Object),     /* tp_basicsize */
+    "walletcore.Purpose",      /* tp_name */
+    sizeof(PurposeObject),     /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,29 +24,33 @@ static PyTypeObject ${name}Type = {
     nullptr,                   /* tp_doc */
 };
 
-int ${name}_init(${name}Object *self, PyObject *args, PyObject *kwds) {
+int Purpose_init(PurposeObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool ${name}_enum_init(PyObject *module) {
-    ${name}Type.tp_init = (initproc)${name}_init;
-    ${name}Type.tp_new = PyType_GenericNew;
+bool Purpose_enum_init(PyObject *module) {
+    
+    PurposeType.tp_init = (initproc)Purpose_init;
+    PurposeType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&${name}Type) < 0)
+    if (PyType_Ready(&PurposeType) < 0)
         return false;
-
-    Py_INCREF(&${name}Type);
-    if (PyModule_AddObject(module, "${name}", (PyObject *) &${name}Type) < 0) {
-        Py_DECREF(&${name}Type);
+    
+    Py_INCREF(&PurposeType);
+    if (PyModule_AddObject(module, "Purpose", (PyObject *) &PurposeType) < 0) {
+        Py_DECREF(&PurposeType);
         return false;
     }
 
-    // auto* o = PyObject_New(${name}Object, &${name}Type);
+    // auto* o = PyObject_New(PurposeObject, &PurposeType);
 
-    PyObject* dict = ${name}Type.tp_dict;
+    PyObject* dict = PurposeType.tp_dict;
     (void)dict;
 
-${constants}
+    PyDict_SetItemString(dict, "BIP44", PyLong_FromLong(TWPurposeBIP44));
+    PyDict_SetItemString(dict, "BIP49", PyLong_FromLong(TWPurposeBIP49));
+    PyDict_SetItemString(dict, "BIP84", PyLong_FromLong(TWPurposeBIP84));
+    PyDict_SetItemString(dict, "BIP1852", PyLong_FromLong(TWPurposeBIP1852));
 
     return true;
 }

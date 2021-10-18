@@ -1,9 +1,9 @@
-#include "${name}.h"
+#include "SS58AddressType.h"
 
-static PyTypeObject ${name}Type = {
+static PyTypeObject SS58AddressTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "walletcore.${name}",      /* tp_name */
-    sizeof(${name}Object),     /* tp_basicsize */
+    "walletcore.SS58AddressType",      /* tp_name */
+    sizeof(SS58AddressTypeObject),     /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,29 +24,31 @@ static PyTypeObject ${name}Type = {
     nullptr,                   /* tp_doc */
 };
 
-int ${name}_init(${name}Object *self, PyObject *args, PyObject *kwds) {
+int SS58AddressType_init(SS58AddressTypeObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool ${name}_enum_init(PyObject *module) {
-    ${name}Type.tp_init = (initproc)${name}_init;
-    ${name}Type.tp_new = PyType_GenericNew;
+bool SS58AddressType_enum_init(PyObject *module) {
+    
+    SS58AddressTypeType.tp_init = (initproc)SS58AddressType_init;
+    SS58AddressTypeType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&${name}Type) < 0)
+    if (PyType_Ready(&SS58AddressTypeType) < 0)
         return false;
-
-    Py_INCREF(&${name}Type);
-    if (PyModule_AddObject(module, "${name}", (PyObject *) &${name}Type) < 0) {
-        Py_DECREF(&${name}Type);
+    
+    Py_INCREF(&SS58AddressTypeType);
+    if (PyModule_AddObject(module, "SS58AddressType", (PyObject *) &SS58AddressTypeType) < 0) {
+        Py_DECREF(&SS58AddressTypeType);
         return false;
     }
 
-    // auto* o = PyObject_New(${name}Object, &${name}Type);
+    // auto* o = PyObject_New(SS58AddressTypeObject, &SS58AddressTypeType);
 
-    PyObject* dict = ${name}Type.tp_dict;
+    PyObject* dict = SS58AddressTypeType.tp_dict;
     (void)dict;
 
-${constants}
+    PyDict_SetItemString(dict, "Polkadot", PyLong_FromLong(TWSS58AddressTypePolkadot));
+    PyDict_SetItemString(dict, "Kusama", PyLong_FromLong(TWSS58AddressTypeKusama));
 
     return true;
 }

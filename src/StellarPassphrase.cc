@@ -1,9 +1,9 @@
-#include "${name}.h"
+#include "StellarPassphrase.h"
 
-static PyTypeObject ${name}Type = {
+static PyTypeObject StellarPassphraseType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "walletcore.${name}",      /* tp_name */
-    sizeof(${name}Object),     /* tp_basicsize */
+    "walletcore.StellarPassphrase",      /* tp_name */
+    sizeof(StellarPassphraseObject),     /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,29 +24,30 @@ static PyTypeObject ${name}Type = {
     nullptr,                   /* tp_doc */
 };
 
-int ${name}_init(${name}Object *self, PyObject *args, PyObject *kwds) {
+int StellarPassphrase_init(StellarPassphraseObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool ${name}_enum_init(PyObject *module) {
-    ${name}Type.tp_init = (initproc)${name}_init;
-    ${name}Type.tp_new = PyType_GenericNew;
+bool StellarPassphrase_enum_init(PyObject *module) {
+    
+    StellarPassphraseType.tp_init = (initproc)StellarPassphrase_init;
+    StellarPassphraseType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&${name}Type) < 0)
+    if (PyType_Ready(&StellarPassphraseType) < 0)
         return false;
-
-    Py_INCREF(&${name}Type);
-    if (PyModule_AddObject(module, "${name}", (PyObject *) &${name}Type) < 0) {
-        Py_DECREF(&${name}Type);
+    
+    Py_INCREF(&StellarPassphraseType);
+    if (PyModule_AddObject(module, "StellarPassphrase", (PyObject *) &StellarPassphraseType) < 0) {
+        Py_DECREF(&StellarPassphraseType);
         return false;
     }
 
-    // auto* o = PyObject_New(${name}Object, &${name}Type);
+    // auto* o = PyObject_New(StellarPassphraseObject, &StellarPassphraseType);
 
-    PyObject* dict = ${name}Type.tp_dict;
+    PyObject* dict = StellarPassphraseType.tp_dict;
     (void)dict;
 
-${constants}
+
 
     return true;
 }

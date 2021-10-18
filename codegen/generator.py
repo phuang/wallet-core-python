@@ -19,18 +19,16 @@ class Generator:
         return Template(open(filepath).read())
 
     def generate(self):
-        functions = []
+        names = []
         for enum in self._parser._enums:
             self.generate_enum(enum)
-            functions.append(enum._name[2:])
+            names.append(enum._name[2:])
+        names.sort()
         
-        declares = ['bool {}_init(PyObject* module);'.format(f) for f in functions]
-        declares = '\n'.join(declares)
+        includes = '\n'.join(['#include "{}.h"'.format(f) for f in names])
+        functions = '\n'.join(['    {}_enum_init,'.format(f) for f in names])
 
-        functions = ['    {}_init,'.format(f) for f in functions]
-        functions = '\n'.join(functions)
-
-        values = { 'functions' : functions, 'declares' : declares }
+        values = { 'functions' : functions, 'includes' : includes }
         with open(os.path.join(OUTPUT_DIR, 'module.cc'), 'w') as out:
             template = self.template('module.cc')
             out.write(template.substitute(values))
@@ -50,7 +48,11 @@ class Generator:
         values = { 'name' : name, 'constants' : constants }
         
         with open(os.path.join(OUTPUT_DIR, name) + '.cc', 'w') as out:
-            template = self.template('enum.cc')            
+            template = self.template('enum.cc')
+            out.write(template.substitute(values))
+
+        with open(os.path.join(OUTPUT_DIR, name) + '.h', 'w') as out:
+            template = self.template('enum.h')
             out.write(template.substitute(values))
 
 

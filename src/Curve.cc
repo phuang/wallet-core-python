@@ -1,9 +1,9 @@
-#include "${name}.h"
+#include "Curve.h"
 
-static PyTypeObject ${name}Type = {
+static PyTypeObject CurveType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "walletcore.${name}",      /* tp_name */
-    sizeof(${name}Object),     /* tp_basicsize */
+    "walletcore.Curve",      /* tp_name */
+    sizeof(CurveObject),     /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -24,29 +24,30 @@ static PyTypeObject ${name}Type = {
     nullptr,                   /* tp_doc */
 };
 
-int ${name}_init(${name}Object *self, PyObject *args, PyObject *kwds) {
+int Curve_init(CurveObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
-bool ${name}_enum_init(PyObject *module) {
-    ${name}Type.tp_init = (initproc)${name}_init;
-    ${name}Type.tp_new = PyType_GenericNew;
+bool Curve_enum_init(PyObject *module) {
+    
+    CurveType.tp_init = (initproc)Curve_init;
+    CurveType.tp_new = PyType_GenericNew;
 
-    if (PyType_Ready(&${name}Type) < 0)
+    if (PyType_Ready(&CurveType) < 0)
         return false;
-
-    Py_INCREF(&${name}Type);
-    if (PyModule_AddObject(module, "${name}", (PyObject *) &${name}Type) < 0) {
-        Py_DECREF(&${name}Type);
+    
+    Py_INCREF(&CurveType);
+    if (PyModule_AddObject(module, "Curve", (PyObject *) &CurveType) < 0) {
+        Py_DECREF(&CurveType);
         return false;
     }
 
-    // auto* o = PyObject_New(${name}Object, &${name}Type);
+    // auto* o = PyObject_New(CurveObject, &CurveType);
 
-    PyObject* dict = ${name}Type.tp_dict;
+    PyObject* dict = CurveType.tp_dict;
     (void)dict;
 
-${constants}
+
 
     return true;
 }
