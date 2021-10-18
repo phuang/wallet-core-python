@@ -3,7 +3,12 @@
 #include "Curve.h"
 
 #define CONSTANTS(I) \
-
+    I(SECP256k1) \
+    I(ED25519) \
+    I(ED25519Blake2bNano) \
+    I(Curve25519) \
+    I(NIST256p1) \
+    I(ED25519Extended) \
 
 struct ValuePair {
     TWCurve value;

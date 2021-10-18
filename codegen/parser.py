@@ -18,7 +18,7 @@ class Type:
         self._is_nonnull = False
         if self._is_ptr:
             self._is_nonnull = words[1].strip() == '_Nonnull'
-        
+
         words = words[0].split()
         self._name = words.pop()
 
@@ -55,7 +55,7 @@ class Argument:
         type, name = text.rsplit(' ', 1)
         self._name = name
         self._type = Type(type)
-    
+
     def __str__(self):
         return '%s %s' % (str(self._type), self._name)
 
@@ -75,7 +75,7 @@ class Function:
             self._args = [Argument(arg) for arg in args]
         else:
             self._args = []
-    
+
     def __str__(self):
         args = map(str, self._args)
         return '%s %s(%s)' % (str(self._type), self._name, ', '.join(args))
@@ -88,7 +88,7 @@ class Entity:
         self._properties = []
         self._static_methods = []
         self._static_properties = []
-    
+
     def __str__(self):
         lines = []
         for method in self._methods:
@@ -106,9 +106,9 @@ class Entity:
         for property in self._static_properties:
             lines.append('TW_EXPORT_STATIC_PROPERTY')
             lines.append(str(property))
-        
+
         return '\n'.join(lines)
-    
+
     def parse(self):
         assert not self._methods
         assert not self._properties
@@ -152,7 +152,7 @@ class Enum(Entity):
         self._name = re.findall(r'^enum (\w+) {', line)[0]
 
         print('Found enum %s' % self._name)
-        
+
         # parse constants in the enum
         self._constants = []
         for line in self._file:
@@ -160,14 +160,21 @@ class Enum(Entity):
             if line == '};':
                 break
             result = re.findall(r'^(\w+) = (\d+|0x[0-9A-Fa-f]+),', line)
-            if not result:
+            if result:
+                self._constants.append(result[0][0])
                 continue
-            # result[0] = (name, value)
-            self._constants.append(result[0])
-        
+
+            result = re.findall(r'^(\w+)\s*.*,', line)
+            if result:
+                print(result[0])
+                self._constants.append(result[0])
+                continue
+
+        if not self._constants:
+            raise Exception('No constants in {}'.format(self._name))
         # parse rest of the file
         Entity.parse(self)
-    
+
     def __str__(self):
         lines = []
         lines.append('TW_EXPORT_ENUM(%s)' % self._enum_type)
@@ -197,7 +204,7 @@ class Class(Entity):
 
         # parse rest of the file
         Entity.parse(self)
-    
+
     def __str__(self):
         lines = []
         lines.append('TW_EXPORT_%s ' % self._type.upper())

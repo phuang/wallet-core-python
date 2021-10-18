@@ -24,7 +24,6 @@ module = Extension('walletcore',
                     library_dirs = [ WALLET_CORE_BUILD, TREZOR_CRYPTO ],
                     libraries = [ 'TrezorCrypto', 'TrustWalletCore', 'protobuf' ],
                     extra_link_args = link_args,
-                    headers = glob('src/*.h'),
                     sources = glob('src/*.cc'))
 
 setup (name = 'walletcore',

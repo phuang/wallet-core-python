@@ -3,7 +3,30 @@
 #include "HRP.h"
 
 #define CONSTANTS(I) \
-
+    I(Unknown) \
+    I(Bitcoin) \
+    I(Litecoin) \
+    I(Viacoin) \
+    I(Groestlcoin) \
+    I(DigiByte) \
+    I(Monacoin) \
+    I(Cosmos) \
+    I(BitcoinCash) \
+    I(BitcoinGold) \
+    I(IoTeX) \
+    I(Zilliqa) \
+    I(Terra) \
+    I(CryptoOrg) \
+    I(Kava) \
+    I(Oasis) \
+    I(Bluzelle) \
+    I(BandChain) \
+    I(Elrond) \
+    I(Binance) \
+    I(THORChain) \
+    I(Harmony) \
+    I(Cardano) \
+    I(Qtum) \
 
 struct ValuePair {
     TWHRP value;

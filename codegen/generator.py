@@ -39,7 +39,7 @@ class Generator:
         name = name[2:]
 
         constants = []
-        for fullname, v in enum._constants:
+        for fullname in enum._constants:
             assert fullname.startswith('TW' + name)
             shortname = fullname[2 + len(name):]
             constants.append('    I({}) \\'.format(shortname))

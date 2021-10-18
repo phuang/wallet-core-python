@@ -3,7 +3,8 @@
 #include "StellarPassphrase.h"
 
 #define CONSTANTS(I) \
-
+    I(Stellar) \
+    I(Kin) \
 
 struct ValuePair {
     TWStellarPassphrase value;
