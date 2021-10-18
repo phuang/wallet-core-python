@@ -7,10 +7,13 @@
 
 #include <TrustWalletCore/TWAESPaddingMode.h>
 
+extern PyTypeObject PyAESPaddingModeType;
+
 struct PyAESPaddingModeObject {
     PyObject_HEAD
     const TWAESPaddingMode value;
 };
 
 PyObject* PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode value);
+
 bool PyInit_AESPaddingMode(PyObject *module);

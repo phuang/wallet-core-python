@@ -14,13 +14,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWBitcoinSigHashType##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PyBitcoinSigHashTypeType = {
+PyTypeObject PyBitcoinSigHashTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.BitcoinSigHashType",      /* tp_name */
     sizeof(PyBitcoinSigHashTypeObject),   /* tp_basicsize */
@@ -45,6 +39,13 @@ static PyTypeObject PyBitcoinSigHashTypeType = {
 };
 
 PyObject* PyBitcoinSigHashType_FromTWBitcoinSigHashType(TWBitcoinSigHashType value) {
+
+#define I(name) { TWBitcoinSigHashType##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

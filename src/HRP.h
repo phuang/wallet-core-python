@@ -7,10 +7,13 @@
 
 #include <TrustWalletCore/TWHRP.h>
 
+extern PyTypeObject PyHRPType;
+
 struct PyHRPObject {
     PyObject_HEAD
     const TWHRP value;
 };
 
 PyObject* PyHRP_FromTWHRP(TWHRP value);
+
 bool PyInit_HRP(PyObject *module);

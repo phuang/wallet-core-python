@@ -83,13 +83,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWCoinType##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PyCoinTypeType = {
+PyTypeObject PyCoinTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.CoinType",      /* tp_name */
     sizeof(PyCoinTypeObject),   /* tp_basicsize */
@@ -114,6 +108,13 @@ static PyTypeObject PyCoinTypeType = {
 };
 
 PyObject* PyCoinType_FromTWCoinType(TWCoinType value) {
+
+#define I(name) { TWCoinType##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

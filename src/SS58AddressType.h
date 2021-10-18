@@ -7,10 +7,13 @@
 
 #include <TrustWalletCore/TWSS58AddressType.h>
 
+extern PyTypeObject PySS58AddressTypeType;
+
 struct PySS58AddressTypeObject {
     PyObject_HEAD
     const TWSS58AddressType value;
 };
 
 PyObject* PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value);
+
 bool PyInit_SS58AddressType(PyObject *module);

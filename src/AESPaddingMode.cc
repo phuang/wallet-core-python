@@ -11,13 +11,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWAESPaddingMode##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PyAESPaddingModeType = {
+PyTypeObject PyAESPaddingModeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.AESPaddingMode",      /* tp_name */
     sizeof(PyAESPaddingModeObject),   /* tp_basicsize */
@@ -42,6 +36,13 @@ static PyTypeObject PyAESPaddingModeType = {
 };
 
 PyObject* PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode value) {
+
+#define I(name) { TWAESPaddingMode##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

@@ -7,10 +7,13 @@
 
 #include <TrustWalletCore/TWEthereumChainID.h>
 
+extern PyTypeObject PyEthereumChainIDType;
+
 struct PyEthereumChainIDObject {
     PyObject_HEAD
     const TWEthereumChainID value;
 };
 
 PyObject* PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value);
+
 bool PyInit_EthereumChainID(PyObject *module);

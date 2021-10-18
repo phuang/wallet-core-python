@@ -13,13 +13,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWStellarVersionByte##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PyStellarVersionByteType = {
+PyTypeObject PyStellarVersionByteType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.StellarVersionByte",      /* tp_name */
     sizeof(PyStellarVersionByteObject),   /* tp_basicsize */
@@ -44,6 +38,13 @@ static PyTypeObject PyStellarVersionByteType = {
 };
 
 PyObject* PyStellarVersionByte_FromTWStellarVersionByte(TWStellarVersionByte value) {
+
+#define I(name) { TWStellarVersionByte##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

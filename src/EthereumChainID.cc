@@ -28,13 +28,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWEthereumChainID##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PyEthereumChainIDType = {
+PyTypeObject PyEthereumChainIDType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.EthereumChainID",      /* tp_name */
     sizeof(PyEthereumChainIDObject),   /* tp_basicsize */
@@ -59,6 +53,13 @@ static PyTypeObject PyEthereumChainIDType = {
 };
 
 PyObject* PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value) {
+
+#define I(name) { TWEthereumChainID##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

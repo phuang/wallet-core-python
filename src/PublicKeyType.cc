@@ -17,13 +17,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWPublicKeyType##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PyPublicKeyTypeType = {
+PyTypeObject PyPublicKeyTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.PublicKeyType",      /* tp_name */
     sizeof(PyPublicKeyTypeObject),   /* tp_basicsize */
@@ -48,6 +42,13 @@ static PyTypeObject PyPublicKeyTypeType = {
 };
 
 PyObject* PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType value) {
+
+#define I(name) { TWPublicKeyType##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

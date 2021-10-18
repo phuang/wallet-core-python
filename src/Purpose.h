@@ -7,10 +7,13 @@
 
 #include <TrustWalletCore/TWPurpose.h>
 
+extern PyTypeObject PyPurposeType;
+
 struct PyPurposeObject {
     PyObject_HEAD
     const TWPurpose value;
 };
 
 PyObject* PyPurpose_FromTWPurpose(TWPurpose value);
+
 bool PyInit_Purpose(PyObject *module);

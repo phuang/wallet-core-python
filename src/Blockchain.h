@@ -7,10 +7,13 @@
 
 #include <TrustWalletCore/TWBlockchain.h>
 
+extern PyTypeObject PyBlockchainType;
+
 struct PyBlockchainObject {
     PyObject_HEAD
     const TWBlockchain value;
 };
 
 PyObject* PyBlockchain_FromTWBlockchain(TWBlockchain value);
+
 bool PyInit_Blockchain(PyObject *module);

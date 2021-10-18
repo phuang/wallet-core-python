@@ -14,13 +14,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWStellarMemoType##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PyStellarMemoTypeType = {
+PyTypeObject PyStellarMemoTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.StellarMemoType",      /* tp_name */
     sizeof(PyStellarMemoTypeObject),   /* tp_basicsize */
@@ -45,6 +39,13 @@ static PyTypeObject PyStellarMemoTypeType = {
 };
 
 PyObject* PyStellarMemoType_FromTWStellarMemoType(TWStellarMemoType value) {
+
+#define I(name) { TWStellarMemoType##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

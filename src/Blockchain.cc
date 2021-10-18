@@ -42,13 +42,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWBlockchain##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PyBlockchainType = {
+PyTypeObject PyBlockchainType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.Blockchain",      /* tp_name */
     sizeof(PyBlockchainObject),   /* tp_basicsize */
@@ -73,6 +67,13 @@ static PyTypeObject PyBlockchainType = {
 };
 
 PyObject* PyBlockchain_FromTWBlockchain(TWBlockchain value) {
+
+#define I(name) { TWBlockchain##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

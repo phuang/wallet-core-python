@@ -7,10 +7,13 @@
 
 #include <TrustWalletCore/TWCoinType.h>
 
+extern PyTypeObject PyCoinTypeType;
+
 struct PyCoinTypeObject {
     PyObject_HEAD
     const TWCoinType value;
 };
 
 PyObject* PyCoinType_FromTWCoinType(TWCoinType value);
+
 bool PyInit_CoinType(PyObject *module);

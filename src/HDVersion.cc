@@ -24,13 +24,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWHDVersion##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PyHDVersionType = {
+PyTypeObject PyHDVersionType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.HDVersion",      /* tp_name */
     sizeof(PyHDVersionObject),   /* tp_basicsize */
@@ -55,6 +49,13 @@ static PyTypeObject PyHDVersionType = {
 };
 
 PyObject* PyHDVersion_FromTWHDVersion(TWHDVersion value) {
+
+#define I(name) { TWHDVersion##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

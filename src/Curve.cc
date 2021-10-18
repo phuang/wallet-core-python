@@ -10,13 +10,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWCurve##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PyCurveType = {
+PyTypeObject PyCurveType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.Curve",      /* tp_name */
     sizeof(PyCurveObject),   /* tp_basicsize */
@@ -41,6 +35,13 @@ static PyTypeObject PyCurveType = {
 };
 
 PyObject* PyCurve_FromTWCurve(TWCurve value) {
+
+#define I(name) { TWCurve##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

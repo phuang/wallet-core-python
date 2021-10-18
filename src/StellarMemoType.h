@@ -7,10 +7,13 @@
 
 #include <TrustWalletCore/TWStellarMemoType.h>
 
+extern PyTypeObject PyStellarMemoTypeType;
+
 struct PyStellarMemoTypeObject {
     PyObject_HEAD
     const TWStellarMemoType value;
 };
 
 PyObject* PyStellarMemoType_FromTWStellarMemoType(TWStellarMemoType value);
+
 bool PyInit_StellarMemoType(PyObject *module);

@@ -10,13 +10,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWHRP##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PyHRPType = {
+PyTypeObject PyHRPType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.HRP",      /* tp_name */
     sizeof(PyHRPObject),   /* tp_basicsize */
@@ -41,6 +35,13 @@ static PyTypeObject PyHRPType = {
 };
 
 PyObject* PyHRP_FromTWHRP(TWHRP value) {
+
+#define I(name) { TWHRP##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

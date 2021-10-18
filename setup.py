@@ -20,10 +20,11 @@ for line in open(os.path.join(WALLET_CORE_BUILD, 'CMakeCache.txt')):
         break
 
 module = Extension('walletcore',
-                    include_dirs = [WALLET_CORE_INCLUDE],
-                    library_dirs= [WALLET_CORE_BUILD, TREZOR_CRYPTO],
-                    libraries = ['TrezorCrypto', 'TrustWalletCore', 'protobuf'],
-                    extra_link_args= link_args,
+                    include_dirs = [ WALLET_CORE_INCLUDE ],
+                    library_dirs = [ WALLET_CORE_BUILD, TREZOR_CRYPTO ],
+                    libraries = [ 'TrezorCrypto', 'TrustWalletCore', 'protobuf' ],
+                    extra_link_args = link_args,
+                    headers = glob('src/*.h'),
                     sources = glob('src/*.cc'))
 
 setup (name = 'walletcore',

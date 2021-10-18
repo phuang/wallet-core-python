@@ -10,13 +10,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWStellarPassphrase##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PyStellarPassphraseType = {
+PyTypeObject PyStellarPassphraseType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.StellarPassphrase",      /* tp_name */
     sizeof(PyStellarPassphraseObject),   /* tp_basicsize */
@@ -41,6 +35,13 @@ static PyTypeObject PyStellarPassphraseType = {
 };
 
 PyObject* PyStellarPassphrase_FromTWStellarPassphrase(TWStellarPassphrase value) {
+
+#define I(name) { TWStellarPassphrase##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

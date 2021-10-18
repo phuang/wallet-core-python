@@ -7,10 +7,13 @@
 
 #include <TrustWalletCore/TW${name}.h>
 
+extern PyTypeObject Py${name}Type;
+
 struct Py${name}Object {
     PyObject_HEAD
     const TW${name} value;
 };
 
 PyObject* Py${name}_FromTW${name}(TW${name} value);
+
 bool PyInit_${name}(PyObject *module);

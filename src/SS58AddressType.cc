@@ -11,13 +11,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWSS58AddressType##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PySS58AddressTypeType = {
+PyTypeObject PySS58AddressTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.SS58AddressType",      /* tp_name */
     sizeof(PySS58AddressTypeObject),   /* tp_basicsize */
@@ -42,6 +36,13 @@ static PyTypeObject PySS58AddressTypeType = {
 };
 
 PyObject* PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value) {
+
+#define I(name) { TWSS58AddressType##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

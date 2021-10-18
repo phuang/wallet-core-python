@@ -7,10 +7,13 @@
 
 #include <TrustWalletCore/TWHDVersion.h>
 
+extern PyTypeObject PyHDVersionType;
+
 struct PyHDVersionObject {
     PyObject_HEAD
     const TWHDVersion value;
 };
 
 PyObject* PyHDVersion_FromTWHDVersion(TWHDVersion value);
+
 bool PyInit_HDVersion(PyObject *module);

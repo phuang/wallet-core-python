@@ -7,10 +7,13 @@
 
 #include <TrustWalletCore/TWStellarPassphrase.h>
 
+extern PyTypeObject PyStellarPassphraseType;
+
 struct PyStellarPassphraseObject {
     PyObject_HEAD
     const TWStellarPassphrase value;
 };
 
 PyObject* PyStellarPassphrase_FromTWStellarPassphrase(TWStellarPassphrase value);
+
 bool PyInit_StellarPassphrase(PyObject *module);

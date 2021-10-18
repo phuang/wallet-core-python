@@ -13,13 +13,7 @@ struct ValuePair {
     PyObject* pyvalue;
 };
 
-#define I(name) { TWPurpose##name, nullptr },
-static ValuePair constants[] = {
-    CONSTANTS(I)
-};
-#undef I
-
-static PyTypeObject PyPurposeType = {
+PyTypeObject PyPurposeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.Purpose",      /* tp_name */
     sizeof(PyPurposeObject),   /* tp_basicsize */
@@ -44,6 +38,13 @@ static PyTypeObject PyPurposeType = {
 };
 
 PyObject* PyPurpose_FromTWPurpose(TWPurpose value) {
+
+#define I(name) { TWPurpose##name, nullptr },
+    static ValuePair constants[] = {
+        CONSTANTS(I)
+    };
+#undef I
+
     ValuePair* value_pair = nullptr;
     for (auto& constant : constants) {
         if (constant.value == value) {

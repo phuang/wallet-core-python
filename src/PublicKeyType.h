@@ -7,10 +7,13 @@
 
 #include <TrustWalletCore/TWPublicKeyType.h>
 
+extern PyTypeObject PyPublicKeyTypeType;
+
 struct PyPublicKeyTypeObject {
     PyObject_HEAD
     const TWPublicKeyType value;
 };
 
 PyObject* PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType value);
+
 bool PyInit_PublicKeyType(PyObject *module);
