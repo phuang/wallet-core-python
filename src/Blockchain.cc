@@ -110,7 +110,7 @@ static PyObject* PyBlockchain_new(PyTypeObject *subtype, PyObject *args, PyObjec
 }
 
 static PyObject* PyBlockchain_str(PyBlockchainObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWBlockchain##name: \
@@ -118,9 +118,6 @@ static PyObject* PyBlockchain_str(PyBlockchainObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

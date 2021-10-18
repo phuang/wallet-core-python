@@ -9,6 +9,7 @@
     I(Curve25519) \
     I(NIST256p1) \
     I(ED25519Extended) \
+    I(None) \
 
 struct ValuePair {
     TWCurve value;
@@ -83,7 +84,7 @@ static PyObject* PyCurve_new(PyTypeObject *subtype, PyObject *args, PyObject *kw
 }
 
 static PyObject* PyCurve_str(PyCurveObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWCurve##name: \
@@ -91,9 +92,6 @@ static PyObject* PyCurve_str(PyCurveObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

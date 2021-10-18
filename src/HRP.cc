@@ -101,7 +101,7 @@ static PyObject* PyHRP_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds
 }
 
 static PyObject* PyHRP_str(PyHRPObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWHRP##name: \
@@ -109,9 +109,6 @@ static PyObject* PyHRP_str(PyHRPObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

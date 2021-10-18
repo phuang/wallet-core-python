@@ -164,7 +164,7 @@ class Enum(Entity):
                 self._constants.append(result[0][0])
                 continue
 
-            result = re.findall(r'^(\w+)\s*.*,', line)
+            result = re.findall(r'^(\w+)\s*.*', line)
             if result:
                 print(result[0])
                 self._constants.append(result[0])

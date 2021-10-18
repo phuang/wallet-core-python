@@ -78,7 +78,7 @@ static PyObject* Py${name}_new(PyTypeObject *subtype, PyObject *args, PyObject *
 }
 
 static PyObject* Py${name}_str(Py${name}Object *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TW${name}##name: \
@@ -86,9 +86,6 @@ static PyObject* Py${name}_str(Py${name}Object *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

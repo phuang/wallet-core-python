@@ -92,7 +92,7 @@ static PyObject* PyHDVersion_new(PyTypeObject *subtype, PyObject *args, PyObject
 }
 
 static PyObject* PyHDVersion_str(PyHDVersionObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWHDVersion##name: \
@@ -100,9 +100,6 @@ static PyObject* PyHDVersion_str(PyHDVersionObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

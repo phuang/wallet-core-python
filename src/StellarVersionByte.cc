@@ -81,7 +81,7 @@ static PyObject* PyStellarVersionByte_new(PyTypeObject *subtype, PyObject *args,
 }
 
 static PyObject* PyStellarVersionByte_str(PyStellarVersionByteObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWStellarVersionByte##name: \
@@ -89,9 +89,6 @@ static PyObject* PyStellarVersionByte_str(PyStellarVersionByteObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

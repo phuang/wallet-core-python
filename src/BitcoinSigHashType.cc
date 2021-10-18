@@ -8,6 +8,7 @@
     I(Single) \
     I(Fork) \
     I(ForkBTG) \
+    I(AnyoneCanPay) \
 
 struct ValuePair {
     TWBitcoinSigHashType value;
@@ -82,7 +83,7 @@ static PyObject* PyBitcoinSigHashType_new(PyTypeObject *subtype, PyObject *args,
 }
 
 static PyObject* PyBitcoinSigHashType_str(PyBitcoinSigHashTypeObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWBitcoinSigHashType##name: \
@@ -90,9 +91,6 @@ static PyObject* PyBitcoinSigHashType_str(PyBitcoinSigHashTypeObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

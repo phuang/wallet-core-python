@@ -151,7 +151,7 @@ static PyObject* PyCoinType_new(PyTypeObject *subtype, PyObject *args, PyObject 
 }
 
 static PyObject* PyCoinType_str(PyCoinTypeObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWCoinType##name: \
@@ -159,9 +159,6 @@ static PyObject* PyCoinType_str(PyCoinTypeObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

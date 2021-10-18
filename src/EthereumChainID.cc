@@ -96,7 +96,7 @@ static PyObject* PyEthereumChainID_new(PyTypeObject *subtype, PyObject *args, Py
 }
 
 static PyObject* PyEthereumChainID_str(PyEthereumChainIDObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWEthereumChainID##name: \
@@ -104,9 +104,6 @@ static PyObject* PyEthereumChainID_str(PyEthereumChainIDObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

@@ -79,7 +79,7 @@ static PyObject* PySS58AddressType_new(PyTypeObject *subtype, PyObject *args, Py
 }
 
 static PyObject* PySS58AddressType_str(PySS58AddressTypeObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWSS58AddressType##name: \
@@ -87,9 +87,6 @@ static PyObject* PySS58AddressType_str(PySS58AddressTypeObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

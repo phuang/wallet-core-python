@@ -79,7 +79,7 @@ static PyObject* PyAESPaddingMode_new(PyTypeObject *subtype, PyObject *args, PyO
 }
 
 static PyObject* PyAESPaddingMode_str(PyAESPaddingModeObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWAESPaddingMode##name: \
@@ -87,9 +87,6 @@ static PyObject* PyAESPaddingMode_str(PyAESPaddingModeObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

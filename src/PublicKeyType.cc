@@ -85,7 +85,7 @@ static PyObject* PyPublicKeyType_new(PyTypeObject *subtype, PyObject *args, PyOb
 }
 
 static PyObject* PyPublicKeyType_str(PyPublicKeyTypeObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWPublicKeyType##name: \
@@ -93,9 +93,6 @@ static PyObject* PyPublicKeyType_str(PyPublicKeyTypeObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

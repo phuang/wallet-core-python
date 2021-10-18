@@ -81,7 +81,7 @@ static PyObject* PyPurpose_new(PyTypeObject *subtype, PyObject *args, PyObject *
 }
 
 static PyObject* PyPurpose_str(PyPurposeObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWPurpose##name: \
@@ -89,9 +89,6 @@ static PyObject* PyPurpose_str(PyPurposeObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

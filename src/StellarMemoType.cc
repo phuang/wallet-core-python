@@ -82,7 +82,7 @@ static PyObject* PyStellarMemoType_new(PyTypeObject *subtype, PyObject *args, Py
 }
 
 static PyObject* PyStellarMemoType_str(PyStellarMemoTypeObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWStellarMemoType##name: \
@@ -90,9 +90,6 @@ static PyObject* PyStellarMemoType_str(PyStellarMemoTypeObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }

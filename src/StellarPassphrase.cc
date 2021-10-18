@@ -79,7 +79,7 @@ static PyObject* PyStellarPassphrase_new(PyTypeObject *subtype, PyObject *args, 
 }
 
 static PyObject* PyStellarPassphrase_str(PyStellarPassphraseObject *self) {
-    const char* str = nullptr;
+    const char* str = "Unknown";
     switch(self->value) {
 #define I(name) \
         case TWStellarPassphrase##name: \
@@ -87,9 +87,6 @@ static PyObject* PyStellarPassphrase_str(PyStellarPassphraseObject *self) {
             break;
         CONSTANTS(I)
 #undef I
-      default:
-        str = "Unknown";
-        break;
     }
     return PyUnicode_FromString(str);
 }
