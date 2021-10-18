@@ -1,3 +1,5 @@
+// This is a GENERATED FILE, changes made here WILL BE LOST.
+
 #include "SS58AddressType.h"
 
 #define CONSTANTS(I) \

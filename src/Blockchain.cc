@@ -1,3 +1,5 @@
+// This is a GENERATED FILE, changes made here WILL BE LOST.
+
 #include "Blockchain.h"
 
 #define CONSTANTS(I) \

@@ -1,3 +1,5 @@
+// This is a GENERATED FILE, changes made here WILL BE LOST.
+
 #include "StellarMemoType.h"
 
 #define CONSTANTS(I) \

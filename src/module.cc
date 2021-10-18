@@ -1,3 +1,5 @@
+// This is a GENERATED FILE, changes made here WILL BE LOST.
+
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
@@ -38,13 +40,12 @@ PyMODINIT_FUNC
 PyInit_walletcore(void) {
     static struct PyModuleDef enum_module_def = {
         PyModuleDef_HEAD_INIT,
-        "walletcore",   /* name of module */
-        nullptr,        /* module documentation, may be NULL */
-        -1,             /* size of per-interpreter state of the module,
-                           or -1 if the module keeps state in global variables. */
-        nullptr
+        "walletcore",   /* m_name */
+        nullptr,        /* m_doc */
+        -1,             /* m_size */
+        nullptr         /* m_methods */
     };
-    
+
     PyObject *module = PyModule_Create(&enum_module_def);
     if (module == nullptr) {
         return nullptr;
@@ -56,6 +57,6 @@ PyInit_walletcore(void) {
             return nullptr;
         }
     }
-    
+
     return module;
 }

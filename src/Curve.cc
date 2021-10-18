@@ -1,3 +1,5 @@
+// This is a GENERATED FILE, changes made here WILL BE LOST.
+
 #include "Curve.h"
 
 #define CONSTANTS(I) \

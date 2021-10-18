@@ -1,3 +1,5 @@
+// This is a GENERATED FILE, changes made here WILL BE LOST.
+
 #include "StellarPassphrase.h"
 
 #define CONSTANTS(I) \
