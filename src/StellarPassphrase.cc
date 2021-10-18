@@ -1,5 +1,19 @@
 #include "StellarPassphrase.h"
 
+#define CONSTANTS(I) \
+
+
+struct ValuePair {
+    TWStellarPassphrase value;
+    PyObject* pyvalue;
+};
+
+#define I(name) { TWStellarPassphrase##name, nullptr },
+static ValuePair constants[] = {
+    CONSTANTS(I)
+};
+#undef I
+
 static PyTypeObject PyStellarPassphraseType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.StellarPassphrase",      /* tp_name */
@@ -24,13 +38,62 @@ static PyTypeObject PyStellarPassphraseType = {
     nullptr,                   /* tp_doc */
 };
 
-int PyStellarPassphrase_init(PyStellarPassphraseObject *self, PyObject *args, PyObject *kwds) {
+PyObject* PyStellarPassphrase_FromTWStellarPassphrase(TWStellarPassphrase value) {
+    ValuePair* p = nullptr;
+    for (auto& constant : constants) {
+        if (constant.value == value) {
+            p = &constant;
+            break;
+        }
+    }
+
+    if (!p) {
+        PyErr_Format(PyExc_ValueError, "Invalid StellarPassphrase value: %d", value);
+        return nullptr;
+    }
+
+    if (!p->pyvalue) {
+        auto* pyvalue = PyObject_New(PyStellarPassphraseObject, &PyStellarPassphraseType);
+        *const_cast<TWStellarPassphrase*>(&pyvalue->value) = value;
+        p->pyvalue = (PyObject*)pyvalue;
+    }
+
+    Py_INCREF(p->pyvalue);
+    return p->pyvalue;
+}
+
+static int PyStellarPassphrase_init(PyStellarPassphraseObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
+static PyObject* PyStellarPassphrase_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
+    int value = 0;
+    if (!PyArg_ParseTuple(args, "|i", &value)) {
+        return nullptr;
+    }
+    return PyStellarPassphrase_FromTWStellarPassphrase((TWStellarPassphrase)value);
+}
+
+static PyObject* PyStellarPassphrase_str(PyStellarPassphraseObject *self) {
+    const char* str = nullptr;
+    switch(self->value) {
+#define I(name) \
+        case TWStellarPassphrase##name: \
+            str = #name; \
+            break;
+        CONSTANTS(I)
+#undef I
+      default:
+        str = "Unknown";
+        break;
+    }
+    return PyUnicode_FromString(str);
+}
+
 bool PyInit_StellarPassphrase(PyObject *module) {
+    PyStellarPassphraseType.tp_new = PyStellarPassphrase_new;
     PyStellarPassphraseType.tp_init = (initproc)PyStellarPassphrase_init;
-    PyStellarPassphraseType.tp_new = PyType_GenericNew;
+    PyStellarPassphraseType.tp_str = (reprfunc)PyStellarPassphrase_str;
 
     if (PyType_Ready(&PyStellarPassphraseType) < 0)
         return false;
@@ -41,12 +104,13 @@ bool PyInit_StellarPassphrase(PyObject *module) {
         return false;
     }
 
-    // auto* o = PyObject_New(PyStellarPassphraseObject, &PyStellarPassphraseType);
-
     PyObject* dict = PyStellarPassphraseType.tp_dict;
     (void)dict;
 
-
+#define I(name) \
+    PyDict_SetItemString(dict, #name, PyStellarPassphrase_FromTWStellarPassphrase(TWStellarPassphrase##name));
+    CONSTANTS(I)
+#undef I
 
     return true;
 }

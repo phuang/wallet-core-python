@@ -1,5 +1,23 @@
 #include "BitcoinSigHashType.h"
 
+#define CONSTANTS(I) \
+    I(All) \
+    I(None) \
+    I(Single) \
+    I(Fork) \
+    I(ForkBTG) \
+
+struct ValuePair {
+    TWBitcoinSigHashType value;
+    PyObject* pyvalue;
+};
+
+#define I(name) { TWBitcoinSigHashType##name, nullptr },
+static ValuePair constants[] = {
+    CONSTANTS(I)
+};
+#undef I
+
 static PyTypeObject PyBitcoinSigHashTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.BitcoinSigHashType",      /* tp_name */
@@ -24,13 +42,62 @@ static PyTypeObject PyBitcoinSigHashTypeType = {
     nullptr,                   /* tp_doc */
 };
 
-int PyBitcoinSigHashType_init(PyBitcoinSigHashTypeObject *self, PyObject *args, PyObject *kwds) {
+PyObject* PyBitcoinSigHashType_FromTWBitcoinSigHashType(TWBitcoinSigHashType value) {
+    ValuePair* p = nullptr;
+    for (auto& constant : constants) {
+        if (constant.value == value) {
+            p = &constant;
+            break;
+        }
+    }
+
+    if (!p) {
+        PyErr_Format(PyExc_ValueError, "Invalid BitcoinSigHashType value: %d", value);
+        return nullptr;
+    }
+
+    if (!p->pyvalue) {
+        auto* pyvalue = PyObject_New(PyBitcoinSigHashTypeObject, &PyBitcoinSigHashTypeType);
+        *const_cast<TWBitcoinSigHashType*>(&pyvalue->value) = value;
+        p->pyvalue = (PyObject*)pyvalue;
+    }
+
+    Py_INCREF(p->pyvalue);
+    return p->pyvalue;
+}
+
+static int PyBitcoinSigHashType_init(PyBitcoinSigHashTypeObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
+static PyObject* PyBitcoinSigHashType_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
+    int value = 0;
+    if (!PyArg_ParseTuple(args, "|i", &value)) {
+        return nullptr;
+    }
+    return PyBitcoinSigHashType_FromTWBitcoinSigHashType((TWBitcoinSigHashType)value);
+}
+
+static PyObject* PyBitcoinSigHashType_str(PyBitcoinSigHashTypeObject *self) {
+    const char* str = nullptr;
+    switch(self->value) {
+#define I(name) \
+        case TWBitcoinSigHashType##name: \
+            str = #name; \
+            break;
+        CONSTANTS(I)
+#undef I
+      default:
+        str = "Unknown";
+        break;
+    }
+    return PyUnicode_FromString(str);
+}
+
 bool PyInit_BitcoinSigHashType(PyObject *module) {
+    PyBitcoinSigHashTypeType.tp_new = PyBitcoinSigHashType_new;
     PyBitcoinSigHashTypeType.tp_init = (initproc)PyBitcoinSigHashType_init;
-    PyBitcoinSigHashTypeType.tp_new = PyType_GenericNew;
+    PyBitcoinSigHashTypeType.tp_str = (reprfunc)PyBitcoinSigHashType_str;
 
     if (PyType_Ready(&PyBitcoinSigHashTypeType) < 0)
         return false;
@@ -41,16 +108,13 @@ bool PyInit_BitcoinSigHashType(PyObject *module) {
         return false;
     }
 
-    // auto* o = PyObject_New(PyBitcoinSigHashTypeObject, &PyBitcoinSigHashTypeType);
-
     PyObject* dict = PyBitcoinSigHashTypeType.tp_dict;
     (void)dict;
 
-    PyDict_SetItemString(dict, "All", PyLong_FromLong(TWBitcoinSigHashTypeAll));
-    PyDict_SetItemString(dict, "None", PyLong_FromLong(TWBitcoinSigHashTypeNone));
-    PyDict_SetItemString(dict, "Single", PyLong_FromLong(TWBitcoinSigHashTypeSingle));
-    PyDict_SetItemString(dict, "Fork", PyLong_FromLong(TWBitcoinSigHashTypeFork));
-    PyDict_SetItemString(dict, "ForkBTG", PyLong_FromLong(TWBitcoinSigHashTypeForkBTG));
+#define I(name) \
+    PyDict_SetItemString(dict, #name, PyBitcoinSigHashType_FromTWBitcoinSigHashType(TWBitcoinSigHashType##name));
+    CONSTANTS(I)
+#undef I
 
     return true;
 }

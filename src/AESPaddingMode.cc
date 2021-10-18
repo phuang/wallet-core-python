@@ -1,5 +1,20 @@
 #include "AESPaddingMode.h"
 
+#define CONSTANTS(I) \
+    I(Zero) \
+    I(PKCS7) \
+
+struct ValuePair {
+    TWAESPaddingMode value;
+    PyObject* pyvalue;
+};
+
+#define I(name) { TWAESPaddingMode##name, nullptr },
+static ValuePair constants[] = {
+    CONSTANTS(I)
+};
+#undef I
+
 static PyTypeObject PyAESPaddingModeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.AESPaddingMode",      /* tp_name */
@@ -24,13 +39,62 @@ static PyTypeObject PyAESPaddingModeType = {
     nullptr,                   /* tp_doc */
 };
 
-int PyAESPaddingMode_init(PyAESPaddingModeObject *self, PyObject *args, PyObject *kwds) {
+PyObject* PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode value) {
+    ValuePair* p = nullptr;
+    for (auto& constant : constants) {
+        if (constant.value == value) {
+            p = &constant;
+            break;
+        }
+    }
+
+    if (!p) {
+        PyErr_Format(PyExc_ValueError, "Invalid AESPaddingMode value: %d", value);
+        return nullptr;
+    }
+
+    if (!p->pyvalue) {
+        auto* pyvalue = PyObject_New(PyAESPaddingModeObject, &PyAESPaddingModeType);
+        *const_cast<TWAESPaddingMode*>(&pyvalue->value) = value;
+        p->pyvalue = (PyObject*)pyvalue;
+    }
+
+    Py_INCREF(p->pyvalue);
+    return p->pyvalue;
+}
+
+static int PyAESPaddingMode_init(PyAESPaddingModeObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
+static PyObject* PyAESPaddingMode_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
+    int value = 0;
+    if (!PyArg_ParseTuple(args, "|i", &value)) {
+        return nullptr;
+    }
+    return PyAESPaddingMode_FromTWAESPaddingMode((TWAESPaddingMode)value);
+}
+
+static PyObject* PyAESPaddingMode_str(PyAESPaddingModeObject *self) {
+    const char* str = nullptr;
+    switch(self->value) {
+#define I(name) \
+        case TWAESPaddingMode##name: \
+            str = #name; \
+            break;
+        CONSTANTS(I)
+#undef I
+      default:
+        str = "Unknown";
+        break;
+    }
+    return PyUnicode_FromString(str);
+}
+
 bool PyInit_AESPaddingMode(PyObject *module) {
+    PyAESPaddingModeType.tp_new = PyAESPaddingMode_new;
     PyAESPaddingModeType.tp_init = (initproc)PyAESPaddingMode_init;
-    PyAESPaddingModeType.tp_new = PyType_GenericNew;
+    PyAESPaddingModeType.tp_str = (reprfunc)PyAESPaddingMode_str;
 
     if (PyType_Ready(&PyAESPaddingModeType) < 0)
         return false;
@@ -41,13 +105,13 @@ bool PyInit_AESPaddingMode(PyObject *module) {
         return false;
     }
 
-    // auto* o = PyObject_New(PyAESPaddingModeObject, &PyAESPaddingModeType);
-
     PyObject* dict = PyAESPaddingModeType.tp_dict;
     (void)dict;
 
-    PyDict_SetItemString(dict, "Zero", PyLong_FromLong(TWAESPaddingModeZero));
-    PyDict_SetItemString(dict, "PKCS7", PyLong_FromLong(TWAESPaddingModePKCS7));
+#define I(name) \
+    PyDict_SetItemString(dict, #name, PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode##name));
+    CONSTANTS(I)
+#undef I
 
     return true;
 }

@@ -13,7 +13,7 @@ OUTPUT_DIR = os.path.join(DIR, '..', 'src')
 class Generator:
     def __init__(self):
         self._parser = Parser()
-    
+
     def template(self, filename):
         filepath = os.path.join(DIR, 'templates', filename)
         return Template(open(filepath).read())
@@ -24,7 +24,7 @@ class Generator:
             self.generate_enum(enum)
             names.append(enum._name[2:])
         names.sort()
-        
+
         includes = '\n'.join(['#include "{}.h"'.format(f) for f in names])
         functions = '\n'.join(['    PyInit_{},'.format(f) for f in names])
 
@@ -42,11 +42,11 @@ class Generator:
         for fullname, v in enum._constants:
             assert fullname.startswith('TW' + name)
             shortname = fullname[2 + len(name):]
-            constants.append('    PyDict_SetItemString(dict, "{}", PyLong_FromLong({}));'.format(shortname, fullname))
+            constants.append('    I({}) \\'.format(shortname))
         constants = '\n'.join(constants)
 
         values = { 'name' : name, 'constants' : constants }
-        
+
         with open(os.path.join(OUTPUT_DIR, name) + '.cc', 'w') as out:
             template = self.template('enum.cc')
             out.write(template.substitute(values))

@@ -1,5 +1,19 @@
 #include "Curve.h"
 
+#define CONSTANTS(I) \
+
+
+struct ValuePair {
+    TWCurve value;
+    PyObject* pyvalue;
+};
+
+#define I(name) { TWCurve##name, nullptr },
+static ValuePair constants[] = {
+    CONSTANTS(I)
+};
+#undef I
+
 static PyTypeObject PyCurveType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.Curve",      /* tp_name */
@@ -24,13 +38,62 @@ static PyTypeObject PyCurveType = {
     nullptr,                   /* tp_doc */
 };
 
-int PyCurve_init(PyCurveObject *self, PyObject *args, PyObject *kwds) {
+PyObject* PyCurve_FromTWCurve(TWCurve value) {
+    ValuePair* p = nullptr;
+    for (auto& constant : constants) {
+        if (constant.value == value) {
+            p = &constant;
+            break;
+        }
+    }
+
+    if (!p) {
+        PyErr_Format(PyExc_ValueError, "Invalid Curve value: %d", value);
+        return nullptr;
+    }
+
+    if (!p->pyvalue) {
+        auto* pyvalue = PyObject_New(PyCurveObject, &PyCurveType);
+        *const_cast<TWCurve*>(&pyvalue->value) = value;
+        p->pyvalue = (PyObject*)pyvalue;
+    }
+
+    Py_INCREF(p->pyvalue);
+    return p->pyvalue;
+}
+
+static int PyCurve_init(PyCurveObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
+static PyObject* PyCurve_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
+    int value = 0;
+    if (!PyArg_ParseTuple(args, "|i", &value)) {
+        return nullptr;
+    }
+    return PyCurve_FromTWCurve((TWCurve)value);
+}
+
+static PyObject* PyCurve_str(PyCurveObject *self) {
+    const char* str = nullptr;
+    switch(self->value) {
+#define I(name) \
+        case TWCurve##name: \
+            str = #name; \
+            break;
+        CONSTANTS(I)
+#undef I
+      default:
+        str = "Unknown";
+        break;
+    }
+    return PyUnicode_FromString(str);
+}
+
 bool PyInit_Curve(PyObject *module) {
+    PyCurveType.tp_new = PyCurve_new;
     PyCurveType.tp_init = (initproc)PyCurve_init;
-    PyCurveType.tp_new = PyType_GenericNew;
+    PyCurveType.tp_str = (reprfunc)PyCurve_str;
 
     if (PyType_Ready(&PyCurveType) < 0)
         return false;
@@ -41,12 +104,13 @@ bool PyInit_Curve(PyObject *module) {
         return false;
     }
 
-    // auto* o = PyObject_New(PyCurveObject, &PyCurveType);
-
     PyObject* dict = PyCurveType.tp_dict;
     (void)dict;
 
-
+#define I(name) \
+    PyDict_SetItemString(dict, #name, PyCurve_FromTWCurve(TWCurve##name));
+    CONSTANTS(I)
+#undef I
 
     return true;
 }

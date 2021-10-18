@@ -1,5 +1,51 @@
 #include "Blockchain.h"
 
+#define CONSTANTS(I) \
+    I(Bitcoin) \
+    I(Ethereum) \
+    I(Vechain) \
+    I(Tron) \
+    I(Icon) \
+    I(Binance) \
+    I(Ripple) \
+    I(Tezos) \
+    I(Nimiq) \
+    I(Stellar) \
+    I(Aion) \
+    I(Cosmos) \
+    I(Theta) \
+    I(Ontology) \
+    I(Zilliqa) \
+    I(IoTeX) \
+    I(EOS) \
+    I(Nano) \
+    I(NULS) \
+    I(Waves) \
+    I(Aeternity) \
+    I(Nebulas) \
+    I(FIO) \
+    I(Solana) \
+    I(Harmony) \
+    I(NEAR) \
+    I(Algorand) \
+    I(Polkadot) \
+    I(Cardano) \
+    I(NEO) \
+    I(Filecoin) \
+    I(ElrondNetwork) \
+    I(OasisNetwork) \
+
+struct ValuePair {
+    TWBlockchain value;
+    PyObject* pyvalue;
+};
+
+#define I(name) { TWBlockchain##name, nullptr },
+static ValuePair constants[] = {
+    CONSTANTS(I)
+};
+#undef I
+
 static PyTypeObject PyBlockchainType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.Blockchain",      /* tp_name */
@@ -24,13 +70,62 @@ static PyTypeObject PyBlockchainType = {
     nullptr,                   /* tp_doc */
 };
 
-int PyBlockchain_init(PyBlockchainObject *self, PyObject *args, PyObject *kwds) {
+PyObject* PyBlockchain_FromTWBlockchain(TWBlockchain value) {
+    ValuePair* p = nullptr;
+    for (auto& constant : constants) {
+        if (constant.value == value) {
+            p = &constant;
+            break;
+        }
+    }
+
+    if (!p) {
+        PyErr_Format(PyExc_ValueError, "Invalid Blockchain value: %d", value);
+        return nullptr;
+    }
+
+    if (!p->pyvalue) {
+        auto* pyvalue = PyObject_New(PyBlockchainObject, &PyBlockchainType);
+        *const_cast<TWBlockchain*>(&pyvalue->value) = value;
+        p->pyvalue = (PyObject*)pyvalue;
+    }
+
+    Py_INCREF(p->pyvalue);
+    return p->pyvalue;
+}
+
+static int PyBlockchain_init(PyBlockchainObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
+static PyObject* PyBlockchain_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
+    int value = 0;
+    if (!PyArg_ParseTuple(args, "|i", &value)) {
+        return nullptr;
+    }
+    return PyBlockchain_FromTWBlockchain((TWBlockchain)value);
+}
+
+static PyObject* PyBlockchain_str(PyBlockchainObject *self) {
+    const char* str = nullptr;
+    switch(self->value) {
+#define I(name) \
+        case TWBlockchain##name: \
+            str = #name; \
+            break;
+        CONSTANTS(I)
+#undef I
+      default:
+        str = "Unknown";
+        break;
+    }
+    return PyUnicode_FromString(str);
+}
+
 bool PyInit_Blockchain(PyObject *module) {
+    PyBlockchainType.tp_new = PyBlockchain_new;
     PyBlockchainType.tp_init = (initproc)PyBlockchain_init;
-    PyBlockchainType.tp_new = PyType_GenericNew;
+    PyBlockchainType.tp_str = (reprfunc)PyBlockchain_str;
 
     if (PyType_Ready(&PyBlockchainType) < 0)
         return false;
@@ -41,44 +136,13 @@ bool PyInit_Blockchain(PyObject *module) {
         return false;
     }
 
-    // auto* o = PyObject_New(PyBlockchainObject, &PyBlockchainType);
-
     PyObject* dict = PyBlockchainType.tp_dict;
     (void)dict;
 
-    PyDict_SetItemString(dict, "Bitcoin", PyLong_FromLong(TWBlockchainBitcoin));
-    PyDict_SetItemString(dict, "Ethereum", PyLong_FromLong(TWBlockchainEthereum));
-    PyDict_SetItemString(dict, "Vechain", PyLong_FromLong(TWBlockchainVechain));
-    PyDict_SetItemString(dict, "Tron", PyLong_FromLong(TWBlockchainTron));
-    PyDict_SetItemString(dict, "Icon", PyLong_FromLong(TWBlockchainIcon));
-    PyDict_SetItemString(dict, "Binance", PyLong_FromLong(TWBlockchainBinance));
-    PyDict_SetItemString(dict, "Ripple", PyLong_FromLong(TWBlockchainRipple));
-    PyDict_SetItemString(dict, "Tezos", PyLong_FromLong(TWBlockchainTezos));
-    PyDict_SetItemString(dict, "Nimiq", PyLong_FromLong(TWBlockchainNimiq));
-    PyDict_SetItemString(dict, "Stellar", PyLong_FromLong(TWBlockchainStellar));
-    PyDict_SetItemString(dict, "Aion", PyLong_FromLong(TWBlockchainAion));
-    PyDict_SetItemString(dict, "Cosmos", PyLong_FromLong(TWBlockchainCosmos));
-    PyDict_SetItemString(dict, "Theta", PyLong_FromLong(TWBlockchainTheta));
-    PyDict_SetItemString(dict, "Ontology", PyLong_FromLong(TWBlockchainOntology));
-    PyDict_SetItemString(dict, "Zilliqa", PyLong_FromLong(TWBlockchainZilliqa));
-    PyDict_SetItemString(dict, "IoTeX", PyLong_FromLong(TWBlockchainIoTeX));
-    PyDict_SetItemString(dict, "EOS", PyLong_FromLong(TWBlockchainEOS));
-    PyDict_SetItemString(dict, "Nano", PyLong_FromLong(TWBlockchainNano));
-    PyDict_SetItemString(dict, "NULS", PyLong_FromLong(TWBlockchainNULS));
-    PyDict_SetItemString(dict, "Waves", PyLong_FromLong(TWBlockchainWaves));
-    PyDict_SetItemString(dict, "Aeternity", PyLong_FromLong(TWBlockchainAeternity));
-    PyDict_SetItemString(dict, "Nebulas", PyLong_FromLong(TWBlockchainNebulas));
-    PyDict_SetItemString(dict, "FIO", PyLong_FromLong(TWBlockchainFIO));
-    PyDict_SetItemString(dict, "Solana", PyLong_FromLong(TWBlockchainSolana));
-    PyDict_SetItemString(dict, "Harmony", PyLong_FromLong(TWBlockchainHarmony));
-    PyDict_SetItemString(dict, "NEAR", PyLong_FromLong(TWBlockchainNEAR));
-    PyDict_SetItemString(dict, "Algorand", PyLong_FromLong(TWBlockchainAlgorand));
-    PyDict_SetItemString(dict, "Polkadot", PyLong_FromLong(TWBlockchainPolkadot));
-    PyDict_SetItemString(dict, "Cardano", PyLong_FromLong(TWBlockchainCardano));
-    PyDict_SetItemString(dict, "NEO", PyLong_FromLong(TWBlockchainNEO));
-    PyDict_SetItemString(dict, "Filecoin", PyLong_FromLong(TWBlockchainFilecoin));
-    PyDict_SetItemString(dict, "ElrondNetwork", PyLong_FromLong(TWBlockchainElrondNetwork));
-    PyDict_SetItemString(dict, "OasisNetwork", PyLong_FromLong(TWBlockchainOasisNetwork));
+#define I(name) \
+    PyDict_SetItemString(dict, #name, PyBlockchain_FromTWBlockchain(TWBlockchain##name));
+    CONSTANTS(I)
+#undef I
 
     return true;
 }

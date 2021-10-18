@@ -1,5 +1,20 @@
 #include "SS58AddressType.h"
 
+#define CONSTANTS(I) \
+    I(Polkadot) \
+    I(Kusama) \
+
+struct ValuePair {
+    TWSS58AddressType value;
+    PyObject* pyvalue;
+};
+
+#define I(name) { TWSS58AddressType##name, nullptr },
+static ValuePair constants[] = {
+    CONSTANTS(I)
+};
+#undef I
+
 static PyTypeObject PySS58AddressTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.SS58AddressType",      /* tp_name */
@@ -24,13 +39,62 @@ static PyTypeObject PySS58AddressTypeType = {
     nullptr,                   /* tp_doc */
 };
 
-int PySS58AddressType_init(PySS58AddressTypeObject *self, PyObject *args, PyObject *kwds) {
+PyObject* PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value) {
+    ValuePair* p = nullptr;
+    for (auto& constant : constants) {
+        if (constant.value == value) {
+            p = &constant;
+            break;
+        }
+    }
+
+    if (!p) {
+        PyErr_Format(PyExc_ValueError, "Invalid SS58AddressType value: %d", value);
+        return nullptr;
+    }
+
+    if (!p->pyvalue) {
+        auto* pyvalue = PyObject_New(PySS58AddressTypeObject, &PySS58AddressTypeType);
+        *const_cast<TWSS58AddressType*>(&pyvalue->value) = value;
+        p->pyvalue = (PyObject*)pyvalue;
+    }
+
+    Py_INCREF(p->pyvalue);
+    return p->pyvalue;
+}
+
+static int PySS58AddressType_init(PySS58AddressTypeObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
+static PyObject* PySS58AddressType_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
+    int value = 0;
+    if (!PyArg_ParseTuple(args, "|i", &value)) {
+        return nullptr;
+    }
+    return PySS58AddressType_FromTWSS58AddressType((TWSS58AddressType)value);
+}
+
+static PyObject* PySS58AddressType_str(PySS58AddressTypeObject *self) {
+    const char* str = nullptr;
+    switch(self->value) {
+#define I(name) \
+        case TWSS58AddressType##name: \
+            str = #name; \
+            break;
+        CONSTANTS(I)
+#undef I
+      default:
+        str = "Unknown";
+        break;
+    }
+    return PyUnicode_FromString(str);
+}
+
 bool PyInit_SS58AddressType(PyObject *module) {
+    PySS58AddressTypeType.tp_new = PySS58AddressType_new;
     PySS58AddressTypeType.tp_init = (initproc)PySS58AddressType_init;
-    PySS58AddressTypeType.tp_new = PyType_GenericNew;
+    PySS58AddressTypeType.tp_str = (reprfunc)PySS58AddressType_str;
 
     if (PyType_Ready(&PySS58AddressTypeType) < 0)
         return false;
@@ -41,13 +105,13 @@ bool PyInit_SS58AddressType(PyObject *module) {
         return false;
     }
 
-    // auto* o = PyObject_New(PySS58AddressTypeObject, &PySS58AddressTypeType);
-
     PyObject* dict = PySS58AddressTypeType.tp_dict;
     (void)dict;
 
-    PyDict_SetItemString(dict, "Polkadot", PyLong_FromLong(TWSS58AddressTypePolkadot));
-    PyDict_SetItemString(dict, "Kusama", PyLong_FromLong(TWSS58AddressTypeKusama));
+#define I(name) \
+    PyDict_SetItemString(dict, #name, PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType##name));
+    CONSTANTS(I)
+#undef I
 
     return true;
 }

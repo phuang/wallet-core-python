@@ -7,7 +7,8 @@
 
 struct Py${name}Object {
     PyObject_HEAD
-    TW${name} value;
+    const TW${name} value;
 };
 
+PyObject* Py${name}_FromTW${name}(TW${name} value);
 bool PyInit_${name}(PyObject *module);

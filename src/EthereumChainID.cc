@@ -1,5 +1,37 @@
 #include "EthereumChainID.h"
 
+#define CONSTANTS(I) \
+    I(Ethereum) \
+    I(Go) \
+    I(POA) \
+    I(Callisto) \
+    I(EthereumClassic) \
+    I(VeChain) \
+    I(ThunderToken) \
+    I(TomoChain) \
+    I(BinanceSmartChain) \
+    I(Polygon) \
+    I(Wanchain) \
+    I(Optimism) \
+    I(Arbitrum) \
+    I(Heco) \
+    I(Avalanche) \
+    I(XDai) \
+    I(Fantom) \
+    I(Celo) \
+    I(Ronin) \
+
+struct ValuePair {
+    TWEthereumChainID value;
+    PyObject* pyvalue;
+};
+
+#define I(name) { TWEthereumChainID##name, nullptr },
+static ValuePair constants[] = {
+    CONSTANTS(I)
+};
+#undef I
+
 static PyTypeObject PyEthereumChainIDType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.EthereumChainID",      /* tp_name */
@@ -24,13 +56,62 @@ static PyTypeObject PyEthereumChainIDType = {
     nullptr,                   /* tp_doc */
 };
 
-int PyEthereumChainID_init(PyEthereumChainIDObject *self, PyObject *args, PyObject *kwds) {
+PyObject* PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value) {
+    ValuePair* p = nullptr;
+    for (auto& constant : constants) {
+        if (constant.value == value) {
+            p = &constant;
+            break;
+        }
+    }
+
+    if (!p) {
+        PyErr_Format(PyExc_ValueError, "Invalid EthereumChainID value: %d", value);
+        return nullptr;
+    }
+
+    if (!p->pyvalue) {
+        auto* pyvalue = PyObject_New(PyEthereumChainIDObject, &PyEthereumChainIDType);
+        *const_cast<TWEthereumChainID*>(&pyvalue->value) = value;
+        p->pyvalue = (PyObject*)pyvalue;
+    }
+
+    Py_INCREF(p->pyvalue);
+    return p->pyvalue;
+}
+
+static int PyEthereumChainID_init(PyEthereumChainIDObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
+static PyObject* PyEthereumChainID_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
+    int value = 0;
+    if (!PyArg_ParseTuple(args, "|i", &value)) {
+        return nullptr;
+    }
+    return PyEthereumChainID_FromTWEthereumChainID((TWEthereumChainID)value);
+}
+
+static PyObject* PyEthereumChainID_str(PyEthereumChainIDObject *self) {
+    const char* str = nullptr;
+    switch(self->value) {
+#define I(name) \
+        case TWEthereumChainID##name: \
+            str = #name; \
+            break;
+        CONSTANTS(I)
+#undef I
+      default:
+        str = "Unknown";
+        break;
+    }
+    return PyUnicode_FromString(str);
+}
+
 bool PyInit_EthereumChainID(PyObject *module) {
+    PyEthereumChainIDType.tp_new = PyEthereumChainID_new;
     PyEthereumChainIDType.tp_init = (initproc)PyEthereumChainID_init;
-    PyEthereumChainIDType.tp_new = PyType_GenericNew;
+    PyEthereumChainIDType.tp_str = (reprfunc)PyEthereumChainID_str;
 
     if (PyType_Ready(&PyEthereumChainIDType) < 0)
         return false;
@@ -41,30 +122,13 @@ bool PyInit_EthereumChainID(PyObject *module) {
         return false;
     }
 
-    // auto* o = PyObject_New(PyEthereumChainIDObject, &PyEthereumChainIDType);
-
     PyObject* dict = PyEthereumChainIDType.tp_dict;
     (void)dict;
 
-    PyDict_SetItemString(dict, "Ethereum", PyLong_FromLong(TWEthereumChainIDEthereum));
-    PyDict_SetItemString(dict, "Go", PyLong_FromLong(TWEthereumChainIDGo));
-    PyDict_SetItemString(dict, "POA", PyLong_FromLong(TWEthereumChainIDPOA));
-    PyDict_SetItemString(dict, "Callisto", PyLong_FromLong(TWEthereumChainIDCallisto));
-    PyDict_SetItemString(dict, "EthereumClassic", PyLong_FromLong(TWEthereumChainIDEthereumClassic));
-    PyDict_SetItemString(dict, "VeChain", PyLong_FromLong(TWEthereumChainIDVeChain));
-    PyDict_SetItemString(dict, "ThunderToken", PyLong_FromLong(TWEthereumChainIDThunderToken));
-    PyDict_SetItemString(dict, "TomoChain", PyLong_FromLong(TWEthereumChainIDTomoChain));
-    PyDict_SetItemString(dict, "BinanceSmartChain", PyLong_FromLong(TWEthereumChainIDBinanceSmartChain));
-    PyDict_SetItemString(dict, "Polygon", PyLong_FromLong(TWEthereumChainIDPolygon));
-    PyDict_SetItemString(dict, "Wanchain", PyLong_FromLong(TWEthereumChainIDWanchain));
-    PyDict_SetItemString(dict, "Optimism", PyLong_FromLong(TWEthereumChainIDOptimism));
-    PyDict_SetItemString(dict, "Arbitrum", PyLong_FromLong(TWEthereumChainIDArbitrum));
-    PyDict_SetItemString(dict, "Heco", PyLong_FromLong(TWEthereumChainIDHeco));
-    PyDict_SetItemString(dict, "Avalanche", PyLong_FromLong(TWEthereumChainIDAvalanche));
-    PyDict_SetItemString(dict, "XDai", PyLong_FromLong(TWEthereumChainIDXDai));
-    PyDict_SetItemString(dict, "Fantom", PyLong_FromLong(TWEthereumChainIDFantom));
-    PyDict_SetItemString(dict, "Celo", PyLong_FromLong(TWEthereumChainIDCelo));
-    PyDict_SetItemString(dict, "Ronin", PyLong_FromLong(TWEthereumChainIDRonin));
+#define I(name) \
+    PyDict_SetItemString(dict, #name, PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID##name));
+    CONSTANTS(I)
+#undef I
 
     return true;
 }

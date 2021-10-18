@@ -1,5 +1,22 @@
 #include "StellarVersionByte.h"
 
+#define CONSTANTS(I) \
+    I(AccountID) \
+    I(Seed) \
+    I(PreAuthTX) \
+    I(SHA256Hash) \
+
+struct ValuePair {
+    TWStellarVersionByte value;
+    PyObject* pyvalue;
+};
+
+#define I(name) { TWStellarVersionByte##name, nullptr },
+static ValuePair constants[] = {
+    CONSTANTS(I)
+};
+#undef I
+
 static PyTypeObject PyStellarVersionByteType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.StellarVersionByte",      /* tp_name */
@@ -24,13 +41,62 @@ static PyTypeObject PyStellarVersionByteType = {
     nullptr,                   /* tp_doc */
 };
 
-int PyStellarVersionByte_init(PyStellarVersionByteObject *self, PyObject *args, PyObject *kwds) {
+PyObject* PyStellarVersionByte_FromTWStellarVersionByte(TWStellarVersionByte value) {
+    ValuePair* p = nullptr;
+    for (auto& constant : constants) {
+        if (constant.value == value) {
+            p = &constant;
+            break;
+        }
+    }
+
+    if (!p) {
+        PyErr_Format(PyExc_ValueError, "Invalid StellarVersionByte value: %d", value);
+        return nullptr;
+    }
+
+    if (!p->pyvalue) {
+        auto* pyvalue = PyObject_New(PyStellarVersionByteObject, &PyStellarVersionByteType);
+        *const_cast<TWStellarVersionByte*>(&pyvalue->value) = value;
+        p->pyvalue = (PyObject*)pyvalue;
+    }
+
+    Py_INCREF(p->pyvalue);
+    return p->pyvalue;
+}
+
+static int PyStellarVersionByte_init(PyStellarVersionByteObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
+static PyObject* PyStellarVersionByte_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
+    int value = 0;
+    if (!PyArg_ParseTuple(args, "|i", &value)) {
+        return nullptr;
+    }
+    return PyStellarVersionByte_FromTWStellarVersionByte((TWStellarVersionByte)value);
+}
+
+static PyObject* PyStellarVersionByte_str(PyStellarVersionByteObject *self) {
+    const char* str = nullptr;
+    switch(self->value) {
+#define I(name) \
+        case TWStellarVersionByte##name: \
+            str = #name; \
+            break;
+        CONSTANTS(I)
+#undef I
+      default:
+        str = "Unknown";
+        break;
+    }
+    return PyUnicode_FromString(str);
+}
+
 bool PyInit_StellarVersionByte(PyObject *module) {
+    PyStellarVersionByteType.tp_new = PyStellarVersionByte_new;
     PyStellarVersionByteType.tp_init = (initproc)PyStellarVersionByte_init;
-    PyStellarVersionByteType.tp_new = PyType_GenericNew;
+    PyStellarVersionByteType.tp_str = (reprfunc)PyStellarVersionByte_str;
 
     if (PyType_Ready(&PyStellarVersionByteType) < 0)
         return false;
@@ -41,15 +107,13 @@ bool PyInit_StellarVersionByte(PyObject *module) {
         return false;
     }
 
-    // auto* o = PyObject_New(PyStellarVersionByteObject, &PyStellarVersionByteType);
-
     PyObject* dict = PyStellarVersionByteType.tp_dict;
     (void)dict;
 
-    PyDict_SetItemString(dict, "AccountID", PyLong_FromLong(TWStellarVersionByteAccountID));
-    PyDict_SetItemString(dict, "Seed", PyLong_FromLong(TWStellarVersionByteSeed));
-    PyDict_SetItemString(dict, "PreAuthTX", PyLong_FromLong(TWStellarVersionBytePreAuthTX));
-    PyDict_SetItemString(dict, "SHA256Hash", PyLong_FromLong(TWStellarVersionByteSHA256Hash));
+#define I(name) \
+    PyDict_SetItemString(dict, #name, PyStellarVersionByte_FromTWStellarVersionByte(TWStellarVersionByte##name));
+    CONSTANTS(I)
+#undef I
 
     return true;
 }

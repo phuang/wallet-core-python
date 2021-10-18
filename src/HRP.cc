@@ -1,5 +1,19 @@
 #include "HRP.h"
 
+#define CONSTANTS(I) \
+
+
+struct ValuePair {
+    TWHRP value;
+    PyObject* pyvalue;
+};
+
+#define I(name) { TWHRP##name, nullptr },
+static ValuePair constants[] = {
+    CONSTANTS(I)
+};
+#undef I
+
 static PyTypeObject PyHRPType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.HRP",      /* tp_name */
@@ -24,13 +38,62 @@ static PyTypeObject PyHRPType = {
     nullptr,                   /* tp_doc */
 };
 
-int PyHRP_init(PyHRPObject *self, PyObject *args, PyObject *kwds) {
+PyObject* PyHRP_FromTWHRP(TWHRP value) {
+    ValuePair* p = nullptr;
+    for (auto& constant : constants) {
+        if (constant.value == value) {
+            p = &constant;
+            break;
+        }
+    }
+
+    if (!p) {
+        PyErr_Format(PyExc_ValueError, "Invalid HRP value: %d", value);
+        return nullptr;
+    }
+
+    if (!p->pyvalue) {
+        auto* pyvalue = PyObject_New(PyHRPObject, &PyHRPType);
+        *const_cast<TWHRP*>(&pyvalue->value) = value;
+        p->pyvalue = (PyObject*)pyvalue;
+    }
+
+    Py_INCREF(p->pyvalue);
+    return p->pyvalue;
+}
+
+static int PyHRP_init(PyHRPObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
+static PyObject* PyHRP_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
+    int value = 0;
+    if (!PyArg_ParseTuple(args, "|i", &value)) {
+        return nullptr;
+    }
+    return PyHRP_FromTWHRP((TWHRP)value);
+}
+
+static PyObject* PyHRP_str(PyHRPObject *self) {
+    const char* str = nullptr;
+    switch(self->value) {
+#define I(name) \
+        case TWHRP##name: \
+            str = #name; \
+            break;
+        CONSTANTS(I)
+#undef I
+      default:
+        str = "Unknown";
+        break;
+    }
+    return PyUnicode_FromString(str);
+}
+
 bool PyInit_HRP(PyObject *module) {
+    PyHRPType.tp_new = PyHRP_new;
     PyHRPType.tp_init = (initproc)PyHRP_init;
-    PyHRPType.tp_new = PyType_GenericNew;
+    PyHRPType.tp_str = (reprfunc)PyHRP_str;
 
     if (PyType_Ready(&PyHRPType) < 0)
         return false;
@@ -41,12 +104,13 @@ bool PyInit_HRP(PyObject *module) {
         return false;
     }
 
-    // auto* o = PyObject_New(PyHRPObject, &PyHRPType);
-
     PyObject* dict = PyHRPType.tp_dict;
     (void)dict;
 
-
+#define I(name) \
+    PyDict_SetItemString(dict, #name, PyHRP_FromTWHRP(TWHRP##name));
+    CONSTANTS(I)
+#undef I
 
     return true;
 }

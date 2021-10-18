@@ -1,5 +1,19 @@
 #include "${name}.h"
 
+#define CONSTANTS(I) \
+${constants}
+
+struct ValuePair {
+    TW${name} value;
+    PyObject* pyvalue;
+};
+
+#define I(name) { TW${name}##name, nullptr },
+static ValuePair constants[] = {
+    CONSTANTS(I)
+};
+#undef I
+
 static PyTypeObject Py${name}Type = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.${name}",      /* tp_name */
@@ -24,13 +38,62 @@ static PyTypeObject Py${name}Type = {
     nullptr,                   /* tp_doc */
 };
 
-int Py${name}_init(Py${name}Object *self, PyObject *args, PyObject *kwds) {
+PyObject* Py${name}_FromTW${name}(TW${name} value) {
+    ValuePair* p = nullptr;
+    for (auto& constant : constants) {
+        if (constant.value == value) {
+            p = &constant;
+            break;
+        }
+    }
+
+    if (!p) {
+        PyErr_Format(PyExc_ValueError, "Invalid ${name} value: %d", value);
+        return nullptr;
+    }
+
+    if (!p->pyvalue) {
+        auto* pyvalue = PyObject_New(Py${name}Object, &Py${name}Type);
+        *const_cast<TW${name}*>(&pyvalue->value) = value;
+        p->pyvalue = (PyObject*)pyvalue;
+    }
+
+    Py_INCREF(p->pyvalue);
+    return p->pyvalue;
+}
+
+static int Py${name}_init(Py${name}Object *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
+static PyObject* Py${name}_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
+    int value = 0;
+    if (!PyArg_ParseTuple(args, "|i", &value)) {
+        return nullptr;
+    }
+    return Py${name}_FromTW${name}((TW${name})value);
+}
+
+static PyObject* Py${name}_str(Py${name}Object *self) {
+    const char* str = nullptr;
+    switch(self->value) {
+#define I(name) \
+        case TW${name}##name: \
+            str = #name; \
+            break;
+        CONSTANTS(I)
+#undef I
+      default:
+        str = "Unknown";
+        break;
+    }
+    return PyUnicode_FromString(str);
+}
+
 bool PyInit_${name}(PyObject *module) {
+    Py${name}Type.tp_new = Py${name}_new;
     Py${name}Type.tp_init = (initproc)Py${name}_init;
-    Py${name}Type.tp_new = PyType_GenericNew;
+    Py${name}Type.tp_str = (reprfunc)Py${name}_str;
 
     if (PyType_Ready(&Py${name}Type) < 0)
         return false;
@@ -41,12 +104,13 @@ bool PyInit_${name}(PyObject *module) {
         return false;
     }
 
-    // auto* o = PyObject_New(Py${name}Object, &Py${name}Type);
-
     PyObject* dict = Py${name}Type.tp_dict;
     (void)dict;
 
-${constants}
+#define I(name) \
+    PyDict_SetItemString(dict, #name, Py${name}_FromTW${name}(TW${name}##name));
+    CONSTANTS(I)
+#undef I
 
     return true;
 }

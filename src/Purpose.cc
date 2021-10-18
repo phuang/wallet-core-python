@@ -1,5 +1,22 @@
 #include "Purpose.h"
 
+#define CONSTANTS(I) \
+    I(BIP44) \
+    I(BIP49) \
+    I(BIP84) \
+    I(BIP1852) \
+
+struct ValuePair {
+    TWPurpose value;
+    PyObject* pyvalue;
+};
+
+#define I(name) { TWPurpose##name, nullptr },
+static ValuePair constants[] = {
+    CONSTANTS(I)
+};
+#undef I
+
 static PyTypeObject PyPurposeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.Purpose",      /* tp_name */
@@ -24,13 +41,62 @@ static PyTypeObject PyPurposeType = {
     nullptr,                   /* tp_doc */
 };
 
-int PyPurpose_init(PyPurposeObject *self, PyObject *args, PyObject *kwds) {
+PyObject* PyPurpose_FromTWPurpose(TWPurpose value) {
+    ValuePair* p = nullptr;
+    for (auto& constant : constants) {
+        if (constant.value == value) {
+            p = &constant;
+            break;
+        }
+    }
+
+    if (!p) {
+        PyErr_Format(PyExc_ValueError, "Invalid Purpose value: %d", value);
+        return nullptr;
+    }
+
+    if (!p->pyvalue) {
+        auto* pyvalue = PyObject_New(PyPurposeObject, &PyPurposeType);
+        *const_cast<TWPurpose*>(&pyvalue->value) = value;
+        p->pyvalue = (PyObject*)pyvalue;
+    }
+
+    Py_INCREF(p->pyvalue);
+    return p->pyvalue;
+}
+
+static int PyPurpose_init(PyPurposeObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
+static PyObject* PyPurpose_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
+    int value = 0;
+    if (!PyArg_ParseTuple(args, "|i", &value)) {
+        return nullptr;
+    }
+    return PyPurpose_FromTWPurpose((TWPurpose)value);
+}
+
+static PyObject* PyPurpose_str(PyPurposeObject *self) {
+    const char* str = nullptr;
+    switch(self->value) {
+#define I(name) \
+        case TWPurpose##name: \
+            str = #name; \
+            break;
+        CONSTANTS(I)
+#undef I
+      default:
+        str = "Unknown";
+        break;
+    }
+    return PyUnicode_FromString(str);
+}
+
 bool PyInit_Purpose(PyObject *module) {
+    PyPurposeType.tp_new = PyPurpose_new;
     PyPurposeType.tp_init = (initproc)PyPurpose_init;
-    PyPurposeType.tp_new = PyType_GenericNew;
+    PyPurposeType.tp_str = (reprfunc)PyPurpose_str;
 
     if (PyType_Ready(&PyPurposeType) < 0)
         return false;
@@ -41,15 +107,13 @@ bool PyInit_Purpose(PyObject *module) {
         return false;
     }
 
-    // auto* o = PyObject_New(PyPurposeObject, &PyPurposeType);
-
     PyObject* dict = PyPurposeType.tp_dict;
     (void)dict;
 
-    PyDict_SetItemString(dict, "BIP44", PyLong_FromLong(TWPurposeBIP44));
-    PyDict_SetItemString(dict, "BIP49", PyLong_FromLong(TWPurposeBIP49));
-    PyDict_SetItemString(dict, "BIP84", PyLong_FromLong(TWPurposeBIP84));
-    PyDict_SetItemString(dict, "BIP1852", PyLong_FromLong(TWPurposeBIP1852));
+#define I(name) \
+    PyDict_SetItemString(dict, #name, PyPurpose_FromTWPurpose(TWPurpose##name));
+    CONSTANTS(I)
+#undef I
 
     return true;
 }

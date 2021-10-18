@@ -1,5 +1,26 @@
 #include "PublicKeyType.h"
 
+#define CONSTANTS(I) \
+    I(SECP256k1) \
+    I(SECP256k1Extended) \
+    I(NIST256p1) \
+    I(NIST256p1Extended) \
+    I(ED25519) \
+    I(ED25519Blake2b) \
+    I(CURVE25519) \
+    I(ED25519Extended) \
+
+struct ValuePair {
+    TWPublicKeyType value;
+    PyObject* pyvalue;
+};
+
+#define I(name) { TWPublicKeyType##name, nullptr },
+static ValuePair constants[] = {
+    CONSTANTS(I)
+};
+#undef I
+
 static PyTypeObject PyPublicKeyTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.PublicKeyType",      /* tp_name */
@@ -24,13 +45,62 @@ static PyTypeObject PyPublicKeyTypeType = {
     nullptr,                   /* tp_doc */
 };
 
-int PyPublicKeyType_init(PyPublicKeyTypeObject *self, PyObject *args, PyObject *kwds) {
+PyObject* PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType value) {
+    ValuePair* p = nullptr;
+    for (auto& constant : constants) {
+        if (constant.value == value) {
+            p = &constant;
+            break;
+        }
+    }
+
+    if (!p) {
+        PyErr_Format(PyExc_ValueError, "Invalid PublicKeyType value: %d", value);
+        return nullptr;
+    }
+
+    if (!p->pyvalue) {
+        auto* pyvalue = PyObject_New(PyPublicKeyTypeObject, &PyPublicKeyTypeType);
+        *const_cast<TWPublicKeyType*>(&pyvalue->value) = value;
+        p->pyvalue = (PyObject*)pyvalue;
+    }
+
+    Py_INCREF(p->pyvalue);
+    return p->pyvalue;
+}
+
+static int PyPublicKeyType_init(PyPublicKeyTypeObject *self, PyObject *args, PyObject *kwds) {
     return 0;
 }
 
+static PyObject* PyPublicKeyType_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
+    int value = 0;
+    if (!PyArg_ParseTuple(args, "|i", &value)) {
+        return nullptr;
+    }
+    return PyPublicKeyType_FromTWPublicKeyType((TWPublicKeyType)value);
+}
+
+static PyObject* PyPublicKeyType_str(PyPublicKeyTypeObject *self) {
+    const char* str = nullptr;
+    switch(self->value) {
+#define I(name) \
+        case TWPublicKeyType##name: \
+            str = #name; \
+            break;
+        CONSTANTS(I)
+#undef I
+      default:
+        str = "Unknown";
+        break;
+    }
+    return PyUnicode_FromString(str);
+}
+
 bool PyInit_PublicKeyType(PyObject *module) {
+    PyPublicKeyTypeType.tp_new = PyPublicKeyType_new;
     PyPublicKeyTypeType.tp_init = (initproc)PyPublicKeyType_init;
-    PyPublicKeyTypeType.tp_new = PyType_GenericNew;
+    PyPublicKeyTypeType.tp_str = (reprfunc)PyPublicKeyType_str;
 
     if (PyType_Ready(&PyPublicKeyTypeType) < 0)
         return false;
@@ -41,19 +111,13 @@ bool PyInit_PublicKeyType(PyObject *module) {
         return false;
     }
 
-    // auto* o = PyObject_New(PyPublicKeyTypeObject, &PyPublicKeyTypeType);
-
     PyObject* dict = PyPublicKeyTypeType.tp_dict;
     (void)dict;
 
-    PyDict_SetItemString(dict, "SECP256k1", PyLong_FromLong(TWPublicKeyTypeSECP256k1));
-    PyDict_SetItemString(dict, "SECP256k1Extended", PyLong_FromLong(TWPublicKeyTypeSECP256k1Extended));
-    PyDict_SetItemString(dict, "NIST256p1", PyLong_FromLong(TWPublicKeyTypeNIST256p1));
-    PyDict_SetItemString(dict, "NIST256p1Extended", PyLong_FromLong(TWPublicKeyTypeNIST256p1Extended));
-    PyDict_SetItemString(dict, "ED25519", PyLong_FromLong(TWPublicKeyTypeED25519));
-    PyDict_SetItemString(dict, "ED25519Blake2b", PyLong_FromLong(TWPublicKeyTypeED25519Blake2b));
-    PyDict_SetItemString(dict, "CURVE25519", PyLong_FromLong(TWPublicKeyTypeCURVE25519));
-    PyDict_SetItemString(dict, "ED25519Extended", PyLong_FromLong(TWPublicKeyTypeED25519Extended));
+#define I(name) \
+    PyDict_SetItemString(dict, #name, PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType##name));
+    CONSTANTS(I)
+#undef I
 
     return true;
 }
