@@ -2,6 +2,9 @@
 
 #include "Curve.h"
 
+#include <algorithm>
+#include <iterator>
+
 #define CONSTANTS(I)                                                           \
   I(SECP256k1)                                                                 \
   I(ED25519)                                                                   \
@@ -11,7 +14,7 @@
   I(ED25519Extended)                                                           \
   I(None)
 
-PyTypeObject PyCurveType = {
+static PyTypeObject PyCurveType = {
     PyVarObject_HEAD_INIT(NULL, 0) "walletcore.Curve", /* tp_name */
     sizeof(PyCurveObject),                             /* tp_basicsize */
     0,                                                 /* tp_itemsize */
@@ -38,22 +41,20 @@ bool PyCurve_Check(PyObject *object) {
   return PyObject_TypeCheck(object, &PyCurveType) != 0;
 }
 
+// Create PyCurve from enum TWCurve. It returns the same PyCurve instance
+// for the same enum TWCurve value.
 PyObject *PyCurve_FromTWCurve(TWCurve value) {
   struct ValuePair {
-    TWCurve value;
+    const TWCurve value;
     PyObject *pyvalue;
   };
 #define I(name) {TWCurve##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair = nullptr;
-  for (auto &constant : constants) {
-    if (constant.value == value) {
-      value_pair = &constant;
-      break;
-    }
-  }
+  ValuePair *value_pair =
+      std::find_if(std::begin(constants), std::end(constants),
+                   [&value](const ValuePair &v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid Curve value: %d", value);
@@ -96,15 +97,9 @@ static PyObject *PyCurve_str(PyCurveObject *self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_def[] = {{}};
 
-    {},
-};
-
-static const PyMethodDef method_def[] = {
-
-    {},
-};
+static const PyMethodDef method_def[] = {{}};
 
 bool PyInit_Curve(PyObject *module) {
 

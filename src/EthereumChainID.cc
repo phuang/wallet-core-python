@@ -2,6 +2,9 @@
 
 #include "EthereumChainID.h"
 
+#include <algorithm>
+#include <iterator>
+
 #define CONSTANTS(I)                                                           \
   I(Ethereum)                                                                  \
   I(Go)                                                                        \
@@ -23,7 +26,7 @@
   I(Celo)                                                                      \
   I(Ronin)
 
-PyTypeObject PyEthereumChainIDType = {
+static PyTypeObject PyEthereumChainIDType = {
     PyVarObject_HEAD_INIT(NULL, 0) "walletcore.EthereumChainID", /* tp_name */
     sizeof(PyEthereumChainIDObject), /* tp_basicsize */
     0,                               /* tp_itemsize */
@@ -50,22 +53,20 @@ bool PyEthereumChainID_Check(PyObject *object) {
   return PyObject_TypeCheck(object, &PyEthereumChainIDType) != 0;
 }
 
+// Create PyEthereumChainID from enum TWEthereumChainID. It returns the same
+// PyEthereumChainID instance for the same enum TWEthereumChainID value.
 PyObject *PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value) {
   struct ValuePair {
-    TWEthereumChainID value;
+    const TWEthereumChainID value;
     PyObject *pyvalue;
   };
 #define I(name) {TWEthereumChainID##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair = nullptr;
-  for (auto &constant : constants) {
-    if (constant.value == value) {
-      value_pair = &constant;
-      break;
-    }
-  }
+  ValuePair *value_pair =
+      std::find_if(std::begin(constants), std::end(constants),
+                   [&value](const ValuePair &v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid EthereumChainID value: %d", value);
@@ -110,15 +111,9 @@ static PyObject *PyEthereumChainID_str(PyEthereumChainIDObject *self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_def[] = {{}};
 
-    {},
-};
-
-static const PyMethodDef method_def[] = {
-
-    {},
-};
+static const PyMethodDef method_def[] = {{}};
 
 bool PyInit_EthereumChainID(PyObject *module) {
 

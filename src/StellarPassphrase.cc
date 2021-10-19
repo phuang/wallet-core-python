@@ -2,11 +2,14 @@
 
 #include "StellarPassphrase.h"
 
+#include <algorithm>
+#include <iterator>
+
 #define CONSTANTS(I)                                                           \
   I(Stellar)                                                                   \
   I(Kin)
 
-PyTypeObject PyStellarPassphraseType = {
+static PyTypeObject PyStellarPassphraseType = {
     PyVarObject_HEAD_INIT(NULL, 0) "walletcore.StellarPassphrase", /* tp_name */
     sizeof(PyStellarPassphraseObject), /* tp_basicsize */
     0,                                 /* tp_itemsize */
@@ -33,23 +36,21 @@ bool PyStellarPassphrase_Check(PyObject *object) {
   return PyObject_TypeCheck(object, &PyStellarPassphraseType) != 0;
 }
 
+// Create PyStellarPassphrase from enum TWStellarPassphrase. It returns the same
+// PyStellarPassphrase instance for the same enum TWStellarPassphrase value.
 PyObject *
 PyStellarPassphrase_FromTWStellarPassphrase(TWStellarPassphrase value) {
   struct ValuePair {
-    TWStellarPassphrase value;
+    const TWStellarPassphrase value;
     PyObject *pyvalue;
   };
 #define I(name) {TWStellarPassphrase##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair = nullptr;
-  for (auto &constant : constants) {
-    if (constant.value == value) {
-      value_pair = &constant;
-      break;
-    }
-  }
+  ValuePair *value_pair =
+      std::find_if(std::begin(constants), std::end(constants),
+                   [&value](const ValuePair &v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid StellarPassphrase value: %d",
@@ -96,15 +97,9 @@ static PyObject *PyStellarPassphrase_str(PyStellarPassphraseObject *self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_def[] = {{}};
 
-    {},
-};
-
-static const PyMethodDef method_def[] = {
-
-    {},
-};
+static const PyMethodDef method_def[] = {{}};
 
 bool PyInit_StellarPassphrase(PyObject *module) {
 

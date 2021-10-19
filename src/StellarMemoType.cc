@@ -2,6 +2,9 @@
 
 #include "StellarMemoType.h"
 
+#include <algorithm>
+#include <iterator>
+
 #define CONSTANTS(I)                                                           \
   I(None)                                                                      \
   I(Text)                                                                      \
@@ -9,7 +12,7 @@
   I(Hash)                                                                      \
   I(Return)
 
-PyTypeObject PyStellarMemoTypeType = {
+static PyTypeObject PyStellarMemoTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0) "walletcore.StellarMemoType", /* tp_name */
     sizeof(PyStellarMemoTypeObject), /* tp_basicsize */
     0,                               /* tp_itemsize */
@@ -36,22 +39,20 @@ bool PyStellarMemoType_Check(PyObject *object) {
   return PyObject_TypeCheck(object, &PyStellarMemoTypeType) != 0;
 }
 
+// Create PyStellarMemoType from enum TWStellarMemoType. It returns the same
+// PyStellarMemoType instance for the same enum TWStellarMemoType value.
 PyObject *PyStellarMemoType_FromTWStellarMemoType(TWStellarMemoType value) {
   struct ValuePair {
-    TWStellarMemoType value;
+    const TWStellarMemoType value;
     PyObject *pyvalue;
   };
 #define I(name) {TWStellarMemoType##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair = nullptr;
-  for (auto &constant : constants) {
-    if (constant.value == value) {
-      value_pair = &constant;
-      break;
-    }
-  }
+  ValuePair *value_pair =
+      std::find_if(std::begin(constants), std::end(constants),
+                   [&value](const ValuePair &v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid StellarMemoType value: %d", value);
@@ -96,15 +97,9 @@ static PyObject *PyStellarMemoType_str(PyStellarMemoTypeObject *self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_def[] = {{}};
 
-    {},
-};
-
-static const PyMethodDef method_def[] = {
-
-    {},
-};
+static const PyMethodDef method_def[] = {{}};
 
 bool PyInit_StellarMemoType(PyObject *module) {
 

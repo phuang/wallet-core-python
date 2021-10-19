@@ -2,13 +2,16 @@
 
 #include "Purpose.h"
 
+#include <algorithm>
+#include <iterator>
+
 #define CONSTANTS(I)                                                           \
   I(BIP44)                                                                     \
   I(BIP49)                                                                     \
   I(BIP84)                                                                     \
   I(BIP1852)
 
-PyTypeObject PyPurposeType = {
+static PyTypeObject PyPurposeType = {
     PyVarObject_HEAD_INIT(NULL, 0) "walletcore.Purpose", /* tp_name */
     sizeof(PyPurposeObject),                             /* tp_basicsize */
     0,                                                   /* tp_itemsize */
@@ -35,22 +38,20 @@ bool PyPurpose_Check(PyObject *object) {
   return PyObject_TypeCheck(object, &PyPurposeType) != 0;
 }
 
+// Create PyPurpose from enum TWPurpose. It returns the same PyPurpose instance
+// for the same enum TWPurpose value.
 PyObject *PyPurpose_FromTWPurpose(TWPurpose value) {
   struct ValuePair {
-    TWPurpose value;
+    const TWPurpose value;
     PyObject *pyvalue;
   };
 #define I(name) {TWPurpose##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair = nullptr;
-  for (auto &constant : constants) {
-    if (constant.value == value) {
-      value_pair = &constant;
-      break;
-    }
-  }
+  ValuePair *value_pair =
+      std::find_if(std::begin(constants), std::end(constants),
+                   [&value](const ValuePair &v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid Purpose value: %d", value);
@@ -94,15 +95,9 @@ static PyObject *PyPurpose_str(PyPurposeObject *self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_def[] = {{}};
 
-    {},
-};
-
-static const PyMethodDef method_def[] = {
-
-    {},
-};
+static const PyMethodDef method_def[] = {{}};
 
 bool PyInit_Purpose(PyObject *module) {
 

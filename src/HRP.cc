@@ -2,6 +2,9 @@
 
 #include "HRP.h"
 
+#include <algorithm>
+#include <iterator>
+
 #define CONSTANTS(I)                                                           \
   I(Unknown)                                                                   \
   I(Bitcoin)                                                                   \
@@ -28,7 +31,7 @@
   I(Cardano)                                                                   \
   I(Qtum)
 
-PyTypeObject PyHRPType = {
+static PyTypeObject PyHRPType = {
     PyVarObject_HEAD_INIT(NULL, 0) "walletcore.HRP", /* tp_name */
     sizeof(PyHRPObject),                             /* tp_basicsize */
     0,                                               /* tp_itemsize */
@@ -55,22 +58,20 @@ bool PyHRP_Check(PyObject *object) {
   return PyObject_TypeCheck(object, &PyHRPType) != 0;
 }
 
+// Create PyHRP from enum TWHRP. It returns the same PyHRP instance
+// for the same enum TWHRP value.
 PyObject *PyHRP_FromTWHRP(TWHRP value) {
   struct ValuePair {
-    TWHRP value;
+    const TWHRP value;
     PyObject *pyvalue;
   };
 #define I(name) {TWHRP##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair = nullptr;
-  for (auto &constant : constants) {
-    if (constant.value == value) {
-      value_pair = &constant;
-      break;
-    }
-  }
+  ValuePair *value_pair =
+      std::find_if(std::begin(constants), std::end(constants),
+                   [&value](const ValuePair &v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid HRP value: %d", value);
@@ -113,15 +114,9 @@ static PyObject *PyHRP_str(PyHRPObject *self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_def[] = {{}};
 
-    {},
-};
-
-static const PyMethodDef method_def[] = {
-
-    {},
-};
+static const PyMethodDef method_def[] = {{}};
 
 bool PyInit_HRP(PyObject *module) {
 

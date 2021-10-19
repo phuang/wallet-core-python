@@ -2,6 +2,9 @@
 
 #include "PublicKeyType.h"
 
+#include <algorithm>
+#include <iterator>
+
 #define CONSTANTS(I)                                                           \
   I(SECP256k1)                                                                 \
   I(SECP256k1Extended)                                                         \
@@ -12,7 +15,7 @@
   I(CURVE25519)                                                                \
   I(ED25519Extended)
 
-PyTypeObject PyPublicKeyTypeType = {
+static PyTypeObject PyPublicKeyTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0) "walletcore.PublicKeyType", /* tp_name */
     sizeof(PyPublicKeyTypeObject), /* tp_basicsize */
     0,                             /* tp_itemsize */
@@ -39,22 +42,20 @@ bool PyPublicKeyType_Check(PyObject *object) {
   return PyObject_TypeCheck(object, &PyPublicKeyTypeType) != 0;
 }
 
+// Create PyPublicKeyType from enum TWPublicKeyType. It returns the same
+// PyPublicKeyType instance for the same enum TWPublicKeyType value.
 PyObject *PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType value) {
   struct ValuePair {
-    TWPublicKeyType value;
+    const TWPublicKeyType value;
     PyObject *pyvalue;
   };
 #define I(name) {TWPublicKeyType##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair = nullptr;
-  for (auto &constant : constants) {
-    if (constant.value == value) {
-      value_pair = &constant;
-      break;
-    }
-  }
+  ValuePair *value_pair =
+      std::find_if(std::begin(constants), std::end(constants),
+                   [&value](const ValuePair &v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid PublicKeyType value: %d", value);
@@ -98,15 +99,9 @@ static PyObject *PyPublicKeyType_str(PyPublicKeyTypeObject *self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_def[] = {{}};
 
-    {},
-};
-
-static const PyMethodDef method_def[] = {
-
-    {},
-};
+static const PyMethodDef method_def[] = {{}};
 
 bool PyInit_PublicKeyType(PyObject *module) {
 

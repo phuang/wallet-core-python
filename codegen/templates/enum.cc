@@ -2,12 +2,15 @@
 
 #include "${name}.h"
 
+#include <algorithm>
+#include <iterator>
+
 ${includes}
 
 #define CONSTANTS(I) \
 ${constants}
 
-PyTypeObject Py${name}Type = {
+static PyTypeObject Py${name}Type = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.${name}",      /* tp_name */
     sizeof(Py${name}Object),   /* tp_basicsize */
@@ -36,10 +39,11 @@ bool Py${name}_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &Py${name}Type) != 0;
 }
 
-
+// Create Py${name} from enum TW${name}. It returns the same Py${name} instance
+// for the same enum TW${name} value.
 PyObject* Py${name}_FromTW${name}(TW${name} value) {
   struct ValuePair {
-    TW${name} value;
+    const TW${name} value;
     PyObject* pyvalue;
   };
 #define I(name) { TW${name}##name, nullptr },
@@ -48,13 +52,9 @@ PyObject* Py${name}_FromTW${name}(TW${name} value) {
   };
 #undef I
 
-  ValuePair* value_pair = nullptr;
-  for (auto& constant : constants) {
-    if (constant.value == value) {
-      value_pair = &constant;
-      break;
-    }
-  }
+  ValuePair* value_pair =
+      std::find_if(std::begin(constants), std::end(constants),
+                   [&value](const ValuePair& v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid ${name} value: %d", value);
@@ -100,12 +100,10 @@ ${functions}
 
 static const PyGetSetDef get_set_def[] = {
   ${properties}
-  {},
 };
 
 static const PyMethodDef method_def[] = {
   ${methods}
-  {},
 };
 
 bool PyInit_${name}(PyObject *module) {

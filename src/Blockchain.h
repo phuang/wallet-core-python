@@ -7,14 +7,16 @@
 
 #include <TrustWalletCore/TWBlockchain.h>
 
-extern PyTypeObject PyBlockchainType;
-
 struct PyBlockchainObject {
   PyObject_HEAD const TWBlockchain value;
 };
 
+// Returns true if the object is a PyBlockchain.
 bool PyBlockchain_Check(PyObject *object);
 
+// Create PyBlockchain from an enum TWBlockchain value.
+// Note: it returns the same PyBlockchain instance for the same enum
+// TWBlockchain value. the caller should release the reference after using.
 PyObject *PyBlockchain_FromTWBlockchain(TWBlockchain value);
 
 bool PyInit_Blockchain(PyObject *module);

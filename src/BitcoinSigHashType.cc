@@ -2,6 +2,9 @@
 
 #include "BitcoinSigHashType.h"
 
+#include <algorithm>
+#include <iterator>
+
 #define CONSTANTS(I)                                                           \
   I(All)                                                                       \
   I(None)                                                                      \
@@ -10,7 +13,7 @@
   I(ForkBTG)                                                                   \
   I(AnyoneCanPay)
 
-PyTypeObject PyBitcoinSigHashTypeType = {
+static PyTypeObject PyBitcoinSigHashTypeType = {
     PyVarObject_HEAD_INIT(NULL,
                           0) "walletcore.BitcoinSigHashType", /* tp_name */
     sizeof(PyBitcoinSigHashTypeObject),                       /* tp_basicsize */
@@ -38,23 +41,22 @@ bool PyBitcoinSigHashType_Check(PyObject *object) {
   return PyObject_TypeCheck(object, &PyBitcoinSigHashTypeType) != 0;
 }
 
+// Create PyBitcoinSigHashType from enum TWBitcoinSigHashType. It returns the
+// same PyBitcoinSigHashType instance for the same enum TWBitcoinSigHashType
+// value.
 PyObject *
 PyBitcoinSigHashType_FromTWBitcoinSigHashType(TWBitcoinSigHashType value) {
   struct ValuePair {
-    TWBitcoinSigHashType value;
+    const TWBitcoinSigHashType value;
     PyObject *pyvalue;
   };
 #define I(name) {TWBitcoinSigHashType##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair = nullptr;
-  for (auto &constant : constants) {
-    if (constant.value == value) {
-      value_pair = &constant;
-      break;
-    }
-  }
+  ValuePair *value_pair =
+      std::find_if(std::begin(constants), std::end(constants),
+                   [&value](const ValuePair &v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid BitcoinSigHashType value: %d",
@@ -101,15 +103,9 @@ static PyObject *PyBitcoinSigHashType_str(PyBitcoinSigHashTypeObject *self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_def[] = {{}};
 
-    {},
-};
-
-static const PyMethodDef method_def[] = {
-
-    {},
-};
+static const PyMethodDef method_def[] = {{}};
 
 bool PyInit_BitcoinSigHashType(PyObject *module) {
 

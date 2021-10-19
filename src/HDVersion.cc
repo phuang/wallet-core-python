@@ -2,6 +2,9 @@
 
 #include "HDVersion.h"
 
+#include <algorithm>
+#include <iterator>
+
 #define CONSTANTS(I)                                                           \
   I(None)                                                                      \
   I(XPUB)                                                                      \
@@ -19,7 +22,7 @@
   I(DGUB)                                                                      \
   I(DGPV)
 
-PyTypeObject PyHDVersionType = {
+static PyTypeObject PyHDVersionType = {
     PyVarObject_HEAD_INIT(NULL, 0) "walletcore.HDVersion", /* tp_name */
     sizeof(PyHDVersionObject),                             /* tp_basicsize */
     0,                                                     /* tp_itemsize */
@@ -46,22 +49,20 @@ bool PyHDVersion_Check(PyObject *object) {
   return PyObject_TypeCheck(object, &PyHDVersionType) != 0;
 }
 
+// Create PyHDVersion from enum TWHDVersion. It returns the same PyHDVersion
+// instance for the same enum TWHDVersion value.
 PyObject *PyHDVersion_FromTWHDVersion(TWHDVersion value) {
   struct ValuePair {
-    TWHDVersion value;
+    const TWHDVersion value;
     PyObject *pyvalue;
   };
 #define I(name) {TWHDVersion##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair = nullptr;
-  for (auto &constant : constants) {
-    if (constant.value == value) {
-      value_pair = &constant;
-      break;
-    }
-  }
+  ValuePair *value_pair =
+      std::find_if(std::begin(constants), std::end(constants),
+                   [&value](const ValuePair &v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid HDVersion value: %d", value);
@@ -120,13 +121,9 @@ static PyObject *PyHDVersionIsPrivate(PyHDVersionObject *self, void *) {
 static const PyGetSetDef get_set_def[] = {
     {"IsPublic", (getter)PyHDVersionIsPublic},
     {"IsPrivate", (getter)PyHDVersionIsPrivate},
-    {},
-};
+    {}};
 
-static const PyMethodDef method_def[] = {
-
-    {},
-};
+static const PyMethodDef method_def[] = {{}};
 
 bool PyInit_HDVersion(PyObject *module) {
 

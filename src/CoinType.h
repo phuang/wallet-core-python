@@ -7,14 +7,16 @@
 
 #include <TrustWalletCore/TWCoinType.h>
 
-extern PyTypeObject PyCoinTypeType;
-
 struct PyCoinTypeObject {
   PyObject_HEAD const TWCoinType value;
 };
 
+// Returns true if the object is a PyCoinType.
 bool PyCoinType_Check(PyObject *object);
 
+// Create PyCoinType from an enum TWCoinType value.
+// Note: it returns the same PyCoinType instance for the same enum TWCoinType
+// value. the caller should release the reference after using.
 PyObject *PyCoinType_FromTWCoinType(TWCoinType value);
 
 bool PyInit_CoinType(PyObject *module);

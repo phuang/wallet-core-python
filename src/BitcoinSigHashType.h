@@ -7,14 +7,17 @@
 
 #include <TrustWalletCore/TWBitcoinSigHashType.h>
 
-extern PyTypeObject PyBitcoinSigHashTypeType;
-
 struct PyBitcoinSigHashTypeObject {
   PyObject_HEAD const TWBitcoinSigHashType value;
 };
 
+// Returns true if the object is a PyBitcoinSigHashType.
 bool PyBitcoinSigHashType_Check(PyObject *object);
 
+// Create PyBitcoinSigHashType from an enum TWBitcoinSigHashType value.
+// Note: it returns the same PyBitcoinSigHashType instance for the same enum
+// TWBitcoinSigHashType value. the caller should release the reference after
+// using.
 PyObject *
 PyBitcoinSigHashType_FromTWBitcoinSigHashType(TWBitcoinSigHashType value);
 

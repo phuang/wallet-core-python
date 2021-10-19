@@ -2,6 +2,9 @@
 
 #include "Blockchain.h"
 
+#include <algorithm>
+#include <iterator>
+
 #define CONSTANTS(I)                                                           \
   I(Bitcoin)                                                                   \
   I(Ethereum)                                                                  \
@@ -37,7 +40,7 @@
   I(ElrondNetwork)                                                             \
   I(OasisNetwork)
 
-PyTypeObject PyBlockchainType = {
+static PyTypeObject PyBlockchainType = {
     PyVarObject_HEAD_INIT(NULL, 0) "walletcore.Blockchain", /* tp_name */
     sizeof(PyBlockchainObject),                             /* tp_basicsize */
     0,                                                      /* tp_itemsize */
@@ -64,22 +67,20 @@ bool PyBlockchain_Check(PyObject *object) {
   return PyObject_TypeCheck(object, &PyBlockchainType) != 0;
 }
 
+// Create PyBlockchain from enum TWBlockchain. It returns the same PyBlockchain
+// instance for the same enum TWBlockchain value.
 PyObject *PyBlockchain_FromTWBlockchain(TWBlockchain value) {
   struct ValuePair {
-    TWBlockchain value;
+    const TWBlockchain value;
     PyObject *pyvalue;
   };
 #define I(name) {TWBlockchain##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair = nullptr;
-  for (auto &constant : constants) {
-    if (constant.value == value) {
-      value_pair = &constant;
-      break;
-    }
-  }
+  ValuePair *value_pair =
+      std::find_if(std::begin(constants), std::end(constants),
+                   [&value](const ValuePair &v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid Blockchain value: %d", value);
@@ -123,15 +124,9 @@ static PyObject *PyBlockchain_str(PyBlockchainObject *self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_def[] = {{}};
 
-    {},
-};
-
-static const PyMethodDef method_def[] = {
-
-    {},
-};
+static const PyMethodDef method_def[] = {{}};
 
 bool PyInit_Blockchain(PyObject *module) {
 

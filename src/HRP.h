@@ -7,14 +7,16 @@
 
 #include <TrustWalletCore/TWHRP.h>
 
-extern PyTypeObject PyHRPType;
-
 struct PyHRPObject {
   PyObject_HEAD const TWHRP value;
 };
 
+// Returns true if the object is a PyHRP.
 bool PyHRP_Check(PyObject *object);
 
+// Create PyHRP from an enum TWHRP value.
+// Note: it returns the same PyHRP instance for the same enum TWHRP value.
+// the caller should release the reference after using.
 PyObject *PyHRP_FromTWHRP(TWHRP value);
 
 bool PyInit_HRP(PyObject *module);

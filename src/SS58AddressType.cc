@@ -2,11 +2,14 @@
 
 #include "SS58AddressType.h"
 
+#include <algorithm>
+#include <iterator>
+
 #define CONSTANTS(I)                                                           \
   I(Polkadot)                                                                  \
   I(Kusama)
 
-PyTypeObject PySS58AddressTypeType = {
+static PyTypeObject PySS58AddressTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0) "walletcore.SS58AddressType", /* tp_name */
     sizeof(PySS58AddressTypeObject), /* tp_basicsize */
     0,                               /* tp_itemsize */
@@ -33,22 +36,20 @@ bool PySS58AddressType_Check(PyObject *object) {
   return PyObject_TypeCheck(object, &PySS58AddressTypeType) != 0;
 }
 
+// Create PySS58AddressType from enum TWSS58AddressType. It returns the same
+// PySS58AddressType instance for the same enum TWSS58AddressType value.
 PyObject *PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value) {
   struct ValuePair {
-    TWSS58AddressType value;
+    const TWSS58AddressType value;
     PyObject *pyvalue;
   };
 #define I(name) {TWSS58AddressType##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair = nullptr;
-  for (auto &constant : constants) {
-    if (constant.value == value) {
-      value_pair = &constant;
-      break;
-    }
-  }
+  ValuePair *value_pair =
+      std::find_if(std::begin(constants), std::end(constants),
+                   [&value](const ValuePair &v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid SS58AddressType value: %d", value);
@@ -93,15 +94,9 @@ static PyObject *PySS58AddressType_str(PySS58AddressTypeObject *self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_def[] = {{}};
 
-    {},
-};
-
-static const PyMethodDef method_def[] = {
-
-    {},
-};
+static const PyMethodDef method_def[] = {{}};
 
 bool PyInit_SS58AddressType(PyObject *module) {
 

@@ -7,14 +7,16 @@
 
 #include <TrustWalletCore/TWPublicKeyType.h>
 
-extern PyTypeObject PyPublicKeyTypeType;
-
 struct PyPublicKeyTypeObject {
   PyObject_HEAD const TWPublicKeyType value;
 };
 
+// Returns true if the object is a PyPublicKeyType.
 bool PyPublicKeyType_Check(PyObject *object);
 
+// Create PyPublicKeyType from an enum TWPublicKeyType value.
+// Note: it returns the same PyPublicKeyType instance for the same enum
+// TWPublicKeyType value. the caller should release the reference after using.
 PyObject *PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType value);
 
 bool PyInit_PublicKeyType(PyObject *module);

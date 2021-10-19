@@ -83,14 +83,15 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
         includes.sort()
         includes = '\n'.join([ '#include "{}.h"'.format(n) for n in includes])
 
-        properties = '\n  '.join([ '{{ "{1}", (getter)Py{0}{1} }},'.format(name, p) for p in properties ])
+        properties = [ '{{ "{1}", (getter)Py{0}{1} }},'.format(name, p) for p in properties ] + [ '{}' ]
+        properties = '\n  '.join(properties)
 
         values = {
             'name' : name,
             'includes' : includes,
             'constants' : constants,
             'properties' : properties,
-            'methods' : '',
+            'methods' : '{}',
             'functions' : '\n'.join(functions)
         }
 
