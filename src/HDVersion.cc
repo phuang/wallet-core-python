@@ -117,13 +117,13 @@ static PyObject *PyHDVersionIsPrivate(PyHDVersionObject *self, void *) {
   return result;
 }
 
-const static PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_def[] = {
     {"IsPublic", (getter)PyHDVersionIsPublic},
     {"IsPrivate", (getter)PyHDVersionIsPrivate},
     {},
 };
 
-const static PyMethodDef method_def[] = {
+static const PyMethodDef method_def[] = {
 
     {},
 };

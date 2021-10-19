@@ -94,12 +94,12 @@ static PyObject *PyPurpose_str(PyPurposeObject *self) {
   return PyUnicode_FromString(str);
 }
 
-const static PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_def[] = {
 
     {},
 };
 
-const static PyMethodDef method_def[] = {
+static const PyMethodDef method_def[] = {
 
     {},
 };

@@ -210,7 +210,7 @@ static PyObject *PyCoinTypeSlip44Id(PyCoinTypeObject *self, void *) {
   return PyLong_FromLong((long)TWCoinTypeSlip44Id(self->value));
 }
 
-const static PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_def[] = {
     {"Blockchain", (getter)PyCoinTypeBlockchain},
     {"Purpose", (getter)PyCoinTypePurpose},
     {"Curve", (getter)PyCoinTypeCurve},
@@ -224,7 +224,7 @@ const static PyGetSetDef get_set_def[] = {
     {},
 };
 
-const static PyMethodDef method_def[] = {
+static const PyMethodDef method_def[] = {
 
     {},
 };
