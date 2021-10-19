@@ -99,11 +99,11 @@ static PyObject* Py${name}_str(Py${name}Object *self) {
 ${functions}
 
 static const PyGetSetDef get_set_def[] = {
-  ${properties}
+${properties}
 };
 
 static const PyMethodDef method_def[] = {
-  ${methods}
+${methods}
 };
 
 bool PyInit_${name}(PyObject *module) {
