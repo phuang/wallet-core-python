@@ -5,10 +5,10 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I)                                                           \
-  I(BIP44)                                                                     \
-  I(BIP49)                                                                     \
-  I(BIP84)                                                                     \
+#define CONSTANTS(I) \
+  I(BIP44)           \
+  I(BIP49)           \
+  I(BIP84)           \
   I(BIP1852)
 
 static PyTypeObject PyPurposeType = {
@@ -34,24 +34,24 @@ static PyTypeObject PyPurposeType = {
     nullptr,                                             /* tp_doc */
 };
 
-bool PyPurpose_Check(PyObject *object) {
+bool PyPurpose_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyPurposeType) != 0;
 }
 
 // Create PyPurpose from enum TWPurpose. It returns the same PyPurpose instance
 // for the same enum TWPurpose value.
-PyObject *PyPurpose_FromTWPurpose(TWPurpose value) {
+PyObject* PyPurpose_FromTWPurpose(TWPurpose value) {
   struct ValuePair {
     const TWPurpose value;
-    PyObject *pyvalue;
+    PyObject* pyvalue;
   };
 #define I(name) {TWPurpose##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair =
+  ValuePair* value_pair =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair &v) { return v.value == value; });
+                   [&value](const ValuePair& v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid Purpose value: %d", value);
@@ -59,22 +59,24 @@ PyObject *PyPurpose_FromTWPurpose(TWPurpose value) {
   }
 
   if (!value_pair->pyvalue) {
-    auto *pyvalue = PyObject_New(PyPurposeObject, &PyPurposeType);
-    *const_cast<TWPurpose *>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject *)pyvalue;
+    auto* pyvalue = PyObject_New(PyPurposeObject, &PyPurposeType);
+    *const_cast<TWPurpose*>(&pyvalue->value) = value;
+    value_pair->pyvalue = (PyObject*)pyvalue;
   }
 
   Py_INCREF(value_pair->pyvalue);
   return value_pair->pyvalue;
 }
 
-static int PyPurpose_init(PyPurposeObject *self, PyObject *args,
-                          PyObject *kwds) {
+static int PyPurpose_init(PyPurposeObject* self,
+                          PyObject* args,
+                          PyObject* kwds) {
   return 0;
 }
 
-static PyObject *PyPurpose_new(PyTypeObject *subtype, PyObject *args,
-                               PyObject *kwds) {
+static PyObject* PyPurpose_new(PyTypeObject* subtype,
+                               PyObject* args,
+                               PyObject* kwds) {
   int value = 0;
   if (!PyArg_ParseTuple(args, "|i", &value)) {
     return nullptr;
@@ -82,12 +84,12 @@ static PyObject *PyPurpose_new(PyTypeObject *subtype, PyObject *args,
   return PyPurpose_FromTWPurpose((TWPurpose)value);
 }
 
-static PyObject *PyPurpose_str(PyPurposeObject *self) {
-  const char *str = "Unknown";
+static PyObject* PyPurpose_str(PyPurposeObject* self) {
+  const char* str = "Unknown";
   switch (self->value) {
-#define I(name)                                                                \
-  case TWPurpose##name:                                                        \
-    str = #name;                                                               \
+#define I(name)         \
+  case TWPurpose##name: \
+    str = #name;        \
     break;
     CONSTANTS(I)
 #undef I
@@ -99,27 +101,26 @@ static const PyGetSetDef get_set_def[] = {{}};
 
 static const PyMethodDef method_def[] = {{}};
 
-bool PyInit_Purpose(PyObject *module) {
-
+bool PyInit_Purpose(PyObject* module) {
   PyPurposeType.tp_new = PyPurpose_new;
   PyPurposeType.tp_init = (initproc)PyPurpose_init;
   PyPurposeType.tp_str = (reprfunc)PyPurpose_str;
-  PyPurposeType.tp_getset = (PyGetSetDef *)get_set_def;
-  PyPurposeType.tp_methods = (PyMethodDef *)method_def;
+  PyPurposeType.tp_getset = (PyGetSetDef*)get_set_def;
+  PyPurposeType.tp_methods = (PyMethodDef*)method_def;
 
   if (PyType_Ready(&PyPurposeType) < 0)
     return false;
 
   Py_INCREF(&PyPurposeType);
-  if (PyModule_AddObject(module, "Purpose", (PyObject *)&PyPurposeType) < 0) {
+  if (PyModule_AddObject(module, "Purpose", (PyObject*)&PyPurposeType) < 0) {
     Py_DECREF(&PyPurposeType);
     return false;
   }
 
-  PyObject *dict = PyPurposeType.tp_dict;
+  PyObject* dict = PyPurposeType.tp_dict;
   (void)dict;
 
-#define I(name)                                                                \
+#define I(name) \
   PyDict_SetItemString(dict, #name, PyPurpose_FromTWPurpose(TWPurpose##name));
   CONSTANTS(I)
 #undef I

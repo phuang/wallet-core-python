@@ -12,11 +12,13 @@ struct PySS58AddressTypeObject {
 };
 
 // Returns true if the object is a PySS58AddressType.
-bool PySS58AddressType_Check(PyObject *object);
+bool PySS58AddressType_Check(PyObject* object);
 
 // Create PySS58AddressType from an enum TWSS58AddressType value.
 // Note: it returns the same PySS58AddressType instance for the same enum
 // TWSS58AddressType value. the caller should release the reference after using.
-PyObject *PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value);
+PyObject* PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value);
 
-bool PyInit_SS58AddressType(PyObject *module);
+// Initialize for PySS58AddressType. It is called by python module init
+// function.
+bool PyInit_SS58AddressType(PyObject* module);

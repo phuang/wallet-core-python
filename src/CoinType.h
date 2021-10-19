@@ -12,11 +12,12 @@ struct PyCoinTypeObject {
 };
 
 // Returns true if the object is a PyCoinType.
-bool PyCoinType_Check(PyObject *object);
+bool PyCoinType_Check(PyObject* object);
 
 // Create PyCoinType from an enum TWCoinType value.
 // Note: it returns the same PyCoinType instance for the same enum TWCoinType
 // value. the caller should release the reference after using.
-PyObject *PyCoinType_FromTWCoinType(TWCoinType value);
+PyObject* PyCoinType_FromTWCoinType(TWCoinType value);
 
-bool PyInit_CoinType(PyObject *module);
+// Initialize for PyCoinType. It is called by python module init function.
+bool PyInit_CoinType(PyObject* module);

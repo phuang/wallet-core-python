@@ -5,30 +5,30 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I)                                                           \
-  I(Unknown)                                                                   \
-  I(Bitcoin)                                                                   \
-  I(Litecoin)                                                                  \
-  I(Viacoin)                                                                   \
-  I(Groestlcoin)                                                               \
-  I(DigiByte)                                                                  \
-  I(Monacoin)                                                                  \
-  I(Cosmos)                                                                    \
-  I(BitcoinCash)                                                               \
-  I(BitcoinGold)                                                               \
-  I(IoTeX)                                                                     \
-  I(Zilliqa)                                                                   \
-  I(Terra)                                                                     \
-  I(CryptoOrg)                                                                 \
-  I(Kava)                                                                      \
-  I(Oasis)                                                                     \
-  I(Bluzelle)                                                                  \
-  I(BandChain)                                                                 \
-  I(Elrond)                                                                    \
-  I(Binance)                                                                   \
-  I(THORChain)                                                                 \
-  I(Harmony)                                                                   \
-  I(Cardano)                                                                   \
+#define CONSTANTS(I) \
+  I(Unknown)         \
+  I(Bitcoin)         \
+  I(Litecoin)        \
+  I(Viacoin)         \
+  I(Groestlcoin)     \
+  I(DigiByte)        \
+  I(Monacoin)        \
+  I(Cosmos)          \
+  I(BitcoinCash)     \
+  I(BitcoinGold)     \
+  I(IoTeX)           \
+  I(Zilliqa)         \
+  I(Terra)           \
+  I(CryptoOrg)       \
+  I(Kava)            \
+  I(Oasis)           \
+  I(Bluzelle)        \
+  I(BandChain)       \
+  I(Elrond)          \
+  I(Binance)         \
+  I(THORChain)       \
+  I(Harmony)         \
+  I(Cardano)         \
   I(Qtum)
 
 static PyTypeObject PyHRPType = {
@@ -54,24 +54,24 @@ static PyTypeObject PyHRPType = {
     nullptr,                                         /* tp_doc */
 };
 
-bool PyHRP_Check(PyObject *object) {
+bool PyHRP_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyHRPType) != 0;
 }
 
 // Create PyHRP from enum TWHRP. It returns the same PyHRP instance
 // for the same enum TWHRP value.
-PyObject *PyHRP_FromTWHRP(TWHRP value) {
+PyObject* PyHRP_FromTWHRP(TWHRP value) {
   struct ValuePair {
     const TWHRP value;
-    PyObject *pyvalue;
+    PyObject* pyvalue;
   };
 #define I(name) {TWHRP##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair =
+  ValuePair* value_pair =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair &v) { return v.value == value; });
+                   [&value](const ValuePair& v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid HRP value: %d", value);
@@ -79,21 +79,22 @@ PyObject *PyHRP_FromTWHRP(TWHRP value) {
   }
 
   if (!value_pair->pyvalue) {
-    auto *pyvalue = PyObject_New(PyHRPObject, &PyHRPType);
-    *const_cast<TWHRP *>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject *)pyvalue;
+    auto* pyvalue = PyObject_New(PyHRPObject, &PyHRPType);
+    *const_cast<TWHRP*>(&pyvalue->value) = value;
+    value_pair->pyvalue = (PyObject*)pyvalue;
   }
 
   Py_INCREF(value_pair->pyvalue);
   return value_pair->pyvalue;
 }
 
-static int PyHRP_init(PyHRPObject *self, PyObject *args, PyObject *kwds) {
+static int PyHRP_init(PyHRPObject* self, PyObject* args, PyObject* kwds) {
   return 0;
 }
 
-static PyObject *PyHRP_new(PyTypeObject *subtype, PyObject *args,
-                           PyObject *kwds) {
+static PyObject* PyHRP_new(PyTypeObject* subtype,
+                           PyObject* args,
+                           PyObject* kwds) {
   int value = 0;
   if (!PyArg_ParseTuple(args, "|i", &value)) {
     return nullptr;
@@ -101,12 +102,12 @@ static PyObject *PyHRP_new(PyTypeObject *subtype, PyObject *args,
   return PyHRP_FromTWHRP((TWHRP)value);
 }
 
-static PyObject *PyHRP_str(PyHRPObject *self) {
-  const char *str = "Unknown";
+static PyObject* PyHRP_str(PyHRPObject* self) {
+  const char* str = "Unknown";
   switch (self->value) {
-#define I(name)                                                                \
-  case TWHRP##name:                                                            \
-    str = #name;                                                               \
+#define I(name)     \
+  case TWHRP##name: \
+    str = #name;    \
     break;
     CONSTANTS(I)
 #undef I
@@ -118,24 +119,23 @@ static const PyGetSetDef get_set_def[] = {{}};
 
 static const PyMethodDef method_def[] = {{}};
 
-bool PyInit_HRP(PyObject *module) {
-
+bool PyInit_HRP(PyObject* module) {
   PyHRPType.tp_new = PyHRP_new;
   PyHRPType.tp_init = (initproc)PyHRP_init;
   PyHRPType.tp_str = (reprfunc)PyHRP_str;
-  PyHRPType.tp_getset = (PyGetSetDef *)get_set_def;
-  PyHRPType.tp_methods = (PyMethodDef *)method_def;
+  PyHRPType.tp_getset = (PyGetSetDef*)get_set_def;
+  PyHRPType.tp_methods = (PyMethodDef*)method_def;
 
   if (PyType_Ready(&PyHRPType) < 0)
     return false;
 
   Py_INCREF(&PyHRPType);
-  if (PyModule_AddObject(module, "HRP", (PyObject *)&PyHRPType) < 0) {
+  if (PyModule_AddObject(module, "HRP", (PyObject*)&PyHRPType) < 0) {
     Py_DECREF(&PyHRPType);
     return false;
   }
 
-  PyObject *dict = PyHRPType.tp_dict;
+  PyObject* dict = PyHRPType.tp_dict;
   (void)dict;
 
 #define I(name) PyDict_SetItemString(dict, #name, PyHRP_FromTWHRP(TWHRP##name));

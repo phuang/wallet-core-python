@@ -18,7 +18,7 @@
 #include "StellarPassphrase.h"
 #include "StellarVersionByte.h"
 
-typedef bool (*InitProc)(PyObject *module);
+typedef bool (*InitProc)(PyObject* module);
 const InitProc init_functions[] = {
     PyInit_AESPaddingMode,
     PyInit_BitcoinSigHashType,
@@ -44,7 +44,7 @@ PyMODINIT_FUNC PyInit_walletcore(void) {
       nullptr                              /* m_methods */
   };
 
-  PyObject *module = PyModule_Create(&enum_module_def);
+  PyObject* module = PyModule_Create(&enum_module_def);
   if (module == nullptr) {
     return nullptr;
   }

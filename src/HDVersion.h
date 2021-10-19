@@ -12,11 +12,12 @@ struct PyHDVersionObject {
 };
 
 // Returns true if the object is a PyHDVersion.
-bool PyHDVersion_Check(PyObject *object);
+bool PyHDVersion_Check(PyObject* object);
 
 // Create PyHDVersion from an enum TWHDVersion value.
 // Note: it returns the same PyHDVersion instance for the same enum TWHDVersion
 // value. the caller should release the reference after using.
-PyObject *PyHDVersion_FromTWHDVersion(TWHDVersion value);
+PyObject* PyHDVersion_FromTWHDVersion(TWHDVersion value);
 
-bool PyInit_HDVersion(PyObject *module);
+// Initialize for PyHDVersion. It is called by python module init function.
+bool PyInit_HDVersion(PyObject* module);

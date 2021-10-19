@@ -12,11 +12,13 @@ struct PyStellarMemoTypeObject {
 };
 
 // Returns true if the object is a PyStellarMemoType.
-bool PyStellarMemoType_Check(PyObject *object);
+bool PyStellarMemoType_Check(PyObject* object);
 
 // Create PyStellarMemoType from an enum TWStellarMemoType value.
 // Note: it returns the same PyStellarMemoType instance for the same enum
 // TWStellarMemoType value. the caller should release the reference after using.
-PyObject *PyStellarMemoType_FromTWStellarMemoType(TWStellarMemoType value);
+PyObject* PyStellarMemoType_FromTWStellarMemoType(TWStellarMemoType value);
 
-bool PyInit_StellarMemoType(PyObject *module);
+// Initialize for PyStellarMemoType. It is called by python module init
+// function.
+bool PyInit_StellarMemoType(PyObject* module);

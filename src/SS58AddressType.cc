@@ -5,8 +5,8 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I)                                                           \
-  I(Polkadot)                                                                  \
+#define CONSTANTS(I) \
+  I(Polkadot)        \
   I(Kusama)
 
 static PyTypeObject PySS58AddressTypeType = {
@@ -32,24 +32,24 @@ static PyTypeObject PySS58AddressTypeType = {
     nullptr,                         /* tp_doc */
 };
 
-bool PySS58AddressType_Check(PyObject *object) {
+bool PySS58AddressType_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PySS58AddressTypeType) != 0;
 }
 
 // Create PySS58AddressType from enum TWSS58AddressType. It returns the same
 // PySS58AddressType instance for the same enum TWSS58AddressType value.
-PyObject *PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value) {
+PyObject* PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value) {
   struct ValuePair {
     const TWSS58AddressType value;
-    PyObject *pyvalue;
+    PyObject* pyvalue;
   };
 #define I(name) {TWSS58AddressType##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair =
+  ValuePair* value_pair =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair &v) { return v.value == value; });
+                   [&value](const ValuePair& v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid SS58AddressType value: %d", value);
@@ -57,23 +57,25 @@ PyObject *PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value) {
   }
 
   if (!value_pair->pyvalue) {
-    auto *pyvalue =
+    auto* pyvalue =
         PyObject_New(PySS58AddressTypeObject, &PySS58AddressTypeType);
-    *const_cast<TWSS58AddressType *>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject *)pyvalue;
+    *const_cast<TWSS58AddressType*>(&pyvalue->value) = value;
+    value_pair->pyvalue = (PyObject*)pyvalue;
   }
 
   Py_INCREF(value_pair->pyvalue);
   return value_pair->pyvalue;
 }
 
-static int PySS58AddressType_init(PySS58AddressTypeObject *self, PyObject *args,
-                                  PyObject *kwds) {
+static int PySS58AddressType_init(PySS58AddressTypeObject* self,
+                                  PyObject* args,
+                                  PyObject* kwds) {
   return 0;
 }
 
-static PyObject *PySS58AddressType_new(PyTypeObject *subtype, PyObject *args,
-                                       PyObject *kwds) {
+static PyObject* PySS58AddressType_new(PyTypeObject* subtype,
+                                       PyObject* args,
+                                       PyObject* kwds) {
   int value = 0;
   if (!PyArg_ParseTuple(args, "|i", &value)) {
     return nullptr;
@@ -81,12 +83,12 @@ static PyObject *PySS58AddressType_new(PyTypeObject *subtype, PyObject *args,
   return PySS58AddressType_FromTWSS58AddressType((TWSS58AddressType)value);
 }
 
-static PyObject *PySS58AddressType_str(PySS58AddressTypeObject *self) {
-  const char *str = "Unknown";
+static PyObject* PySS58AddressType_str(PySS58AddressTypeObject* self) {
+  const char* str = "Unknown";
   switch (self->value) {
-#define I(name)                                                                \
-  case TWSS58AddressType##name:                                                \
-    str = #name;                                                               \
+#define I(name)                 \
+  case TWSS58AddressType##name: \
+    str = #name;                \
     break;
     CONSTANTS(I)
 #undef I
@@ -98,30 +100,29 @@ static const PyGetSetDef get_set_def[] = {{}};
 
 static const PyMethodDef method_def[] = {{}};
 
-bool PyInit_SS58AddressType(PyObject *module) {
-
+bool PyInit_SS58AddressType(PyObject* module) {
   PySS58AddressTypeType.tp_new = PySS58AddressType_new;
   PySS58AddressTypeType.tp_init = (initproc)PySS58AddressType_init;
   PySS58AddressTypeType.tp_str = (reprfunc)PySS58AddressType_str;
-  PySS58AddressTypeType.tp_getset = (PyGetSetDef *)get_set_def;
-  PySS58AddressTypeType.tp_methods = (PyMethodDef *)method_def;
+  PySS58AddressTypeType.tp_getset = (PyGetSetDef*)get_set_def;
+  PySS58AddressTypeType.tp_methods = (PyMethodDef*)method_def;
 
   if (PyType_Ready(&PySS58AddressTypeType) < 0)
     return false;
 
   Py_INCREF(&PySS58AddressTypeType);
   if (PyModule_AddObject(module, "SS58AddressType",
-                         (PyObject *)&PySS58AddressTypeType) < 0) {
+                         (PyObject*)&PySS58AddressTypeType) < 0) {
     Py_DECREF(&PySS58AddressTypeType);
     return false;
   }
 
-  PyObject *dict = PySS58AddressTypeType.tp_dict;
+  PyObject* dict = PySS58AddressTypeType.tp_dict;
   (void)dict;
 
-#define I(name)                                                                \
-  PyDict_SetItemString(                                                        \
-      dict, #name,                                                             \
+#define I(name)         \
+  PyDict_SetItemString( \
+      dict, #name,      \
       PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType##name));
   CONSTANTS(I)
 #undef I

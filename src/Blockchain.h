@@ -12,11 +12,12 @@ struct PyBlockchainObject {
 };
 
 // Returns true if the object is a PyBlockchain.
-bool PyBlockchain_Check(PyObject *object);
+bool PyBlockchain_Check(PyObject* object);
 
 // Create PyBlockchain from an enum TWBlockchain value.
 // Note: it returns the same PyBlockchain instance for the same enum
 // TWBlockchain value. the caller should release the reference after using.
-PyObject *PyBlockchain_FromTWBlockchain(TWBlockchain value);
+PyObject* PyBlockchain_FromTWBlockchain(TWBlockchain value);
 
-bool PyInit_Blockchain(PyObject *module);
+// Initialize for PyBlockchain. It is called by python module init function.
+bool PyInit_Blockchain(PyObject* module);

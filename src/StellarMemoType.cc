@@ -5,11 +5,11 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I)                                                           \
-  I(None)                                                                      \
-  I(Text)                                                                      \
-  I(Id)                                                                        \
-  I(Hash)                                                                      \
+#define CONSTANTS(I) \
+  I(None)            \
+  I(Text)            \
+  I(Id)              \
+  I(Hash)            \
   I(Return)
 
 static PyTypeObject PyStellarMemoTypeType = {
@@ -35,24 +35,24 @@ static PyTypeObject PyStellarMemoTypeType = {
     nullptr,                         /* tp_doc */
 };
 
-bool PyStellarMemoType_Check(PyObject *object) {
+bool PyStellarMemoType_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyStellarMemoTypeType) != 0;
 }
 
 // Create PyStellarMemoType from enum TWStellarMemoType. It returns the same
 // PyStellarMemoType instance for the same enum TWStellarMemoType value.
-PyObject *PyStellarMemoType_FromTWStellarMemoType(TWStellarMemoType value) {
+PyObject* PyStellarMemoType_FromTWStellarMemoType(TWStellarMemoType value) {
   struct ValuePair {
     const TWStellarMemoType value;
-    PyObject *pyvalue;
+    PyObject* pyvalue;
   };
 #define I(name) {TWStellarMemoType##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair =
+  ValuePair* value_pair =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair &v) { return v.value == value; });
+                   [&value](const ValuePair& v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid StellarMemoType value: %d", value);
@@ -60,23 +60,25 @@ PyObject *PyStellarMemoType_FromTWStellarMemoType(TWStellarMemoType value) {
   }
 
   if (!value_pair->pyvalue) {
-    auto *pyvalue =
+    auto* pyvalue =
         PyObject_New(PyStellarMemoTypeObject, &PyStellarMemoTypeType);
-    *const_cast<TWStellarMemoType *>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject *)pyvalue;
+    *const_cast<TWStellarMemoType*>(&pyvalue->value) = value;
+    value_pair->pyvalue = (PyObject*)pyvalue;
   }
 
   Py_INCREF(value_pair->pyvalue);
   return value_pair->pyvalue;
 }
 
-static int PyStellarMemoType_init(PyStellarMemoTypeObject *self, PyObject *args,
-                                  PyObject *kwds) {
+static int PyStellarMemoType_init(PyStellarMemoTypeObject* self,
+                                  PyObject* args,
+                                  PyObject* kwds) {
   return 0;
 }
 
-static PyObject *PyStellarMemoType_new(PyTypeObject *subtype, PyObject *args,
-                                       PyObject *kwds) {
+static PyObject* PyStellarMemoType_new(PyTypeObject* subtype,
+                                       PyObject* args,
+                                       PyObject* kwds) {
   int value = 0;
   if (!PyArg_ParseTuple(args, "|i", &value)) {
     return nullptr;
@@ -84,12 +86,12 @@ static PyObject *PyStellarMemoType_new(PyTypeObject *subtype, PyObject *args,
   return PyStellarMemoType_FromTWStellarMemoType((TWStellarMemoType)value);
 }
 
-static PyObject *PyStellarMemoType_str(PyStellarMemoTypeObject *self) {
-  const char *str = "Unknown";
+static PyObject* PyStellarMemoType_str(PyStellarMemoTypeObject* self) {
+  const char* str = "Unknown";
   switch (self->value) {
-#define I(name)                                                                \
-  case TWStellarMemoType##name:                                                \
-    str = #name;                                                               \
+#define I(name)                 \
+  case TWStellarMemoType##name: \
+    str = #name;                \
     break;
     CONSTANTS(I)
 #undef I
@@ -101,30 +103,29 @@ static const PyGetSetDef get_set_def[] = {{}};
 
 static const PyMethodDef method_def[] = {{}};
 
-bool PyInit_StellarMemoType(PyObject *module) {
-
+bool PyInit_StellarMemoType(PyObject* module) {
   PyStellarMemoTypeType.tp_new = PyStellarMemoType_new;
   PyStellarMemoTypeType.tp_init = (initproc)PyStellarMemoType_init;
   PyStellarMemoTypeType.tp_str = (reprfunc)PyStellarMemoType_str;
-  PyStellarMemoTypeType.tp_getset = (PyGetSetDef *)get_set_def;
-  PyStellarMemoTypeType.tp_methods = (PyMethodDef *)method_def;
+  PyStellarMemoTypeType.tp_getset = (PyGetSetDef*)get_set_def;
+  PyStellarMemoTypeType.tp_methods = (PyMethodDef*)method_def;
 
   if (PyType_Ready(&PyStellarMemoTypeType) < 0)
     return false;
 
   Py_INCREF(&PyStellarMemoTypeType);
   if (PyModule_AddObject(module, "StellarMemoType",
-                         (PyObject *)&PyStellarMemoTypeType) < 0) {
+                         (PyObject*)&PyStellarMemoTypeType) < 0) {
     Py_DECREF(&PyStellarMemoTypeType);
     return false;
   }
 
-  PyObject *dict = PyStellarMemoTypeType.tp_dict;
+  PyObject* dict = PyStellarMemoTypeType.tp_dict;
   (void)dict;
 
-#define I(name)                                                                \
-  PyDict_SetItemString(                                                        \
-      dict, #name,                                                             \
+#define I(name)         \
+  PyDict_SetItemString( \
+      dict, #name,      \
       PyStellarMemoType_FromTWStellarMemoType(TWStellarMemoType##name));
   CONSTANTS(I)
 #undef I

@@ -12,11 +12,12 @@ struct PyAESPaddingModeObject {
 };
 
 // Returns true if the object is a PyAESPaddingMode.
-bool PyAESPaddingMode_Check(PyObject *object);
+bool PyAESPaddingMode_Check(PyObject* object);
 
 // Create PyAESPaddingMode from an enum TWAESPaddingMode value.
 // Note: it returns the same PyAESPaddingMode instance for the same enum
 // TWAESPaddingMode value. the caller should release the reference after using.
-PyObject *PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode value);
+PyObject* PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode value);
 
-bool PyInit_AESPaddingMode(PyObject *module);
+// Initialize for PyAESPaddingMode. It is called by python module init function.
+bool PyInit_AESPaddingMode(PyObject* module);

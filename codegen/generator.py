@@ -33,8 +33,12 @@ class Generator:
             template = self.template('module.cc')
             out.write(template.substitute(values))
 
+        self.format()
+
+    def format(self):
         # format generated c/c++ source code
-        os.system('clang-format -i {0}/*.cc {0}/*.h'.format(OUTPUT_DIR))
+        os.system('clang-format -style=Chromium -i {0}/*.cc {0}/*.h'.format(OUTPUT_DIR))
+
 
     def generate_enum(self, enum):
         name = enum._name

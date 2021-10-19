@@ -5,25 +5,25 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I)                                                           \
-  I(Ethereum)                                                                  \
-  I(Go)                                                                        \
-  I(POA)                                                                       \
-  I(Callisto)                                                                  \
-  I(EthereumClassic)                                                           \
-  I(VeChain)                                                                   \
-  I(ThunderToken)                                                              \
-  I(TomoChain)                                                                 \
-  I(BinanceSmartChain)                                                         \
-  I(Polygon)                                                                   \
-  I(Wanchain)                                                                  \
-  I(Optimism)                                                                  \
-  I(Arbitrum)                                                                  \
-  I(Heco)                                                                      \
-  I(Avalanche)                                                                 \
-  I(XDai)                                                                      \
-  I(Fantom)                                                                    \
-  I(Celo)                                                                      \
+#define CONSTANTS(I)   \
+  I(Ethereum)          \
+  I(Go)                \
+  I(POA)               \
+  I(Callisto)          \
+  I(EthereumClassic)   \
+  I(VeChain)           \
+  I(ThunderToken)      \
+  I(TomoChain)         \
+  I(BinanceSmartChain) \
+  I(Polygon)           \
+  I(Wanchain)          \
+  I(Optimism)          \
+  I(Arbitrum)          \
+  I(Heco)              \
+  I(Avalanche)         \
+  I(XDai)              \
+  I(Fantom)            \
+  I(Celo)              \
   I(Ronin)
 
 static PyTypeObject PyEthereumChainIDType = {
@@ -49,24 +49,24 @@ static PyTypeObject PyEthereumChainIDType = {
     nullptr,                         /* tp_doc */
 };
 
-bool PyEthereumChainID_Check(PyObject *object) {
+bool PyEthereumChainID_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyEthereumChainIDType) != 0;
 }
 
 // Create PyEthereumChainID from enum TWEthereumChainID. It returns the same
 // PyEthereumChainID instance for the same enum TWEthereumChainID value.
-PyObject *PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value) {
+PyObject* PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value) {
   struct ValuePair {
     const TWEthereumChainID value;
-    PyObject *pyvalue;
+    PyObject* pyvalue;
   };
 #define I(name) {TWEthereumChainID##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair =
+  ValuePair* value_pair =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair &v) { return v.value == value; });
+                   [&value](const ValuePair& v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid EthereumChainID value: %d", value);
@@ -74,23 +74,25 @@ PyObject *PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value) {
   }
 
   if (!value_pair->pyvalue) {
-    auto *pyvalue =
+    auto* pyvalue =
         PyObject_New(PyEthereumChainIDObject, &PyEthereumChainIDType);
-    *const_cast<TWEthereumChainID *>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject *)pyvalue;
+    *const_cast<TWEthereumChainID*>(&pyvalue->value) = value;
+    value_pair->pyvalue = (PyObject*)pyvalue;
   }
 
   Py_INCREF(value_pair->pyvalue);
   return value_pair->pyvalue;
 }
 
-static int PyEthereumChainID_init(PyEthereumChainIDObject *self, PyObject *args,
-                                  PyObject *kwds) {
+static int PyEthereumChainID_init(PyEthereumChainIDObject* self,
+                                  PyObject* args,
+                                  PyObject* kwds) {
   return 0;
 }
 
-static PyObject *PyEthereumChainID_new(PyTypeObject *subtype, PyObject *args,
-                                       PyObject *kwds) {
+static PyObject* PyEthereumChainID_new(PyTypeObject* subtype,
+                                       PyObject* args,
+                                       PyObject* kwds) {
   int value = 0;
   if (!PyArg_ParseTuple(args, "|i", &value)) {
     return nullptr;
@@ -98,12 +100,12 @@ static PyObject *PyEthereumChainID_new(PyTypeObject *subtype, PyObject *args,
   return PyEthereumChainID_FromTWEthereumChainID((TWEthereumChainID)value);
 }
 
-static PyObject *PyEthereumChainID_str(PyEthereumChainIDObject *self) {
-  const char *str = "Unknown";
+static PyObject* PyEthereumChainID_str(PyEthereumChainIDObject* self) {
+  const char* str = "Unknown";
   switch (self->value) {
-#define I(name)                                                                \
-  case TWEthereumChainID##name:                                                \
-    str = #name;                                                               \
+#define I(name)                 \
+  case TWEthereumChainID##name: \
+    str = #name;                \
     break;
     CONSTANTS(I)
 #undef I
@@ -115,30 +117,29 @@ static const PyGetSetDef get_set_def[] = {{}};
 
 static const PyMethodDef method_def[] = {{}};
 
-bool PyInit_EthereumChainID(PyObject *module) {
-
+bool PyInit_EthereumChainID(PyObject* module) {
   PyEthereumChainIDType.tp_new = PyEthereumChainID_new;
   PyEthereumChainIDType.tp_init = (initproc)PyEthereumChainID_init;
   PyEthereumChainIDType.tp_str = (reprfunc)PyEthereumChainID_str;
-  PyEthereumChainIDType.tp_getset = (PyGetSetDef *)get_set_def;
-  PyEthereumChainIDType.tp_methods = (PyMethodDef *)method_def;
+  PyEthereumChainIDType.tp_getset = (PyGetSetDef*)get_set_def;
+  PyEthereumChainIDType.tp_methods = (PyMethodDef*)method_def;
 
   if (PyType_Ready(&PyEthereumChainIDType) < 0)
     return false;
 
   Py_INCREF(&PyEthereumChainIDType);
   if (PyModule_AddObject(module, "EthereumChainID",
-                         (PyObject *)&PyEthereumChainIDType) < 0) {
+                         (PyObject*)&PyEthereumChainIDType) < 0) {
     Py_DECREF(&PyEthereumChainIDType);
     return false;
   }
 
-  PyObject *dict = PyEthereumChainIDType.tp_dict;
+  PyObject* dict = PyEthereumChainIDType.tp_dict;
   (void)dict;
 
-#define I(name)                                                                \
-  PyDict_SetItemString(                                                        \
-      dict, #name,                                                             \
+#define I(name)         \
+  PyDict_SetItemString( \
+      dict, #name,      \
       PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID##name));
   CONSTANTS(I)
 #undef I

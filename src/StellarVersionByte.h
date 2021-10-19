@@ -12,13 +12,15 @@ struct PyStellarVersionByteObject {
 };
 
 // Returns true if the object is a PyStellarVersionByte.
-bool PyStellarVersionByte_Check(PyObject *object);
+bool PyStellarVersionByte_Check(PyObject* object);
 
 // Create PyStellarVersionByte from an enum TWStellarVersionByte value.
 // Note: it returns the same PyStellarVersionByte instance for the same enum
 // TWStellarVersionByte value. the caller should release the reference after
 // using.
-PyObject *
-PyStellarVersionByte_FromTWStellarVersionByte(TWStellarVersionByte value);
+PyObject* PyStellarVersionByte_FromTWStellarVersionByte(
+    TWStellarVersionByte value);
 
-bool PyInit_StellarVersionByte(PyObject *module);
+// Initialize for PyStellarVersionByte. It is called by python module init
+// function.
+bool PyInit_StellarVersionByte(PyObject* module);

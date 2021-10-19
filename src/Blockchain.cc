@@ -5,39 +5,39 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I)                                                           \
-  I(Bitcoin)                                                                   \
-  I(Ethereum)                                                                  \
-  I(Vechain)                                                                   \
-  I(Tron)                                                                      \
-  I(Icon)                                                                      \
-  I(Binance)                                                                   \
-  I(Ripple)                                                                    \
-  I(Tezos)                                                                     \
-  I(Nimiq)                                                                     \
-  I(Stellar)                                                                   \
-  I(Aion)                                                                      \
-  I(Cosmos)                                                                    \
-  I(Theta)                                                                     \
-  I(Ontology)                                                                  \
-  I(Zilliqa)                                                                   \
-  I(IoTeX)                                                                     \
-  I(EOS)                                                                       \
-  I(Nano)                                                                      \
-  I(NULS)                                                                      \
-  I(Waves)                                                                     \
-  I(Aeternity)                                                                 \
-  I(Nebulas)                                                                   \
-  I(FIO)                                                                       \
-  I(Solana)                                                                    \
-  I(Harmony)                                                                   \
-  I(NEAR)                                                                      \
-  I(Algorand)                                                                  \
-  I(Polkadot)                                                                  \
-  I(Cardano)                                                                   \
-  I(NEO)                                                                       \
-  I(Filecoin)                                                                  \
-  I(ElrondNetwork)                                                             \
+#define CONSTANTS(I) \
+  I(Bitcoin)         \
+  I(Ethereum)        \
+  I(Vechain)         \
+  I(Tron)            \
+  I(Icon)            \
+  I(Binance)         \
+  I(Ripple)          \
+  I(Tezos)           \
+  I(Nimiq)           \
+  I(Stellar)         \
+  I(Aion)            \
+  I(Cosmos)          \
+  I(Theta)           \
+  I(Ontology)        \
+  I(Zilliqa)         \
+  I(IoTeX)           \
+  I(EOS)             \
+  I(Nano)            \
+  I(NULS)            \
+  I(Waves)           \
+  I(Aeternity)       \
+  I(Nebulas)         \
+  I(FIO)             \
+  I(Solana)          \
+  I(Harmony)         \
+  I(NEAR)            \
+  I(Algorand)        \
+  I(Polkadot)        \
+  I(Cardano)         \
+  I(NEO)             \
+  I(Filecoin)        \
+  I(ElrondNetwork)   \
   I(OasisNetwork)
 
 static PyTypeObject PyBlockchainType = {
@@ -63,24 +63,24 @@ static PyTypeObject PyBlockchainType = {
     nullptr,                                                /* tp_doc */
 };
 
-bool PyBlockchain_Check(PyObject *object) {
+bool PyBlockchain_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyBlockchainType) != 0;
 }
 
 // Create PyBlockchain from enum TWBlockchain. It returns the same PyBlockchain
 // instance for the same enum TWBlockchain value.
-PyObject *PyBlockchain_FromTWBlockchain(TWBlockchain value) {
+PyObject* PyBlockchain_FromTWBlockchain(TWBlockchain value) {
   struct ValuePair {
     const TWBlockchain value;
-    PyObject *pyvalue;
+    PyObject* pyvalue;
   };
 #define I(name) {TWBlockchain##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair =
+  ValuePair* value_pair =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair &v) { return v.value == value; });
+                   [&value](const ValuePair& v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid Blockchain value: %d", value);
@@ -88,22 +88,24 @@ PyObject *PyBlockchain_FromTWBlockchain(TWBlockchain value) {
   }
 
   if (!value_pair->pyvalue) {
-    auto *pyvalue = PyObject_New(PyBlockchainObject, &PyBlockchainType);
-    *const_cast<TWBlockchain *>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject *)pyvalue;
+    auto* pyvalue = PyObject_New(PyBlockchainObject, &PyBlockchainType);
+    *const_cast<TWBlockchain*>(&pyvalue->value) = value;
+    value_pair->pyvalue = (PyObject*)pyvalue;
   }
 
   Py_INCREF(value_pair->pyvalue);
   return value_pair->pyvalue;
 }
 
-static int PyBlockchain_init(PyBlockchainObject *self, PyObject *args,
-                             PyObject *kwds) {
+static int PyBlockchain_init(PyBlockchainObject* self,
+                             PyObject* args,
+                             PyObject* kwds) {
   return 0;
 }
 
-static PyObject *PyBlockchain_new(PyTypeObject *subtype, PyObject *args,
-                                  PyObject *kwds) {
+static PyObject* PyBlockchain_new(PyTypeObject* subtype,
+                                  PyObject* args,
+                                  PyObject* kwds) {
   int value = 0;
   if (!PyArg_ParseTuple(args, "|i", &value)) {
     return nullptr;
@@ -111,12 +113,12 @@ static PyObject *PyBlockchain_new(PyTypeObject *subtype, PyObject *args,
   return PyBlockchain_FromTWBlockchain((TWBlockchain)value);
 }
 
-static PyObject *PyBlockchain_str(PyBlockchainObject *self) {
-  const char *str = "Unknown";
+static PyObject* PyBlockchain_str(PyBlockchainObject* self) {
+  const char* str = "Unknown";
   switch (self->value) {
-#define I(name)                                                                \
-  case TWBlockchain##name:                                                     \
-    str = #name;                                                               \
+#define I(name)            \
+  case TWBlockchain##name: \
+    str = #name;           \
     break;
     CONSTANTS(I)
 #undef I
@@ -128,29 +130,28 @@ static const PyGetSetDef get_set_def[] = {{}};
 
 static const PyMethodDef method_def[] = {{}};
 
-bool PyInit_Blockchain(PyObject *module) {
-
+bool PyInit_Blockchain(PyObject* module) {
   PyBlockchainType.tp_new = PyBlockchain_new;
   PyBlockchainType.tp_init = (initproc)PyBlockchain_init;
   PyBlockchainType.tp_str = (reprfunc)PyBlockchain_str;
-  PyBlockchainType.tp_getset = (PyGetSetDef *)get_set_def;
-  PyBlockchainType.tp_methods = (PyMethodDef *)method_def;
+  PyBlockchainType.tp_getset = (PyGetSetDef*)get_set_def;
+  PyBlockchainType.tp_methods = (PyMethodDef*)method_def;
 
   if (PyType_Ready(&PyBlockchainType) < 0)
     return false;
 
   Py_INCREF(&PyBlockchainType);
-  if (PyModule_AddObject(module, "Blockchain", (PyObject *)&PyBlockchainType) <
+  if (PyModule_AddObject(module, "Blockchain", (PyObject*)&PyBlockchainType) <
       0) {
     Py_DECREF(&PyBlockchainType);
     return false;
   }
 
-  PyObject *dict = PyBlockchainType.tp_dict;
+  PyObject* dict = PyBlockchainType.tp_dict;
   (void)dict;
 
-#define I(name)                                                                \
-  PyDict_SetItemString(dict, #name,                                            \
+#define I(name)                     \
+  PyDict_SetItemString(dict, #name, \
                        PyBlockchain_FromTWBlockchain(TWBlockchain##name));
   CONSTANTS(I)
 #undef I

@@ -12,11 +12,12 @@ struct PyPublicKeyTypeObject {
 };
 
 // Returns true if the object is a PyPublicKeyType.
-bool PyPublicKeyType_Check(PyObject *object);
+bool PyPublicKeyType_Check(PyObject* object);
 
 // Create PyPublicKeyType from an enum TWPublicKeyType value.
 // Note: it returns the same PyPublicKeyType instance for the same enum
 // TWPublicKeyType value. the caller should release the reference after using.
-PyObject *PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType value);
+PyObject* PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType value);
 
-bool PyInit_PublicKeyType(PyObject *module);
+// Initialize for PyPublicKeyType. It is called by python module init function.
+bool PyInit_PublicKeyType(PyObject* module);

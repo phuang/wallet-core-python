@@ -5,13 +5,13 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I)                                                           \
-  I(SECP256k1)                                                                 \
-  I(ED25519)                                                                   \
-  I(ED25519Blake2bNano)                                                        \
-  I(Curve25519)                                                                \
-  I(NIST256p1)                                                                 \
-  I(ED25519Extended)                                                           \
+#define CONSTANTS(I)    \
+  I(SECP256k1)          \
+  I(ED25519)            \
+  I(ED25519Blake2bNano) \
+  I(Curve25519)         \
+  I(NIST256p1)          \
+  I(ED25519Extended)    \
   I(None)
 
 static PyTypeObject PyCurveType = {
@@ -37,24 +37,24 @@ static PyTypeObject PyCurveType = {
     nullptr,                                           /* tp_doc */
 };
 
-bool PyCurve_Check(PyObject *object) {
+bool PyCurve_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyCurveType) != 0;
 }
 
 // Create PyCurve from enum TWCurve. It returns the same PyCurve instance
 // for the same enum TWCurve value.
-PyObject *PyCurve_FromTWCurve(TWCurve value) {
+PyObject* PyCurve_FromTWCurve(TWCurve value) {
   struct ValuePair {
     const TWCurve value;
-    PyObject *pyvalue;
+    PyObject* pyvalue;
   };
 #define I(name) {TWCurve##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair =
+  ValuePair* value_pair =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair &v) { return v.value == value; });
+                   [&value](const ValuePair& v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid Curve value: %d", value);
@@ -62,21 +62,22 @@ PyObject *PyCurve_FromTWCurve(TWCurve value) {
   }
 
   if (!value_pair->pyvalue) {
-    auto *pyvalue = PyObject_New(PyCurveObject, &PyCurveType);
-    *const_cast<TWCurve *>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject *)pyvalue;
+    auto* pyvalue = PyObject_New(PyCurveObject, &PyCurveType);
+    *const_cast<TWCurve*>(&pyvalue->value) = value;
+    value_pair->pyvalue = (PyObject*)pyvalue;
   }
 
   Py_INCREF(value_pair->pyvalue);
   return value_pair->pyvalue;
 }
 
-static int PyCurve_init(PyCurveObject *self, PyObject *args, PyObject *kwds) {
+static int PyCurve_init(PyCurveObject* self, PyObject* args, PyObject* kwds) {
   return 0;
 }
 
-static PyObject *PyCurve_new(PyTypeObject *subtype, PyObject *args,
-                             PyObject *kwds) {
+static PyObject* PyCurve_new(PyTypeObject* subtype,
+                             PyObject* args,
+                             PyObject* kwds) {
   int value = 0;
   if (!PyArg_ParseTuple(args, "|i", &value)) {
     return nullptr;
@@ -84,12 +85,12 @@ static PyObject *PyCurve_new(PyTypeObject *subtype, PyObject *args,
   return PyCurve_FromTWCurve((TWCurve)value);
 }
 
-static PyObject *PyCurve_str(PyCurveObject *self) {
-  const char *str = "Unknown";
+static PyObject* PyCurve_str(PyCurveObject* self) {
+  const char* str = "Unknown";
   switch (self->value) {
-#define I(name)                                                                \
-  case TWCurve##name:                                                          \
-    str = #name;                                                               \
+#define I(name)       \
+  case TWCurve##name: \
+    str = #name;      \
     break;
     CONSTANTS(I)
 #undef I
@@ -101,27 +102,26 @@ static const PyGetSetDef get_set_def[] = {{}};
 
 static const PyMethodDef method_def[] = {{}};
 
-bool PyInit_Curve(PyObject *module) {
-
+bool PyInit_Curve(PyObject* module) {
   PyCurveType.tp_new = PyCurve_new;
   PyCurveType.tp_init = (initproc)PyCurve_init;
   PyCurveType.tp_str = (reprfunc)PyCurve_str;
-  PyCurveType.tp_getset = (PyGetSetDef *)get_set_def;
-  PyCurveType.tp_methods = (PyMethodDef *)method_def;
+  PyCurveType.tp_getset = (PyGetSetDef*)get_set_def;
+  PyCurveType.tp_methods = (PyMethodDef*)method_def;
 
   if (PyType_Ready(&PyCurveType) < 0)
     return false;
 
   Py_INCREF(&PyCurveType);
-  if (PyModule_AddObject(module, "Curve", (PyObject *)&PyCurveType) < 0) {
+  if (PyModule_AddObject(module, "Curve", (PyObject*)&PyCurveType) < 0) {
     Py_DECREF(&PyCurveType);
     return false;
   }
 
-  PyObject *dict = PyCurveType.tp_dict;
+  PyObject* dict = PyCurveType.tp_dict;
   (void)dict;
 
-#define I(name)                                                                \
+#define I(name) \
   PyDict_SetItemString(dict, #name, PyCurve_FromTWCurve(TWCurve##name));
   CONSTANTS(I)
 #undef I

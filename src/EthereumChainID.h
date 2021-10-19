@@ -12,11 +12,13 @@ struct PyEthereumChainIDObject {
 };
 
 // Returns true if the object is a PyEthereumChainID.
-bool PyEthereumChainID_Check(PyObject *object);
+bool PyEthereumChainID_Check(PyObject* object);
 
 // Create PyEthereumChainID from an enum TWEthereumChainID value.
 // Note: it returns the same PyEthereumChainID instance for the same enum
 // TWEthereumChainID value. the caller should release the reference after using.
-PyObject *PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value);
+PyObject* PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value);
 
-bool PyInit_EthereumChainID(PyObject *module);
+// Initialize for PyEthereumChainID. It is called by python module init
+// function.
+bool PyInit_EthereumChainID(PyObject* module);

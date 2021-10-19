@@ -5,8 +5,8 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I)                                                           \
-  I(Zero)                                                                      \
+#define CONSTANTS(I) \
+  I(Zero)            \
   I(PKCS7)
 
 static PyTypeObject PyAESPaddingModeType = {
@@ -32,24 +32,24 @@ static PyTypeObject PyAESPaddingModeType = {
     nullptr,                        /* tp_doc */
 };
 
-bool PyAESPaddingMode_Check(PyObject *object) {
+bool PyAESPaddingMode_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyAESPaddingModeType) != 0;
 }
 
 // Create PyAESPaddingMode from enum TWAESPaddingMode. It returns the same
 // PyAESPaddingMode instance for the same enum TWAESPaddingMode value.
-PyObject *PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode value) {
+PyObject* PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode value) {
   struct ValuePair {
     const TWAESPaddingMode value;
-    PyObject *pyvalue;
+    PyObject* pyvalue;
   };
 #define I(name) {TWAESPaddingMode##name, nullptr},
   static ValuePair constants[] = {CONSTANTS(I)};
 #undef I
 
-  ValuePair *value_pair =
+  ValuePair* value_pair =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair &v) { return v.value == value; });
+                   [&value](const ValuePair& v) { return v.value == value; });
 
   if (!value_pair) {
     PyErr_Format(PyExc_ValueError, "Invalid AESPaddingMode value: %d", value);
@@ -57,22 +57,24 @@ PyObject *PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode value) {
   }
 
   if (!value_pair->pyvalue) {
-    auto *pyvalue = PyObject_New(PyAESPaddingModeObject, &PyAESPaddingModeType);
-    *const_cast<TWAESPaddingMode *>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject *)pyvalue;
+    auto* pyvalue = PyObject_New(PyAESPaddingModeObject, &PyAESPaddingModeType);
+    *const_cast<TWAESPaddingMode*>(&pyvalue->value) = value;
+    value_pair->pyvalue = (PyObject*)pyvalue;
   }
 
   Py_INCREF(value_pair->pyvalue);
   return value_pair->pyvalue;
 }
 
-static int PyAESPaddingMode_init(PyAESPaddingModeObject *self, PyObject *args,
-                                 PyObject *kwds) {
+static int PyAESPaddingMode_init(PyAESPaddingModeObject* self,
+                                 PyObject* args,
+                                 PyObject* kwds) {
   return 0;
 }
 
-static PyObject *PyAESPaddingMode_new(PyTypeObject *subtype, PyObject *args,
-                                      PyObject *kwds) {
+static PyObject* PyAESPaddingMode_new(PyTypeObject* subtype,
+                                      PyObject* args,
+                                      PyObject* kwds) {
   int value = 0;
   if (!PyArg_ParseTuple(args, "|i", &value)) {
     return nullptr;
@@ -80,12 +82,12 @@ static PyObject *PyAESPaddingMode_new(PyTypeObject *subtype, PyObject *args,
   return PyAESPaddingMode_FromTWAESPaddingMode((TWAESPaddingMode)value);
 }
 
-static PyObject *PyAESPaddingMode_str(PyAESPaddingModeObject *self) {
-  const char *str = "Unknown";
+static PyObject* PyAESPaddingMode_str(PyAESPaddingModeObject* self) {
+  const char* str = "Unknown";
   switch (self->value) {
-#define I(name)                                                                \
-  case TWAESPaddingMode##name:                                                 \
-    str = #name;                                                               \
+#define I(name)                \
+  case TWAESPaddingMode##name: \
+    str = #name;               \
     break;
     CONSTANTS(I)
 #undef I
@@ -97,30 +99,29 @@ static const PyGetSetDef get_set_def[] = {{}};
 
 static const PyMethodDef method_def[] = {{}};
 
-bool PyInit_AESPaddingMode(PyObject *module) {
-
+bool PyInit_AESPaddingMode(PyObject* module) {
   PyAESPaddingModeType.tp_new = PyAESPaddingMode_new;
   PyAESPaddingModeType.tp_init = (initproc)PyAESPaddingMode_init;
   PyAESPaddingModeType.tp_str = (reprfunc)PyAESPaddingMode_str;
-  PyAESPaddingModeType.tp_getset = (PyGetSetDef *)get_set_def;
-  PyAESPaddingModeType.tp_methods = (PyMethodDef *)method_def;
+  PyAESPaddingModeType.tp_getset = (PyGetSetDef*)get_set_def;
+  PyAESPaddingModeType.tp_methods = (PyMethodDef*)method_def;
 
   if (PyType_Ready(&PyAESPaddingModeType) < 0)
     return false;
 
   Py_INCREF(&PyAESPaddingModeType);
   if (PyModule_AddObject(module, "AESPaddingMode",
-                         (PyObject *)&PyAESPaddingModeType) < 0) {
+                         (PyObject*)&PyAESPaddingModeType) < 0) {
     Py_DECREF(&PyAESPaddingModeType);
     return false;
   }
 
-  PyObject *dict = PyAESPaddingModeType.tp_dict;
+  PyObject* dict = PyAESPaddingModeType.tp_dict;
   (void)dict;
 
-#define I(name)                                                                \
-  PyDict_SetItemString(                                                        \
-      dict, #name,                                                             \
+#define I(name)         \
+  PyDict_SetItemString( \
+      dict, #name,      \
       PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode##name));
   CONSTANTS(I)
 #undef I
