@@ -10,10 +10,11 @@
 extern PyTypeObject PyPurposeType;
 
 struct PyPurposeObject {
-    PyObject_HEAD
-    const TWPurpose value;
+  PyObject_HEAD const TWPurpose value;
 };
 
-PyObject* PyPurpose_FromTWPurpose(TWPurpose value);
+bool PyPurpose_Check(PyObject *object);
+
+PyObject *PyPurpose_FromTWPurpose(TWPurpose value);
 
 bool PyInit_Purpose(PyObject *module);

@@ -10,10 +10,11 @@
 extern PyTypeObject PyHRPType;
 
 struct PyHRPObject {
-    PyObject_HEAD
-    const TWHRP value;
+  PyObject_HEAD const TWHRP value;
 };
 
-PyObject* PyHRP_FromTWHRP(TWHRP value);
+bool PyHRP_Check(PyObject *object);
+
+PyObject *PyHRP_FromTWHRP(TWHRP value);
 
 bool PyInit_HRP(PyObject *module);

@@ -10,10 +10,11 @@
 extern PyTypeObject PyPublicKeyTypeType;
 
 struct PyPublicKeyTypeObject {
-    PyObject_HEAD
-    const TWPublicKeyType value;
+  PyObject_HEAD const TWPublicKeyType value;
 };
 
-PyObject* PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType value);
+bool PyPublicKeyType_Check(PyObject *object);
+
+PyObject *PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType value);
 
 bool PyInit_PublicKeyType(PyObject *module);

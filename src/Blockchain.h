@@ -10,10 +10,11 @@
 extern PyTypeObject PyBlockchainType;
 
 struct PyBlockchainObject {
-    PyObject_HEAD
-    const TWBlockchain value;
+  PyObject_HEAD const TWBlockchain value;
 };
 
-PyObject* PyBlockchain_FromTWBlockchain(TWBlockchain value);
+bool PyBlockchain_Check(PyObject *object);
+
+PyObject *PyBlockchain_FromTWBlockchain(TWBlockchain value);
 
 bool PyInit_Blockchain(PyObject *module);

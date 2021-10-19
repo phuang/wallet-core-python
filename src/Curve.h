@@ -10,10 +10,11 @@
 extern PyTypeObject PyCurveType;
 
 struct PyCurveObject {
-    PyObject_HEAD
-    const TWCurve value;
+  PyObject_HEAD const TWCurve value;
 };
 
-PyObject* PyCurve_FromTWCurve(TWCurve value);
+bool PyCurve_Check(PyObject *object);
+
+PyObject *PyCurve_FromTWCurve(TWCurve value);
 
 bool PyInit_Curve(PyObject *module);

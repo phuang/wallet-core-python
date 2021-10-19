@@ -14,6 +14,8 @@ struct Py${name}Object {
     const TW${name} value;
 };
 
+bool Py${name}_Check(PyObject* object);
+
 PyObject* Py${name}_FromTW${name}(TW${name} value);
 
 bool PyInit_${name}(PyObject *module);

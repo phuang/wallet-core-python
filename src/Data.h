@@ -5,6 +5,6 @@
 
 #include <TrustWalletCore/TWData.h>
 
-PyObject* PyByteArray_FromTWData(TWData* data);
+PyObject *PyByteArray_FromTWData(TWData *data);
 
-TWData* PyByteArray_GetTWData(PyObject* object);
+TWData *PyByteArray_GetTWData(PyObject *object);

@@ -5,6 +5,6 @@
 
 #include <TrustWalletCore/TWString.h>
 
-PyObject* PyUnicode_FromTWString(TWString* str);
+PyObject *PyUnicode_FromTWString(TWString *str);
 
-TWString* PyUnicode_GetTWString(PyObject* object);
+TWString *PyUnicode_GetTWString(PyObject *object);

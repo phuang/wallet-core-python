@@ -31,6 +31,12 @@ PyTypeObject Py${name}Type = {
     nullptr,                   /* tp_doc */
 };
 
+
+bool Py${name}_Check(PyObject* object) {
+    return PyObject_TypeCheck(object, &Py${name}Type) != 0;
+}
+
+
 PyObject* Py${name}_FromTW${name}(TW${name} value) {
     struct ValuePair {
         TW${name} value;
@@ -92,8 +98,13 @@ static PyObject* Py${name}_str(Py${name}Object *self) {
 
 ${functions}
 
-static PyGetSetDef get_set_def[] = {
+const static PyGetSetDef get_set_def[] = {
     ${properties}
+    {},
+};
+
+const static PyMethodDef method_def[] = {
+    ${methods}
     {},
 };
 
@@ -103,6 +114,7 @@ bool PyInit_${name}(PyObject *module) {
     Py${name}Type.tp_init = (initproc)Py${name}_init;
     Py${name}Type.tp_str = (reprfunc)Py${name}_str;
     Py${name}Type.tp_getset = (PyGetSetDef*)get_set_def;
+    Py${name}Type.tp_methods = (PyMethodDef*)method_def;
 
     if (PyType_Ready(&Py${name}Type) < 0)
         return false;

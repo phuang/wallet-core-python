@@ -10,10 +10,12 @@
 extern PyTypeObject PyStellarPassphraseType;
 
 struct PyStellarPassphraseObject {
-    PyObject_HEAD
-    const TWStellarPassphrase value;
+  PyObject_HEAD const TWStellarPassphrase value;
 };
 
-PyObject* PyStellarPassphrase_FromTWStellarPassphrase(TWStellarPassphrase value);
+bool PyStellarPassphrase_Check(PyObject *object);
+
+PyObject *
+PyStellarPassphrase_FromTWStellarPassphrase(TWStellarPassphrase value);
 
 bool PyInit_StellarPassphrase(PyObject *module);

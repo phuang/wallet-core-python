@@ -87,8 +87,9 @@ static PyObject* Py{name}{prop_name}(Py{name}Object *self, void *) {{
             'includes' : includes,
             'constants' : constants,
             'properties' : properties,
+            'methods' : '',
             'functions' : '\n'.join(functions)
-            }
+        }
 
         with open(os.path.join(OUTPUT_DIR, name) + '.cc', 'w') as out:
             template = self.template('enum.cc')

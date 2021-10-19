@@ -10,10 +10,12 @@
 extern PyTypeObject PyStellarVersionByteType;
 
 struct PyStellarVersionByteObject {
-    PyObject_HEAD
-    const TWStellarVersionByte value;
+  PyObject_HEAD const TWStellarVersionByte value;
 };
 
-PyObject* PyStellarVersionByte_FromTWStellarVersionByte(TWStellarVersionByte value);
+bool PyStellarVersionByte_Check(PyObject *object);
+
+PyObject *
+PyStellarVersionByte_FromTWStellarVersionByte(TWStellarVersionByte value);
 
 bool PyInit_StellarVersionByte(PyObject *module);

@@ -10,10 +10,11 @@
 extern PyTypeObject PyEthereumChainIDType;
 
 struct PyEthereumChainIDObject {
-    PyObject_HEAD
-    const TWEthereumChainID value;
+  PyObject_HEAD const TWEthereumChainID value;
 };
 
-PyObject* PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value);
+bool PyEthereumChainID_Check(PyObject *object);
+
+PyObject *PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value);
 
 bool PyInit_EthereumChainID(PyObject *module);

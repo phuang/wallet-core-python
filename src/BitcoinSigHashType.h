@@ -10,10 +10,12 @@
 extern PyTypeObject PyBitcoinSigHashTypeType;
 
 struct PyBitcoinSigHashTypeObject {
-    PyObject_HEAD
-    const TWBitcoinSigHashType value;
+  PyObject_HEAD const TWBitcoinSigHashType value;
 };
 
-PyObject* PyBitcoinSigHashType_FromTWBitcoinSigHashType(TWBitcoinSigHashType value);
+bool PyBitcoinSigHashType_Check(PyObject *object);
+
+PyObject *
+PyBitcoinSigHashType_FromTWBitcoinSigHashType(TWBitcoinSigHashType value);
 
 bool PyInit_BitcoinSigHashType(PyObject *module);
