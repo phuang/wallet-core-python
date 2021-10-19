@@ -10,8 +10,8 @@
 extern PyTypeObject Py${name}Type;
 
 struct Py${name}Object {
-    PyObject_HEAD
-    const TW${name} value;
+  PyObject_HEAD
+  const TW${name} value;
 };
 
 bool Py${name}_Check(PyObject* object);
