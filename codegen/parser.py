@@ -160,6 +160,10 @@ class Enum(Entity):
             if line == '};':
                 break
 
+            # Examples:
+            # TWCoinTypeCelo = 52752,
+            # TWCurveED25519Extended        /* "ed25519-cardano-seed" */,
+            # TWCurveNone
             result = re.findall(r'^(\w+)\s*.*,?', line)
             if result:
                 print(result[0])
