@@ -2,14 +2,11 @@
 
 #include "AESPaddingMode.h"
 
+
+
 #define CONSTANTS(I) \
     I(Zero) \
     I(PKCS7) \
-
-struct ValuePair {
-    TWAESPaddingMode value;
-    PyObject* pyvalue;
-};
 
 PyTypeObject PyAESPaddingModeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -36,7 +33,10 @@ PyTypeObject PyAESPaddingModeType = {
 };
 
 PyObject* PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode value) {
-
+    struct ValuePair {
+        TWAESPaddingMode value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWAESPaddingMode##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -91,10 +91,19 @@ static PyObject* PyAESPaddingMode_str(PyAESPaddingModeObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+
+static PyGetSetDef get_set_def[] = {
+    
+    {},
+};
+
 bool PyInit_AESPaddingMode(PyObject *module) {
+
     PyAESPaddingModeType.tp_new = PyAESPaddingMode_new;
     PyAESPaddingModeType.tp_init = (initproc)PyAESPaddingMode_init;
     PyAESPaddingModeType.tp_str = (reprfunc)PyAESPaddingMode_str;
+    PyAESPaddingModeType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PyAESPaddingModeType) < 0)
         return false;

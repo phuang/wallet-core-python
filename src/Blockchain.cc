@@ -2,6 +2,8 @@
 
 #include "Blockchain.h"
 
+
+
 #define CONSTANTS(I) \
     I(Bitcoin) \
     I(Ethereum) \
@@ -37,11 +39,6 @@
     I(ElrondNetwork) \
     I(OasisNetwork) \
 
-struct ValuePair {
-    TWBlockchain value;
-    PyObject* pyvalue;
-};
-
 PyTypeObject PyBlockchainType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.Blockchain",      /* tp_name */
@@ -67,7 +64,10 @@ PyTypeObject PyBlockchainType = {
 };
 
 PyObject* PyBlockchain_FromTWBlockchain(TWBlockchain value) {
-
+    struct ValuePair {
+        TWBlockchain value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWBlockchain##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -122,10 +122,19 @@ static PyObject* PyBlockchain_str(PyBlockchainObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+
+static PyGetSetDef get_set_def[] = {
+    
+    {},
+};
+
 bool PyInit_Blockchain(PyObject *module) {
+
     PyBlockchainType.tp_new = PyBlockchain_new;
     PyBlockchainType.tp_init = (initproc)PyBlockchain_init;
     PyBlockchainType.tp_str = (reprfunc)PyBlockchain_str;
+    PyBlockchainType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PyBlockchainType) < 0)
         return false;

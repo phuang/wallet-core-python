@@ -2,6 +2,8 @@
 
 #include "PublicKeyType.h"
 
+
+
 #define CONSTANTS(I) \
     I(SECP256k1) \
     I(SECP256k1Extended) \
@@ -11,11 +13,6 @@
     I(ED25519Blake2b) \
     I(CURVE25519) \
     I(ED25519Extended) \
-
-struct ValuePair {
-    TWPublicKeyType value;
-    PyObject* pyvalue;
-};
 
 PyTypeObject PyPublicKeyTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -42,7 +39,10 @@ PyTypeObject PyPublicKeyTypeType = {
 };
 
 PyObject* PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType value) {
-
+    struct ValuePair {
+        TWPublicKeyType value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWPublicKeyType##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -97,10 +97,19 @@ static PyObject* PyPublicKeyType_str(PyPublicKeyTypeObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+
+static PyGetSetDef get_set_def[] = {
+    
+    {},
+};
+
 bool PyInit_PublicKeyType(PyObject *module) {
+
     PyPublicKeyTypeType.tp_new = PyPublicKeyType_new;
     PyPublicKeyTypeType.tp_init = (initproc)PyPublicKeyType_init;
     PyPublicKeyTypeType.tp_str = (reprfunc)PyPublicKeyType_str;
+    PyPublicKeyTypeType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PyPublicKeyTypeType) < 0)
         return false;

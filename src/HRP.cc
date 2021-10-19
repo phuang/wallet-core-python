@@ -2,6 +2,8 @@
 
 #include "HRP.h"
 
+
+
 #define CONSTANTS(I) \
     I(Unknown) \
     I(Bitcoin) \
@@ -28,11 +30,6 @@
     I(Cardano) \
     I(Qtum) \
 
-struct ValuePair {
-    TWHRP value;
-    PyObject* pyvalue;
-};
-
 PyTypeObject PyHRPType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.HRP",      /* tp_name */
@@ -58,7 +55,10 @@ PyTypeObject PyHRPType = {
 };
 
 PyObject* PyHRP_FromTWHRP(TWHRP value) {
-
+    struct ValuePair {
+        TWHRP value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWHRP##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -113,10 +113,19 @@ static PyObject* PyHRP_str(PyHRPObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+
+static PyGetSetDef get_set_def[] = {
+    
+    {},
+};
+
 bool PyInit_HRP(PyObject *module) {
+
     PyHRPType.tp_new = PyHRP_new;
     PyHRPType.tp_init = (initproc)PyHRP_init;
     PyHRPType.tp_str = (reprfunc)PyHRP_str;
+    PyHRPType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PyHRPType) < 0)
         return false;

@@ -2,6 +2,12 @@
 
 #include "CoinType.h"
 
+#include "Blockchain.h"
+#include "Curve.h"
+#include "HDVersion.h"
+#include "HRP.h"
+#include "Purpose.h"
+
 #define CONSTANTS(I) \
     I(Aeternity) \
     I(Aion) \
@@ -78,11 +84,6 @@
     I(Celo) \
     I(Ronin) \
 
-struct ValuePair {
-    TWCoinType value;
-    PyObject* pyvalue;
-};
-
 PyTypeObject PyCoinTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     "walletcore.CoinType",      /* tp_name */
@@ -108,7 +109,10 @@ PyTypeObject PyCoinTypeType = {
 };
 
 PyObject* PyCoinType_FromTWCoinType(TWCoinType value) {
-
+    struct ValuePair {
+        TWCoinType value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWCoinType##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -163,10 +167,77 @@ static PyObject* PyCoinType_str(PyCoinTypeObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+static PyObject* PyCoinTypeBlockchain(PyCoinTypeObject *self, void *) {
+    return PyBlockchain_FromTWBlockchain(TWCoinTypeBlockchain(self->value));
+}
+
+
+static PyObject* PyCoinTypePurpose(PyCoinTypeObject *self, void *) {
+    return PyPurpose_FromTWPurpose(TWCoinTypePurpose(self->value));
+}
+
+
+static PyObject* PyCoinTypeCurve(PyCoinTypeObject *self, void *) {
+    return PyCurve_FromTWCurve(TWCoinTypeCurve(self->value));
+}
+
+
+static PyObject* PyCoinTypeXpubVersion(PyCoinTypeObject *self, void *) {
+    return PyHDVersion_FromTWHDVersion(TWCoinTypeXpubVersion(self->value));
+}
+
+
+static PyObject* PyCoinTypeXprvVersion(PyCoinTypeObject *self, void *) {
+    return PyHDVersion_FromTWHDVersion(TWCoinTypeXprvVersion(self->value));
+}
+
+
+static PyObject* PyCoinTypeHRP(PyCoinTypeObject *self, void *) {
+    return PyHRP_FromTWHRP(TWCoinTypeHRP(self->value));
+}
+
+
+static PyObject* PyCoinTypeP2pkhPrefix(PyCoinTypeObject *self, void *) {
+    return PyLong_FromLong((long)TWCoinTypeP2pkhPrefix(self->value));
+}
+
+
+static PyObject* PyCoinTypeP2shPrefix(PyCoinTypeObject *self, void *) {
+    return PyLong_FromLong((long)TWCoinTypeP2shPrefix(self->value));
+}
+
+
+static PyObject* PyCoinTypeStaticPrefix(PyCoinTypeObject *self, void *) {
+    return PyLong_FromLong((long)TWCoinTypeStaticPrefix(self->value));
+}
+
+
+static PyObject* PyCoinTypeSlip44Id(PyCoinTypeObject *self, void *) {
+    return PyLong_FromLong((long)TWCoinTypeSlip44Id(self->value));
+}
+
+
+static PyGetSetDef get_set_def[] = {
+    { "Blockchain", (getter)PyCoinTypeBlockchain },
+    { "Purpose", (getter)PyCoinTypePurpose },
+    { "Curve", (getter)PyCoinTypeCurve },
+    { "XpubVersion", (getter)PyCoinTypeXpubVersion },
+    { "XprvVersion", (getter)PyCoinTypeXprvVersion },
+    { "HRP", (getter)PyCoinTypeHRP },
+    { "P2pkhPrefix", (getter)PyCoinTypeP2pkhPrefix },
+    { "P2shPrefix", (getter)PyCoinTypeP2shPrefix },
+    { "StaticPrefix", (getter)PyCoinTypeStaticPrefix },
+    { "Slip44Id", (getter)PyCoinTypeSlip44Id },
+    {},
+};
+
 bool PyInit_CoinType(PyObject *module) {
+
     PyCoinTypeType.tp_new = PyCoinType_new;
     PyCoinTypeType.tp_init = (initproc)PyCoinType_init;
     PyCoinTypeType.tp_str = (reprfunc)PyCoinType_str;
+    PyCoinTypeType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PyCoinTypeType) < 0)
         return false;

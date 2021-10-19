@@ -37,6 +37,7 @@ class Generator:
         name = enum._name
         assert name.startswith('TW')
         name = name[2:]
+        used_types = set()
 
         constants = []
         for fullname in enum._constants:
@@ -45,7 +46,49 @@ class Generator:
             constants.append('    I({}) \\'.format(shortname))
         constants = '\n'.join(constants)
 
-        values = { 'name' : name, 'constants' : constants }
+        properties = []
+        functions = []
+        for prop in enum._properties:
+            prop_name = prop._name[len(name) + 2:]
+            values = { 'name' : name, 'prop_name' : prop_name }
+            if prop._type._name in ('uint8_t', 'uint16_t', 'uint32_t'):
+                function = '''
+static PyObject* Py{name}{prop_name}(Py{name}Object *self, void *) {{
+    return PyLong_FromLong((long)TW{name}{prop_name}(self->value));
+}}\n'''.format_map(values)
+            elif prop._type._name == 'bool':
+                function = '''
+static PyObject* Py{name}{prop_name}(Py{name}Object *self, void *) {{
+    PyObject* result = TW{name}{prop_name}(self->value) ? Py_True : Py_False;
+    Py_XINCREF(result);
+    return result;
+}}\n'''.format_map(values)
+            elif prop._type._type == 'enum':
+                prop_type = prop._type._name[2:]
+                used_types.add(prop_type)
+                values['prop_type'] = prop._type._name[2:]
+                function = '''
+static PyObject* Py{name}{prop_name}(Py{name}Object *self, void *) {{
+    return Py{prop_type}_FromTW{prop_type}(TW{name}{prop_name}(self->value));
+}}\n'''.format_map(values)
+            else:
+                continue
+            properties.append(prop_name)
+            functions.append(function)
+
+        includes = list(used_types)
+        includes.sort()
+        includes = '\n'.join([ '#include "{}.h"'.format(n) for n in includes])
+
+        properties = '\n    '.join([ '{{ "{1}", (getter)Py{0}{1} }},'.format(name, p) for p in properties ])
+
+        values = {
+            'name' : name,
+            'includes' : includes,
+            'constants' : constants,
+            'properties' : properties,
+            'functions' : '\n'.join(functions)
+            }
 
         with open(os.path.join(OUTPUT_DIR, name) + '.cc', 'w') as out:
             template = self.template('enum.cc')

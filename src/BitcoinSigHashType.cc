@@ -2,6 +2,8 @@
 
 #include "BitcoinSigHashType.h"
 
+
+
 #define CONSTANTS(I) \
     I(All) \
     I(None) \
@@ -9,11 +11,6 @@
     I(Fork) \
     I(ForkBTG) \
     I(AnyoneCanPay) \
-
-struct ValuePair {
-    TWBitcoinSigHashType value;
-    PyObject* pyvalue;
-};
 
 PyTypeObject PyBitcoinSigHashTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -40,7 +37,10 @@ PyTypeObject PyBitcoinSigHashTypeType = {
 };
 
 PyObject* PyBitcoinSigHashType_FromTWBitcoinSigHashType(TWBitcoinSigHashType value) {
-
+    struct ValuePair {
+        TWBitcoinSigHashType value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWBitcoinSigHashType##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -95,10 +95,19 @@ static PyObject* PyBitcoinSigHashType_str(PyBitcoinSigHashTypeObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+
+static PyGetSetDef get_set_def[] = {
+    
+    {},
+};
+
 bool PyInit_BitcoinSigHashType(PyObject *module) {
+
     PyBitcoinSigHashTypeType.tp_new = PyBitcoinSigHashType_new;
     PyBitcoinSigHashTypeType.tp_init = (initproc)PyBitcoinSigHashType_init;
     PyBitcoinSigHashTypeType.tp_str = (reprfunc)PyBitcoinSigHashType_str;
+    PyBitcoinSigHashTypeType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PyBitcoinSigHashTypeType) < 0)
         return false;

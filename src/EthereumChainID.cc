@@ -2,6 +2,8 @@
 
 #include "EthereumChainID.h"
 
+
+
 #define CONSTANTS(I) \
     I(Ethereum) \
     I(Go) \
@@ -22,11 +24,6 @@
     I(Fantom) \
     I(Celo) \
     I(Ronin) \
-
-struct ValuePair {
-    TWEthereumChainID value;
-    PyObject* pyvalue;
-};
 
 PyTypeObject PyEthereumChainIDType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -53,7 +50,10 @@ PyTypeObject PyEthereumChainIDType = {
 };
 
 PyObject* PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value) {
-
+    struct ValuePair {
+        TWEthereumChainID value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWEthereumChainID##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -108,10 +108,19 @@ static PyObject* PyEthereumChainID_str(PyEthereumChainIDObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+
+static PyGetSetDef get_set_def[] = {
+    
+    {},
+};
+
 bool PyInit_EthereumChainID(PyObject *module) {
+
     PyEthereumChainIDType.tp_new = PyEthereumChainID_new;
     PyEthereumChainIDType.tp_init = (initproc)PyEthereumChainID_init;
     PyEthereumChainIDType.tp_str = (reprfunc)PyEthereumChainID_str;
+    PyEthereumChainIDType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PyEthereumChainIDType) < 0)
         return false;

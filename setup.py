@@ -22,7 +22,7 @@ for line in open(os.path.join(WALLET_CORE_BUILD, 'CMakeCache.txt')):
 module = Extension('walletcore',
                     include_dirs = [ WALLET_CORE_INCLUDE ],
                     library_dirs = [ WALLET_CORE_BUILD, TREZOR_CRYPTO ],
-                    libraries = [ 'TrezorCrypto', 'TrustWalletCore', 'protobuf' ],
+                    libraries = [ 'TrustWalletCore', 'protobuf' , 'TrezorCrypto'],
                     extra_link_args = link_args,
                     sources = glob('src/*.cc'))
 

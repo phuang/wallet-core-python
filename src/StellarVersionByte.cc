@@ -2,16 +2,13 @@
 
 #include "StellarVersionByte.h"
 
+
+
 #define CONSTANTS(I) \
     I(AccountID) \
     I(Seed) \
     I(PreAuthTX) \
     I(SHA256Hash) \
-
-struct ValuePair {
-    TWStellarVersionByte value;
-    PyObject* pyvalue;
-};
 
 PyTypeObject PyStellarVersionByteType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -38,7 +35,10 @@ PyTypeObject PyStellarVersionByteType = {
 };
 
 PyObject* PyStellarVersionByte_FromTWStellarVersionByte(TWStellarVersionByte value) {
-
+    struct ValuePair {
+        TWStellarVersionByte value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWStellarVersionByte##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -93,10 +93,19 @@ static PyObject* PyStellarVersionByte_str(PyStellarVersionByteObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+
+static PyGetSetDef get_set_def[] = {
+    
+    {},
+};
+
 bool PyInit_StellarVersionByte(PyObject *module) {
+
     PyStellarVersionByteType.tp_new = PyStellarVersionByte_new;
     PyStellarVersionByteType.tp_init = (initproc)PyStellarVersionByte_init;
     PyStellarVersionByteType.tp_str = (reprfunc)PyStellarVersionByte_str;
+    PyStellarVersionByteType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PyStellarVersionByteType) < 0)
         return false;

@@ -2,14 +2,11 @@
 
 #include "StellarPassphrase.h"
 
+
+
 #define CONSTANTS(I) \
     I(Stellar) \
     I(Kin) \
-
-struct ValuePair {
-    TWStellarPassphrase value;
-    PyObject* pyvalue;
-};
 
 PyTypeObject PyStellarPassphraseType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -36,7 +33,10 @@ PyTypeObject PyStellarPassphraseType = {
 };
 
 PyObject* PyStellarPassphrase_FromTWStellarPassphrase(TWStellarPassphrase value) {
-
+    struct ValuePair {
+        TWStellarPassphrase value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWStellarPassphrase##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -91,10 +91,19 @@ static PyObject* PyStellarPassphrase_str(PyStellarPassphraseObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+
+static PyGetSetDef get_set_def[] = {
+    
+    {},
+};
+
 bool PyInit_StellarPassphrase(PyObject *module) {
+
     PyStellarPassphraseType.tp_new = PyStellarPassphrase_new;
     PyStellarPassphraseType.tp_init = (initproc)PyStellarPassphrase_init;
     PyStellarPassphraseType.tp_str = (reprfunc)PyStellarPassphrase_str;
+    PyStellarPassphraseType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PyStellarPassphraseType) < 0)
         return false;

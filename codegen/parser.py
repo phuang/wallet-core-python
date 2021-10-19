@@ -166,7 +166,6 @@ class Enum(Entity):
             # TWCurveNone
             result = re.findall(r'^(\w+)\s*.*,?', line)
             if result:
-                print(result[0])
                 self._constants.append(result[0])
                 continue
 
@@ -219,7 +218,8 @@ class Parser:
         self._structs = []
         self._classes = []
         for filename in glob.glob(os.path.join(WALLET_CORE_INCLUDE, 'TrustWalletCore', '*.h')):
-            self.parse_file(filename)
+            if not filename.endswith('Proto.h'):
+                self.parse_file(filename)
 
     def parse_file(self, filename):
         with open(filename) as file:

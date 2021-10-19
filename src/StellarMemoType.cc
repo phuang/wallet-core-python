@@ -2,17 +2,14 @@
 
 #include "StellarMemoType.h"
 
+
+
 #define CONSTANTS(I) \
     I(None) \
     I(Text) \
     I(Id) \
     I(Hash) \
     I(Return) \
-
-struct ValuePair {
-    TWStellarMemoType value;
-    PyObject* pyvalue;
-};
 
 PyTypeObject PyStellarMemoTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -39,7 +36,10 @@ PyTypeObject PyStellarMemoTypeType = {
 };
 
 PyObject* PyStellarMemoType_FromTWStellarMemoType(TWStellarMemoType value) {
-
+    struct ValuePair {
+        TWStellarMemoType value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWStellarMemoType##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -94,10 +94,19 @@ static PyObject* PyStellarMemoType_str(PyStellarMemoTypeObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+
+static PyGetSetDef get_set_def[] = {
+    
+    {},
+};
+
 bool PyInit_StellarMemoType(PyObject *module) {
+
     PyStellarMemoTypeType.tp_new = PyStellarMemoType_new;
     PyStellarMemoTypeType.tp_init = (initproc)PyStellarMemoType_init;
     PyStellarMemoTypeType.tp_str = (reprfunc)PyStellarMemoType_str;
+    PyStellarMemoTypeType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PyStellarMemoTypeType) < 0)
         return false;

@@ -2,16 +2,13 @@
 
 #include "Purpose.h"
 
+
+
 #define CONSTANTS(I) \
     I(BIP44) \
     I(BIP49) \
     I(BIP84) \
     I(BIP1852) \
-
-struct ValuePair {
-    TWPurpose value;
-    PyObject* pyvalue;
-};
 
 PyTypeObject PyPurposeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -38,7 +35,10 @@ PyTypeObject PyPurposeType = {
 };
 
 PyObject* PyPurpose_FromTWPurpose(TWPurpose value) {
-
+    struct ValuePair {
+        TWPurpose value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWPurpose##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -93,10 +93,19 @@ static PyObject* PyPurpose_str(PyPurposeObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+
+static PyGetSetDef get_set_def[] = {
+    
+    {},
+};
+
 bool PyInit_Purpose(PyObject *module) {
+
     PyPurposeType.tp_new = PyPurpose_new;
     PyPurposeType.tp_init = (initproc)PyPurpose_init;
     PyPurposeType.tp_str = (reprfunc)PyPurpose_str;
+    PyPurposeType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PyPurposeType) < 0)
         return false;

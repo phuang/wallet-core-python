@@ -2,6 +2,8 @@
 
 #include "Curve.h"
 
+
+
 #define CONSTANTS(I) \
     I(SECP256k1) \
     I(ED25519) \
@@ -10,11 +12,6 @@
     I(NIST256p1) \
     I(ED25519Extended) \
     I(None) \
-
-struct ValuePair {
-    TWCurve value;
-    PyObject* pyvalue;
-};
 
 PyTypeObject PyCurveType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -41,7 +38,10 @@ PyTypeObject PyCurveType = {
 };
 
 PyObject* PyCurve_FromTWCurve(TWCurve value) {
-
+    struct ValuePair {
+        TWCurve value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWCurve##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -96,10 +96,19 @@ static PyObject* PyCurve_str(PyCurveObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+
+static PyGetSetDef get_set_def[] = {
+    
+    {},
+};
+
 bool PyInit_Curve(PyObject *module) {
+
     PyCurveType.tp_new = PyCurve_new;
     PyCurveType.tp_init = (initproc)PyCurve_init;
     PyCurveType.tp_str = (reprfunc)PyCurve_str;
+    PyCurveType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PyCurveType) < 0)
         return false;

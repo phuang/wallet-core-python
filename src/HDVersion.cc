@@ -2,6 +2,8 @@
 
 #include "HDVersion.h"
 
+
+
 #define CONSTANTS(I) \
     I(None) \
     I(XPUB) \
@@ -18,11 +20,6 @@
     I(DPRV) \
     I(DGUB) \
     I(DGPV) \
-
-struct ValuePair {
-    TWHDVersion value;
-    PyObject* pyvalue;
-};
 
 PyTypeObject PyHDVersionType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -49,7 +46,10 @@ PyTypeObject PyHDVersionType = {
 };
 
 PyObject* PyHDVersion_FromTWHDVersion(TWHDVersion value) {
-
+    struct ValuePair {
+        TWHDVersion value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWHDVersion##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -104,10 +104,33 @@ static PyObject* PyHDVersion_str(PyHDVersionObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+static PyObject* PyHDVersionIsPublic(PyHDVersionObject *self, void *) {
+    PyObject* result = TWHDVersionIsPublic(self->value) ? Py_True : Py_False;
+    Py_XINCREF(result);
+    return result;
+}
+
+
+static PyObject* PyHDVersionIsPrivate(PyHDVersionObject *self, void *) {
+    PyObject* result = TWHDVersionIsPrivate(self->value) ? Py_True : Py_False;
+    Py_XINCREF(result);
+    return result;
+}
+
+
+static PyGetSetDef get_set_def[] = {
+    { "IsPublic", (getter)PyHDVersionIsPublic },
+    { "IsPrivate", (getter)PyHDVersionIsPrivate },
+    {},
+};
+
 bool PyInit_HDVersion(PyObject *module) {
+
     PyHDVersionType.tp_new = PyHDVersion_new;
     PyHDVersionType.tp_init = (initproc)PyHDVersion_init;
     PyHDVersionType.tp_str = (reprfunc)PyHDVersion_str;
+    PyHDVersionType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PyHDVersionType) < 0)
         return false;

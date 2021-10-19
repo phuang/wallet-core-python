@@ -2,14 +2,11 @@
 
 #include "SS58AddressType.h"
 
+
+
 #define CONSTANTS(I) \
     I(Polkadot) \
     I(Kusama) \
-
-struct ValuePair {
-    TWSS58AddressType value;
-    PyObject* pyvalue;
-};
 
 PyTypeObject PySS58AddressTypeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -36,7 +33,10 @@ PyTypeObject PySS58AddressTypeType = {
 };
 
 PyObject* PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value) {
-
+    struct ValuePair {
+        TWSS58AddressType value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TWSS58AddressType##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -91,10 +91,19 @@ static PyObject* PySS58AddressType_str(PySS58AddressTypeObject *self) {
     return PyUnicode_FromString(str);
 }
 
+
+
+static PyGetSetDef get_set_def[] = {
+    
+    {},
+};
+
 bool PyInit_SS58AddressType(PyObject *module) {
+
     PySS58AddressTypeType.tp_new = PySS58AddressType_new;
     PySS58AddressTypeType.tp_init = (initproc)PySS58AddressType_init;
     PySS58AddressTypeType.tp_str = (reprfunc)PySS58AddressType_str;
+    PySS58AddressTypeType.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&PySS58AddressTypeType) < 0)
         return false;

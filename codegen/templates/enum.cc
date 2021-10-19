@@ -2,13 +2,10 @@
 
 #include "${name}.h"
 
+${includes}
+
 #define CONSTANTS(I) \
 ${constants}
-
-struct ValuePair {
-    TW${name} value;
-    PyObject* pyvalue;
-};
 
 PyTypeObject Py${name}Type = {
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -35,7 +32,10 @@ PyTypeObject Py${name}Type = {
 };
 
 PyObject* Py${name}_FromTW${name}(TW${name} value) {
-
+    struct ValuePair {
+        TW${name} value;
+        PyObject* pyvalue;
+    };
 #define I(name) { TW${name}##name, nullptr },
     static ValuePair constants[] = {
         CONSTANTS(I)
@@ -90,10 +90,19 @@ static PyObject* Py${name}_str(Py${name}Object *self) {
     return PyUnicode_FromString(str);
 }
 
+${functions}
+
+static PyGetSetDef get_set_def[] = {
+    ${properties}
+    {},
+};
+
 bool PyInit_${name}(PyObject *module) {
+
     Py${name}Type.tp_new = Py${name}_new;
     Py${name}Type.tp_init = (initproc)Py${name}_init;
     Py${name}Type.tp_str = (reprfunc)Py${name}_str;
+    Py${name}Type.tp_getset = (PyGetSetDef*)get_set_def;
 
     if (PyType_Ready(&Py${name}Type) < 0)
         return false;
