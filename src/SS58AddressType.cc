@@ -96,16 +96,16 @@ static PyObject* PySS58AddressType_str(PySS58AddressTypeObject* self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {{}};
+static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_SS58AddressType(PyObject* module) {
   PySS58AddressTypeType.tp_new = PySS58AddressType_new;
   PySS58AddressTypeType.tp_init = (initproc)PySS58AddressType_init;
   PySS58AddressTypeType.tp_str = (reprfunc)PySS58AddressType_str;
-  PySS58AddressTypeType.tp_getset = (PyGetSetDef*)get_set_def;
-  PySS58AddressTypeType.tp_methods = (PyMethodDef*)method_def;
+  PySS58AddressTypeType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PySS58AddressTypeType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PySS58AddressTypeType) < 0)
     return false;

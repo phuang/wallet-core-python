@@ -113,16 +113,16 @@ static PyObject* PyEthereumChainID_str(PyEthereumChainIDObject* self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {{}};
+static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_EthereumChainID(PyObject* module) {
   PyEthereumChainIDType.tp_new = PyEthereumChainID_new;
   PyEthereumChainIDType.tp_init = (initproc)PyEthereumChainID_init;
   PyEthereumChainIDType.tp_str = (reprfunc)PyEthereumChainID_str;
-  PyEthereumChainIDType.tp_getset = (PyGetSetDef*)get_set_def;
-  PyEthereumChainIDType.tp_methods = (PyMethodDef*)method_def;
+  PyEthereumChainIDType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PyEthereumChainIDType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PyEthereumChainIDType) < 0)
     return false;

@@ -95,16 +95,16 @@ static PyObject* PyAESPaddingMode_str(PyAESPaddingModeObject* self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {{}};
+static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_AESPaddingMode(PyObject* module) {
   PyAESPaddingModeType.tp_new = PyAESPaddingMode_new;
   PyAESPaddingModeType.tp_init = (initproc)PyAESPaddingMode_init;
   PyAESPaddingModeType.tp_str = (reprfunc)PyAESPaddingMode_str;
-  PyAESPaddingModeType.tp_getset = (PyGetSetDef*)get_set_def;
-  PyAESPaddingModeType.tp_methods = (PyMethodDef*)method_def;
+  PyAESPaddingModeType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PyAESPaddingModeType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PyAESPaddingModeType) < 0)
     return false;

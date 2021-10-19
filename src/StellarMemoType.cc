@@ -99,16 +99,16 @@ static PyObject* PyStellarMemoType_str(PyStellarMemoTypeObject* self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {{}};
+static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_StellarMemoType(PyObject* module) {
   PyStellarMemoTypeType.tp_new = PyStellarMemoType_new;
   PyStellarMemoTypeType.tp_init = (initproc)PyStellarMemoType_init;
   PyStellarMemoTypeType.tp_str = (reprfunc)PyStellarMemoType_str;
-  PyStellarMemoTypeType.tp_getset = (PyGetSetDef*)get_set_def;
-  PyStellarMemoTypeType.tp_methods = (PyMethodDef*)method_def;
+  PyStellarMemoTypeType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PyStellarMemoTypeType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PyStellarMemoTypeType) < 0)
     return false;

@@ -97,16 +97,16 @@ static PyObject* PyPurpose_str(PyPurposeObject* self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {{}};
+static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_Purpose(PyObject* module) {
   PyPurposeType.tp_new = PyPurpose_new;
   PyPurposeType.tp_init = (initproc)PyPurpose_init;
   PyPurposeType.tp_str = (reprfunc)PyPurpose_str;
-  PyPurposeType.tp_getset = (PyGetSetDef*)get_set_def;
-  PyPurposeType.tp_methods = (PyMethodDef*)method_def;
+  PyPurposeType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PyPurposeType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PyPurposeType) < 0)
     return false;

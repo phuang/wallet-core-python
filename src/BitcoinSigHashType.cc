@@ -105,16 +105,16 @@ static PyObject* PyBitcoinSigHashType_str(PyBitcoinSigHashTypeObject* self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {{}};
+static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_BitcoinSigHashType(PyObject* module) {
   PyBitcoinSigHashTypeType.tp_new = PyBitcoinSigHashType_new;
   PyBitcoinSigHashTypeType.tp_init = (initproc)PyBitcoinSigHashType_init;
   PyBitcoinSigHashTypeType.tp_str = (reprfunc)PyBitcoinSigHashType_str;
-  PyBitcoinSigHashTypeType.tp_getset = (PyGetSetDef*)get_set_def;
-  PyBitcoinSigHashTypeType.tp_methods = (PyMethodDef*)method_def;
+  PyBitcoinSigHashTypeType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PyBitcoinSigHashTypeType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PyBitcoinSigHashTypeType) < 0)
     return false;

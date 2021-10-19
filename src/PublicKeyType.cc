@@ -101,16 +101,16 @@ static PyObject* PyPublicKeyType_str(PyPublicKeyTypeObject* self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {{}};
+static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_PublicKeyType(PyObject* module) {
   PyPublicKeyTypeType.tp_new = PyPublicKeyType_new;
   PyPublicKeyTypeType.tp_init = (initproc)PyPublicKeyType_init;
   PyPublicKeyTypeType.tp_str = (reprfunc)PyPublicKeyType_str;
-  PyPublicKeyTypeType.tp_getset = (PyGetSetDef*)get_set_def;
-  PyPublicKeyTypeType.tp_methods = (PyMethodDef*)method_def;
+  PyPublicKeyTypeType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PyPublicKeyTypeType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PyPublicKeyTypeType) < 0)
     return false;

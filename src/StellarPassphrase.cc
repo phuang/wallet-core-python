@@ -99,16 +99,16 @@ static PyObject* PyStellarPassphrase_str(PyStellarPassphraseObject* self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {{}};
+static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_StellarPassphrase(PyObject* module) {
   PyStellarPassphraseType.tp_new = PyStellarPassphrase_new;
   PyStellarPassphraseType.tp_init = (initproc)PyStellarPassphrase_init;
   PyStellarPassphraseType.tp_str = (reprfunc)PyStellarPassphrase_str;
-  PyStellarPassphraseType.tp_getset = (PyGetSetDef*)get_set_def;
-  PyStellarPassphraseType.tp_methods = (PyMethodDef*)method_def;
+  PyStellarPassphraseType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PyStellarPassphraseType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PyStellarPassphraseType) < 0)
     return false;

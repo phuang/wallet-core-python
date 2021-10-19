@@ -109,30 +109,26 @@ static PyObject* PyHDVersion_str(PyHDVersionObject* self) {
 }
 
 static PyObject* PyHDVersionIsPublic(PyHDVersionObject* self, void*) {
-  PyObject* result = TWHDVersionIsPublic(self->value) ? Py_True : Py_False;
-  Py_XINCREF(result);
-  return result;
+  return PyBool_FromLong(TWHDVersionIsPublic(self->value));
 }
 
 static PyObject* PyHDVersionIsPrivate(PyHDVersionObject* self, void*) {
-  PyObject* result = TWHDVersionIsPrivate(self->value) ? Py_True : Py_False;
-  Py_XINCREF(result);
-  return result;
+  return PyBool_FromLong(TWHDVersionIsPrivate(self->value));
 }
 
-static const PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_defs[] = {
     {"IsPublic", (getter)PyHDVersionIsPublic},
     {"IsPrivate", (getter)PyHDVersionIsPrivate},
     {}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_HDVersion(PyObject* module) {
   PyHDVersionType.tp_new = PyHDVersion_new;
   PyHDVersionType.tp_init = (initproc)PyHDVersion_init;
   PyHDVersionType.tp_str = (reprfunc)PyHDVersion_str;
-  PyHDVersionType.tp_getset = (PyGetSetDef*)get_set_def;
-  PyHDVersionType.tp_methods = (PyMethodDef*)method_def;
+  PyHDVersionType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PyHDVersionType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PyHDVersionType) < 0)
     return false;

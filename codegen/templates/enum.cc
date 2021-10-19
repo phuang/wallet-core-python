@@ -98,11 +98,11 @@ static PyObject* Py${name}_str(Py${name}Object *self) {
 
 ${functions}
 
-static const PyGetSetDef get_set_def[] = {
-${properties}
+static const PyGetSetDef get_set_defs[] = {
+${getsetdefs}
 };
 
-static const PyMethodDef method_def[] = {
+static const PyMethodDef method_defs[] = {
 ${methods}
 };
 
@@ -111,8 +111,8 @@ bool PyInit_${name}(PyObject *module) {
   Py${name}Type.tp_new = Py${name}_new;
   Py${name}Type.tp_init = (initproc)Py${name}_init;
   Py${name}Type.tp_str = (reprfunc)Py${name}_str;
-  Py${name}Type.tp_getset = (PyGetSetDef*)get_set_def;
-  Py${name}Type.tp_methods = (PyMethodDef*)method_def;
+  Py${name}Type.tp_getset = (PyGetSetDef*)get_set_defs;
+  Py${name}Type.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&Py${name}Type) < 0)
     return false;

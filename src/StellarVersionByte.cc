@@ -103,16 +103,16 @@ static PyObject* PyStellarVersionByte_str(PyStellarVersionByteObject* self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {{}};
+static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_StellarVersionByte(PyObject* module) {
   PyStellarVersionByteType.tp_new = PyStellarVersionByte_new;
   PyStellarVersionByteType.tp_init = (initproc)PyStellarVersionByte_init;
   PyStellarVersionByteType.tp_str = (reprfunc)PyStellarVersionByte_str;
-  PyStellarVersionByteType.tp_getset = (PyGetSetDef*)get_set_def;
-  PyStellarVersionByteType.tp_methods = (PyMethodDef*)method_def;
+  PyStellarVersionByteType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PyStellarVersionByteType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PyStellarVersionByteType) < 0)
     return false;

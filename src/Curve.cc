@@ -98,16 +98,16 @@ static PyObject* PyCurve_str(PyCurveObject* self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {{}};
+static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_Curve(PyObject* module) {
   PyCurveType.tp_new = PyCurve_new;
   PyCurveType.tp_init = (initproc)PyCurve_init;
   PyCurveType.tp_str = (reprfunc)PyCurve_str;
-  PyCurveType.tp_getset = (PyGetSetDef*)get_set_def;
-  PyCurveType.tp_methods = (PyMethodDef*)method_def;
+  PyCurveType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PyCurveType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PyCurveType) < 0)
     return false;

@@ -126,16 +126,16 @@ static PyObject* PyBlockchain_str(PyBlockchainObject* self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {{}};
+static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_Blockchain(PyObject* module) {
   PyBlockchainType.tp_new = PyBlockchain_new;
   PyBlockchainType.tp_init = (initproc)PyBlockchain_init;
   PyBlockchainType.tp_str = (reprfunc)PyBlockchain_str;
-  PyBlockchainType.tp_getset = (PyGetSetDef*)get_set_def;
-  PyBlockchainType.tp_methods = (PyMethodDef*)method_def;
+  PyBlockchainType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PyBlockchainType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PyBlockchainType) < 0)
     return false;

@@ -37,8 +37,82 @@ class Generator:
 
     def format(self):
         # format generated c/c++ source code
-        os.system('clang-format -style=Chromium -i {0}/*.cc {0}/*.h'.format(OUTPUT_DIR))
+        os.system('/usr/bin/clang-format -style=Chromium -i \
+            {0}/*.cc {0}/*.h'.format(OUTPUT_DIR))
 
+    def process_properties(self, name, props):
+        used_types = set()
+        getsetdefs = []
+        functions = []
+        for prop in props:
+            prop_name = prop._name[len(name) + 2:]
+            values = { 'name' : name, 'prop_name' : prop_name }
+            if prop._type._name in ('uint8_t', 'uint16_t', 'uint32_t'):
+                function = Template('''
+static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
+  return PyLong_FromLong((long)TW${name}${prop_name}(self->value));
+}\n''').substitute(values)
+            elif prop._type._name == 'bool':
+                function = Template('''
+static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
+  return PyBool_FromLong(TW${name}${prop_name}(self->value));
+}\n''').substitute(values)
+            elif prop._type._type == 'enum':
+                prop_type = prop._type._name[2:]
+                used_types.add(prop_type)
+                values['prop_type'] = prop._type._name[2:]
+                function = Template('''
+static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
+  return Py${prop_type}_FromTW${prop_type}(TW${name}${prop_name}(self->value));
+}\n''').substitute(values)
+            else:
+                continue
+            getsetdefs.append(prop_name)
+            functions.append(function)
+
+        includes = list(used_types)
+        includes.sort()
+        includes = [ '#include "{}.h"'.format(n) for n in includes]
+
+        getsetdefs = [ '{{ "{1}", (getter)Py{0}{1} }},'.format(name, p) for p in getsetdefs ] + [ '{}' ]
+        return includes, functions, getsetdefs
+
+    def process_methods(self, name, methods):
+        used_types = set()
+        method_defs = []
+        functions = []
+        for method in methods:
+            method_name = method._name[len(name) + 2:]
+            values = { 'name' : name, 'method_name' : method_name }
+            if method._type._name in ('uint8_t', 'uint16_t', 'uint32_t'):
+                function = Template('''
+static PyObject* Py${name}${method_name}(Py${name}Object *self, void *) {
+  return PyLong_FromLong((long)TW${name}${method_name}(self->value));
+}\n''').substitute(values)
+            elif method._type._name == 'bool':
+                function = Template('''
+static PyObject* Py${name}${method_name}(Py${name}Object *self, void *) {
+  return PyBool_FromLong(TW${name}${method_name}(self->value));
+}\n''').substitute(values)
+            elif method._type._type == 'enum':
+                method_type = method._type._name[2:]
+                used_types.add(method_type)
+                values['method_type'] = method._type._name[2:]
+                function = Template('''
+static PyObject* Py${name}${method_name}(Py${name}Object *self, void *) {
+  return Py${method_type}_FromTW${method_type}(TW${name}${method_name}(self->value));
+}\n''').substitute(values)
+            else:
+                continue
+            method_defs.append(method_name)
+            functions.append(function)
+
+        includes = list(used_types)
+        includes.sort()
+        includes = [ '#include "{}.h"'.format(n) for n in includes]
+
+        method_defs = [ '{{ "{1}", (getter)Py{0}{1} }},'.format(name, p) for p in method_defs ] + [ '{}' ]
+        return includes, functions, method_defs
 
     def generate_enum(self, enum):
         name = enum._name
@@ -53,48 +127,15 @@ class Generator:
             constants.append('    I({}) \\'.format(shortname))
         constants = '\n'.join(constants)
 
-        properties = []
-        functions = []
-        for prop in enum._properties:
-            prop_name = prop._name[len(name) + 2:]
-            values = { 'name' : name, 'prop_name' : prop_name }
-            if prop._type._name in ('uint8_t', 'uint16_t', 'uint32_t'):
-                function = Template('''
-static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
-  return PyLong_FromLong((long)TW${name}${prop_name}(self->value));
-}\n''').substitute(values)
-            elif prop._type._name == 'bool':
-                function = Template('''
-static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
-  PyObject* result = TW${name}${prop_name}(self->value) ? Py_True : Py_False;
-  Py_XINCREF(result);
-  return result;
-}\n''').substitute(values)
-            elif prop._type._type == 'enum':
-                prop_type = prop._type._name[2:]
-                used_types.add(prop_type)
-                values['prop_type'] = prop._type._name[2:]
-                function = Template('''
-static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
-  return Py${prop_type}_FromTW${prop_type}(TW${name}${prop_name}(self->value));
-}\n''').substitute(values)
-            else:
-                continue
-            properties.append(prop_name)
-            functions.append(function)
-
-        includes = list(used_types)
-        includes.sort()
-        includes = '\n'.join([ '#include "{}.h"'.format(n) for n in includes])
-
-        properties = [ '{{ "{1}", (getter)Py{0}{1} }},'.format(name, p) for p in properties ] + [ '{}' ]
-        properties = '\n  '.join(properties)
+        includes, functions, getsetdefs = self.process_properties(name, enum._properties)
+        includes = '\n'.join(includes)
+        getsetdefs = '\n  '.join(getsetdefs)
 
         values = {
             'name' : name,
             'includes' : includes,
             'constants' : constants,
-            'properties' : properties,
+            'getsetdefs' : getsetdefs,
             'methods' : '{}',
             'functions' : '\n'.join(functions)
         }

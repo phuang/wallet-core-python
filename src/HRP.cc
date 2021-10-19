@@ -115,16 +115,16 @@ static PyObject* PyHRP_str(PyHRPObject* self) {
   return PyUnicode_FromString(str);
 }
 
-static const PyGetSetDef get_set_def[] = {{}};
+static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_HRP(PyObject* module) {
   PyHRPType.tp_new = PyHRP_new;
   PyHRPType.tp_init = (initproc)PyHRP_init;
   PyHRPType.tp_str = (reprfunc)PyHRP_str;
-  PyHRPType.tp_getset = (PyGetSetDef*)get_set_def;
-  PyHRPType.tp_methods = (PyMethodDef*)method_def;
+  PyHRPType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PyHRPType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PyHRPType) < 0)
     return false;

@@ -213,7 +213,7 @@ static PyObject* PyCoinTypeSlip44Id(PyCoinTypeObject* self, void*) {
   return PyLong_FromLong((long)TWCoinTypeSlip44Id(self->value));
 }
 
-static const PyGetSetDef get_set_def[] = {
+static const PyGetSetDef get_set_defs[] = {
     {"Blockchain", (getter)PyCoinTypeBlockchain},
     {"Purpose", (getter)PyCoinTypePurpose},
     {"Curve", (getter)PyCoinTypeCurve},
@@ -226,14 +226,14 @@ static const PyGetSetDef get_set_def[] = {
     {"Slip44Id", (getter)PyCoinTypeSlip44Id},
     {}};
 
-static const PyMethodDef method_def[] = {{}};
+static const PyMethodDef method_defs[] = {{}};
 
 bool PyInit_CoinType(PyObject* module) {
   PyCoinTypeType.tp_new = PyCoinType_new;
   PyCoinTypeType.tp_init = (initproc)PyCoinType_init;
   PyCoinTypeType.tp_str = (reprfunc)PyCoinType_str;
-  PyCoinTypeType.tp_getset = (PyGetSetDef*)get_set_def;
-  PyCoinTypeType.tp_methods = (PyMethodDef*)method_def;
+  PyCoinTypeType.tp_getset = (PyGetSetDef*)get_set_defs;
+  PyCoinTypeType.tp_methods = (PyMethodDef*)method_defs;
 
   if (PyType_Ready(&PyCoinTypeType) < 0)
     return false;
