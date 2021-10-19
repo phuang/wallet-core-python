@@ -26,12 +26,15 @@ class Generator:
         names.sort()
 
         includes = '\n'.join(['#include "{}.h"'.format(f) for f in names])
-        functions = '\n'.join(['    PyInit_{},'.format(f) for f in names])
+        functions = '\n'.join(['  PyInit_{},'.format(f) for f in names])
 
         values = { 'functions' : functions, 'includes' : includes }
         with open(os.path.join(OUTPUT_DIR, 'module.cc'), 'w') as out:
             template = self.template('module.cc')
             out.write(template.substitute(values))
+
+        # format generated c/c++ source code
+        os.system('clang-format -i {0}/*.cc {0}/*.h'.format(OUTPUT_DIR))
 
     def generate_enum(self, enum):
         name = enum._name
