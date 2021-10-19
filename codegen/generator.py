@@ -55,25 +55,25 @@ class Generator:
             prop_name = prop._name[len(name) + 2:]
             values = { 'name' : name, 'prop_name' : prop_name }
             if prop._type._name in ('uint8_t', 'uint16_t', 'uint32_t'):
-                function = '''
-static PyObject* Py{name}{prop_name}(Py{name}Object *self, void *) {{
-  return PyLong_FromLong((long)TW{name}{prop_name}(self->value));
-}}\n'''.format_map(values)
+                function = Template('''
+static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
+  return PyLong_FromLong((long)TW${name}${prop_name}(self->value));
+}\n''').substitute(values)
             elif prop._type._name == 'bool':
-                function = '''
-static PyObject* Py{name}{prop_name}(Py{name}Object *self, void *) {{
-  PyObject* result = TW{name}{prop_name}(self->value) ? Py_True : Py_False;
+                function = Template('''
+static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
+  PyObject* result = TW${name}${prop_name}(self->value) ? Py_True : Py_False;
   Py_XINCREF(result);
   return result;
-}}\n'''.format_map(values)
+}\n''').substitute(values)
             elif prop._type._type == 'enum':
                 prop_type = prop._type._name[2:]
                 used_types.add(prop_type)
                 values['prop_type'] = prop._type._name[2:]
-                function = '''
-static PyObject* Py{name}{prop_name}(Py{name}Object *self, void *) {{
-  return Py{prop_type}_FromTW{prop_type}(TW{name}{prop_name}(self->value));
-}}\n'''.format_map(values)
+                function = Template('''
+static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
+  return Py${prop_type}_FromTW${prop_type}(TW${name}${prop_name}(self->value));
+}\n''').substitute(values)
             else:
                 continue
             properties.append(prop_name)
