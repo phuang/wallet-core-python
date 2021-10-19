@@ -108,10 +108,12 @@ static PyObject* PyHDVersion_str(PyHDVersionObject* self) {
   return PyUnicode_FromString(str);
 }
 
+// getter function for IsPublic
 static PyObject* PyHDVersionIsPublic(PyHDVersionObject* self, void*) {
   return PyBool_FromLong(TWHDVersionIsPublic(self->value));
 }
 
+// getter function for IsPrivate
 static PyObject* PyHDVersionIsPrivate(PyHDVersionObject* self, void*) {
   return PyBool_FromLong(TWHDVersionIsPrivate(self->value));
 }

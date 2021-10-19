@@ -105,9 +105,28 @@ static PyObject* PyBitcoinSigHashType_str(PyBitcoinSigHashTypeObject* self) {
   return PyUnicode_FromString(str);
 }
 
+// method function for IsSingle
+static PyObject* PyBitcoinSigHashTypeIsSingle(PyBitcoinSigHashTypeObject* self,
+                                              PyObject* const* args,
+                                              Py_ssize_t nargs) {
+  ;
+  return PyLong_FromLong((long)TWBitcoinSigHashTypeIsSingle(self->value));
+}
+
+// method function for IsNone
+static PyObject* PyBitcoinSigHashTypeIsNone(PyBitcoinSigHashTypeObject* self,
+                                            PyObject* const* args,
+                                            Py_ssize_t nargs) {
+  ;
+  return PyLong_FromLong((long)TWBitcoinSigHashTypeIsNone(self->value));
+}
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_defs[] = {{}};
+static const PyMethodDef method_defs[] = {
+    {"IsSingle", (PyCFunction)PyBitcoinSigHashTypeIsSingle, METH_FASTCALL},
+    {"IsNone", (PyCFunction)PyBitcoinSigHashTypeIsNone, METH_FASTCALL},
+    {}};
 
 bool PyInit_BitcoinSigHashType(PyObject* module) {
   PyBitcoinSigHashTypeType.tp_new = PyBitcoinSigHashType_new;

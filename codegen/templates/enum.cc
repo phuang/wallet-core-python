@@ -103,7 +103,7 @@ ${getsetdefs}
 };
 
 static const PyMethodDef method_defs[] = {
-${methods}
+${methoddefs}
 };
 
 bool PyInit_${name}(PyObject *module) {

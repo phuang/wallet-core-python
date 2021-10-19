@@ -173,44 +173,62 @@ static PyObject* PyCoinType_str(PyCoinTypeObject* self) {
   return PyUnicode_FromString(str);
 }
 
+// getter function for Blockchain
 static PyObject* PyCoinTypeBlockchain(PyCoinTypeObject* self, void*) {
   return PyBlockchain_FromTWBlockchain(TWCoinTypeBlockchain(self->value));
 }
 
+// getter function for Purpose
 static PyObject* PyCoinTypePurpose(PyCoinTypeObject* self, void*) {
   return PyPurpose_FromTWPurpose(TWCoinTypePurpose(self->value));
 }
 
+// getter function for Curve
 static PyObject* PyCoinTypeCurve(PyCoinTypeObject* self, void*) {
   return PyCurve_FromTWCurve(TWCoinTypeCurve(self->value));
 }
 
+// getter function for XpubVersion
 static PyObject* PyCoinTypeXpubVersion(PyCoinTypeObject* self, void*) {
   return PyHDVersion_FromTWHDVersion(TWCoinTypeXpubVersion(self->value));
 }
 
+// getter function for XprvVersion
 static PyObject* PyCoinTypeXprvVersion(PyCoinTypeObject* self, void*) {
   return PyHDVersion_FromTWHDVersion(TWCoinTypeXprvVersion(self->value));
 }
 
+// getter function for HRP
 static PyObject* PyCoinTypeHRP(PyCoinTypeObject* self, void*) {
   return PyHRP_FromTWHRP(TWCoinTypeHRP(self->value));
 }
 
+// getter function for P2pkhPrefix
 static PyObject* PyCoinTypeP2pkhPrefix(PyCoinTypeObject* self, void*) {
-  return PyLong_FromLong((long)TWCoinTypeP2pkhPrefix(self->value));
+  return PyLong_FromLong(TWCoinTypeP2pkhPrefix(self->value));
 }
 
+// getter function for P2shPrefix
 static PyObject* PyCoinTypeP2shPrefix(PyCoinTypeObject* self, void*) {
-  return PyLong_FromLong((long)TWCoinTypeP2shPrefix(self->value));
+  return PyLong_FromLong(TWCoinTypeP2shPrefix(self->value));
 }
 
+// getter function for StaticPrefix
 static PyObject* PyCoinTypeStaticPrefix(PyCoinTypeObject* self, void*) {
-  return PyLong_FromLong((long)TWCoinTypeStaticPrefix(self->value));
+  return PyLong_FromLong(TWCoinTypeStaticPrefix(self->value));
 }
 
+// getter function for Slip44Id
 static PyObject* PyCoinTypeSlip44Id(PyCoinTypeObject* self, void*) {
-  return PyLong_FromLong((long)TWCoinTypeSlip44Id(self->value));
+  return PyLong_FromLong(TWCoinTypeSlip44Id(self->value));
+}
+
+// method function for Validate
+static PyObject* PyCoinTypeValidate(PyCoinTypeObject* self,
+                                    PyObject* const* args,
+                                    Py_ssize_t nargs) {
+  ;
+  return PyLong_FromLong((long)TWCoinTypeValidate(self->value));
 }
 
 static const PyGetSetDef get_set_defs[] = {
@@ -226,7 +244,9 @@ static const PyGetSetDef get_set_defs[] = {
     {"Slip44Id", (getter)PyCoinTypeSlip44Id},
     {}};
 
-static const PyMethodDef method_defs[] = {{}};
+static const PyMethodDef method_defs[] = {
+    {"Validate", (PyCFunction)PyCoinTypeValidate, METH_FASTCALL},
+    {}};
 
 bool PyInit_CoinType(PyObject* module) {
   PyCoinTypeType.tp_new = PyCoinType_new;
