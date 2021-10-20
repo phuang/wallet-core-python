@@ -5,7 +5,7 @@ import os
 from os.path import basename
 from os.path import dirname
 from parser import Parser
-from string import Template
+from string import Template as T
 
 DIR = dirname(__file__)
 OUTPUT_DIR = os.path.join(DIR, '..', 'src')
@@ -16,7 +16,7 @@ class Generator:
 
     def template(self, filename):
         filepath = os.path.join(DIR, 'templates', filename)
-        return Template(open(filepath).read())
+        return T(open(filepath).read())
 
     def generate(self):
         names = []
@@ -41,7 +41,7 @@ class Generator:
             {0}/*.cc {0}/*.h'.format(OUTPUT_DIR))
 
     def process_properties(self, name, props):
-        template = Template('''
+        template = T('''
 // getter function for ${prop_name}
 static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
   return ${return}(TW${name}${prop_name}(self->value));
@@ -80,18 +80,51 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
 
     def process_arguments(self, args):
         prepare_args = []
+        prepare_args.append(T('''
+  if (nargs != ${nargs}) {
+    PyErr_Format(PyExc_TypeError, "Expect ${nargs} instead of %d.", nargs);
+    return nullptr;
+  }
+''').substitute(nargs = len(args)))
 
-        for arg in args:
-            pass
+        template = T('''
+  if (!Py${arg_type}_Check(args[${i}])) {
+    PyErr_SetString(PyExc_TypeError, "The arg ${i} is not in type ${arg_type}");
+    return nullptr;
+  }
+  auto arg${i} = ${get_ctype}(args[${i}]);
+''')
+        call_args = []
+        used_types = set()
+        for i, arg in enumerate(args):
+            print(arg._name)
+            print(arg._type._name)
+            if arg._type._name == 'TWString':
+                assert arg._type._is_ptr
+                arg_type  = 'Unicode'
+                get_ctype = 'PyUnicode_GetTWString'
+                call_args.append('arg{}.get()'.format(i))
+                used_types.add('String')
+            else:
+                continue
+            values = {
+                'arg_type' : arg_type,
+                'i' : i,
+                'get_ctype' : get_ctype,
+            }
+            prepare_args.append(template.substitute(values))
+        prepare_args = '\n'.join(prepare_args)
+        call_args = ', '.join(call_args)
+        return prepare_args, call_args, used_types
 
     def process_methods(self, name, methods):
-        template = Template('''
+        template = T('''
 // method function for ${method_name}
 static PyObject* Py${name}${method_name}(Py${name}Object *self,
                                          PyObject *const *args,
                                          Py_ssize_t nargs) {
   ${prepare_args};
-  auto${return_ptr} result = TW${name}${method_name}(self->value${args});
+  ${return_type} result = TW${name}${method_name}(${call_args});
   return ${return}(result);
 }\n''')
         used_types = set()
@@ -100,21 +133,26 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         for method in methods:
             method_name = method._name[len(name) + 2:]
             if method._type._name in ('uint8_t', 'uint16_t', 'uint32_t'):
+                return_type = method._type._name
                 return_ = 'PyLong_FromLong'
             elif method._type._name == 'bool':
+                return_type = method._type._name
                 return_ = 'PyBool_FromLong'
             elif method._type._type == 'enum':
-                method_type = method._type._name[2:]
-                used_types.add(method_type)
-                return_ = 'Py{0}_FromTW{0}'.format(method_type)
+                return_type = method._type._name
+                used_types.add(return_type[2:])
+                return_ = 'Py{}_FromTW{}'.format(return_type[2:])
             else:
                 continue
+            prepare_args, call_args, types = self.process_arguments(method._args[1:])
+            call_args = 'self->value, '  + call_args if call_args else 'self->value'
+            used_types |= types
             values = {
                 'name' : name,
                 'method_name' : method_name,
-                'prepare_args' : '',
-                'args' : '',
-                'return_ptr' : '',
+                'prepare_args' : prepare_args,
+                'call_args' : call_args,
+                'return_type' : return_type,
                 'return' : return_,
             }
             function = template.substitute(values)

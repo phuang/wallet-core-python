@@ -10,6 +10,7 @@
 #include "HDVersion.h"
 #include "HRP.h"
 #include "Purpose.h"
+#include "String.h"
 
 #define CONSTANTS(I)  \
   I(Aeternity)        \
@@ -227,8 +228,18 @@ static PyObject* PyCoinTypeSlip44Id(PyCoinTypeObject* self, void*) {
 static PyObject* PyCoinTypeValidate(PyCoinTypeObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
   ;
-  auto result = TWCoinTypeValidate(self->value);
+  bool result = TWCoinTypeValidate(self->value, arg0.get());
   return PyBool_FromLong(result);
 }
 

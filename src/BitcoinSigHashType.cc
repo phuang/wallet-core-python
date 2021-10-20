@@ -109,8 +109,11 @@ static PyObject* PyBitcoinSigHashType_str(PyBitcoinSigHashTypeObject* self) {
 static PyObject* PyBitcoinSigHashTypeIsSingle(PyBitcoinSigHashTypeObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
-  ;
-  auto result = TWBitcoinSigHashTypeIsSingle(self->value);
+  if (nargs != 0) {
+    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    return nullptr;
+  };
+  bool result = TWBitcoinSigHashTypeIsSingle(self->value);
   return PyBool_FromLong(result);
 }
 
@@ -118,8 +121,11 @@ static PyObject* PyBitcoinSigHashTypeIsSingle(PyBitcoinSigHashTypeObject* self,
 static PyObject* PyBitcoinSigHashTypeIsNone(PyBitcoinSigHashTypeObject* self,
                                             PyObject* const* args,
                                             Py_ssize_t nargs) {
-  ;
-  auto result = TWBitcoinSigHashTypeIsNone(self->value);
+  if (nargs != 0) {
+    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    return nullptr;
+  };
+  bool result = TWBitcoinSigHashTypeIsNone(self->value);
   return PyBool_FromLong(result);
 }
 
