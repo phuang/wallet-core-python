@@ -101,22 +101,6 @@ static PyObject* PyBitcoinAddressKeyhash(PyBitcoinAddressObject* self, void*) {
   return PyByteArray_FromTWData(TWBitcoinAddressKeyhash(self->value));
 }
 
-// method function for Delete
-static const char PyBitcoinAddressDelete_doc[] =
-    "void TWBitcoinAddressDelete(struct TWBitcoinAddress* address)";
-static PyObject* PyBitcoinAddressDelete(PyBitcoinAddressObject* self,
-                                        PyObject* const* args,
-                                        Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWBitcoinAddressDelete(self->value);
-  return nullptr;
-}
-
 // static method function for Equal
 static const char PyBitcoinAddressEqual_doc[] =
     "bool TWBitcoinAddressEqual(struct TWBitcoinAddress* lhs, struct "
@@ -275,8 +259,6 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyBitcoinAddressDelete, METH_FASTCALL,
-     PyBitcoinAddressDelete_doc},
     {"Equal", (PyCFunction)PyBitcoinAddressEqual, METH_FASTCALL | METH_STATIC,
      PyBitcoinAddressEqual_doc},
     {"IsValid", (PyCFunction)PyBitcoinAddressIsValid,

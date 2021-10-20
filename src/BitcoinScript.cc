@@ -132,22 +132,6 @@ static PyObject* PyBitcoinScriptIsWitnessProgram(PyBitcoinScriptObject* self,
   return PyBool_FromLong(TWBitcoinScriptIsWitnessProgram(self->value));
 }
 
-// method function for Delete
-static const char PyBitcoinScriptDelete_doc[] =
-    "void TWBitcoinScriptDelete(struct TWBitcoinScript* script)";
-static PyObject* PyBitcoinScriptDelete(PyBitcoinScriptObject* self,
-                                       PyObject* const* args,
-                                       Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWBitcoinScriptDelete(self->value);
-  return nullptr;
-}
-
 // method function for MatchPayToPubkey
 static const char PyBitcoinScriptMatchPayToPubkey_doc[] =
     "TWData* TWBitcoinScriptMatchPayToPubkey(const struct TWBitcoinScript* "
@@ -534,8 +518,6 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyBitcoinScriptDelete, METH_FASTCALL,
-     PyBitcoinScriptDelete_doc},
     {"MatchPayToPubkey", (PyCFunction)PyBitcoinScriptMatchPayToPubkey,
      METH_FASTCALL, PyBitcoinScriptMatchPayToPubkey_doc},
     {"MatchPayToPubkeyHash", (PyCFunction)PyBitcoinScriptMatchPayToPubkeyHash,

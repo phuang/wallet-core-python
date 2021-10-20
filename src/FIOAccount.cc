@@ -84,22 +84,6 @@ static PyObject* PyFIOAccountDescription(PyFIOAccountObject* self, void*) {
   return PyUnicode_FromTWString(TWFIOAccountDescription(self->value));
 }
 
-// method function for Delete
-static const char PyFIOAccountDelete_doc[] =
-    "void TWFIOAccountDelete(struct TWFIOAccount* account)";
-static PyObject* PyFIOAccountDelete(PyFIOAccountObject* self,
-                                    PyObject* const* args,
-                                    Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWFIOAccountDelete(self->value);
-  return nullptr;
-}
-
 // static method function for CreateWithString
 static const char PyFIOAccountCreateWithString_doc[] =
     "struct TWFIOAccount* TWFIOAccountCreateWithString(TWString* string)";
@@ -128,8 +112,6 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyFIOAccountDelete, METH_FASTCALL,
-     PyFIOAccountDelete_doc},
     {"CreateWithString", (PyCFunction)PyFIOAccountCreateWithString,
      METH_FASTCALL | METH_STATIC, PyFIOAccountCreateWithString_doc},
     {}};

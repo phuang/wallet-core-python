@@ -105,22 +105,6 @@ static PyObject* PyAccountCoin(PyAccountObject* self, void*) {
   return PyCoinType_FromTWCoinType(TWAccountCoin(self->value));
 }
 
-// method function for Delete
-static const char PyAccountDelete_doc[] =
-    "void TWAccountDelete(struct TWAccount* account)";
-static PyObject* PyAccountDelete(PyAccountObject* self,
-                                 PyObject* const* args,
-                                 Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWAccountDelete(self->value);
-  return nullptr;
-}
-
 // static method function for Create
 static const char PyAccountCreate_doc[] =
     "struct TWAccount* TWAccountCreate(TWString* address, enum TWCoinType "
@@ -172,8 +156,6 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyAccountDelete, METH_FASTCALL,
-     PyAccountDelete_doc},
     {"Create", (PyCFunction)PyAccountCreate, METH_FASTCALL | METH_STATIC,
      PyAccountCreate_doc},
     {}};

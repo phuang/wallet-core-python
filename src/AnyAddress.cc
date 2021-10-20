@@ -101,22 +101,6 @@ static PyObject* PyAnyAddressData(PyAnyAddressObject* self, void*) {
   return PyByteArray_FromTWData(TWAnyAddressData(self->value));
 }
 
-// method function for Delete
-static const char PyAnyAddressDelete_doc[] =
-    "void TWAnyAddressDelete(struct TWAnyAddress* address)";
-static PyObject* PyAnyAddressDelete(PyAnyAddressObject* self,
-                                    PyObject* const* args,
-                                    Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWAnyAddressDelete(self->value);
-  return nullptr;
-}
-
 // static method function for Equal
 static const char PyAnyAddressEqual_doc[] =
     "bool TWAnyAddressEqual(struct TWAnyAddress* lhs, struct TWAnyAddress* "
@@ -240,8 +224,6 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyAnyAddressDelete, METH_FASTCALL,
-     PyAnyAddressDelete_doc},
     {"Equal", (PyCFunction)PyAnyAddressEqual, METH_FASTCALL | METH_STATIC,
      PyAnyAddressEqual_doc},
     {"IsValid", (PyCFunction)PyAnyAddressIsValid, METH_FASTCALL | METH_STATIC,

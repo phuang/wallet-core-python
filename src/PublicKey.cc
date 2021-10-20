@@ -121,22 +121,6 @@ static PyObject* PyPublicKeyDescription(PyPublicKeyObject* self, void*) {
   return PyUnicode_FromTWString(TWPublicKeyDescription(self->value));
 }
 
-// method function for Delete
-static const char PyPublicKeyDelete_doc[] =
-    "void TWPublicKeyDelete(struct TWPublicKey* pk)";
-static PyObject* PyPublicKeyDelete(PyPublicKeyObject* self,
-                                   PyObject* const* args,
-                                   Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWPublicKeyDelete(self->value);
-  return nullptr;
-}
-
 // method function for Verify
 static const char PyPublicKeyVerify_doc[] =
     "bool TWPublicKeyVerify(struct TWPublicKey* pk, TWData* signature, TWData* "
@@ -295,8 +279,6 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyPublicKeyDelete, METH_FASTCALL,
-     PyPublicKeyDelete_doc},
     {"Verify", (PyCFunction)PyPublicKeyVerify, METH_FASTCALL,
      PyPublicKeyVerify_doc},
     {"VerifySchnorr", (PyCFunction)PyPublicKeyVerifySchnorr, METH_FASTCALL,

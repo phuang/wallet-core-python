@@ -93,22 +93,6 @@ static PyObject* PyRippleXAddressTag(PyRippleXAddressObject* self, void*) {
   return PyLong_FromLong(TWRippleXAddressTag(self->value));
 }
 
-// method function for Delete
-static const char PyRippleXAddressDelete_doc[] =
-    "void TWRippleXAddressDelete(struct TWRippleXAddress* address)";
-static PyObject* PyRippleXAddressDelete(PyRippleXAddressObject* self,
-                                        PyObject* const* args,
-                                        Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWRippleXAddressDelete(self->value);
-  return nullptr;
-}
-
 // static method function for Equal
 static const char PyRippleXAddressEqual_doc[] =
     "bool TWRippleXAddressEqual(struct TWRippleXAddress* lhs, struct "
@@ -220,8 +204,6 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyRippleXAddressDelete, METH_FASTCALL,
-     PyRippleXAddressDelete_doc},
     {"Equal", (PyCFunction)PyRippleXAddressEqual, METH_FASTCALL | METH_STATIC,
      PyRippleXAddressEqual_doc},
     {"IsValidString", (PyCFunction)PyRippleXAddressIsValidString,

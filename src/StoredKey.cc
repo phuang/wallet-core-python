@@ -102,22 +102,6 @@ static PyObject* PyStoredKeyIsMnemonic(PyStoredKeyObject* self, void*) {
   return PyBool_FromLong(TWStoredKeyIsMnemonic(self->value));
 }
 
-// method function for Delete
-static const char PyStoredKeyDelete_doc[] =
-    "void TWStoredKeyDelete(struct TWStoredKey* key)";
-static PyObject* PyStoredKeyDelete(PyStoredKeyObject* self,
-                                   PyObject* const* args,
-                                   Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWStoredKeyDelete(self->value);
-  return nullptr;
-}
-
 // method function for Account
 static const char PyStoredKeyAccount_doc[] =
     "struct TWAccount* TWStoredKeyAccount(struct TWStoredKey* key, size_t "
@@ -558,8 +542,6 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyStoredKeyDelete, METH_FASTCALL,
-     PyStoredKeyDelete_doc},
     {"Account", (PyCFunction)PyStoredKeyAccount, METH_FASTCALL,
      PyStoredKeyAccount_doc},
     {"AccountForCoin", (PyCFunction)PyStoredKeyAccountForCoin, METH_FASTCALL,

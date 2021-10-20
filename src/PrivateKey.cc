@@ -87,22 +87,6 @@ static PyObject* PyPrivateKeyData(PyPrivateKeyObject* self, void*) {
   return PyByteArray_FromTWData(TWPrivateKeyData(self->value));
 }
 
-// method function for Delete
-static const char PyPrivateKeyDelete_doc[] =
-    "void TWPrivateKeyDelete(struct TWPrivateKey* pk)";
-static PyObject* PyPrivateKeyDelete(PyPrivateKeyObject* self,
-                                    PyObject* const* args,
-                                    Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWPrivateKeyDelete(self->value);
-  return nullptr;
-}
-
 // method function for GetPublicKeySecp256k1
 static const char PyPrivateKeyGetPublicKeySecp256k1_doc[] =
     "struct TWPublicKey* TWPrivateKeyGetPublicKeySecp256k1(struct "
@@ -422,8 +406,6 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyPrivateKeyDelete, METH_FASTCALL,
-     PyPrivateKeyDelete_doc},
     {"GetPublicKeySecp256k1", (PyCFunction)PyPrivateKeyGetPublicKeySecp256k1,
      METH_FASTCALL, PyPrivateKeyGetPublicKeySecp256k1_doc},
     {"GetPublicKeyNist256p1", (PyCFunction)PyPrivateKeyGetPublicKeyNist256p1,

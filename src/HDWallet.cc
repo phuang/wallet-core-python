@@ -105,22 +105,6 @@ static PyObject* PyHDWalletEntropy(PyHDWalletObject* self, void*) {
   return PyByteArray_FromTWData(TWHDWalletEntropy(self->value));
 }
 
-// method function for Delete
-static const char PyHDWalletDelete_doc[] =
-    "void TWHDWalletDelete(struct TWHDWallet* wallet)";
-static PyObject* PyHDWalletDelete(PyHDWalletObject* self,
-                                  PyObject* const* args,
-                                  Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWHDWalletDelete(self->value);
-  return nullptr;
-}
-
 // method function for GetMasterKey
 static const char PyHDWalletGetMasterKey_doc[] =
     "struct TWPrivateKey* TWHDWalletGetMasterKey(struct TWHDWallet* wallet, "
@@ -499,8 +483,6 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyHDWalletDelete, METH_FASTCALL,
-     PyHDWalletDelete_doc},
     {"GetMasterKey", (PyCFunction)PyHDWalletGetMasterKey, METH_FASTCALL,
      PyHDWalletGetMasterKey_doc},
     {"GetKeyForCoin", (PyCFunction)PyHDWalletGetKeyForCoin, METH_FASTCALL,

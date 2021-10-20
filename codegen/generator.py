@@ -16,10 +16,13 @@
 # along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
+import shutil
 
+from filecmp import dircmp
 from os.path import basename
 from os.path import dirname
 from parser import Parser
+from tempfile import mkdtemp
 from string import Template as T
 
 DIR = dirname(__file__)
@@ -28,15 +31,16 @@ OUTPUT_DIR = os.path.join(DIR, '..', 'src')
 class Generator:
     def __init__(self):
         self._parser = Parser()
+        self._tmp_dir = mkdtemp()
 
     def template(self, filename):
         filepath = os.path.join(DIR, 'templates', filename)
         return T(open(filepath).read())
 
-    def format(self):
+    def clang_format(self, path):
         # format generated c/c++ source code
         os.system('/usr/bin/clang-format -style=Chromium -i \
-            {0}/*.cc {0}/*.h'.format(OUTPUT_DIR))
+            {0}/*.cc {0}/*.h'.format(path))
 
     def process_properties(self, name, props):
         template = T('''
@@ -186,6 +190,9 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         functions = []
         for method in methods:
             method_name = method._name[len(name) + 2:]
+            if method_name == 'Delete':
+                assert not is_static
+                continue
             if method._type._name in ('uint8_t', 'uint16_t', 'uint32_t', 'int'):
                 return_type = method._type._name
                 return_ = 'PyLong_FromLong'
@@ -281,11 +288,11 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
             'functions' : functions
         }
 
-        with open(os.path.join(OUTPUT_DIR, name) + '.cc', 'w') as out:
+        with open(os.path.join(self._tmp_dir, name) + '.cc', 'w') as out:
             template = self.template('enum.cc')
             out.write(template.substitute(values))
 
-        with open(os.path.join(OUTPUT_DIR, name) + '.h', 'w') as out:
+        with open(os.path.join(self._tmp_dir, name) + '.h', 'w') as out:
             template = self.template('enum.h')
             out.write(template.substitute(values))
 
@@ -315,11 +322,11 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
             'functions' : functions
         }
 
-        with open(os.path.join(OUTPUT_DIR, name) + '.cc', 'w') as out:
+        with open(os.path.join(self._tmp_dir, name) + '.cc', 'w') as out:
             template = self.template('class.cc')
             out.write(template.substitute(values))
 
-        with open(os.path.join(OUTPUT_DIR, name) + '.h', 'w') as out:
+        with open(os.path.join(self._tmp_dir, name) + '.h', 'w') as out:
             template = self.template('class.h')
             out.write(template.substitute(values))
 
@@ -349,11 +356,11 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
             'functions' : functions
         }
 
-        with open(os.path.join(OUTPUT_DIR, name) + '.cc', 'w') as out:
+        with open(os.path.join(self._tmp_dir, name) + '.cc', 'w') as out:
             template = self.template('struct.cc')
             out.write(template.substitute(values))
 
-        with open(os.path.join(OUTPUT_DIR, name) + '.h', 'w') as out:
+        with open(os.path.join(self._tmp_dir, name) + '.h', 'w') as out:
             template = self.template('struct.h')
             out.write(template.substitute(values))
 
@@ -376,12 +383,19 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         functions = '\n'.join(['  PyInit_{},'.format(f) for f in names])
 
         values = { 'functions' : functions, 'includes' : includes }
-        with open(os.path.join(OUTPUT_DIR, 'module.cc'), 'w') as out:
+        with open(os.path.join(self._tmp_dir, 'module.cc'), 'w') as out:
             template = self.template('module.cc')
             out.write(template.substitute(values))
 
-        self.format()
-
+        self.clang_format(self._tmp_dir)
+        result = dircmp(self._tmp_dir, OUTPUT_DIR)
+        for file in result.left_only:
+            print('new file: ' + file)
+            shutil.copy(os.path.join(self._tmp_dir, file), OUTPUT_DIR)
+        for file in result.diff_files:
+            print('diff file: ' + file)
+            shutil.copy(os.path.join(self._tmp_dir, file), OUTPUT_DIR)
+        shutil.rmtree(self._tmp_dir)
 
 if __name__ == '__main__':
     Generator().generate()

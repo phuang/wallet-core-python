@@ -84,22 +84,6 @@ static PyObject* PyNEARAccountDescription(PyNEARAccountObject* self, void*) {
   return PyUnicode_FromTWString(TWNEARAccountDescription(self->value));
 }
 
-// method function for Delete
-static const char PyNEARAccountDelete_doc[] =
-    "void TWNEARAccountDelete(struct TWNEARAccount* account)";
-static PyObject* PyNEARAccountDelete(PyNEARAccountObject* self,
-                                     PyObject* const* args,
-                                     Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWNEARAccountDelete(self->value);
-  return nullptr;
-}
-
 // static method function for CreateWithString
 static const char PyNEARAccountCreateWithString_doc[] =
     "struct TWNEARAccount* TWNEARAccountCreateWithString(TWString* string)";
@@ -128,8 +112,6 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyNEARAccountDelete, METH_FASTCALL,
-     PyNEARAccountDelete_doc},
     {"CreateWithString", (PyCFunction)PyNEARAccountCreateWithString,
      METH_FASTCALL | METH_STATIC, PyNEARAccountCreateWithString_doc},
     {}};

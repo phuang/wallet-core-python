@@ -81,22 +81,6 @@ static void PyEthereumAbiFunction_dealloc(PyEthereumAbiFunctionObject* self) {
   Py_TYPE(self)->tp_free(self);
 }
 
-// method function for Delete
-static const char PyEthereumAbiFunctionDelete_doc[] =
-    "void TWEthereumAbiFunctionDelete(struct TWEthereumAbiFunction* fn)";
-static PyObject* PyEthereumAbiFunctionDelete(PyEthereumAbiFunctionObject* self,
-                                             PyObject* const* args,
-                                             Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWEthereumAbiFunctionDelete(self->value);
-  return nullptr;
-}
-
 // method function for GetType
 static const char PyEthereumAbiFunctionGetType_doc[] =
     "TWString* TWEthereumAbiFunctionGetType(struct TWEthereumAbiFunction* fn)";
@@ -1430,8 +1414,6 @@ static PyObject* PyEthereumAbiFunctionCreateWithString(
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyEthereumAbiFunctionDelete, METH_FASTCALL,
-     PyEthereumAbiFunctionDelete_doc},
     {"GetType", (PyCFunction)PyEthereumAbiFunctionGetType, METH_FASTCALL,
      PyEthereumAbiFunctionGetType_doc},
     {"AddParamUInt8", (PyCFunction)PyEthereumAbiFunctionAddParamUInt8,

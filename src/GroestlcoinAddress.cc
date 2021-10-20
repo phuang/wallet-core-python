@@ -90,22 +90,6 @@ static PyObject* PyGroestlcoinAddressDescription(
   return PyUnicode_FromTWString(TWGroestlcoinAddressDescription(self->value));
 }
 
-// method function for Delete
-static const char PyGroestlcoinAddressDelete_doc[] =
-    "void TWGroestlcoinAddressDelete(struct TWGroestlcoinAddress* address)";
-static PyObject* PyGroestlcoinAddressDelete(PyGroestlcoinAddressObject* self,
-                                            PyObject* const* args,
-                                            Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWGroestlcoinAddressDelete(self->value);
-  return nullptr;
-}
-
 // static method function for Equal
 static const char PyGroestlcoinAddressEqual_doc[] =
     "bool TWGroestlcoinAddressEqual(struct TWGroestlcoinAddress* lhs, struct "
@@ -223,8 +207,6 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyGroestlcoinAddressDelete, METH_FASTCALL,
-     PyGroestlcoinAddressDelete_doc},
     {"Equal", (PyCFunction)PyGroestlcoinAddressEqual,
      METH_FASTCALL | METH_STATIC, PyGroestlcoinAddressEqual_doc},
     {"IsValidString", (PyCFunction)PyGroestlcoinAddressIsValidString,

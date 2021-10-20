@@ -103,22 +103,6 @@ static PyObject* PySegwitAddressWitnessProgram(PySegwitAddressObject* self,
   return PyByteArray_FromTWData(TWSegwitAddressWitnessProgram(self->value));
 }
 
-// method function for Delete
-static const char PySegwitAddressDelete_doc[] =
-    "void TWSegwitAddressDelete(struct TWSegwitAddress* address)";
-static PyObject* PySegwitAddressDelete(PySegwitAddressObject* self,
-                                       PyObject* const* args,
-                                       Py_ssize_t nargs) {
-  if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  TWSegwitAddressDelete(self->value);
-  return nullptr;
-}
-
 // static method function for Equal
 static const char PySegwitAddressEqual_doc[] =
     "bool TWSegwitAddressEqual(struct TWSegwitAddress* lhs, struct "
@@ -230,8 +214,6 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PySegwitAddressDelete, METH_FASTCALL,
-     PySegwitAddressDelete_doc},
     {"Equal", (PyCFunction)PySegwitAddressEqual, METH_FASTCALL | METH_STATIC,
      PySegwitAddressEqual_doc},
     {"IsValidString", (PyCFunction)PySegwitAddressIsValidString,
