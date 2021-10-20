@@ -110,7 +110,8 @@ static PyObject* PyBitcoinSigHashTypeIsSingle(PyBitcoinSigHashTypeObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
   ;
-  return PyLong_FromLong((long)TWBitcoinSigHashTypeIsSingle(self->value));
+  auto result = TWBitcoinSigHashTypeIsSingle(self->value);
+  return PyBool_FromLong(result);
 }
 
 // method function for IsNone
@@ -118,7 +119,8 @@ static PyObject* PyBitcoinSigHashTypeIsNone(PyBitcoinSigHashTypeObject* self,
                                             PyObject* const* args,
                                             Py_ssize_t nargs) {
   ;
-  return PyLong_FromLong((long)TWBitcoinSigHashTypeIsNone(self->value));
+  auto result = TWBitcoinSigHashTypeIsNone(self->value);
+  return PyBool_FromLong(result);
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};

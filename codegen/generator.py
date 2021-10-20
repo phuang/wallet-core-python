@@ -79,7 +79,10 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
         return includes, functions, getsetdefs
 
     def process_arguments(self, args):
-        pass
+        prepare_args = []
+
+        for arg in args:
+            pass
 
     def process_methods(self, name, methods):
         template = Template('''
@@ -88,7 +91,8 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
                                          PyObject *const *args,
                                          Py_ssize_t nargs) {
   ${prepare_args};
-  return PyLong_FromLong((long)TW${name}${method_name}(self->value${args}));
+  auto${return_ptr} result = TW${name}${method_name}(self->value${args});
+  return ${return}(result);
 }\n''')
         used_types = set()
         methoddefs = []
@@ -110,6 +114,8 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
                 'method_name' : method_name,
                 'prepare_args' : '',
                 'args' : '',
+                'return_ptr' : '',
+                'return' : return_,
             }
             function = template.substitute(values)
             functions.append(function)

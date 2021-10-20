@@ -228,7 +228,8 @@ static PyObject* PyCoinTypeValidate(PyCoinTypeObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
   ;
-  return PyLong_FromLong((long)TWCoinTypeValidate(self->value));
+  auto result = TWCoinTypeValidate(self->value);
+  return PyBool_FromLong(result);
 }
 
 static const PyGetSetDef get_set_defs[] = {
