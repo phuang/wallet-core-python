@@ -15,3 +15,11 @@
 // along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
+
+#define PY_SSIZE_T_CLEAN
+#include <Python.h>
+
+#include <TrustWalletCore/TWAnySigner.h>
+
+// Initialize for PyAnySigner. It is called by python module init function.
+bool PyInit_AnySigner(PyObject* module);

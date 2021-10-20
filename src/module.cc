@@ -23,6 +23,7 @@
 #include "AESPaddingMode.h"
 #include "Account.h"
 #include "AnyAddress.h"
+#include "AnySigner.h"
 #include "Base58.h"
 #include "BitcoinAddress.h"
 #include "BitcoinScript.h"
@@ -63,6 +64,7 @@ const InitProc init_functions[] = {
     PyInit_AESPaddingMode,
     PyInit_Account,
     PyInit_AnyAddress,
+    PyInit_AnySigner,
     PyInit_Base58,
     PyInit_BitcoinAddress,
     PyInit_BitcoinScript,
