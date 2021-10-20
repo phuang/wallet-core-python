@@ -3,14 +3,17 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
+#include "AES.h"
 #include "AESPaddingMode.h"
 #include "Account.h"
 #include "AnyAddress.h"
+#include "Base58.h"
 #include "BitcoinAddress.h"
 #include "BitcoinScript.h"
 #include "BitcoinSigHashType.h"
 #include "Blockchain.h"
 #include "CoinType.h"
+#include "CoinTypeConfiguration.h"
 #include "Curve.h"
 #include "EthereumAbi.h"
 #include "EthereumAbiFunction.h"
@@ -22,6 +25,7 @@
 #include "HDVersion.h"
 #include "HDWallet.h"
 #include "HRP.h"
+#include "Hash.h"
 #include "Mnemonic.h"
 #include "NEARAccount.h"
 #include "PrivateKey.h"
@@ -39,14 +43,17 @@
 
 typedef bool (*InitProc)(PyObject* module);
 const InitProc init_functions[] = {
+    PyInit_AES,
     PyInit_AESPaddingMode,
     PyInit_Account,
     PyInit_AnyAddress,
+    PyInit_Base58,
     PyInit_BitcoinAddress,
     PyInit_BitcoinScript,
     PyInit_BitcoinSigHashType,
     PyInit_Blockchain,
     PyInit_CoinType,
+    PyInit_CoinTypeConfiguration,
     PyInit_Curve,
     PyInit_EthereumAbi,
     PyInit_EthereumAbiFunction,
@@ -58,6 +65,7 @@ const InitProc init_functions[] = {
     PyInit_HDVersion,
     PyInit_HDWallet,
     PyInit_HRP,
+    PyInit_Hash,
     PyInit_Mnemonic,
     PyInit_NEARAccount,
     PyInit_PrivateKey,

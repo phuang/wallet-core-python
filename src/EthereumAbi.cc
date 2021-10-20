@@ -4,6 +4,7 @@
 
 #include "Data.h"
 #include "EthereumAbiFunction.h"
+#include "String.h"
 
 static PyTypeObject PyEthereumAbiType = {
     // clang-format off
@@ -74,6 +75,27 @@ TWEthereumAbi* PyEthereumAbi_GetTWEthereumAbi(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// static method function for Encode
+// TWData* TWEthereumAbiEncode(struct TWEthereumAbiFunction* fn);
+static PyObject* PyEthereumAbiEncode(PyEthereumAbiObject* self,
+                                     PyObject* const* args,
+                                     Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyEthereumAbiFunction_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError,
+                    "The arg 0 is not in type EthereumAbiFunction");
+    return nullptr;
+  }
+  auto arg0 = PyEthereumAbiFunction_GetTWEthereumAbiFunction(args[0]);
+
+  TWDataPtr result = TWEthereumAbiEncode(arg0);
+  return PyByteArray_FromTWData(result);
+}
+
 // static method function for DecodeOutput
 // bool TWEthereumAbiDecodeOutput(struct TWEthereumAbiFunction* fn, TWData*
 // encoded);
@@ -102,10 +124,61 @@ static PyObject* PyEthereumAbiDecodeOutput(PyEthereumAbiObject* self,
   return PyBool_FromLong(result);
 }
 
+// static method function for DecodeCall
+// TWString* TWEthereumAbiDecodeCall(TWData* data, TWString* abi);
+static PyObject* PyEthereumAbiDecodeCall(PyEthereumAbiObject* self,
+                                         PyObject* const* args,
+                                         Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyByteArray_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+    return nullptr;
+  }
+  auto arg0 = PyByteArray_GetTWData(args[0]);
+
+  if (!PyUnicode_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg1 = PyUnicode_GetTWString(args[1]);
+
+  TWStringPtr result = TWEthereumAbiDecodeCall(arg0.get(), arg1.get());
+  return PyUnicode_FromTWString(result);
+}
+
+// static method function for EncodeTyped
+// TWData* TWEthereumAbiEncodeTyped(TWString* messageJson);
+static PyObject* PyEthereumAbiEncodeTyped(PyEthereumAbiObject* self,
+                                          PyObject* const* args,
+                                          Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  TWDataPtr result = TWEthereumAbiEncodeTyped(arg0.get());
+  return PyByteArray_FromTWData(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
+    {"Encode", (PyCFunction)PyEthereumAbiEncode, METH_FASTCALL | METH_STATIC},
     {"DecodeOutput", (PyCFunction)PyEthereumAbiDecodeOutput,
+     METH_FASTCALL | METH_STATIC},
+    {"DecodeCall", (PyCFunction)PyEthereumAbiDecodeCall,
+     METH_FASTCALL | METH_STATIC},
+    {"EncodeTyped", (PyCFunction)PyEthereumAbiEncodeTyped,
      METH_FASTCALL | METH_STATIC},
     {}};
 

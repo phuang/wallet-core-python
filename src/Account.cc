@@ -3,6 +3,7 @@
 #include "Account.h"
 
 #include "CoinType.h"
+#include "String.h"
 
 static PyTypeObject PyAccountType = {
     // clang-format off
@@ -78,9 +79,65 @@ static PyObject* PyAccountCoin(PyAccountObject* self, void*) {
   return PyCoinType_FromTWCoinType(TWAccountCoin(self->value));
 }
 
+// method function for Delete
+// void TWAccountDelete(struct TWAccount* account);
+static PyObject* PyAccountDelete(PyAccountObject* self,
+                                 PyObject* const* args,
+                                 Py_ssize_t nargs) {
+  if (nargs != 0) {
+    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  TWAccountDelete(self->value);
+  return nullptr;
+}
+
+// static method function for Create
+// struct TWAccount* TWAccountCreate(TWString* address, enum TWCoinType coin,
+// TWString* derivationPath, TWString* extendedPublicKey);
+static PyObject* PyAccountCreate(PyAccountObject* self,
+                                 PyObject* const* args,
+                                 Py_ssize_t nargs) {
+  if (nargs != 4) {
+    PyErr_Format(PyExc_TypeError, "Expect 4 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  if (!PyUnicode_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg2 = PyUnicode_GetTWString(args[2]);
+
+  if (!PyUnicode_Check(args[3])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg3 = PyUnicode_GetTWString(args[3]);
+
+  TWAccount* result = TWAccountCreate(arg0.get(), arg1, arg2.get(), arg3.get());
+  return PyAccount_FromTWAccount(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {{"Coin", (getter)PyAccountCoin}, {}};
 
-static const PyMethodDef method_defs[] = {{}};
+static const PyMethodDef method_defs[] = {
+    {"Delete", (PyCFunction)PyAccountDelete, METH_FASTCALL},
+    {"Create", (PyCFunction)PyAccountCreate, METH_FASTCALL | METH_STATIC},
+    {}};
 
 bool PyInit_Account(PyObject* module) {
   // PyAccountType.tp_new = PyAccount_new;

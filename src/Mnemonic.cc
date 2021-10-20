@@ -112,12 +112,33 @@ static PyObject* PyMnemonicIsValidWord(PyMnemonicObject* self,
   return PyBool_FromLong(result);
 }
 
+// static method function for Suggest
+// TWString* TWMnemonicSuggest(TWString* prefix);
+static PyObject* PyMnemonicSuggest(PyMnemonicObject* self,
+                                   PyObject* const* args,
+                                   Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  TWStringPtr result = TWMnemonicSuggest(arg0.get());
+  return PyUnicode_FromTWString(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
     {"IsValid", (PyCFunction)PyMnemonicIsValid, METH_FASTCALL | METH_STATIC},
     {"IsValidWord", (PyCFunction)PyMnemonicIsValidWord,
      METH_FASTCALL | METH_STATIC},
+    {"Suggest", (PyCFunction)PyMnemonicSuggest, METH_FASTCALL | METH_STATIC},
     {}};
 
 bool PyInit_Mnemonic(PyObject* module) {

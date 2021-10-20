@@ -85,6 +85,20 @@ static PyObject* PyPublicKeyKeyType(PyPublicKeyObject* self, void*) {
   return PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyKeyType(self->value));
 }
 
+// method function for Delete
+// void TWPublicKeyDelete(struct TWPublicKey* pk);
+static PyObject* PyPublicKeyDelete(PyPublicKeyObject* self,
+                                   PyObject* const* args,
+                                   Py_ssize_t nargs) {
+  if (nargs != 0) {
+    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  TWPublicKeyDelete(self->value);
+  return nullptr;
+}
+
 // method function for Verify
 // bool TWPublicKeyVerify(struct TWPublicKey* pk, TWData* signature, TWData*
 // message);
@@ -139,6 +153,33 @@ static PyObject* PyPublicKeyVerifySchnorr(PyPublicKeyObject* self,
   return PyBool_FromLong(result);
 }
 
+// static method function for CreateWithData
+// struct TWPublicKey* TWPublicKeyCreateWithData(TWData* data, enum
+// TWPublicKeyType type);
+static PyObject* PyPublicKeyCreateWithData(PyPublicKeyObject* self,
+                                           PyObject* const* args,
+                                           Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyByteArray_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+    return nullptr;
+  }
+  auto arg0 = PyByteArray_GetTWData(args[0]);
+
+  if (!PyPublicKeyType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type PublicKeyType");
+    return nullptr;
+  }
+  auto arg1 = PyPublicKeyType_GetTWPublicKeyType(args[1]);
+
+  TWPublicKey* result = TWPublicKeyCreateWithData(arg0.get(), arg1);
+  return PyPublicKey_FromTWPublicKey(result);
+}
+
 // static method function for IsValid
 // bool TWPublicKeyIsValid(TWData* data, enum TWPublicKeyType type);
 static PyObject* PyPublicKeyIsValid(PyPublicKeyObject* self,
@@ -165,15 +206,45 @@ static PyObject* PyPublicKeyIsValid(PyPublicKeyObject* self,
   return PyBool_FromLong(result);
 }
 
+// static method function for Recover
+// struct TWPublicKey* TWPublicKeyRecover(TWData* signature, TWData* message);
+static PyObject* PyPublicKeyRecover(PyPublicKeyObject* self,
+                                    PyObject* const* args,
+                                    Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyByteArray_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+    return nullptr;
+  }
+  auto arg0 = PyByteArray_GetTWData(args[0]);
+
+  if (!PyByteArray_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+    return nullptr;
+  }
+  auto arg1 = PyByteArray_GetTWData(args[1]);
+
+  TWPublicKey* result = TWPublicKeyRecover(arg0.get(), arg1.get());
+  return PyPublicKey_FromTWPublicKey(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {
     {"IsCompressed", (getter)PyPublicKeyIsCompressed},
     {"KeyType", (getter)PyPublicKeyKeyType},
     {}};
 
 static const PyMethodDef method_defs[] = {
+    {"Delete", (PyCFunction)PyPublicKeyDelete, METH_FASTCALL},
     {"Verify", (PyCFunction)PyPublicKeyVerify, METH_FASTCALL},
     {"VerifySchnorr", (PyCFunction)PyPublicKeyVerifySchnorr, METH_FASTCALL},
+    {"CreateWithData", (PyCFunction)PyPublicKeyCreateWithData,
+     METH_FASTCALL | METH_STATIC},
     {"IsValid", (PyCFunction)PyPublicKeyIsValid, METH_FASTCALL | METH_STATIC},
+    {"Recover", (PyCFunction)PyPublicKeyRecover, METH_FASTCALL | METH_STATIC},
     {}};
 
 bool PyInit_PublicKey(PyObject* module) {

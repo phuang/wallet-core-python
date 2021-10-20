@@ -9,6 +9,8 @@
 #include "Curve.h"
 #include "HDVersion.h"
 #include "HRP.h"
+#include "PrivateKey.h"
+#include "PublicKey.h"
 #include "Purpose.h"
 #include "String.h"
 
@@ -262,6 +264,62 @@ static PyObject* PyCoinTypeValidate(PyCoinTypeObject* self,
   return PyBool_FromLong(result);
 }
 
+// method function for DerivationPath
+// TWString* TWCoinTypeDerivationPath(enum TWCoinType coin);
+static PyObject* PyCoinTypeDerivationPath(PyCoinTypeObject* self,
+                                          PyObject* const* args,
+                                          Py_ssize_t nargs) {
+  if (nargs != 0) {
+    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  TWStringPtr result = TWCoinTypeDerivationPath(self->value);
+  return PyUnicode_FromTWString(result);
+}
+
+// method function for DeriveAddress
+// TWString* TWCoinTypeDeriveAddress(enum TWCoinType coin, struct TWPrivateKey*
+// privateKey);
+static PyObject* PyCoinTypeDeriveAddress(PyCoinTypeObject* self,
+                                         PyObject* const* args,
+                                         Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyPrivateKey_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PrivateKey");
+    return nullptr;
+  }
+  auto arg0 = PyPrivateKey_GetTWPrivateKey(args[0]);
+
+  TWStringPtr result = TWCoinTypeDeriveAddress(self->value, arg0);
+  return PyUnicode_FromTWString(result);
+}
+
+// method function for DeriveAddressFromPublicKey
+// TWString* TWCoinTypeDeriveAddressFromPublicKey(enum TWCoinType coin, struct
+// TWPublicKey* publicKey);
+static PyObject* PyCoinTypeDeriveAddressFromPublicKey(PyCoinTypeObject* self,
+                                                      PyObject* const* args,
+                                                      Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyPublicKey_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PublicKey");
+    return nullptr;
+  }
+  auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
+
+  TWStringPtr result = TWCoinTypeDeriveAddressFromPublicKey(self->value, arg0);
+  return PyUnicode_FromTWString(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {
     {"Blockchain", (getter)PyCoinTypeBlockchain},
     {"Purpose", (getter)PyCoinTypePurpose},
@@ -277,6 +335,10 @@ static const PyGetSetDef get_set_defs[] = {
 
 static const PyMethodDef method_defs[] = {
     {"Validate", (PyCFunction)PyCoinTypeValidate, METH_FASTCALL},
+    {"DerivationPath", (PyCFunction)PyCoinTypeDerivationPath, METH_FASTCALL},
+    {"DeriveAddress", (PyCFunction)PyCoinTypeDeriveAddress, METH_FASTCALL},
+    {"DeriveAddressFromPublicKey",
+     (PyCFunction)PyCoinTypeDeriveAddressFromPublicKey, METH_FASTCALL},
     {}};
 
 bool PyInit_CoinType(PyObject* module) {

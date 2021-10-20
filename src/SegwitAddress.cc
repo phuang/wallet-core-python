@@ -3,6 +3,7 @@
 #include "SegwitAddress.h"
 
 #include "HRP.h"
+#include "PublicKey.h"
 #include "String.h"
 
 static PyTypeObject PySegwitAddressType = {
@@ -80,6 +81,20 @@ static PyObject* PySegwitAddressHRP(PySegwitAddressObject* self, void*) {
   return PyHRP_FromTWHRP(TWSegwitAddressHRP(self->value));
 }
 
+// method function for Delete
+// void TWSegwitAddressDelete(struct TWSegwitAddress* address);
+static PyObject* PySegwitAddressDelete(PySegwitAddressObject* self,
+                                       PyObject* const* args,
+                                       Py_ssize_t nargs) {
+  if (nargs != 0) {
+    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  TWSegwitAddressDelete(self->value);
+  return nullptr;
+}
+
 // static method function for Equal
 // bool TWSegwitAddressEqual(struct TWSegwitAddress* lhs, struct
 // TWSegwitAddress* rhs);
@@ -127,12 +142,64 @@ static PyObject* PySegwitAddressIsValidString(PySegwitAddressObject* self,
   return PyBool_FromLong(result);
 }
 
+// static method function for CreateWithString
+// struct TWSegwitAddress* TWSegwitAddressCreateWithString(TWString* string);
+static PyObject* PySegwitAddressCreateWithString(PySegwitAddressObject* self,
+                                                 PyObject* const* args,
+                                                 Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  TWSegwitAddress* result = TWSegwitAddressCreateWithString(arg0.get());
+  return PySegwitAddress_FromTWSegwitAddress(result);
+}
+
+// static method function for CreateWithPublicKey
+// struct TWSegwitAddress* TWSegwitAddressCreateWithPublicKey(enum TWHRP hrp,
+// struct TWPublicKey* publicKey);
+static PyObject* PySegwitAddressCreateWithPublicKey(PySegwitAddressObject* self,
+                                                    PyObject* const* args,
+                                                    Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyHRP_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type HRP");
+    return nullptr;
+  }
+  auto arg0 = PyHRP_GetTWHRP(args[0]);
+
+  if (!PyPublicKey_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type PublicKey");
+    return nullptr;
+  }
+  auto arg1 = PyPublicKey_GetTWPublicKey(args[1]);
+
+  TWSegwitAddress* result = TWSegwitAddressCreateWithPublicKey(arg0, arg1);
+  return PySegwitAddress_FromTWSegwitAddress(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {{"HRP", (getter)PySegwitAddressHRP},
                                            {}};
 
 static const PyMethodDef method_defs[] = {
+    {"Delete", (PyCFunction)PySegwitAddressDelete, METH_FASTCALL},
     {"Equal", (PyCFunction)PySegwitAddressEqual, METH_FASTCALL | METH_STATIC},
     {"IsValidString", (PyCFunction)PySegwitAddressIsValidString,
+     METH_FASTCALL | METH_STATIC},
+    {"CreateWithString", (PyCFunction)PySegwitAddressCreateWithString,
+     METH_FASTCALL | METH_STATIC},
+    {"CreateWithPublicKey", (PyCFunction)PySegwitAddressCreateWithPublicKey,
      METH_FASTCALL | METH_STATIC},
     {}};
 

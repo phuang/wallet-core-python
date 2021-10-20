@@ -2,6 +2,7 @@
 
 #include "RippleXAddress.h"
 
+#include "PublicKey.h"
 #include "String.h"
 
 static PyTypeObject PyRippleXAddressType = {
@@ -79,6 +80,20 @@ static PyObject* PyRippleXAddressTag(PyRippleXAddressObject* self, void*) {
   return PyLong_FromLong(TWRippleXAddressTag(self->value));
 }
 
+// method function for Delete
+// void TWRippleXAddressDelete(struct TWRippleXAddress* address);
+static PyObject* PyRippleXAddressDelete(PyRippleXAddressObject* self,
+                                        PyObject* const* args,
+                                        Py_ssize_t nargs) {
+  if (nargs != 0) {
+    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  TWRippleXAddressDelete(self->value);
+  return nullptr;
+}
+
 // static method function for Equal
 // bool TWRippleXAddressEqual(struct TWRippleXAddress* lhs, struct
 // TWRippleXAddress* rhs);
@@ -126,12 +141,65 @@ static PyObject* PyRippleXAddressIsValidString(PyRippleXAddressObject* self,
   return PyBool_FromLong(result);
 }
 
+// static method function for CreateWithString
+// struct TWRippleXAddress* TWRippleXAddressCreateWithString(TWString* string);
+static PyObject* PyRippleXAddressCreateWithString(PyRippleXAddressObject* self,
+                                                  PyObject* const* args,
+                                                  Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  TWRippleXAddress* result = TWRippleXAddressCreateWithString(arg0.get());
+  return PyRippleXAddress_FromTWRippleXAddress(result);
+}
+
+// static method function for CreateWithPublicKey
+// struct TWRippleXAddress* TWRippleXAddressCreateWithPublicKey(struct
+// TWPublicKey* publicKey, uint32_t tag);
+static PyObject* PyRippleXAddressCreateWithPublicKey(
+    PyRippleXAddressObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyPublicKey_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PublicKey");
+    return nullptr;
+  }
+  auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
+
+  if (!PyLong_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
+    return nullptr;
+  }
+  auto arg1 = PyLong_AsLong(args[1]);
+
+  TWRippleXAddress* result = TWRippleXAddressCreateWithPublicKey(arg0, arg1);
+  return PyRippleXAddress_FromTWRippleXAddress(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {{"Tag", (getter)PyRippleXAddressTag},
                                            {}};
 
 static const PyMethodDef method_defs[] = {
+    {"Delete", (PyCFunction)PyRippleXAddressDelete, METH_FASTCALL},
     {"Equal", (PyCFunction)PyRippleXAddressEqual, METH_FASTCALL | METH_STATIC},
     {"IsValidString", (PyCFunction)PyRippleXAddressIsValidString,
+     METH_FASTCALL | METH_STATIC},
+    {"CreateWithString", (PyCFunction)PyRippleXAddressCreateWithString,
+     METH_FASTCALL | METH_STATIC},
+    {"CreateWithPublicKey", (PyCFunction)PyRippleXAddressCreateWithPublicKey,
      METH_FASTCALL | METH_STATIC},
     {}};
 

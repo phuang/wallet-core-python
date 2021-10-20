@@ -57,14 +57,14 @@ class Argument:
         self._type = Type(type)
 
     def __str__(self):
-        return '%s %s' % (str(self._type), self._name)
+        return '{} {}'.format(str(self._type), self._name)
 
 
 class Function:
     def __init__(self, text):
         result = re.findall(r'(.*) (\w+)\((.*)\);', text)
         if not result:
-            raise Exception('failed to parse property: "%s"' % text)
+            raise Exception('failed to parse property: "{}"'.format(text))
         return_type, name, args = result[0]
 
         self._type = Type(return_type)
@@ -126,7 +126,10 @@ class Entity:
 
     def handle_function(self, functions):
         line = self._file.readline().strip()
+        if line == 'TW_METHOD_DISCARDABLE_RESULT':
+            line = ''
         while not line.endswith(';'):
+            line += ' '
             line += self._file.readline().strip()
         functions.append(Function(line))
 
@@ -206,8 +209,8 @@ class Class(Entity):
 
     def __str__(self):
         lines = []
-        lines.append('TW_EXPORT_%s ' % self._type.upper())
-        lines.append('struct %s;' % self.self._name)
+        lines.append('TW_EXPORT_{} '.format(self._type.upper()))
+        lines.append('struct {};'.format(self._name))
         lines.append(Entity.__str__(self))
         return '\n'.join(lines)
 

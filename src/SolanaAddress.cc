@@ -2,6 +2,8 @@
 
 #include "SolanaAddress.h"
 
+#include "String.h"
+
 static PyTypeObject PySolanaAddressType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -71,9 +73,71 @@ TWSolanaAddress* PySolanaAddress_GetTWSolanaAddress(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// method function for Delete
+// void TWSolanaAddressDelete(struct TWSolanaAddress* address);
+static PyObject* PySolanaAddressDelete(PySolanaAddressObject* self,
+                                       PyObject* const* args,
+                                       Py_ssize_t nargs) {
+  if (nargs != 0) {
+    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  TWSolanaAddressDelete(self->value);
+  return nullptr;
+}
+
+// method function for DefaultTokenAddress
+// TWString* TWSolanaAddressDefaultTokenAddress(struct TWSolanaAddress* address,
+// TWString* tokenMintAddress);
+static PyObject* PySolanaAddressDefaultTokenAddress(PySolanaAddressObject* self,
+                                                    PyObject* const* args,
+                                                    Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  TWStringPtr result =
+      TWSolanaAddressDefaultTokenAddress(self->value, arg0.get());
+  return PyUnicode_FromTWString(result);
+}
+
+// static method function for CreateWithString
+// struct TWSolanaAddress* TWSolanaAddressCreateWithString(TWString* string);
+static PyObject* PySolanaAddressCreateWithString(PySolanaAddressObject* self,
+                                                 PyObject* const* args,
+                                                 Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  TWSolanaAddress* result = TWSolanaAddressCreateWithString(arg0.get());
+  return PySolanaAddress_FromTWSolanaAddress(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_defs[] = {{}};
+static const PyMethodDef method_defs[] = {
+    {"Delete", (PyCFunction)PySolanaAddressDelete, METH_FASTCALL},
+    {"DefaultTokenAddress", (PyCFunction)PySolanaAddressDefaultTokenAddress,
+     METH_FASTCALL},
+    {"CreateWithString", (PyCFunction)PySolanaAddressCreateWithString,
+     METH_FASTCALL | METH_STATIC},
+    {}};
 
 bool PyInit_SolanaAddress(PyObject* module) {
   // PySolanaAddressType.tp_new = PySolanaAddress_new;

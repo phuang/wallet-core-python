@@ -2,6 +2,7 @@
 
 #include "GroestlcoinAddress.h"
 
+#include "PublicKey.h"
 #include "String.h"
 
 static PyTypeObject PyGroestlcoinAddressType = {
@@ -76,6 +77,20 @@ TWGroestlcoinAddress* PyGroestlcoinAddress_GetTWGroestlcoinAddress(
 //   return PyUnicode_FromString(str);
 // }
 
+// method function for Delete
+// void TWGroestlcoinAddressDelete(struct TWGroestlcoinAddress* address);
+static PyObject* PyGroestlcoinAddressDelete(PyGroestlcoinAddressObject* self,
+                                            PyObject* const* args,
+                                            Py_ssize_t nargs) {
+  if (nargs != 0) {
+    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  TWGroestlcoinAddressDelete(self->value);
+  return nullptr;
+}
+
 // static method function for Equal
 // bool TWGroestlcoinAddressEqual(struct TWGroestlcoinAddress* lhs, struct
 // TWGroestlcoinAddress* rhs);
@@ -126,12 +141,70 @@ static PyObject* PyGroestlcoinAddressIsValidString(
   return PyBool_FromLong(result);
 }
 
+// static method function for CreateWithString
+// struct TWGroestlcoinAddress* TWGroestlcoinAddressCreateWithString(TWString*
+// string);
+static PyObject* PyGroestlcoinAddressCreateWithString(
+    PyGroestlcoinAddressObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  TWGroestlcoinAddress* result =
+      TWGroestlcoinAddressCreateWithString(arg0.get());
+  return PyGroestlcoinAddress_FromTWGroestlcoinAddress(result);
+}
+
+// static method function for CreateWithPublicKey
+// struct TWGroestlcoinAddress* TWGroestlcoinAddressCreateWithPublicKey(struct
+// TWPublicKey* publicKey, uint8_t prefix);
+static PyObject* PyGroestlcoinAddressCreateWithPublicKey(
+    PyGroestlcoinAddressObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyPublicKey_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PublicKey");
+    return nullptr;
+  }
+  auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
+
+  if (!PyLong_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
+    return nullptr;
+  }
+  auto arg1 = PyLong_AsLong(args[1]);
+
+  TWGroestlcoinAddress* result =
+      TWGroestlcoinAddressCreateWithPublicKey(arg0, arg1);
+  return PyGroestlcoinAddress_FromTWGroestlcoinAddress(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
+    {"Delete", (PyCFunction)PyGroestlcoinAddressDelete, METH_FASTCALL},
     {"Equal", (PyCFunction)PyGroestlcoinAddressEqual,
      METH_FASTCALL | METH_STATIC},
     {"IsValidString", (PyCFunction)PyGroestlcoinAddressIsValidString,
+     METH_FASTCALL | METH_STATIC},
+    {"CreateWithString", (PyCFunction)PyGroestlcoinAddressCreateWithString,
+     METH_FASTCALL | METH_STATIC},
+    {"CreateWithPublicKey",
+     (PyCFunction)PyGroestlcoinAddressCreateWithPublicKey,
      METH_FASTCALL | METH_STATIC},
     {}};
 

@@ -82,16 +82,20 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
         call_args = []
         used_types = set()
         for i, arg in enumerate(args):
-            print(arg._name)
-            print(arg._type._name)
             if arg._type._name == 'bool':
                 arg_type  = 'Bool'
                 get_ctype = 'PyBool_IsTrue'
                 call_args.append('arg{}'.format(i))
                 used_types.add('Bool')
-            elif arg._type._name == 'int':
+            elif arg._type._name in ('int8_t', 'uint8_t', 'int16_t', 'uint16_t', 'int', 'int32_t', 'uint32_t', 'size_t'):
+                # Check overflow
                 arg_type  = 'Long'
                 get_ctype = 'PyLong_AsLong'
+                call_args.append('arg{}'.format(i))
+            elif arg._type._name in ('int64_t', 'uint64_t'):
+                # Check overflow
+                arg_type  = 'Long'
+                get_ctype = 'PyLong_AsLongLong'
                 call_args.append('arg{}'.format(i))
             elif arg._type._name == 'TWString':
                 assert arg._type._is_ptr
@@ -118,7 +122,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 call_args.append('arg{}'.format(i))
                 used_types.add(arg_type)
             else:
-                continue
+                raise Exception('Not support argument type:' + str(arg._type))
             values = {
                 'arg_type' : arg_type,
                 'i' : i,
@@ -141,23 +145,53 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
   ${return_type} result = TW${name}${method_name}(${call_args});
   return ${return}(result);
 }\n''')
+        void_template = T('''
+// ${static}method function for ${method_name}
+// ${c_function};
+static PyObject* Py${name}${method_name}(Py${name}Object *self,
+                                         PyObject *const *args,
+                                         Py_ssize_t nargs) {
+  ${prepare_args}
+  TW${name}${method_name}(${call_args});
+  return nullptr;
+}\n''')
         used_types = set()
         methoddefs = []
         functions = []
         for method in methods:
             method_name = method._name[len(name) + 2:]
-            if method._type._name in ('uint8_t', 'uint16_t', 'uint32_t'):
+            if method._type._name in ('uint8_t', 'uint16_t', 'uint32_t', 'int'):
                 return_type = method._type._name
                 return_ = 'PyLong_FromLong'
+            elif method._type._name in ('uint64_t'):
+                return_type = method._type._name
+                return_ = 'PyLong_FromLongLong'
             elif method._type._name == 'bool':
                 return_type = method._type._name
                 return_ = 'PyBool_FromLong'
             elif method._type._type == 'enum':
                 return_type = method._type._name
                 used_types.add(return_type[2:])
-                return_ = 'Py{}_FromTW{}'.format(return_type[2:])
+                return_ = 'Py{0}_FromTW{0}'.format(return_type[2:])
+            elif method._type._type == 'struct':
+                assert method._type._is_ptr
+                return_type = method._type._name
+                used_types.add(return_type[2:])
+                return_ = 'Py{0}_FromTW{0}'.format(return_type[2:])
+                return_type += '*'
+            elif method._type._name == 'TWData':
+                return_type = 'TWDataPtr'
+                used_types.add('Data')
+                return_ = 'PyByteArray_FromTWData'
+            elif method._type._name == 'TWString':
+                return_type = 'TWStringPtr'
+                used_types.add('String')
+                return_ = 'PyUnicode_FromTWString'
+            elif method._type._name == 'void':
+                return_type = 'void'
+                return_ = ''
             else:
-                continue
+                raise Exception('Not support method return type:' + str(method._type))
             if not is_static:
                 prepare_args, call_args, types = self.process_arguments(method._args[1:])
                 call_args = 'self->value, '  + call_args if call_args else 'self->value'
@@ -174,7 +208,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
                 'return_type' : return_type,
                 'return' : return_,
             }
-            function = template.substitute(values)
+            function = template.substitute(values) if return_type != 'void' else void_template.substitute(values)
             functions.append(function)
             methoddefs.append(method_name)
 
@@ -263,6 +297,40 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
             template = self.template('class.h')
             out.write(template.substitute(values))
 
+    def generate_struct(self, struct):
+        name = struct._name
+        assert name.startswith('TW')
+        name = name[2:]
+        used_types = set()
+
+        prop_includes, prop_functions, getsetdefs = self.process_properties(name, struct._properties)
+        method_includes, method_functions, methoddefs = self.process_methods(name, struct._methods, False)
+        static_method_includes, static_method_functions, static_methoddefs = self.process_methods(name, struct._static_methods, True)
+
+        includes = prop_includes + method_includes + static_method_includes
+        includes = '\n'.join(includes)
+        functions = prop_functions + method_functions + static_method_functions
+        functions = '\n'.join(functions)
+        getsetdefs = '\n  '.join(getsetdefs)
+        methoddefs = methoddefs + static_methoddefs + [ '{}' ]
+        methoddefs = '\n  '.join(methoddefs)
+
+        values = {
+            'name' : name,
+            'includes' : includes,
+            'getsetdefs' : getsetdefs,
+            'methoddefs' : methoddefs,
+            'functions' : functions
+        }
+
+        with open(os.path.join(OUTPUT_DIR, name) + '.cc', 'w') as out:
+            template = self.template('struct.cc')
+            out.write(template.substitute(values))
+
+        with open(os.path.join(OUTPUT_DIR, name) + '.h', 'w') as out:
+            template = self.template('struct.h')
+            out.write(template.substitute(values))
+
     def generate(self):
         names = []
         for enum in self._parser._enums:
@@ -272,6 +340,10 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         for class_ in self._parser._classes:
             self.generate_class(class_)
             names.append(class_._name[2:])
+
+        for struct in self._parser._structs:
+            self.generate_struct(struct)
+            names.append(struct._name[2:])
 
         names.sort()
         includes = '\n'.join(['#include "{}.h"'.format(f) for f in names])

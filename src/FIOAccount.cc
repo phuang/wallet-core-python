@@ -2,6 +2,8 @@
 
 #include "FIOAccount.h"
 
+#include "String.h"
+
 static PyTypeObject PyFIOAccountType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -71,9 +73,47 @@ TWFIOAccount* PyFIOAccount_GetTWFIOAccount(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// method function for Delete
+// void TWFIOAccountDelete(struct TWFIOAccount* account);
+static PyObject* PyFIOAccountDelete(PyFIOAccountObject* self,
+                                    PyObject* const* args,
+                                    Py_ssize_t nargs) {
+  if (nargs != 0) {
+    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  TWFIOAccountDelete(self->value);
+  return nullptr;
+}
+
+// static method function for CreateWithString
+// struct TWFIOAccount* TWFIOAccountCreateWithString(TWString* string);
+static PyObject* PyFIOAccountCreateWithString(PyFIOAccountObject* self,
+                                              PyObject* const* args,
+                                              Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  TWFIOAccount* result = TWFIOAccountCreateWithString(arg0.get());
+  return PyFIOAccount_FromTWFIOAccount(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_defs[] = {{}};
+static const PyMethodDef method_defs[] = {
+    {"Delete", (PyCFunction)PyFIOAccountDelete, METH_FASTCALL},
+    {"CreateWithString", (PyCFunction)PyFIOAccountCreateWithString,
+     METH_FASTCALL | METH_STATIC},
+    {}};
 
 bool PyInit_FIOAccount(PyObject* module) {
   // PyFIOAccountType.tp_new = PyFIOAccount_new;

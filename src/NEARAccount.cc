@@ -2,6 +2,8 @@
 
 #include "NEARAccount.h"
 
+#include "String.h"
+
 static PyTypeObject PyNEARAccountType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -71,9 +73,47 @@ TWNEARAccount* PyNEARAccount_GetTWNEARAccount(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// method function for Delete
+// void TWNEARAccountDelete(struct TWNEARAccount* account);
+static PyObject* PyNEARAccountDelete(PyNEARAccountObject* self,
+                                     PyObject* const* args,
+                                     Py_ssize_t nargs) {
+  if (nargs != 0) {
+    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  TWNEARAccountDelete(self->value);
+  return nullptr;
+}
+
+// static method function for CreateWithString
+// struct TWNEARAccount* TWNEARAccountCreateWithString(TWString* string);
+static PyObject* PyNEARAccountCreateWithString(PyNEARAccountObject* self,
+                                               PyObject* const* args,
+                                               Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  TWNEARAccount* result = TWNEARAccountCreateWithString(arg0.get());
+  return PyNEARAccount_FromTWNEARAccount(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_defs[] = {{}};
+static const PyMethodDef method_defs[] = {
+    {"Delete", (PyCFunction)PyNEARAccountDelete, METH_FASTCALL},
+    {"CreateWithString", (PyCFunction)PyNEARAccountCreateWithString,
+     METH_FASTCALL | METH_STATIC},
+    {}};
 
 bool PyInit_NEARAccount(PyObject* module) {
   // PyNEARAccountType.tp_new = PyNEARAccount_new;

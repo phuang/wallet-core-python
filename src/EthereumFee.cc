@@ -2,6 +2,8 @@
 
 #include "EthereumFee.h"
 
+#include "String.h"
+
 static PyTypeObject PyEthereumFeeType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -71,9 +73,31 @@ TWEthereumFee* PyEthereumFee_GetTWEthereumFee(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// static method function for Suggest
+// TWString* TWEthereumFeeSuggest(TWString* feeHistory);
+static PyObject* PyEthereumFeeSuggest(PyEthereumFeeObject* self,
+                                      PyObject* const* args,
+                                      Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  TWStringPtr result = TWEthereumFeeSuggest(arg0.get());
+  return PyUnicode_FromTWString(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_defs[] = {{}};
+static const PyMethodDef method_defs[] = {
+    {"Suggest", (PyCFunction)PyEthereumFeeSuggest, METH_FASTCALL | METH_STATIC},
+    {}};
 
 bool PyInit_EthereumFee(PyObject* module) {
   // PyEthereumFeeType.tp_new = PyEthereumFee_new;

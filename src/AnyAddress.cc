@@ -3,6 +3,7 @@
 #include "AnyAddress.h"
 
 #include "CoinType.h"
+#include "PublicKey.h"
 #include "String.h"
 
 static PyTypeObject PyAnyAddressType = {
@@ -80,6 +81,20 @@ static PyObject* PyAnyAddressCoin(PyAnyAddressObject* self, void*) {
   return PyCoinType_FromTWCoinType(TWAnyAddressCoin(self->value));
 }
 
+// method function for Delete
+// void TWAnyAddressDelete(struct TWAnyAddress* address);
+static PyObject* PyAnyAddressDelete(PyAnyAddressObject* self,
+                                    PyObject* const* args,
+                                    Py_ssize_t nargs) {
+  if (nargs != 0) {
+    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  TWAnyAddressDelete(self->value);
+  return nullptr;
+}
+
 // static method function for Equal
 // bool TWAnyAddressEqual(struct TWAnyAddress* lhs, struct TWAnyAddress* rhs);
 static PyObject* PyAnyAddressEqual(PyAnyAddressObject* self,
@@ -132,12 +147,71 @@ static PyObject* PyAnyAddressIsValid(PyAnyAddressObject* self,
   return PyBool_FromLong(result);
 }
 
+// static method function for CreateWithString
+// struct TWAnyAddress* TWAnyAddressCreateWithString(TWString* string, enum
+// TWCoinType coin);
+static PyObject* PyAnyAddressCreateWithString(PyAnyAddressObject* self,
+                                              PyObject* const* args,
+                                              Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  TWAnyAddress* result = TWAnyAddressCreateWithString(arg0.get(), arg1);
+  return PyAnyAddress_FromTWAnyAddress(result);
+}
+
+// static method function for CreateWithPublicKey
+// struct TWAnyAddress* TWAnyAddressCreateWithPublicKey(struct TWPublicKey*
+// publicKey, enum TWCoinType coin);
+static PyObject* PyAnyAddressCreateWithPublicKey(PyAnyAddressObject* self,
+                                                 PyObject* const* args,
+                                                 Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyPublicKey_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PublicKey");
+    return nullptr;
+  }
+  auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  TWAnyAddress* result = TWAnyAddressCreateWithPublicKey(arg0, arg1);
+  return PyAnyAddress_FromTWAnyAddress(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {{"Coin", (getter)PyAnyAddressCoin},
                                            {}};
 
 static const PyMethodDef method_defs[] = {
+    {"Delete", (PyCFunction)PyAnyAddressDelete, METH_FASTCALL},
     {"Equal", (PyCFunction)PyAnyAddressEqual, METH_FASTCALL | METH_STATIC},
     {"IsValid", (PyCFunction)PyAnyAddressIsValid, METH_FASTCALL | METH_STATIC},
+    {"CreateWithString", (PyCFunction)PyAnyAddressCreateWithString,
+     METH_FASTCALL | METH_STATIC},
+    {"CreateWithPublicKey", (PyCFunction)PyAnyAddressCreateWithPublicKey,
+     METH_FASTCALL | METH_STATIC},
     {}};
 
 bool PyInit_AnyAddress(PyObject* module) {
