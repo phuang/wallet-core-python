@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWStoredKey.h>
 
-struct PyStoredKeyObject {
-  PyObject_HEAD;
-  TWStoredKey* value;
-};
-
 // Returns true if the object is a PyStoredKey.
 bool PyStoredKey_Check(PyObject* object);
 

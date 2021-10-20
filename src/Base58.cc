@@ -21,6 +21,10 @@
 #include "Data.h"
 #include "String.h"
 
+struct PyBase58Object {
+  PyObject_HEAD;
+};
+
 static PyTypeObject PyBase58Type = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -46,29 +50,6 @@ static PyTypeObject PyBase58Type = {
     Py_TPFLAGS_DEFAULT,     /* tp_flags */
     nullptr,                /* tp_doc */
 };
-
-bool PyBase58_Check(PyObject* object) {
-  return PyObject_TypeCheck(object, &PyBase58Type) != 0;
-}
-
-// Create PyBase58 from enum TWBase58.
-PyObject* PyBase58_FromTWBase58(TWBase58* value) {
-  if (!value)
-    return nullptr;
-
-  PyBase58Object* object = PyObject_New(PyBase58Object, &PyBase58Type);
-  if (!object)
-    return nullptr;
-
-  object->value = value;
-
-  return (PyObject*)object;
-}
-
-TWBase58* PyBase58_GetTWBase58(PyObject* object) {
-  assert(PyBase58_Check(object));
-  return ((PyBase58Object*)object)->value;
-}
 
 // static method function for Encode
 static const char PyBase58Encode_doc[] =

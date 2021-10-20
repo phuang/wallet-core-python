@@ -22,6 +22,10 @@
 #include "EthereumAbiFunction.h"
 #include "String.h"
 
+struct PyEthereumAbiObject {
+  PyObject_HEAD;
+};
+
 static PyTypeObject PyEthereumAbiType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -47,30 +51,6 @@ static PyTypeObject PyEthereumAbiType = {
     Py_TPFLAGS_DEFAULT,          /* tp_flags */
     nullptr,                     /* tp_doc */
 };
-
-bool PyEthereumAbi_Check(PyObject* object) {
-  return PyObject_TypeCheck(object, &PyEthereumAbiType) != 0;
-}
-
-// Create PyEthereumAbi from enum TWEthereumAbi.
-PyObject* PyEthereumAbi_FromTWEthereumAbi(TWEthereumAbi* value) {
-  if (!value)
-    return nullptr;
-
-  PyEthereumAbiObject* object =
-      PyObject_New(PyEthereumAbiObject, &PyEthereumAbiType);
-  if (!object)
-    return nullptr;
-
-  object->value = value;
-
-  return (PyObject*)object;
-}
-
-TWEthereumAbi* PyEthereumAbi_GetTWEthereumAbi(PyObject* object) {
-  assert(PyEthereumAbi_Check(object));
-  return ((PyEthereumAbiObject*)object)->value;
-}
 
 // static method function for Encode
 static const char PyEthereumAbiEncode_doc[] =

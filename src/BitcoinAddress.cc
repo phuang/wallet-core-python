@@ -22,6 +22,11 @@
 #include "PublicKey.h"
 #include "String.h"
 
+struct PyBitcoinAddressObject {
+  PyObject_HEAD;
+  TWBitcoinAddress* value;
+};
+
 static PyTypeObject PyBitcoinAddressType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

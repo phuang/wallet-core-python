@@ -20,6 +20,10 @@
 
 #include "String.h"
 
+struct PyMnemonicObject {
+  PyObject_HEAD;
+};
+
 static PyTypeObject PyMnemonicType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -45,29 +49,6 @@ static PyTypeObject PyMnemonicType = {
     Py_TPFLAGS_DEFAULT,       /* tp_flags */
     nullptr,                  /* tp_doc */
 };
-
-bool PyMnemonic_Check(PyObject* object) {
-  return PyObject_TypeCheck(object, &PyMnemonicType) != 0;
-}
-
-// Create PyMnemonic from enum TWMnemonic.
-PyObject* PyMnemonic_FromTWMnemonic(TWMnemonic* value) {
-  if (!value)
-    return nullptr;
-
-  PyMnemonicObject* object = PyObject_New(PyMnemonicObject, &PyMnemonicType);
-  if (!object)
-    return nullptr;
-
-  object->value = value;
-
-  return (PyObject*)object;
-}
-
-TWMnemonic* PyMnemonic_GetTWMnemonic(PyObject* object) {
-  assert(PyMnemonic_Check(object));
-  return ((PyMnemonicObject*)object)->value;
-}
 
 // static method function for IsValid
 static const char PyMnemonicIsValid_doc[] =

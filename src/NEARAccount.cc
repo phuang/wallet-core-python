@@ -20,6 +20,11 @@
 
 #include "String.h"
 
+struct PyNEARAccountObject {
+  PyObject_HEAD;
+  TWNEARAccount* value;
+};
+
 static PyTypeObject PyNEARAccountType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

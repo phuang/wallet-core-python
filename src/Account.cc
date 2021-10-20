@@ -21,6 +21,11 @@
 #include "CoinType.h"
 #include "String.h"
 
+struct PyAccountObject {
+  PyObject_HEAD;
+  TWAccount* value;
+};
+
 static PyTypeObject PyAccountType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

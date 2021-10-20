@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWAnyAddress.h>
 
-struct PyAnyAddressObject {
-  PyObject_HEAD;
-  TWAnyAddress* value;
-};
-
 // Returns true if the object is a PyAnyAddress.
 bool PyAnyAddress_Check(PyObject* object);
 

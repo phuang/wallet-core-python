@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWFIOAccount.h>
 
-struct PyFIOAccountObject {
-  PyObject_HEAD;
-  TWFIOAccount* value;
-};
-
 // Returns true if the object is a PyFIOAccount.
 bool PyFIOAccount_Check(PyObject* object);
 

@@ -20,6 +20,10 @@
 
 #include "Data.h"
 
+struct PyHashObject {
+  PyObject_HEAD;
+};
+
 static PyTypeObject PyHashType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -45,29 +49,6 @@ static PyTypeObject PyHashType = {
     Py_TPFLAGS_DEFAULT,   /* tp_flags */
     nullptr,              /* tp_doc */
 };
-
-bool PyHash_Check(PyObject* object) {
-  return PyObject_TypeCheck(object, &PyHashType) != 0;
-}
-
-// Create PyHash from enum TWHash.
-PyObject* PyHash_FromTWHash(TWHash* value) {
-  if (!value)
-    return nullptr;
-
-  PyHashObject* object = PyObject_New(PyHashObject, &PyHashType);
-  if (!object)
-    return nullptr;
-
-  object->value = value;
-
-  return (PyObject*)object;
-}
-
-TWHash* PyHash_GetTWHash(PyObject* object) {
-  assert(PyHash_Check(object));
-  return ((PyHashObject*)object)->value;
-}
 
 // static method function for SHA1
 static const char PyHashSHA1_doc[] = "TWData* TWHashSHA1(TWData* data)";

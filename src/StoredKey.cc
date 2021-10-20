@@ -25,6 +25,11 @@
 #include "PrivateKey.h"
 #include "String.h"
 
+struct PyStoredKeyObject {
+  PyObject_HEAD;
+  TWStoredKey* value;
+};
+
 static PyTypeObject PyStoredKeyType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

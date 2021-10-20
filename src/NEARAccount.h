@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWNEARAccount.h>
 
-struct PyNEARAccountObject {
-  PyObject_HEAD;
-  TWNEARAccount* value;
-};
-
 // Returns true if the object is a PyNEARAccount.
 bool PyNEARAccount_Check(PyObject* object);
 

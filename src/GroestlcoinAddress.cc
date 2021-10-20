@@ -21,6 +21,11 @@
 #include "PublicKey.h"
 #include "String.h"
 
+struct PyGroestlcoinAddressObject {
+  PyObject_HEAD;
+  TWGroestlcoinAddress* value;
+};
+
 static PyTypeObject PyGroestlcoinAddressType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

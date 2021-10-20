@@ -21,6 +21,10 @@
 #include "AESPaddingMode.h"
 #include "Data.h"
 
+struct PyAESObject {
+  PyObject_HEAD;
+};
+
 static PyTypeObject PyAESType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -46,29 +50,6 @@ static PyTypeObject PyAESType = {
     Py_TPFLAGS_DEFAULT,  /* tp_flags */
     nullptr,             /* tp_doc */
 };
-
-bool PyAES_Check(PyObject* object) {
-  return PyObject_TypeCheck(object, &PyAESType) != 0;
-}
-
-// Create PyAES from enum TWAES.
-PyObject* PyAES_FromTWAES(TWAES* value) {
-  if (!value)
-    return nullptr;
-
-  PyAESObject* object = PyObject_New(PyAESObject, &PyAESType);
-  if (!object)
-    return nullptr;
-
-  object->value = value;
-
-  return (PyObject*)object;
-}
-
-TWAES* PyAES_GetTWAES(PyObject* object) {
-  assert(PyAES_Check(object));
-  return ((PyAESObject*)object)->value;
-}
 
 // static method function for EncryptCBC
 static const char PyAESEncryptCBC_doc[] =

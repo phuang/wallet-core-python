@@ -21,6 +21,10 @@
 #include "CoinType.h"
 #include "String.h"
 
+struct PyCoinTypeConfigurationObject {
+  PyObject_HEAD;
+};
+
 static PyTypeObject PyCoinTypeConfigurationType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -46,32 +50,6 @@ static PyTypeObject PyCoinTypeConfigurationType = {
     Py_TPFLAGS_DEFAULT,                    /* tp_flags */
     nullptr,                               /* tp_doc */
 };
-
-bool PyCoinTypeConfiguration_Check(PyObject* object) {
-  return PyObject_TypeCheck(object, &PyCoinTypeConfigurationType) != 0;
-}
-
-// Create PyCoinTypeConfiguration from enum TWCoinTypeConfiguration.
-PyObject* PyCoinTypeConfiguration_FromTWCoinTypeConfiguration(
-    TWCoinTypeConfiguration* value) {
-  if (!value)
-    return nullptr;
-
-  PyCoinTypeConfigurationObject* object =
-      PyObject_New(PyCoinTypeConfigurationObject, &PyCoinTypeConfigurationType);
-  if (!object)
-    return nullptr;
-
-  object->value = value;
-
-  return (PyObject*)object;
-}
-
-TWCoinTypeConfiguration* PyCoinTypeConfiguration_GetTWCoinTypeConfiguration(
-    PyObject* object) {
-  assert(PyCoinTypeConfiguration_Check(object));
-  return ((PyCoinTypeConfigurationObject*)object)->value;
-}
 
 // static method function for GetSymbol
 static const char PyCoinTypeConfigurationGetSymbol_doc[] =

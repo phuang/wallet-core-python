@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWAccount.h>
 
-struct PyAccountObject {
-  PyObject_HEAD;
-  TWAccount* value;
-};
-
 // Returns true if the object is a PyAccount.
 bool PyAccount_Check(PyObject* object);
 

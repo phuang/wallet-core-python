@@ -20,6 +20,11 @@
 
 ${includes}
 
+struct Py${name}Object {
+  PyObject_HEAD;
+  TW${name}* value;
+};
+
 static PyTypeObject Py${name}Type = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

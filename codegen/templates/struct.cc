@@ -20,6 +20,10 @@
 
 ${includes}
 
+struct Py${name}Object {
+  PyObject_HEAD;
+};
+
 static PyTypeObject Py${name}Type = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -45,30 +49,6 @@ static PyTypeObject Py${name}Type = {
     Py_TPFLAGS_DEFAULT,        /* tp_flags */
     nullptr,                   /* tp_doc */
 };
-
-
-bool Py${name}_Check(PyObject* object) {
-  return PyObject_TypeCheck(object, &Py${name}Type) != 0;
-}
-
-// Create Py${name} from enum TW${name}.
-PyObject* Py${name}_FromTW${name}(TW${name}* value) {
-  if (!value)
-    return nullptr;
-
-  Py${name}Object* object = PyObject_New(Py${name}Object, &Py${name}Type);
-  if (!object)
-    return nullptr;
-
-  object->value = value;
-
-  return (PyObject*)object;
-}
-
-TW${name}* Py${name}_GetTW${name}(PyObject* object) {
-  assert(Py${name}_Check(object));
-  return ((Py${name}Object*)object)->value;
-}
 
 ${functions}
 

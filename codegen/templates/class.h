@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TW${name}.h>
 
-struct Py${name}Object {
-  PyObject_HEAD;
-  TW${name}* value;
-};
-
 // Returns true if the object is a Py${name}.
 bool Py${name}_Check(PyObject* object);
 

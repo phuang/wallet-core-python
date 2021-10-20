@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWHDWallet.h>
 
-struct PyHDWalletObject {
-  PyObject_HEAD;
-  TWHDWallet* value;
-};
-
 // Returns true if the object is a PyHDWallet.
 bool PyHDWallet_Check(PyObject* object);
 

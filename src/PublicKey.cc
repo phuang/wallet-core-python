@@ -23,6 +23,11 @@
 #include "PublicKeyType.h"
 #include "String.h"
 
+struct PyPublicKeyObject {
+  PyObject_HEAD;
+  TWPublicKey* value;
+};
+
 static PyTypeObject PyPublicKeyType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

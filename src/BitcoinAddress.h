@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWBitcoinAddress.h>
 
-struct PyBitcoinAddressObject {
-  PyObject_HEAD;
-  TWBitcoinAddress* value;
-};
-
 // Returns true if the object is a PyBitcoinAddress.
 bool PyBitcoinAddress_Check(PyObject* object);
 

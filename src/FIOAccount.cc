@@ -20,6 +20,11 @@
 
 #include "String.h"
 
+struct PyFIOAccountObject {
+  PyObject_HEAD;
+  TWFIOAccount* value;
+};
+
 static PyTypeObject PyFIOAccountType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

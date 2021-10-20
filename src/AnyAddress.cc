@@ -23,6 +23,11 @@
 #include "PublicKey.h"
 #include "String.h"
 
+struct PyAnyAddressObject {
+  PyObject_HEAD;
+  TWAnyAddress* value;
+};
+
 static PyTypeObject PyAnyAddressType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

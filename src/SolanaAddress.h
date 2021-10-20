@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWSolanaAddress.h>
 
-struct PySolanaAddressObject {
-  PyObject_HEAD;
-  TWSolanaAddress* value;
-};
-
 // Returns true if the object is a PySolanaAddress.
 bool PySolanaAddress_Check(PyObject* object);
 

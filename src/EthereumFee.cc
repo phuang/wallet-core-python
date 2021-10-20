@@ -20,6 +20,10 @@
 
 #include "String.h"
 
+struct PyEthereumFeeObject {
+  PyObject_HEAD;
+};
+
 static PyTypeObject PyEthereumFeeType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -45,30 +49,6 @@ static PyTypeObject PyEthereumFeeType = {
     Py_TPFLAGS_DEFAULT,          /* tp_flags */
     nullptr,                     /* tp_doc */
 };
-
-bool PyEthereumFee_Check(PyObject* object) {
-  return PyObject_TypeCheck(object, &PyEthereumFeeType) != 0;
-}
-
-// Create PyEthereumFee from enum TWEthereumFee.
-PyObject* PyEthereumFee_FromTWEthereumFee(TWEthereumFee* value) {
-  if (!value)
-    return nullptr;
-
-  PyEthereumFeeObject* object =
-      PyObject_New(PyEthereumFeeObject, &PyEthereumFeeType);
-  if (!object)
-    return nullptr;
-
-  object->value = value;
-
-  return (PyObject*)object;
-}
-
-TWEthereumFee* PyEthereumFee_GetTWEthereumFee(PyObject* object) {
-  assert(PyEthereumFee_Check(object));
-  return ((PyEthereumFeeObject*)object)->value;
-}
 
 // static method function for Suggest
 static const char PyEthereumFeeSuggest_doc[] =

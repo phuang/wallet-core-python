@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWGroestlcoinAddress.h>
 
-struct PyGroestlcoinAddressObject {
-  PyObject_HEAD;
-  TWGroestlcoinAddress* value;
-};
-
 // Returns true if the object is a PyGroestlcoinAddress.
 bool PyGroestlcoinAddress_Check(PyObject* object);
 

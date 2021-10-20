@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWEthereumAbiFunction.h>
 
-struct PyEthereumAbiFunctionObject {
-  PyObject_HEAD;
-  TWEthereumAbiFunction* value;
-};
-
 // Returns true if the object is a PyEthereumAbiFunction.
 bool PyEthereumAbiFunction_Check(PyObject* object);
 

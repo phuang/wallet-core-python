@@ -22,6 +22,11 @@
 #include "Data.h"
 #include "String.h"
 
+struct PyBitcoinScriptObject {
+  PyObject_HEAD;
+  TWBitcoinScript* value;
+};
+
 static PyTypeObject PyBitcoinScriptType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

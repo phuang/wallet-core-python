@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWRippleXAddress.h>
 
-struct PyRippleXAddressObject {
-  PyObject_HEAD;
-  TWRippleXAddress* value;
-};
-
 // Returns true if the object is a PyRippleXAddress.
 bool PyRippleXAddress_Check(PyObject* object);
 

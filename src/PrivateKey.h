@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWPrivateKey.h>
 
-struct PyPrivateKeyObject {
-  PyObject_HEAD;
-  TWPrivateKey* value;
-};
-
 // Returns true if the object is a PyPrivateKey.
 bool PyPrivateKey_Check(PyObject* object);
 

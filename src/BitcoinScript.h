@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWBitcoinScript.h>
 
-struct PyBitcoinScriptObject {
-  PyObject_HEAD;
-  TWBitcoinScript* value;
-};
-
 // Returns true if the object is a PyBitcoinScript.
 bool PyBitcoinScript_Check(PyObject* object);
 

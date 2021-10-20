@@ -21,6 +21,11 @@
 #include "PublicKey.h"
 #include "String.h"
 
+struct PyRippleXAddressObject {
+  PyObject_HEAD;
+  TWRippleXAddress* value;
+};
+
 static PyTypeObject PyRippleXAddressType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

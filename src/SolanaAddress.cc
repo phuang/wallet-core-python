@@ -20,6 +20,11 @@
 
 #include "String.h"
 
+struct PySolanaAddressObject {
+  PyObject_HEAD;
+  TWSolanaAddress* value;
+};
+
 static PyTypeObject PySolanaAddressType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

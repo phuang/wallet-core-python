@@ -22,6 +22,11 @@
 #include "Data.h"
 #include "String.h"
 
+struct PyEthereumAbiFunctionObject {
+  PyObject_HEAD;
+  TWEthereumAbiFunction* value;
+};
+
 static PyTypeObject PyEthereumAbiFunctionType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

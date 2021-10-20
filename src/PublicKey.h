@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWPublicKey.h>
 
-struct PyPublicKeyObject {
-  PyObject_HEAD;
-  TWPublicKey* value;
-};
-
 // Returns true if the object is a PyPublicKey.
 bool PyPublicKey_Check(PyObject* object);
 

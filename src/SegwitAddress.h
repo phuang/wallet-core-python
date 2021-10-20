@@ -23,11 +23,6 @@
 
 #include <TrustWalletCore/TWSegwitAddress.h>
 
-struct PySegwitAddressObject {
-  PyObject_HEAD;
-  TWSegwitAddress* value;
-};
-
 // Returns true if the object is a PySegwitAddress.
 bool PySegwitAddress_Check(PyObject* object);
 

@@ -28,6 +28,11 @@
 #include "Purpose.h"
 #include "String.h"
 
+struct PyHDWalletObject {
+  PyObject_HEAD;
+  TWHDWallet* value;
+};
+
 static PyTypeObject PyHDWalletType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)

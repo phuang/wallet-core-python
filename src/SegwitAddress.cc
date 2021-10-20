@@ -23,6 +23,11 @@
 #include "PublicKey.h"
 #include "String.h"
 
+struct PySegwitAddressObject {
+  PyObject_HEAD;
+  TWSegwitAddress* value;
+};
+
 static PyTypeObject PySegwitAddressType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
