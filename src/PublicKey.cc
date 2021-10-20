@@ -3,7 +3,9 @@
 #include "PublicKey.h"
 
 #include "Data.h"
+#include "PublicKey.h"
 #include "PublicKeyType.h"
+#include "String.h"
 
 static PyTypeObject PyPublicKeyType = {
     // clang-format off
@@ -54,6 +56,13 @@ TWPublicKey* PyPublicKey_GetTWPublicKey(PyObject* object) {
   return ((PyPublicKeyObject*)object)->value;
 }
 
+static void PyPublicKey_dealloc(PyPublicKeyObject* self) {
+  if (self->value) {
+    TWPublicKeyDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PyPublicKey_init(PyPublicKeyObject *self, PyObject *args, PyObject
 // *kwds) {
 //   return 0;
@@ -74,19 +83,50 @@ TWPublicKey* PyPublicKey_GetTWPublicKey(PyObject* object) {
 // }
 
 // getter function for IsCompressed
-// bool TWPublicKeyIsCompressed(struct TWPublicKey* pk);
+static const char PyPublicKeyIsCompressed_doc[] =
+    "bool TWPublicKeyIsCompressed(struct TWPublicKey* pk)";
 static PyObject* PyPublicKeyIsCompressed(PyPublicKeyObject* self, void*) {
   return PyBool_FromLong(TWPublicKeyIsCompressed(self->value));
 }
 
+// getter function for Compressed
+static const char PyPublicKeyCompressed_doc[] =
+    "struct TWPublicKey* TWPublicKeyCompressed(struct TWPublicKey* from)";
+static PyObject* PyPublicKeyCompressed(PyPublicKeyObject* self, void*) {
+  return PyPublicKey_FromTWPublicKey(TWPublicKeyCompressed(self->value));
+}
+
+// getter function for Uncompressed
+static const char PyPublicKeyUncompressed_doc[] =
+    "struct TWPublicKey* TWPublicKeyUncompressed(struct TWPublicKey* from)";
+static PyObject* PyPublicKeyUncompressed(PyPublicKeyObject* self, void*) {
+  return PyPublicKey_FromTWPublicKey(TWPublicKeyUncompressed(self->value));
+}
+
+// getter function for Data
+static const char PyPublicKeyData_doc[] =
+    "TWData* TWPublicKeyData(struct TWPublicKey* pk)";
+static PyObject* PyPublicKeyData(PyPublicKeyObject* self, void*) {
+  return PyByteArray_FromTWData(TWPublicKeyData(self->value));
+}
+
 // getter function for KeyType
-// enum TWPublicKeyType TWPublicKeyKeyType(struct TWPublicKey* publicKey);
+static const char PyPublicKeyKeyType_doc[] =
+    "enum TWPublicKeyType TWPublicKeyKeyType(struct TWPublicKey* publicKey)";
 static PyObject* PyPublicKeyKeyType(PyPublicKeyObject* self, void*) {
   return PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyKeyType(self->value));
 }
 
+// getter function for Description
+static const char PyPublicKeyDescription_doc[] =
+    "TWString* TWPublicKeyDescription(struct TWPublicKey* publicKey)";
+static PyObject* PyPublicKeyDescription(PyPublicKeyObject* self, void*) {
+  return PyUnicode_FromTWString(TWPublicKeyDescription(self->value));
+}
+
 // method function for Delete
-// void TWPublicKeyDelete(struct TWPublicKey* pk);
+static const char PyPublicKeyDelete_doc[] =
+    "void TWPublicKeyDelete(struct TWPublicKey* pk)";
 static PyObject* PyPublicKeyDelete(PyPublicKeyObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
@@ -100,8 +140,9 @@ static PyObject* PyPublicKeyDelete(PyPublicKeyObject* self,
 }
 
 // method function for Verify
-// bool TWPublicKeyVerify(struct TWPublicKey* pk, TWData* signature, TWData*
-// message);
+static const char PyPublicKeyVerify_doc[] =
+    "bool TWPublicKeyVerify(struct TWPublicKey* pk, TWData* signature, TWData* "
+    "message)";
 static PyObject* PyPublicKeyVerify(PyPublicKeyObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
@@ -127,8 +168,9 @@ static PyObject* PyPublicKeyVerify(PyPublicKeyObject* self,
 }
 
 // method function for VerifySchnorr
-// bool TWPublicKeyVerifySchnorr(struct TWPublicKey* pk, TWData* signature,
-// TWData* message);
+static const char PyPublicKeyVerifySchnorr_doc[] =
+    "bool TWPublicKeyVerifySchnorr(struct TWPublicKey* pk, TWData* signature, "
+    "TWData* message)";
 static PyObject* PyPublicKeyVerifySchnorr(PyPublicKeyObject* self,
                                           PyObject* const* args,
                                           Py_ssize_t nargs) {
@@ -154,8 +196,9 @@ static PyObject* PyPublicKeyVerifySchnorr(PyPublicKeyObject* self,
 }
 
 // static method function for CreateWithData
-// struct TWPublicKey* TWPublicKeyCreateWithData(TWData* data, enum
-// TWPublicKeyType type);
+static const char PyPublicKeyCreateWithData_doc[] =
+    "struct TWPublicKey* TWPublicKeyCreateWithData(TWData* data, enum "
+    "TWPublicKeyType type)";
 static PyObject* PyPublicKeyCreateWithData(PyPublicKeyObject* self,
                                            PyObject* const* args,
                                            Py_ssize_t nargs) {
@@ -181,7 +224,8 @@ static PyObject* PyPublicKeyCreateWithData(PyPublicKeyObject* self,
 }
 
 // static method function for IsValid
-// bool TWPublicKeyIsValid(TWData* data, enum TWPublicKeyType type);
+static const char PyPublicKeyIsValid_doc[] =
+    "bool TWPublicKeyIsValid(TWData* data, enum TWPublicKeyType type)";
 static PyObject* PyPublicKeyIsValid(PyPublicKeyObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
@@ -207,7 +251,9 @@ static PyObject* PyPublicKeyIsValid(PyPublicKeyObject* self,
 }
 
 // static method function for Recover
-// struct TWPublicKey* TWPublicKeyRecover(TWData* signature, TWData* message);
+static const char PyPublicKeyRecover_doc[] =
+    "struct TWPublicKey* TWPublicKeyRecover(TWData* signature, TWData* "
+    "message)";
 static PyObject* PyPublicKeyRecover(PyPublicKeyObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
@@ -233,23 +279,37 @@ static PyObject* PyPublicKeyRecover(PyPublicKeyObject* self,
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"IsCompressed", (getter)PyPublicKeyIsCompressed},
-    {"KeyType", (getter)PyPublicKeyKeyType},
+    {"IsCompressed", (getter)PyPublicKeyIsCompressed, nullptr,
+     PyPublicKeyIsCompressed_doc},
+    {"Compressed", (getter)PyPublicKeyCompressed, nullptr,
+     PyPublicKeyCompressed_doc},
+    {"Uncompressed", (getter)PyPublicKeyUncompressed, nullptr,
+     PyPublicKeyUncompressed_doc},
+    {"Data", (getter)PyPublicKeyData, nullptr, PyPublicKeyData_doc},
+    {"KeyType", (getter)PyPublicKeyKeyType, nullptr, PyPublicKeyKeyType_doc},
+    {"Description", (getter)PyPublicKeyDescription, nullptr,
+     PyPublicKeyDescription_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyPublicKeyDelete, METH_FASTCALL},
-    {"Verify", (PyCFunction)PyPublicKeyVerify, METH_FASTCALL},
-    {"VerifySchnorr", (PyCFunction)PyPublicKeyVerifySchnorr, METH_FASTCALL},
+    {"Delete", (PyCFunction)PyPublicKeyDelete, METH_FASTCALL,
+     PyPublicKeyDelete_doc},
+    {"Verify", (PyCFunction)PyPublicKeyVerify, METH_FASTCALL,
+     PyPublicKeyVerify_doc},
+    {"VerifySchnorr", (PyCFunction)PyPublicKeyVerifySchnorr, METH_FASTCALL,
+     PyPublicKeyVerifySchnorr_doc},
     {"CreateWithData", (PyCFunction)PyPublicKeyCreateWithData,
-     METH_FASTCALL | METH_STATIC},
-    {"IsValid", (PyCFunction)PyPublicKeyIsValid, METH_FASTCALL | METH_STATIC},
-    {"Recover", (PyCFunction)PyPublicKeyRecover, METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyPublicKeyCreateWithData_doc},
+    {"IsValid", (PyCFunction)PyPublicKeyIsValid, METH_FASTCALL | METH_STATIC,
+     PyPublicKeyIsValid_doc},
+    {"Recover", (PyCFunction)PyPublicKeyRecover, METH_FASTCALL | METH_STATIC,
+     PyPublicKeyRecover_doc},
     {}};
 
 bool PyInit_PublicKey(PyObject* module) {
   // PyPublicKeyType.tp_new = PyPublicKey_new;
   // PyPublicKeyType.tp_init = (initproc)PyPublicKey_init;
+  PyPublicKeyType.tp_dealloc = (destructor)PyPublicKey_dealloc;
   // PyPublicKeyType.tp_str = (reprfunc)PyPublicKey_str;
   PyPublicKeyType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyPublicKeyType.tp_methods = (PyMethodDef*)method_defs;

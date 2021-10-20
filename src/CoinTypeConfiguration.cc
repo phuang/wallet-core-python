@@ -79,7 +79,8 @@ TWCoinTypeConfiguration* PyCoinTypeConfiguration_GetTWCoinTypeConfiguration(
 // }
 
 // static method function for GetSymbol
-// TWString* TWCoinTypeConfigurationGetSymbol(enum TWCoinType type);
+static const char PyCoinTypeConfigurationGetSymbol_doc[] =
+    "TWString* TWCoinTypeConfigurationGetSymbol(enum TWCoinType type)";
 static PyObject* PyCoinTypeConfigurationGetSymbol(
     PyCoinTypeConfigurationObject* self,
     PyObject* const* args,
@@ -100,7 +101,8 @@ static PyObject* PyCoinTypeConfigurationGetSymbol(
 }
 
 // static method function for GetDecimals
-// int TWCoinTypeConfigurationGetDecimals(enum TWCoinType type);
+static const char PyCoinTypeConfigurationGetDecimals_doc[] =
+    "int TWCoinTypeConfigurationGetDecimals(enum TWCoinType type)";
 static PyObject* PyCoinTypeConfigurationGetDecimals(
     PyCoinTypeConfigurationObject* self,
     PyObject* const* args,
@@ -121,8 +123,9 @@ static PyObject* PyCoinTypeConfigurationGetDecimals(
 }
 
 // static method function for GetTransactionURL
-// TWString* TWCoinTypeConfigurationGetTransactionURL(enum TWCoinType type,
-// TWString* transactionID);
+static const char PyCoinTypeConfigurationGetTransactionURL_doc[] =
+    "TWString* TWCoinTypeConfigurationGetTransactionURL(enum TWCoinType type, "
+    "TWString* transactionID)";
 static PyObject* PyCoinTypeConfigurationGetTransactionURL(
     PyCoinTypeConfigurationObject* self,
     PyObject* const* args,
@@ -150,8 +153,9 @@ static PyObject* PyCoinTypeConfigurationGetTransactionURL(
 }
 
 // static method function for GetAccountURL
-// TWString* TWCoinTypeConfigurationGetAccountURL(enum TWCoinType type,
-// TWString* accountID);
+static const char PyCoinTypeConfigurationGetAccountURL_doc[] =
+    "TWString* TWCoinTypeConfigurationGetAccountURL(enum TWCoinType type, "
+    "TWString* accountID)";
 static PyObject* PyCoinTypeConfigurationGetAccountURL(
     PyCoinTypeConfigurationObject* self,
     PyObject* const* args,
@@ -178,7 +182,8 @@ static PyObject* PyCoinTypeConfigurationGetAccountURL(
 }
 
 // static method function for GetID
-// TWString* TWCoinTypeConfigurationGetID(enum TWCoinType type);
+static const char PyCoinTypeConfigurationGetID_doc[] =
+    "TWString* TWCoinTypeConfigurationGetID(enum TWCoinType type)";
 static PyObject* PyCoinTypeConfigurationGetID(
     PyCoinTypeConfigurationObject* self,
     PyObject* const* args,
@@ -199,7 +204,8 @@ static PyObject* PyCoinTypeConfigurationGetID(
 }
 
 // static method function for GetName
-// TWString* TWCoinTypeConfigurationGetName(enum TWCoinType type);
+static const char PyCoinTypeConfigurationGetName_doc[] =
+    "TWString* TWCoinTypeConfigurationGetName(enum TWCoinType type)";
 static PyObject* PyCoinTypeConfigurationGetName(
     PyCoinTypeConfigurationObject* self,
     PyObject* const* args,
@@ -223,17 +229,17 @@ static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
     {"GetSymbol", (PyCFunction)PyCoinTypeConfigurationGetSymbol,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyCoinTypeConfigurationGetSymbol_doc},
     {"GetDecimals", (PyCFunction)PyCoinTypeConfigurationGetDecimals,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyCoinTypeConfigurationGetDecimals_doc},
     {"GetTransactionURL", (PyCFunction)PyCoinTypeConfigurationGetTransactionURL,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyCoinTypeConfigurationGetTransactionURL_doc},
     {"GetAccountURL", (PyCFunction)PyCoinTypeConfigurationGetAccountURL,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyCoinTypeConfigurationGetAccountURL_doc},
     {"GetID", (PyCFunction)PyCoinTypeConfigurationGetID,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyCoinTypeConfigurationGetID_doc},
     {"GetName", (PyCFunction)PyCoinTypeConfigurationGetName,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyCoinTypeConfigurationGetName_doc},
     {}};
 
 bool PyInit_CoinTypeConfiguration(PyObject* module) {

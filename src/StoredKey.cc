@@ -58,6 +58,13 @@ TWStoredKey* PyStoredKey_GetTWStoredKey(PyObject* object) {
   return ((PyStoredKeyObject*)object)->value;
 }
 
+static void PyStoredKey_dealloc(PyStoredKeyObject* self) {
+  if (self->value) {
+    TWStoredKeyDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PyStoredKey_init(PyStoredKeyObject *self, PyObject *args, PyObject
 // *kwds) {
 //   return 0;
@@ -77,14 +84,30 @@ TWStoredKey* PyStoredKey_GetTWStoredKey(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// getter function for Identifier
+static const char PyStoredKeyIdentifier_doc[] =
+    "TWString* TWStoredKeyIdentifier(struct TWStoredKey* key)";
+static PyObject* PyStoredKeyIdentifier(PyStoredKeyObject* self, void*) {
+  return PyUnicode_FromTWString(TWStoredKeyIdentifier(self->value));
+}
+
+// getter function for Name
+static const char PyStoredKeyName_doc[] =
+    "TWString* TWStoredKeyName(struct TWStoredKey* key)";
+static PyObject* PyStoredKeyName(PyStoredKeyObject* self, void*) {
+  return PyUnicode_FromTWString(TWStoredKeyName(self->value));
+}
+
 // getter function for IsMnemonic
-// bool TWStoredKeyIsMnemonic(struct TWStoredKey* key);
+static const char PyStoredKeyIsMnemonic_doc[] =
+    "bool TWStoredKeyIsMnemonic(struct TWStoredKey* key)";
 static PyObject* PyStoredKeyIsMnemonic(PyStoredKeyObject* self, void*) {
   return PyBool_FromLong(TWStoredKeyIsMnemonic(self->value));
 }
 
 // method function for Delete
-// void TWStoredKeyDelete(struct TWStoredKey* key);
+static const char PyStoredKeyDelete_doc[] =
+    "void TWStoredKeyDelete(struct TWStoredKey* key)";
 static PyObject* PyStoredKeyDelete(PyStoredKeyObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
@@ -98,7 +121,9 @@ static PyObject* PyStoredKeyDelete(PyStoredKeyObject* self,
 }
 
 // method function for Account
-// struct TWAccount* TWStoredKeyAccount(struct TWStoredKey* key, size_t index);
+static const char PyStoredKeyAccount_doc[] =
+    "struct TWAccount* TWStoredKeyAccount(struct TWStoredKey* key, size_t "
+    "index)";
 static PyObject* PyStoredKeyAccount(PyStoredKeyObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
@@ -118,8 +143,9 @@ static PyObject* PyStoredKeyAccount(PyStoredKeyObject* self,
 }
 
 // method function for AccountForCoin
-// struct TWAccount* TWStoredKeyAccountForCoin(struct TWStoredKey* key, enum
-// TWCoinType coin, struct TWHDWallet* wallet);
+static const char PyStoredKeyAccountForCoin_doc[] =
+    "struct TWAccount* TWStoredKeyAccountForCoin(struct TWStoredKey* key, enum "
+    "TWCoinType coin, struct TWHDWallet* wallet)";
 static PyObject* PyStoredKeyAccountForCoin(PyStoredKeyObject* self,
                                            PyObject* const* args,
                                            Py_ssize_t nargs) {
@@ -145,8 +171,9 @@ static PyObject* PyStoredKeyAccountForCoin(PyStoredKeyObject* self,
 }
 
 // method function for RemoveAccountForCoin
-// void TWStoredKeyRemoveAccountForCoin(struct TWStoredKey* key, enum TWCoinType
-// coin);
+static const char PyStoredKeyRemoveAccountForCoin_doc[] =
+    "void TWStoredKeyRemoveAccountForCoin(struct TWStoredKey* key, enum "
+    "TWCoinType coin)";
 static PyObject* PyStoredKeyRemoveAccountForCoin(PyStoredKeyObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
@@ -166,8 +193,10 @@ static PyObject* PyStoredKeyRemoveAccountForCoin(PyStoredKeyObject* self,
 }
 
 // method function for AddAccount
-// void TWStoredKeyAddAccount(struct TWStoredKey* key, TWString* address, enum
-// TWCoinType coin, TWString* derivationPath, TWString* extetndedPublicKey);
+static const char PyStoredKeyAddAccount_doc[] =
+    "void TWStoredKeyAddAccount(struct TWStoredKey* key, TWString* address, "
+    "enum TWCoinType coin, TWString* derivationPath, TWString* "
+    "extetndedPublicKey)";
 static PyObject* PyStoredKeyAddAccount(PyStoredKeyObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -205,7 +234,8 @@ static PyObject* PyStoredKeyAddAccount(PyStoredKeyObject* self,
 }
 
 // method function for Store
-// bool TWStoredKeyStore(struct TWStoredKey* key, TWString* path);
+static const char PyStoredKeyStore_doc[] =
+    "bool TWStoredKeyStore(struct TWStoredKey* key, TWString* path)";
 static PyObject* PyStoredKeyStore(PyStoredKeyObject* self,
                                   PyObject* const* args,
                                   Py_ssize_t nargs) {
@@ -225,8 +255,9 @@ static PyObject* PyStoredKeyStore(PyStoredKeyObject* self,
 }
 
 // method function for DecryptPrivateKey
-// TWData* TWStoredKeyDecryptPrivateKey(struct TWStoredKey* key, TWData*
-// password);
+static const char PyStoredKeyDecryptPrivateKey_doc[] =
+    "TWData* TWStoredKeyDecryptPrivateKey(struct TWStoredKey* key, TWData* "
+    "password)";
 static PyObject* PyStoredKeyDecryptPrivateKey(PyStoredKeyObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
@@ -246,8 +277,9 @@ static PyObject* PyStoredKeyDecryptPrivateKey(PyStoredKeyObject* self,
 }
 
 // method function for DecryptMnemonic
-// TWString* TWStoredKeyDecryptMnemonic(struct TWStoredKey* key, TWData*
-// password);
+static const char PyStoredKeyDecryptMnemonic_doc[] =
+    "TWString* TWStoredKeyDecryptMnemonic(struct TWStoredKey* key, TWData* "
+    "password)";
 static PyObject* PyStoredKeyDecryptMnemonic(PyStoredKeyObject* self,
                                             PyObject* const* args,
                                             Py_ssize_t nargs) {
@@ -267,8 +299,9 @@ static PyObject* PyStoredKeyDecryptMnemonic(PyStoredKeyObject* self,
 }
 
 // method function for PrivateKey
-// struct TWPrivateKey* TWStoredKeyPrivateKey(struct TWStoredKey* key, enum
-// TWCoinType coin, TWData* password);
+static const char PyStoredKeyPrivateKey_doc[] =
+    "struct TWPrivateKey* TWStoredKeyPrivateKey(struct TWStoredKey* key, enum "
+    "TWCoinType coin, TWData* password)";
 static PyObject* PyStoredKeyPrivateKey(PyStoredKeyObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -294,8 +327,9 @@ static PyObject* PyStoredKeyPrivateKey(PyStoredKeyObject* self,
 }
 
 // method function for Wallet
-// struct TWHDWallet* TWStoredKeyWallet(struct TWStoredKey* key, TWData*
-// password);
+static const char PyStoredKeyWallet_doc[] =
+    "struct TWHDWallet* TWStoredKeyWallet(struct TWStoredKey* key, TWData* "
+    "password)";
 static PyObject* PyStoredKeyWallet(PyStoredKeyObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
@@ -315,7 +349,8 @@ static PyObject* PyStoredKeyWallet(PyStoredKeyObject* self,
 }
 
 // method function for ExportJSON
-// TWData* TWStoredKeyExportJSON(struct TWStoredKey* key);
+static const char PyStoredKeyExportJSON_doc[] =
+    "TWData* TWStoredKeyExportJSON(struct TWStoredKey* key)";
 static PyObject* PyStoredKeyExportJSON(PyStoredKeyObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -329,7 +364,8 @@ static PyObject* PyStoredKeyExportJSON(PyStoredKeyObject* self,
 }
 
 // method function for FixAddresses
-// bool TWStoredKeyFixAddresses(struct TWStoredKey* key, TWData* password);
+static const char PyStoredKeyFixAddresses_doc[] =
+    "bool TWStoredKeyFixAddresses(struct TWStoredKey* key, TWData* password)";
 static PyObject* PyStoredKeyFixAddresses(PyStoredKeyObject* self,
                                          PyObject* const* args,
                                          Py_ssize_t nargs) {
@@ -349,7 +385,8 @@ static PyObject* PyStoredKeyFixAddresses(PyStoredKeyObject* self,
 }
 
 // static method function for Load
-// struct TWStoredKey* TWStoredKeyLoad(TWString* path);
+static const char PyStoredKeyLoad_doc[] =
+    "struct TWStoredKey* TWStoredKeyLoad(TWString* path)";
 static PyObject* PyStoredKeyLoad(PyStoredKeyObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
@@ -369,8 +406,9 @@ static PyObject* PyStoredKeyLoad(PyStoredKeyObject* self,
 }
 
 // static method function for ImportPrivateKey
-// struct TWStoredKey* TWStoredKeyImportPrivateKey(TWData* privateKey, TWString*
-// name, TWData* password, enum TWCoinType coin);
+static const char PyStoredKeyImportPrivateKey_doc[] =
+    "struct TWStoredKey* TWStoredKeyImportPrivateKey(TWData* privateKey, "
+    "TWString* name, TWData* password, enum TWCoinType coin)";
 static PyObject* PyStoredKeyImportPrivateKey(PyStoredKeyObject* self,
                                              PyObject* const* args,
                                              Py_ssize_t nargs) {
@@ -409,8 +447,9 @@ static PyObject* PyStoredKeyImportPrivateKey(PyStoredKeyObject* self,
 }
 
 // static method function for ImportHDWallet
-// struct TWStoredKey* TWStoredKeyImportHDWallet(TWString* mnemonic, TWString*
-// name, TWData* password, enum TWCoinType coin);
+static const char PyStoredKeyImportHDWallet_doc[] =
+    "struct TWStoredKey* TWStoredKeyImportHDWallet(TWString* mnemonic, "
+    "TWString* name, TWData* password, enum TWCoinType coin)";
 static PyObject* PyStoredKeyImportHDWallet(PyStoredKeyObject* self,
                                            PyObject* const* args,
                                            Py_ssize_t nargs) {
@@ -449,7 +488,8 @@ static PyObject* PyStoredKeyImportHDWallet(PyStoredKeyObject* self,
 }
 
 // static method function for ImportJSON
-// struct TWStoredKey* TWStoredKeyImportJSON(TWData* json);
+static const char PyStoredKeyImportJSON_doc[] =
+    "struct TWStoredKey* TWStoredKeyImportJSON(TWData* json)";
 static PyObject* PyStoredKeyImportJSON(PyStoredKeyObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -469,7 +509,8 @@ static PyObject* PyStoredKeyImportJSON(PyStoredKeyObject* self,
 }
 
 // static method function for Create
-// struct TWStoredKey* TWStoredKeyCreate(TWString* name, TWData* password);
+static const char PyStoredKeyCreate_doc[] =
+    "struct TWStoredKey* TWStoredKeyCreate(TWString* name, TWData* password)";
 static PyObject* PyStoredKeyCreate(PyStoredKeyObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
@@ -495,37 +536,54 @@ static PyObject* PyStoredKeyCreate(PyStoredKeyObject* self,
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"IsMnemonic", (getter)PyStoredKeyIsMnemonic},
+    {"Identifier", (getter)PyStoredKeyIdentifier, nullptr,
+     PyStoredKeyIdentifier_doc},
+    {"Name", (getter)PyStoredKeyName, nullptr, PyStoredKeyName_doc},
+    {"IsMnemonic", (getter)PyStoredKeyIsMnemonic, nullptr,
+     PyStoredKeyIsMnemonic_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyStoredKeyDelete, METH_FASTCALL},
-    {"Account", (PyCFunction)PyStoredKeyAccount, METH_FASTCALL},
-    {"AccountForCoin", (PyCFunction)PyStoredKeyAccountForCoin, METH_FASTCALL},
+    {"Delete", (PyCFunction)PyStoredKeyDelete, METH_FASTCALL,
+     PyStoredKeyDelete_doc},
+    {"Account", (PyCFunction)PyStoredKeyAccount, METH_FASTCALL,
+     PyStoredKeyAccount_doc},
+    {"AccountForCoin", (PyCFunction)PyStoredKeyAccountForCoin, METH_FASTCALL,
+     PyStoredKeyAccountForCoin_doc},
     {"RemoveAccountForCoin", (PyCFunction)PyStoredKeyRemoveAccountForCoin,
-     METH_FASTCALL},
-    {"AddAccount", (PyCFunction)PyStoredKeyAddAccount, METH_FASTCALL},
-    {"Store", (PyCFunction)PyStoredKeyStore, METH_FASTCALL},
+     METH_FASTCALL, PyStoredKeyRemoveAccountForCoin_doc},
+    {"AddAccount", (PyCFunction)PyStoredKeyAddAccount, METH_FASTCALL,
+     PyStoredKeyAddAccount_doc},
+    {"Store", (PyCFunction)PyStoredKeyStore, METH_FASTCALL,
+     PyStoredKeyStore_doc},
     {"DecryptPrivateKey", (PyCFunction)PyStoredKeyDecryptPrivateKey,
-     METH_FASTCALL},
-    {"DecryptMnemonic", (PyCFunction)PyStoredKeyDecryptMnemonic, METH_FASTCALL},
-    {"PrivateKey", (PyCFunction)PyStoredKeyPrivateKey, METH_FASTCALL},
-    {"Wallet", (PyCFunction)PyStoredKeyWallet, METH_FASTCALL},
-    {"ExportJSON", (PyCFunction)PyStoredKeyExportJSON, METH_FASTCALL},
-    {"FixAddresses", (PyCFunction)PyStoredKeyFixAddresses, METH_FASTCALL},
-    {"Load", (PyCFunction)PyStoredKeyLoad, METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL, PyStoredKeyDecryptPrivateKey_doc},
+    {"DecryptMnemonic", (PyCFunction)PyStoredKeyDecryptMnemonic, METH_FASTCALL,
+     PyStoredKeyDecryptMnemonic_doc},
+    {"PrivateKey", (PyCFunction)PyStoredKeyPrivateKey, METH_FASTCALL,
+     PyStoredKeyPrivateKey_doc},
+    {"Wallet", (PyCFunction)PyStoredKeyWallet, METH_FASTCALL,
+     PyStoredKeyWallet_doc},
+    {"ExportJSON", (PyCFunction)PyStoredKeyExportJSON, METH_FASTCALL,
+     PyStoredKeyExportJSON_doc},
+    {"FixAddresses", (PyCFunction)PyStoredKeyFixAddresses, METH_FASTCALL,
+     PyStoredKeyFixAddresses_doc},
+    {"Load", (PyCFunction)PyStoredKeyLoad, METH_FASTCALL | METH_STATIC,
+     PyStoredKeyLoad_doc},
     {"ImportPrivateKey", (PyCFunction)PyStoredKeyImportPrivateKey,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyStoredKeyImportPrivateKey_doc},
     {"ImportHDWallet", (PyCFunction)PyStoredKeyImportHDWallet,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyStoredKeyImportHDWallet_doc},
     {"ImportJSON", (PyCFunction)PyStoredKeyImportJSON,
-     METH_FASTCALL | METH_STATIC},
-    {"Create", (PyCFunction)PyStoredKeyCreate, METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyStoredKeyImportJSON_doc},
+    {"Create", (PyCFunction)PyStoredKeyCreate, METH_FASTCALL | METH_STATIC,
+     PyStoredKeyCreate_doc},
     {}};
 
 bool PyInit_StoredKey(PyObject* module) {
   // PyStoredKeyType.tp_new = PyStoredKey_new;
   // PyStoredKeyType.tp_init = (initproc)PyStoredKey_init;
+  PyStoredKeyType.tp_dealloc = (destructor)PyStoredKey_dealloc;
   // PyStoredKeyType.tp_str = (reprfunc)PyStoredKey_str;
   PyStoredKeyType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyStoredKeyType.tp_methods = (PyMethodDef*)method_defs;

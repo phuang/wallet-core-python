@@ -73,8 +73,9 @@ TWAES* PyAES_GetTWAES(PyObject* object) {
 // }
 
 // static method function for EncryptCBC
-// TWData* TWAESEncryptCBC(TWData* key, TWData* data, TWData* iv, enum
-// TWAESPaddingMode mode);
+static const char PyAESEncryptCBC_doc[] =
+    "TWData* TWAESEncryptCBC(TWData* key, TWData* data, TWData* iv, enum "
+    "TWAESPaddingMode mode)";
 static PyObject* PyAESEncryptCBC(PyAESObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
@@ -112,8 +113,9 @@ static PyObject* PyAESEncryptCBC(PyAESObject* self,
 }
 
 // static method function for DecryptCBC
-// TWData* TWAESDecryptCBC(TWData* key, TWData* data, TWData* iv, enum
-// TWAESPaddingMode mode);
+static const char PyAESDecryptCBC_doc[] =
+    "TWData* TWAESDecryptCBC(TWData* key, TWData* data, TWData* iv, enum "
+    "TWAESPaddingMode mode)";
 static PyObject* PyAESDecryptCBC(PyAESObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
@@ -151,7 +153,8 @@ static PyObject* PyAESDecryptCBC(PyAESObject* self,
 }
 
 // static method function for EncryptCTR
-// TWData* TWAESEncryptCTR(TWData* key, TWData* data, TWData* iv);
+static const char PyAESEncryptCTR_doc[] =
+    "TWData* TWAESEncryptCTR(TWData* key, TWData* data, TWData* iv)";
 static PyObject* PyAESEncryptCTR(PyAESObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
@@ -183,7 +186,8 @@ static PyObject* PyAESEncryptCTR(PyAESObject* self,
 }
 
 // static method function for DecryptCTR
-// TWData* TWAESDecryptCTR(TWData* key, TWData* data, TWData* iv);
+static const char PyAESDecryptCTR_doc[] =
+    "TWData* TWAESDecryptCTR(TWData* key, TWData* data, TWData* iv)";
 static PyObject* PyAESDecryptCTR(PyAESObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
@@ -217,10 +221,14 @@ static PyObject* PyAESDecryptCTR(PyAESObject* self,
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"EncryptCBC", (PyCFunction)PyAESEncryptCBC, METH_FASTCALL | METH_STATIC},
-    {"DecryptCBC", (PyCFunction)PyAESDecryptCBC, METH_FASTCALL | METH_STATIC},
-    {"EncryptCTR", (PyCFunction)PyAESEncryptCTR, METH_FASTCALL | METH_STATIC},
-    {"DecryptCTR", (PyCFunction)PyAESDecryptCTR, METH_FASTCALL | METH_STATIC},
+    {"EncryptCBC", (PyCFunction)PyAESEncryptCBC, METH_FASTCALL | METH_STATIC,
+     PyAESEncryptCBC_doc},
+    {"DecryptCBC", (PyCFunction)PyAESDecryptCBC, METH_FASTCALL | METH_STATIC,
+     PyAESDecryptCBC_doc},
+    {"EncryptCTR", (PyCFunction)PyAESEncryptCTR, METH_FASTCALL | METH_STATIC,
+     PyAESEncryptCTR_doc},
+    {"DecryptCTR", (PyCFunction)PyAESDecryptCTR, METH_FASTCALL | METH_STATIC,
+     PyAESDecryptCTR_doc},
     {}};
 
 bool PyInit_AES(PyObject* module) {

@@ -54,6 +54,13 @@ TW${name}* Py${name}_GetTW${name}(PyObject* object) {
   return ((Py${name}Object*)object)->value;
 }
 
+static void Py${name}_dealloc(Py${name}Object *self) {
+  if (self->value) {
+    TW${name}Delete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int Py${name}_init(Py${name}Object *self, PyObject *args, PyObject *kwds) {
 //   return 0;
 // }
@@ -85,6 +92,7 @@ bool PyInit_${name}(PyObject *module) {
 
   // Py${name}Type.tp_new = Py${name}_new;
   // Py${name}Type.tp_init = (initproc)Py${name}_init;
+  Py${name}Type.tp_dealloc = (destructor)Py${name}_dealloc;
   // Py${name}Type.tp_str = (reprfunc)Py${name}_str;
   Py${name}Type.tp_getset = (PyGetSetDef*)get_set_defs;
   Py${name}Type.tp_methods = (PyMethodDef*)method_defs;

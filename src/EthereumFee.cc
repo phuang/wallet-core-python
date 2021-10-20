@@ -74,7 +74,8 @@ TWEthereumFee* PyEthereumFee_GetTWEthereumFee(PyObject* object) {
 // }
 
 // static method function for Suggest
-// TWString* TWEthereumFeeSuggest(TWString* feeHistory);
+static const char PyEthereumFeeSuggest_doc[] =
+    "TWString* TWEthereumFeeSuggest(TWString* feeHistory)";
 static PyObject* PyEthereumFeeSuggest(PyEthereumFeeObject* self,
                                       PyObject* const* args,
                                       Py_ssize_t nargs) {
@@ -96,7 +97,8 @@ static PyObject* PyEthereumFeeSuggest(PyEthereumFeeObject* self,
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"Suggest", (PyCFunction)PyEthereumFeeSuggest, METH_FASTCALL | METH_STATIC},
+    {"Suggest", (PyCFunction)PyEthereumFeeSuggest, METH_FASTCALL | METH_STATIC,
+     PyEthereumFeeSuggest_doc},
     {}};
 
 bool PyInit_EthereumFee(PyObject* module) {

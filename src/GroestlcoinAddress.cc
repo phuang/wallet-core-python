@@ -57,6 +57,13 @@ TWGroestlcoinAddress* PyGroestlcoinAddress_GetTWGroestlcoinAddress(
   return ((PyGroestlcoinAddressObject*)object)->value;
 }
 
+static void PyGroestlcoinAddress_dealloc(PyGroestlcoinAddressObject* self) {
+  if (self->value) {
+    TWGroestlcoinAddressDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PyGroestlcoinAddress_init(PyGroestlcoinAddressObject *self,
 // PyObject *args, PyObject *kwds) {
 //   return 0;
@@ -77,8 +84,19 @@ TWGroestlcoinAddress* PyGroestlcoinAddress_GetTWGroestlcoinAddress(
 //   return PyUnicode_FromString(str);
 // }
 
+// getter function for Description
+static const char PyGroestlcoinAddressDescription_doc[] =
+    "TWString* TWGroestlcoinAddressDescription(struct TWGroestlcoinAddress* "
+    "address)";
+static PyObject* PyGroestlcoinAddressDescription(
+    PyGroestlcoinAddressObject* self,
+    void*) {
+  return PyUnicode_FromTWString(TWGroestlcoinAddressDescription(self->value));
+}
+
 // method function for Delete
-// void TWGroestlcoinAddressDelete(struct TWGroestlcoinAddress* address);
+static const char PyGroestlcoinAddressDelete_doc[] =
+    "void TWGroestlcoinAddressDelete(struct TWGroestlcoinAddress* address)";
 static PyObject* PyGroestlcoinAddressDelete(PyGroestlcoinAddressObject* self,
                                             PyObject* const* args,
                                             Py_ssize_t nargs) {
@@ -92,8 +110,9 @@ static PyObject* PyGroestlcoinAddressDelete(PyGroestlcoinAddressObject* self,
 }
 
 // static method function for Equal
-// bool TWGroestlcoinAddressEqual(struct TWGroestlcoinAddress* lhs, struct
-// TWGroestlcoinAddress* rhs);
+static const char PyGroestlcoinAddressEqual_doc[] =
+    "bool TWGroestlcoinAddressEqual(struct TWGroestlcoinAddress* lhs, struct "
+    "TWGroestlcoinAddress* rhs)";
 static PyObject* PyGroestlcoinAddressEqual(PyGroestlcoinAddressObject* self,
                                            PyObject* const* args,
                                            Py_ssize_t nargs) {
@@ -121,7 +140,8 @@ static PyObject* PyGroestlcoinAddressEqual(PyGroestlcoinAddressObject* self,
 }
 
 // static method function for IsValidString
-// bool TWGroestlcoinAddressIsValidString(TWString* string);
+static const char PyGroestlcoinAddressIsValidString_doc[] =
+    "bool TWGroestlcoinAddressIsValidString(TWString* string)";
 static PyObject* PyGroestlcoinAddressIsValidString(
     PyGroestlcoinAddressObject* self,
     PyObject* const* args,
@@ -142,8 +162,9 @@ static PyObject* PyGroestlcoinAddressIsValidString(
 }
 
 // static method function for CreateWithString
-// struct TWGroestlcoinAddress* TWGroestlcoinAddressCreateWithString(TWString*
-// string);
+static const char PyGroestlcoinAddressCreateWithString_doc[] =
+    "struct TWGroestlcoinAddress* "
+    "TWGroestlcoinAddressCreateWithString(TWString* string)";
 static PyObject* PyGroestlcoinAddressCreateWithString(
     PyGroestlcoinAddressObject* self,
     PyObject* const* args,
@@ -165,8 +186,10 @@ static PyObject* PyGroestlcoinAddressCreateWithString(
 }
 
 // static method function for CreateWithPublicKey
-// struct TWGroestlcoinAddress* TWGroestlcoinAddressCreateWithPublicKey(struct
-// TWPublicKey* publicKey, uint8_t prefix);
+static const char PyGroestlcoinAddressCreateWithPublicKey_doc[] =
+    "struct TWGroestlcoinAddress* "
+    "TWGroestlcoinAddressCreateWithPublicKey(struct TWPublicKey* publicKey, "
+    "uint8_t prefix)";
 static PyObject* PyGroestlcoinAddressCreateWithPublicKey(
     PyGroestlcoinAddressObject* self,
     PyObject* const* args,
@@ -193,24 +216,30 @@ static PyObject* PyGroestlcoinAddressCreateWithPublicKey(
   return PyGroestlcoinAddress_FromTWGroestlcoinAddress(result);
 }
 
-static const PyGetSetDef get_set_defs[] = {{}};
+static const PyGetSetDef get_set_defs[] = {
+    {"Description", (getter)PyGroestlcoinAddressDescription, nullptr,
+     PyGroestlcoinAddressDescription_doc},
+    {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyGroestlcoinAddressDelete, METH_FASTCALL},
+    {"Delete", (PyCFunction)PyGroestlcoinAddressDelete, METH_FASTCALL,
+     PyGroestlcoinAddressDelete_doc},
     {"Equal", (PyCFunction)PyGroestlcoinAddressEqual,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyGroestlcoinAddressEqual_doc},
     {"IsValidString", (PyCFunction)PyGroestlcoinAddressIsValidString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyGroestlcoinAddressIsValidString_doc},
     {"CreateWithString", (PyCFunction)PyGroestlcoinAddressCreateWithString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyGroestlcoinAddressCreateWithString_doc},
     {"CreateWithPublicKey",
      (PyCFunction)PyGroestlcoinAddressCreateWithPublicKey,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyGroestlcoinAddressCreateWithPublicKey_doc},
     {}};
 
 bool PyInit_GroestlcoinAddress(PyObject* module) {
   // PyGroestlcoinAddressType.tp_new = PyGroestlcoinAddress_new;
   // PyGroestlcoinAddressType.tp_init = (initproc)PyGroestlcoinAddress_init;
+  PyGroestlcoinAddressType.tp_dealloc =
+      (destructor)PyGroestlcoinAddress_dealloc;
   // PyGroestlcoinAddressType.tp_str = (reprfunc)PyGroestlcoinAddress_str;
   PyGroestlcoinAddressType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyGroestlcoinAddressType.tp_methods = (PyMethodDef*)method_defs;

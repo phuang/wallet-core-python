@@ -56,6 +56,13 @@ TWBitcoinScript* PyBitcoinScript_GetTWBitcoinScript(PyObject* object) {
   return ((PyBitcoinScriptObject*)object)->value;
 }
 
+static void PyBitcoinScript_dealloc(PyBitcoinScriptObject* self) {
+  if (self->value) {
+    TWBitcoinScriptDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PyBitcoinScript_init(PyBitcoinScriptObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;
@@ -75,16 +82,33 @@ TWBitcoinScript* PyBitcoinScript_GetTWBitcoinScript(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// getter function for Data
+static const char PyBitcoinScriptData_doc[] =
+    "TWData* TWBitcoinScriptData(const struct TWBitcoinScript* script)";
+static PyObject* PyBitcoinScriptData(PyBitcoinScriptObject* self, void*) {
+  return PyByteArray_FromTWData(TWBitcoinScriptData(self->value));
+}
+
+// getter function for ScriptHash
+static const char PyBitcoinScriptScriptHash_doc[] =
+    "TWData* TWBitcoinScriptScriptHash(const struct TWBitcoinScript* script)";
+static PyObject* PyBitcoinScriptScriptHash(PyBitcoinScriptObject* self, void*) {
+  return PyByteArray_FromTWData(TWBitcoinScriptScriptHash(self->value));
+}
+
 // getter function for IsPayToScriptHash
-// bool TWBitcoinScriptIsPayToScriptHash(const struct TWBitcoinScript* script);
+static const char PyBitcoinScriptIsPayToScriptHash_doc[] =
+    "bool TWBitcoinScriptIsPayToScriptHash(const struct TWBitcoinScript* "
+    "script)";
 static PyObject* PyBitcoinScriptIsPayToScriptHash(PyBitcoinScriptObject* self,
                                                   void*) {
   return PyBool_FromLong(TWBitcoinScriptIsPayToScriptHash(self->value));
 }
 
 // getter function for IsPayToWitnessScriptHash
-// bool TWBitcoinScriptIsPayToWitnessScriptHash(const struct TWBitcoinScript*
-// script);
+static const char PyBitcoinScriptIsPayToWitnessScriptHash_doc[] =
+    "bool TWBitcoinScriptIsPayToWitnessScriptHash(const struct "
+    "TWBitcoinScript* script)";
 static PyObject* PyBitcoinScriptIsPayToWitnessScriptHash(
     PyBitcoinScriptObject* self,
     void*) {
@@ -92,8 +116,9 @@ static PyObject* PyBitcoinScriptIsPayToWitnessScriptHash(
 }
 
 // getter function for IsPayToWitnessPublicKeyHash
-// bool TWBitcoinScriptIsPayToWitnessPublicKeyHash(const struct TWBitcoinScript*
-// script);
+static const char PyBitcoinScriptIsPayToWitnessPublicKeyHash_doc[] =
+    "bool TWBitcoinScriptIsPayToWitnessPublicKeyHash(const struct "
+    "TWBitcoinScript* script)";
 static PyObject* PyBitcoinScriptIsPayToWitnessPublicKeyHash(
     PyBitcoinScriptObject* self,
     void*) {
@@ -102,14 +127,17 @@ static PyObject* PyBitcoinScriptIsPayToWitnessPublicKeyHash(
 }
 
 // getter function for IsWitnessProgram
-// bool TWBitcoinScriptIsWitnessProgram(const struct TWBitcoinScript* script);
+static const char PyBitcoinScriptIsWitnessProgram_doc[] =
+    "bool TWBitcoinScriptIsWitnessProgram(const struct TWBitcoinScript* "
+    "script)";
 static PyObject* PyBitcoinScriptIsWitnessProgram(PyBitcoinScriptObject* self,
                                                  void*) {
   return PyBool_FromLong(TWBitcoinScriptIsWitnessProgram(self->value));
 }
 
 // method function for Delete
-// void TWBitcoinScriptDelete(struct TWBitcoinScript* script);
+static const char PyBitcoinScriptDelete_doc[] =
+    "void TWBitcoinScriptDelete(struct TWBitcoinScript* script)";
 static PyObject* PyBitcoinScriptDelete(PyBitcoinScriptObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -123,8 +151,9 @@ static PyObject* PyBitcoinScriptDelete(PyBitcoinScriptObject* self,
 }
 
 // method function for MatchPayToPubkey
-// TWData* TWBitcoinScriptMatchPayToPubkey(const struct TWBitcoinScript*
-// script);
+static const char PyBitcoinScriptMatchPayToPubkey_doc[] =
+    "TWData* TWBitcoinScriptMatchPayToPubkey(const struct TWBitcoinScript* "
+    "script)";
 static PyObject* PyBitcoinScriptMatchPayToPubkey(PyBitcoinScriptObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
@@ -138,8 +167,9 @@ static PyObject* PyBitcoinScriptMatchPayToPubkey(PyBitcoinScriptObject* self,
 }
 
 // method function for MatchPayToPubkeyHash
-// TWData* TWBitcoinScriptMatchPayToPubkeyHash(const struct TWBitcoinScript*
-// script);
+static const char PyBitcoinScriptMatchPayToPubkeyHash_doc[] =
+    "TWData* TWBitcoinScriptMatchPayToPubkeyHash(const struct TWBitcoinScript* "
+    "script)";
 static PyObject* PyBitcoinScriptMatchPayToPubkeyHash(
     PyBitcoinScriptObject* self,
     PyObject* const* args,
@@ -154,8 +184,9 @@ static PyObject* PyBitcoinScriptMatchPayToPubkeyHash(
 }
 
 // method function for MatchPayToScriptHash
-// TWData* TWBitcoinScriptMatchPayToScriptHash(const struct TWBitcoinScript*
-// script);
+static const char PyBitcoinScriptMatchPayToScriptHash_doc[] =
+    "TWData* TWBitcoinScriptMatchPayToScriptHash(const struct TWBitcoinScript* "
+    "script)";
 static PyObject* PyBitcoinScriptMatchPayToScriptHash(
     PyBitcoinScriptObject* self,
     PyObject* const* args,
@@ -170,8 +201,9 @@ static PyObject* PyBitcoinScriptMatchPayToScriptHash(
 }
 
 // method function for MatchPayToWitnessPublicKeyHash
-// TWData* TWBitcoinScriptMatchPayToWitnessPublicKeyHash(const struct
-// TWBitcoinScript* script);
+static const char PyBitcoinScriptMatchPayToWitnessPublicKeyHash_doc[] =
+    "TWData* TWBitcoinScriptMatchPayToWitnessPublicKeyHash(const struct "
+    "TWBitcoinScript* script)";
 static PyObject* PyBitcoinScriptMatchPayToWitnessPublicKeyHash(
     PyBitcoinScriptObject* self,
     PyObject* const* args,
@@ -186,8 +218,9 @@ static PyObject* PyBitcoinScriptMatchPayToWitnessPublicKeyHash(
 }
 
 // method function for MatchPayToWitnessScriptHash
-// TWData* TWBitcoinScriptMatchPayToWitnessScriptHash(const struct
-// TWBitcoinScript* script);
+static const char PyBitcoinScriptMatchPayToWitnessScriptHash_doc[] =
+    "TWData* TWBitcoinScriptMatchPayToWitnessScriptHash(const struct "
+    "TWBitcoinScript* script)";
 static PyObject* PyBitcoinScriptMatchPayToWitnessScriptHash(
     PyBitcoinScriptObject* self,
     PyObject* const* args,
@@ -202,7 +235,8 @@ static PyObject* PyBitcoinScriptMatchPayToWitnessScriptHash(
 }
 
 // method function for Encode
-// TWData* TWBitcoinScriptEncode(const struct TWBitcoinScript* script);
+static const char PyBitcoinScriptEncode_doc[] =
+    "TWData* TWBitcoinScriptEncode(const struct TWBitcoinScript* script)";
 static PyObject* PyBitcoinScriptEncode(PyBitcoinScriptObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -216,7 +250,8 @@ static PyObject* PyBitcoinScriptEncode(PyBitcoinScriptObject* self,
 }
 
 // static method function for Create
-// struct TWBitcoinScript* TWBitcoinScriptCreate();
+static const char PyBitcoinScriptCreate_doc[] =
+    "struct TWBitcoinScript* TWBitcoinScriptCreate()";
 static PyObject* PyBitcoinScriptCreate(PyBitcoinScriptObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -230,7 +265,8 @@ static PyObject* PyBitcoinScriptCreate(PyBitcoinScriptObject* self,
 }
 
 // static method function for CreateWithData
-// struct TWBitcoinScript* TWBitcoinScriptCreateWithData(TWData* data);
+static const char PyBitcoinScriptCreateWithData_doc[] =
+    "struct TWBitcoinScript* TWBitcoinScriptCreateWithData(TWData* data)";
 static PyObject* PyBitcoinScriptCreateWithData(PyBitcoinScriptObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
@@ -250,8 +286,9 @@ static PyObject* PyBitcoinScriptCreateWithData(PyBitcoinScriptObject* self,
 }
 
 // static method function for CreateCopy
-// struct TWBitcoinScript* TWBitcoinScriptCreateCopy(const struct
-// TWBitcoinScript* script);
+static const char PyBitcoinScriptCreateCopy_doc[] =
+    "struct TWBitcoinScript* TWBitcoinScriptCreateCopy(const struct "
+    "TWBitcoinScript* script)";
 static PyObject* PyBitcoinScriptCreateCopy(PyBitcoinScriptObject* self,
                                            PyObject* const* args,
                                            Py_ssize_t nargs) {
@@ -271,8 +308,9 @@ static PyObject* PyBitcoinScriptCreateCopy(PyBitcoinScriptObject* self,
 }
 
 // static method function for Equal
-// bool TWBitcoinScriptEqual(const struct TWBitcoinScript* lhs, const struct
-// TWBitcoinScript* rhs);
+static const char PyBitcoinScriptEqual_doc[] =
+    "bool TWBitcoinScriptEqual(const struct TWBitcoinScript* lhs, const struct "
+    "TWBitcoinScript* rhs)";
 static PyObject* PyBitcoinScriptEqual(PyBitcoinScriptObject* self,
                                       PyObject* const* args,
                                       Py_ssize_t nargs) {
@@ -298,7 +336,9 @@ static PyObject* PyBitcoinScriptEqual(PyBitcoinScriptObject* self,
 }
 
 // static method function for BuildPayToPublicKey
-// struct TWBitcoinScript* TWBitcoinScriptBuildPayToPublicKey(TWData* pubkey);
+static const char PyBitcoinScriptBuildPayToPublicKey_doc[] =
+    "struct TWBitcoinScript* TWBitcoinScriptBuildPayToPublicKey(TWData* "
+    "pubkey)";
 static PyObject* PyBitcoinScriptBuildPayToPublicKey(PyBitcoinScriptObject* self,
                                                     PyObject* const* args,
                                                     Py_ssize_t nargs) {
@@ -318,7 +358,9 @@ static PyObject* PyBitcoinScriptBuildPayToPublicKey(PyBitcoinScriptObject* self,
 }
 
 // static method function for BuildPayToPublicKeyHash
-// struct TWBitcoinScript* TWBitcoinScriptBuildPayToPublicKeyHash(TWData* hash);
+static const char PyBitcoinScriptBuildPayToPublicKeyHash_doc[] =
+    "struct TWBitcoinScript* TWBitcoinScriptBuildPayToPublicKeyHash(TWData* "
+    "hash)";
 static PyObject* PyBitcoinScriptBuildPayToPublicKeyHash(
     PyBitcoinScriptObject* self,
     PyObject* const* args,
@@ -339,8 +381,9 @@ static PyObject* PyBitcoinScriptBuildPayToPublicKeyHash(
 }
 
 // static method function for BuildPayToScriptHash
-// struct TWBitcoinScript* TWBitcoinScriptBuildPayToScriptHash(TWData*
-// scriptHash);
+static const char PyBitcoinScriptBuildPayToScriptHash_doc[] =
+    "struct TWBitcoinScript* TWBitcoinScriptBuildPayToScriptHash(TWData* "
+    "scriptHash)";
 static PyObject* PyBitcoinScriptBuildPayToScriptHash(
     PyBitcoinScriptObject* self,
     PyObject* const* args,
@@ -361,8 +404,9 @@ static PyObject* PyBitcoinScriptBuildPayToScriptHash(
 }
 
 // static method function for BuildPayToWitnessPubkeyHash
-// struct TWBitcoinScript* TWBitcoinScriptBuildPayToWitnessPubkeyHash(TWData*
-// hash);
+static const char PyBitcoinScriptBuildPayToWitnessPubkeyHash_doc[] =
+    "struct TWBitcoinScript* "
+    "TWBitcoinScriptBuildPayToWitnessPubkeyHash(TWData* hash)";
 static PyObject* PyBitcoinScriptBuildPayToWitnessPubkeyHash(
     PyBitcoinScriptObject* self,
     PyObject* const* args,
@@ -384,8 +428,9 @@ static PyObject* PyBitcoinScriptBuildPayToWitnessPubkeyHash(
 }
 
 // static method function for BuildPayToWitnessScriptHash
-// struct TWBitcoinScript* TWBitcoinScriptBuildPayToWitnessScriptHash(TWData*
-// scriptHash);
+static const char PyBitcoinScriptBuildPayToWitnessScriptHash_doc[] =
+    "struct TWBitcoinScript* "
+    "TWBitcoinScriptBuildPayToWitnessScriptHash(TWData* scriptHash)";
 static PyObject* PyBitcoinScriptBuildPayToWitnessScriptHash(
     PyBitcoinScriptObject* self,
     PyObject* const* args,
@@ -407,8 +452,9 @@ static PyObject* PyBitcoinScriptBuildPayToWitnessScriptHash(
 }
 
 // static method function for LockScriptForAddress
-// struct TWBitcoinScript* TWBitcoinScriptLockScriptForAddress(TWString*
-// address, enum TWCoinType coin);
+static const char PyBitcoinScriptLockScriptForAddress_doc[] =
+    "struct TWBitcoinScript* TWBitcoinScriptLockScriptForAddress(TWString* "
+    "address, enum TWCoinType coin)";
 static PyObject* PyBitcoinScriptLockScriptForAddress(
     PyBitcoinScriptObject* self,
     PyObject* const* args,
@@ -436,7 +482,8 @@ static PyObject* PyBitcoinScriptLockScriptForAddress(
 }
 
 // static method function for HashTypeForCoin
-// uint32_t TWBitcoinScriptHashTypeForCoin(enum TWCoinType coinType);
+static const char PyBitcoinScriptHashTypeForCoin_doc[] =
+    "uint32_t TWBitcoinScriptHashTypeForCoin(enum TWCoinType coinType)";
 static PyObject* PyBitcoinScriptHashTypeForCoin(PyBitcoinScriptObject* self,
                                                 PyObject* const* args,
                                                 Py_ssize_t nargs) {
@@ -456,55 +503,71 @@ static PyObject* PyBitcoinScriptHashTypeForCoin(PyBitcoinScriptObject* self,
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"IsPayToScriptHash", (getter)PyBitcoinScriptIsPayToScriptHash},
+    {"Data", (getter)PyBitcoinScriptData, nullptr, PyBitcoinScriptData_doc},
+    {"ScriptHash", (getter)PyBitcoinScriptScriptHash, nullptr,
+     PyBitcoinScriptScriptHash_doc},
+    {"IsPayToScriptHash", (getter)PyBitcoinScriptIsPayToScriptHash, nullptr,
+     PyBitcoinScriptIsPayToScriptHash_doc},
     {"IsPayToWitnessScriptHash",
-     (getter)PyBitcoinScriptIsPayToWitnessScriptHash},
+     (getter)PyBitcoinScriptIsPayToWitnessScriptHash, nullptr,
+     PyBitcoinScriptIsPayToWitnessScriptHash_doc},
     {"IsPayToWitnessPublicKeyHash",
-     (getter)PyBitcoinScriptIsPayToWitnessPublicKeyHash},
-    {"IsWitnessProgram", (getter)PyBitcoinScriptIsWitnessProgram},
+     (getter)PyBitcoinScriptIsPayToWitnessPublicKeyHash, nullptr,
+     PyBitcoinScriptIsPayToWitnessPublicKeyHash_doc},
+    {"IsWitnessProgram", (getter)PyBitcoinScriptIsWitnessProgram, nullptr,
+     PyBitcoinScriptIsWitnessProgram_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyBitcoinScriptDelete, METH_FASTCALL},
+    {"Delete", (PyCFunction)PyBitcoinScriptDelete, METH_FASTCALL,
+     PyBitcoinScriptDelete_doc},
     {"MatchPayToPubkey", (PyCFunction)PyBitcoinScriptMatchPayToPubkey,
-     METH_FASTCALL},
+     METH_FASTCALL, PyBitcoinScriptMatchPayToPubkey_doc},
     {"MatchPayToPubkeyHash", (PyCFunction)PyBitcoinScriptMatchPayToPubkeyHash,
-     METH_FASTCALL},
+     METH_FASTCALL, PyBitcoinScriptMatchPayToPubkeyHash_doc},
     {"MatchPayToScriptHash", (PyCFunction)PyBitcoinScriptMatchPayToScriptHash,
-     METH_FASTCALL},
+     METH_FASTCALL, PyBitcoinScriptMatchPayToScriptHash_doc},
     {"MatchPayToWitnessPublicKeyHash",
-     (PyCFunction)PyBitcoinScriptMatchPayToWitnessPublicKeyHash, METH_FASTCALL},
+     (PyCFunction)PyBitcoinScriptMatchPayToWitnessPublicKeyHash, METH_FASTCALL,
+     PyBitcoinScriptMatchPayToWitnessPublicKeyHash_doc},
     {"MatchPayToWitnessScriptHash",
-     (PyCFunction)PyBitcoinScriptMatchPayToWitnessScriptHash, METH_FASTCALL},
-    {"Encode", (PyCFunction)PyBitcoinScriptEncode, METH_FASTCALL},
-    {"Create", (PyCFunction)PyBitcoinScriptCreate, METH_FASTCALL | METH_STATIC},
+     (PyCFunction)PyBitcoinScriptMatchPayToWitnessScriptHash, METH_FASTCALL,
+     PyBitcoinScriptMatchPayToWitnessScriptHash_doc},
+    {"Encode", (PyCFunction)PyBitcoinScriptEncode, METH_FASTCALL,
+     PyBitcoinScriptEncode_doc},
+    {"Create", (PyCFunction)PyBitcoinScriptCreate, METH_FASTCALL | METH_STATIC,
+     PyBitcoinScriptCreate_doc},
     {"CreateWithData", (PyCFunction)PyBitcoinScriptCreateWithData,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBitcoinScriptCreateWithData_doc},
     {"CreateCopy", (PyCFunction)PyBitcoinScriptCreateCopy,
-     METH_FASTCALL | METH_STATIC},
-    {"Equal", (PyCFunction)PyBitcoinScriptEqual, METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBitcoinScriptCreateCopy_doc},
+    {"Equal", (PyCFunction)PyBitcoinScriptEqual, METH_FASTCALL | METH_STATIC,
+     PyBitcoinScriptEqual_doc},
     {"BuildPayToPublicKey", (PyCFunction)PyBitcoinScriptBuildPayToPublicKey,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBitcoinScriptBuildPayToPublicKey_doc},
     {"BuildPayToPublicKeyHash",
      (PyCFunction)PyBitcoinScriptBuildPayToPublicKeyHash,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBitcoinScriptBuildPayToPublicKeyHash_doc},
     {"BuildPayToScriptHash", (PyCFunction)PyBitcoinScriptBuildPayToScriptHash,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBitcoinScriptBuildPayToScriptHash_doc},
     {"BuildPayToWitnessPubkeyHash",
      (PyCFunction)PyBitcoinScriptBuildPayToWitnessPubkeyHash,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC,
+     PyBitcoinScriptBuildPayToWitnessPubkeyHash_doc},
     {"BuildPayToWitnessScriptHash",
      (PyCFunction)PyBitcoinScriptBuildPayToWitnessScriptHash,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC,
+     PyBitcoinScriptBuildPayToWitnessScriptHash_doc},
     {"LockScriptForAddress", (PyCFunction)PyBitcoinScriptLockScriptForAddress,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBitcoinScriptLockScriptForAddress_doc},
     {"HashTypeForCoin", (PyCFunction)PyBitcoinScriptHashTypeForCoin,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBitcoinScriptHashTypeForCoin_doc},
     {}};
 
 bool PyInit_BitcoinScript(PyObject* module) {
   // PyBitcoinScriptType.tp_new = PyBitcoinScript_new;
   // PyBitcoinScriptType.tp_init = (initproc)PyBitcoinScript_init;
+  PyBitcoinScriptType.tp_dealloc = (destructor)PyBitcoinScript_dealloc;
   // PyBitcoinScriptType.tp_str = (reprfunc)PyBitcoinScript_str;
   PyBitcoinScriptType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyBitcoinScriptType.tp_methods = (PyMethodDef*)method_defs;

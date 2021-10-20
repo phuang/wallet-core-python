@@ -55,6 +55,13 @@ TWRippleXAddress* PyRippleXAddress_GetTWRippleXAddress(PyObject* object) {
   return ((PyRippleXAddressObject*)object)->value;
 }
 
+static void PyRippleXAddress_dealloc(PyRippleXAddressObject* self) {
+  if (self->value) {
+    TWRippleXAddressDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PyRippleXAddress_init(PyRippleXAddressObject *self, PyObject
 // *args, PyObject *kwds) {
 //   return 0;
@@ -74,14 +81,24 @@ TWRippleXAddress* PyRippleXAddress_GetTWRippleXAddress(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// getter function for Description
+static const char PyRippleXAddressDescription_doc[] =
+    "TWString* TWRippleXAddressDescription(struct TWRippleXAddress* address)";
+static PyObject* PyRippleXAddressDescription(PyRippleXAddressObject* self,
+                                             void*) {
+  return PyUnicode_FromTWString(TWRippleXAddressDescription(self->value));
+}
+
 // getter function for Tag
-// uint32_t TWRippleXAddressTag(struct TWRippleXAddress* address);
+static const char PyRippleXAddressTag_doc[] =
+    "uint32_t TWRippleXAddressTag(struct TWRippleXAddress* address)";
 static PyObject* PyRippleXAddressTag(PyRippleXAddressObject* self, void*) {
   return PyLong_FromLong(TWRippleXAddressTag(self->value));
 }
 
 // method function for Delete
-// void TWRippleXAddressDelete(struct TWRippleXAddress* address);
+static const char PyRippleXAddressDelete_doc[] =
+    "void TWRippleXAddressDelete(struct TWRippleXAddress* address)";
 static PyObject* PyRippleXAddressDelete(PyRippleXAddressObject* self,
                                         PyObject* const* args,
                                         Py_ssize_t nargs) {
@@ -95,8 +112,9 @@ static PyObject* PyRippleXAddressDelete(PyRippleXAddressObject* self,
 }
 
 // static method function for Equal
-// bool TWRippleXAddressEqual(struct TWRippleXAddress* lhs, struct
-// TWRippleXAddress* rhs);
+static const char PyRippleXAddressEqual_doc[] =
+    "bool TWRippleXAddressEqual(struct TWRippleXAddress* lhs, struct "
+    "TWRippleXAddress* rhs)";
 static PyObject* PyRippleXAddressEqual(PyRippleXAddressObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -122,7 +140,8 @@ static PyObject* PyRippleXAddressEqual(PyRippleXAddressObject* self,
 }
 
 // static method function for IsValidString
-// bool TWRippleXAddressIsValidString(TWString* string);
+static const char PyRippleXAddressIsValidString_doc[] =
+    "bool TWRippleXAddressIsValidString(TWString* string)";
 static PyObject* PyRippleXAddressIsValidString(PyRippleXAddressObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
@@ -142,7 +161,9 @@ static PyObject* PyRippleXAddressIsValidString(PyRippleXAddressObject* self,
 }
 
 // static method function for CreateWithString
-// struct TWRippleXAddress* TWRippleXAddressCreateWithString(TWString* string);
+static const char PyRippleXAddressCreateWithString_doc[] =
+    "struct TWRippleXAddress* TWRippleXAddressCreateWithString(TWString* "
+    "string)";
 static PyObject* PyRippleXAddressCreateWithString(PyRippleXAddressObject* self,
                                                   PyObject* const* args,
                                                   Py_ssize_t nargs) {
@@ -162,8 +183,9 @@ static PyObject* PyRippleXAddressCreateWithString(PyRippleXAddressObject* self,
 }
 
 // static method function for CreateWithPublicKey
-// struct TWRippleXAddress* TWRippleXAddressCreateWithPublicKey(struct
-// TWPublicKey* publicKey, uint32_t tag);
+static const char PyRippleXAddressCreateWithPublicKey_doc[] =
+    "struct TWRippleXAddress* TWRippleXAddressCreateWithPublicKey(struct "
+    "TWPublicKey* publicKey, uint32_t tag)";
 static PyObject* PyRippleXAddressCreateWithPublicKey(
     PyRippleXAddressObject* self,
     PyObject* const* args,
@@ -189,23 +211,29 @@ static PyObject* PyRippleXAddressCreateWithPublicKey(
   return PyRippleXAddress_FromTWRippleXAddress(result);
 }
 
-static const PyGetSetDef get_set_defs[] = {{"Tag", (getter)PyRippleXAddressTag},
-                                           {}};
+static const PyGetSetDef get_set_defs[] = {
+    {"Description", (getter)PyRippleXAddressDescription, nullptr,
+     PyRippleXAddressDescription_doc},
+    {"Tag", (getter)PyRippleXAddressTag, nullptr, PyRippleXAddressTag_doc},
+    {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyRippleXAddressDelete, METH_FASTCALL},
-    {"Equal", (PyCFunction)PyRippleXAddressEqual, METH_FASTCALL | METH_STATIC},
+    {"Delete", (PyCFunction)PyRippleXAddressDelete, METH_FASTCALL,
+     PyRippleXAddressDelete_doc},
+    {"Equal", (PyCFunction)PyRippleXAddressEqual, METH_FASTCALL | METH_STATIC,
+     PyRippleXAddressEqual_doc},
     {"IsValidString", (PyCFunction)PyRippleXAddressIsValidString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyRippleXAddressIsValidString_doc},
     {"CreateWithString", (PyCFunction)PyRippleXAddressCreateWithString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyRippleXAddressCreateWithString_doc},
     {"CreateWithPublicKey", (PyCFunction)PyRippleXAddressCreateWithPublicKey,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyRippleXAddressCreateWithPublicKey_doc},
     {}};
 
 bool PyInit_RippleXAddress(PyObject* module) {
   // PyRippleXAddressType.tp_new = PyRippleXAddress_new;
   // PyRippleXAddressType.tp_init = (initproc)PyRippleXAddress_init;
+  PyRippleXAddressType.tp_dealloc = (destructor)PyRippleXAddress_dealloc;
   // PyRippleXAddressType.tp_str = (reprfunc)PyRippleXAddress_str;
   PyRippleXAddressType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyRippleXAddressType.tp_methods = (PyMethodDef*)method_defs;

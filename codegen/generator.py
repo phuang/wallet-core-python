@@ -26,7 +26,8 @@ class Generator:
     def process_properties(self, name, props):
         template = T('''
 // getter function for ${prop_name}
-// ${c_property};
+static const char Py${name}${prop_name}_doc[] =
+    "${c_property}";
 static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
   return ${return}(TW${name}${prop_name}(self->value));
 }\n''')
@@ -39,10 +40,18 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 return_ = 'PyLong_FromLong'
             elif prop._type._name == 'bool':
                 return_ = 'PyBool_FromLong'
-            elif prop._type._type == 'enum':
+            elif prop._type._type in ('struct', 'enum'):
                 prop_type = prop._type._name[2:]
                 used_types.add(prop_type)
                 return_ = 'Py{0}_FromTW{0}'.format(prop_type)
+            elif prop._type._name == 'TWString':
+                prop_type = prop._type._name[2:]
+                used_types.add('String')
+                return_ = 'PyUnicode_FromTWString'
+            elif prop._type._name == 'TWData':
+                prop_type = prop._type._name[2:]
+                used_types.add('Data')
+                return_ = 'PyByteArray_FromTWData'
             else:
                 continue
 
@@ -60,7 +69,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
         includes.sort()
         includes = [ '#include "{}.h"'.format(n) for n in includes]
 
-        getsetdefs = [ '{{ "{1}", (getter)Py{0}{1} }},'.format(name, p) for p in getsetdefs ] + [ '{}' ]
+        getsetdefs = [ '{{ "{1}", (getter)Py{0}{1}, nullptr, Py{0}{1}_doc }},'.format(name, p) for p in getsetdefs ] + [ '{}' ]
         return includes, functions, getsetdefs
 
     def process_arguments(self, args):
@@ -137,7 +146,8 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
     def process_methods(self, name, methods, is_static):
         template = T('''
 // ${static}method function for ${method_name}
-// ${c_function};
+static const char Py${name}${method_name}_doc[] =
+    "${c_function}";
 static PyObject* Py${name}${method_name}(Py${name}Object *self,
                                          PyObject *const *args,
                                          Py_ssize_t nargs) {
@@ -147,7 +157,8 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
 }\n''')
         void_template = T('''
 // ${static}method function for ${method_name}
-// ${c_function};
+static const char Py${name}${method_name}_doc[] =
+    "${c_function}";
 static PyObject* Py${name}${method_name}(Py${name}Object *self,
                                          PyObject *const *args,
                                          Py_ssize_t nargs) {
@@ -218,7 +229,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         includes = [ '#include "{}.h"'.format(n) for n in includes]
 
         flags = 'METH_FASTCALL | METH_STATIC' if is_static else 'METH_FASTCALL'
-        methoddefs = [ '{{ "{1}", (PyCFunction)Py{0}{1}, {2} }},'.format(name, m, flags) for m in methoddefs ]
+        methoddefs = [ '{{ "{1}", (PyCFunction)Py{0}{1}, {2}, Py{0}{1}_doc }},'.format(name, m, flags) for m in methoddefs ]
         return includes, functions, methoddefs
 
     def generate_enum(self, enum):

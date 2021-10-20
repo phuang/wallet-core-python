@@ -76,7 +76,8 @@ TWEthereumAbi* PyEthereumAbi_GetTWEthereumAbi(PyObject* object) {
 // }
 
 // static method function for Encode
-// TWData* TWEthereumAbiEncode(struct TWEthereumAbiFunction* fn);
+static const char PyEthereumAbiEncode_doc[] =
+    "TWData* TWEthereumAbiEncode(struct TWEthereumAbiFunction* fn)";
 static PyObject* PyEthereumAbiEncode(PyEthereumAbiObject* self,
                                      PyObject* const* args,
                                      Py_ssize_t nargs) {
@@ -97,8 +98,9 @@ static PyObject* PyEthereumAbiEncode(PyEthereumAbiObject* self,
 }
 
 // static method function for DecodeOutput
-// bool TWEthereumAbiDecodeOutput(struct TWEthereumAbiFunction* fn, TWData*
-// encoded);
+static const char PyEthereumAbiDecodeOutput_doc[] =
+    "bool TWEthereumAbiDecodeOutput(struct TWEthereumAbiFunction* fn, TWData* "
+    "encoded)";
 static PyObject* PyEthereumAbiDecodeOutput(PyEthereumAbiObject* self,
                                            PyObject* const* args,
                                            Py_ssize_t nargs) {
@@ -125,7 +127,8 @@ static PyObject* PyEthereumAbiDecodeOutput(PyEthereumAbiObject* self,
 }
 
 // static method function for DecodeCall
-// TWString* TWEthereumAbiDecodeCall(TWData* data, TWString* abi);
+static const char PyEthereumAbiDecodeCall_doc[] =
+    "TWString* TWEthereumAbiDecodeCall(TWData* data, TWString* abi)";
 static PyObject* PyEthereumAbiDecodeCall(PyEthereumAbiObject* self,
                                          PyObject* const* args,
                                          Py_ssize_t nargs) {
@@ -151,7 +154,8 @@ static PyObject* PyEthereumAbiDecodeCall(PyEthereumAbiObject* self,
 }
 
 // static method function for EncodeTyped
-// TWData* TWEthereumAbiEncodeTyped(TWString* messageJson);
+static const char PyEthereumAbiEncodeTyped_doc[] =
+    "TWData* TWEthereumAbiEncodeTyped(TWString* messageJson)";
 static PyObject* PyEthereumAbiEncodeTyped(PyEthereumAbiObject* self,
                                           PyObject* const* args,
                                           Py_ssize_t nargs) {
@@ -173,13 +177,14 @@ static PyObject* PyEthereumAbiEncodeTyped(PyEthereumAbiObject* self,
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"Encode", (PyCFunction)PyEthereumAbiEncode, METH_FASTCALL | METH_STATIC},
+    {"Encode", (PyCFunction)PyEthereumAbiEncode, METH_FASTCALL | METH_STATIC,
+     PyEthereumAbiEncode_doc},
     {"DecodeOutput", (PyCFunction)PyEthereumAbiDecodeOutput,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiDecodeOutput_doc},
     {"DecodeCall", (PyCFunction)PyEthereumAbiDecodeCall,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiDecodeCall_doc},
     {"EncodeTyped", (PyCFunction)PyEthereumAbiEncodeTyped,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiEncodeTyped_doc},
     {}};
 
 bool PyInit_EthereumAbi(PyObject* module) {

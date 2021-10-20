@@ -2,6 +2,7 @@
 
 #include "SegwitAddress.h"
 
+#include "Data.h"
 #include "HRP.h"
 #include "PublicKey.h"
 #include "String.h"
@@ -56,6 +57,13 @@ TWSegwitAddress* PySegwitAddress_GetTWSegwitAddress(PyObject* object) {
   return ((PySegwitAddressObject*)object)->value;
 }
 
+static void PySegwitAddress_dealloc(PySegwitAddressObject* self) {
+  if (self->value) {
+    TWSegwitAddressDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PySegwitAddress_init(PySegwitAddressObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;
@@ -75,14 +83,32 @@ TWSegwitAddress* PySegwitAddress_GetTWSegwitAddress(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// getter function for Description
+static const char PySegwitAddressDescription_doc[] =
+    "TWString* TWSegwitAddressDescription(struct TWSegwitAddress* address)";
+static PyObject* PySegwitAddressDescription(PySegwitAddressObject* self,
+                                            void*) {
+  return PyUnicode_FromTWString(TWSegwitAddressDescription(self->value));
+}
+
 // getter function for HRP
-// enum TWHRP TWSegwitAddressHRP(struct TWSegwitAddress* address);
+static const char PySegwitAddressHRP_doc[] =
+    "enum TWHRP TWSegwitAddressHRP(struct TWSegwitAddress* address)";
 static PyObject* PySegwitAddressHRP(PySegwitAddressObject* self, void*) {
   return PyHRP_FromTWHRP(TWSegwitAddressHRP(self->value));
 }
 
+// getter function for WitnessProgram
+static const char PySegwitAddressWitnessProgram_doc[] =
+    "TWData* TWSegwitAddressWitnessProgram(struct TWSegwitAddress* address)";
+static PyObject* PySegwitAddressWitnessProgram(PySegwitAddressObject* self,
+                                               void*) {
+  return PyByteArray_FromTWData(TWSegwitAddressWitnessProgram(self->value));
+}
+
 // method function for Delete
-// void TWSegwitAddressDelete(struct TWSegwitAddress* address);
+static const char PySegwitAddressDelete_doc[] =
+    "void TWSegwitAddressDelete(struct TWSegwitAddress* address)";
 static PyObject* PySegwitAddressDelete(PySegwitAddressObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -96,8 +122,9 @@ static PyObject* PySegwitAddressDelete(PySegwitAddressObject* self,
 }
 
 // static method function for Equal
-// bool TWSegwitAddressEqual(struct TWSegwitAddress* lhs, struct
-// TWSegwitAddress* rhs);
+static const char PySegwitAddressEqual_doc[] =
+    "bool TWSegwitAddressEqual(struct TWSegwitAddress* lhs, struct "
+    "TWSegwitAddress* rhs)";
 static PyObject* PySegwitAddressEqual(PySegwitAddressObject* self,
                                       PyObject* const* args,
                                       Py_ssize_t nargs) {
@@ -123,7 +150,8 @@ static PyObject* PySegwitAddressEqual(PySegwitAddressObject* self,
 }
 
 // static method function for IsValidString
-// bool TWSegwitAddressIsValidString(TWString* string);
+static const char PySegwitAddressIsValidString_doc[] =
+    "bool TWSegwitAddressIsValidString(TWString* string)";
 static PyObject* PySegwitAddressIsValidString(PySegwitAddressObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
@@ -143,7 +171,8 @@ static PyObject* PySegwitAddressIsValidString(PySegwitAddressObject* self,
 }
 
 // static method function for CreateWithString
-// struct TWSegwitAddress* TWSegwitAddressCreateWithString(TWString* string);
+static const char PySegwitAddressCreateWithString_doc[] =
+    "struct TWSegwitAddress* TWSegwitAddressCreateWithString(TWString* string)";
 static PyObject* PySegwitAddressCreateWithString(PySegwitAddressObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
@@ -163,8 +192,9 @@ static PyObject* PySegwitAddressCreateWithString(PySegwitAddressObject* self,
 }
 
 // static method function for CreateWithPublicKey
-// struct TWSegwitAddress* TWSegwitAddressCreateWithPublicKey(enum TWHRP hrp,
-// struct TWPublicKey* publicKey);
+static const char PySegwitAddressCreateWithPublicKey_doc[] =
+    "struct TWSegwitAddress* TWSegwitAddressCreateWithPublicKey(enum TWHRP "
+    "hrp, struct TWPublicKey* publicKey)";
 static PyObject* PySegwitAddressCreateWithPublicKey(PySegwitAddressObject* self,
                                                     PyObject* const* args,
                                                     Py_ssize_t nargs) {
@@ -189,23 +219,31 @@ static PyObject* PySegwitAddressCreateWithPublicKey(PySegwitAddressObject* self,
   return PySegwitAddress_FromTWSegwitAddress(result);
 }
 
-static const PyGetSetDef get_set_defs[] = {{"HRP", (getter)PySegwitAddressHRP},
-                                           {}};
+static const PyGetSetDef get_set_defs[] = {
+    {"Description", (getter)PySegwitAddressDescription, nullptr,
+     PySegwitAddressDescription_doc},
+    {"HRP", (getter)PySegwitAddressHRP, nullptr, PySegwitAddressHRP_doc},
+    {"WitnessProgram", (getter)PySegwitAddressWitnessProgram, nullptr,
+     PySegwitAddressWitnessProgram_doc},
+    {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PySegwitAddressDelete, METH_FASTCALL},
-    {"Equal", (PyCFunction)PySegwitAddressEqual, METH_FASTCALL | METH_STATIC},
+    {"Delete", (PyCFunction)PySegwitAddressDelete, METH_FASTCALL,
+     PySegwitAddressDelete_doc},
+    {"Equal", (PyCFunction)PySegwitAddressEqual, METH_FASTCALL | METH_STATIC,
+     PySegwitAddressEqual_doc},
     {"IsValidString", (PyCFunction)PySegwitAddressIsValidString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PySegwitAddressIsValidString_doc},
     {"CreateWithString", (PyCFunction)PySegwitAddressCreateWithString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PySegwitAddressCreateWithString_doc},
     {"CreateWithPublicKey", (PyCFunction)PySegwitAddressCreateWithPublicKey,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PySegwitAddressCreateWithPublicKey_doc},
     {}};
 
 bool PyInit_SegwitAddress(PyObject* module) {
   // PySegwitAddressType.tp_new = PySegwitAddress_new;
   // PySegwitAddressType.tp_init = (initproc)PySegwitAddress_init;
+  PySegwitAddressType.tp_dealloc = (destructor)PySegwitAddress_dealloc;
   // PySegwitAddressType.tp_str = (reprfunc)PySegwitAddress_str;
   PySegwitAddressType.tp_getset = (PyGetSetDef*)get_set_defs;
   PySegwitAddressType.tp_methods = (PyMethodDef*)method_defs;

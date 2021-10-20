@@ -114,7 +114,8 @@ static PyObject* PyBitcoinSigHashType_str(PyBitcoinSigHashTypeObject* self) {
 }
 
 // method function for IsSingle
-// bool TWBitcoinSigHashTypeIsSingle(enum TWBitcoinSigHashType type);
+static const char PyBitcoinSigHashTypeIsSingle_doc[] =
+    "bool TWBitcoinSigHashTypeIsSingle(enum TWBitcoinSigHashType type)";
 static PyObject* PyBitcoinSigHashTypeIsSingle(PyBitcoinSigHashTypeObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
@@ -128,7 +129,8 @@ static PyObject* PyBitcoinSigHashTypeIsSingle(PyBitcoinSigHashTypeObject* self,
 }
 
 // method function for IsNone
-// bool TWBitcoinSigHashTypeIsNone(enum TWBitcoinSigHashType type);
+static const char PyBitcoinSigHashTypeIsNone_doc[] =
+    "bool TWBitcoinSigHashTypeIsNone(enum TWBitcoinSigHashType type)";
 static PyObject* PyBitcoinSigHashTypeIsNone(PyBitcoinSigHashTypeObject* self,
                                             PyObject* const* args,
                                             Py_ssize_t nargs) {
@@ -144,8 +146,10 @@ static PyObject* PyBitcoinSigHashTypeIsNone(PyBitcoinSigHashTypeObject* self,
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"IsSingle", (PyCFunction)PyBitcoinSigHashTypeIsSingle, METH_FASTCALL},
-    {"IsNone", (PyCFunction)PyBitcoinSigHashTypeIsNone, METH_FASTCALL},
+    {"IsSingle", (PyCFunction)PyBitcoinSigHashTypeIsSingle, METH_FASTCALL,
+     PyBitcoinSigHashTypeIsSingle_doc},
+    {"IsNone", (PyCFunction)PyBitcoinSigHashTypeIsNone, METH_FASTCALL,
+     PyBitcoinSigHashTypeIsNone_doc},
     {}};
 
 bool PyInit_BitcoinSigHashType(PyObject* module) {

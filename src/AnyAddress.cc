@@ -3,6 +3,7 @@
 #include "AnyAddress.h"
 
 #include "CoinType.h"
+#include "Data.h"
 #include "PublicKey.h"
 #include "String.h"
 
@@ -56,6 +57,13 @@ TWAnyAddress* PyAnyAddress_GetTWAnyAddress(PyObject* object) {
   return ((PyAnyAddressObject*)object)->value;
 }
 
+static void PyAnyAddress_dealloc(PyAnyAddressObject* self) {
+  if (self->value) {
+    TWAnyAddressDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PyAnyAddress_init(PyAnyAddressObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;
@@ -75,14 +83,30 @@ TWAnyAddress* PyAnyAddress_GetTWAnyAddress(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// getter function for Description
+static const char PyAnyAddressDescription_doc[] =
+    "TWString* TWAnyAddressDescription(struct TWAnyAddress* address)";
+static PyObject* PyAnyAddressDescription(PyAnyAddressObject* self, void*) {
+  return PyUnicode_FromTWString(TWAnyAddressDescription(self->value));
+}
+
 // getter function for Coin
-// enum TWCoinType TWAnyAddressCoin(struct TWAnyAddress* address);
+static const char PyAnyAddressCoin_doc[] =
+    "enum TWCoinType TWAnyAddressCoin(struct TWAnyAddress* address)";
 static PyObject* PyAnyAddressCoin(PyAnyAddressObject* self, void*) {
   return PyCoinType_FromTWCoinType(TWAnyAddressCoin(self->value));
 }
 
+// getter function for Data
+static const char PyAnyAddressData_doc[] =
+    "TWData* TWAnyAddressData(struct TWAnyAddress* address)";
+static PyObject* PyAnyAddressData(PyAnyAddressObject* self, void*) {
+  return PyByteArray_FromTWData(TWAnyAddressData(self->value));
+}
+
 // method function for Delete
-// void TWAnyAddressDelete(struct TWAnyAddress* address);
+static const char PyAnyAddressDelete_doc[] =
+    "void TWAnyAddressDelete(struct TWAnyAddress* address)";
 static PyObject* PyAnyAddressDelete(PyAnyAddressObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
@@ -96,7 +120,9 @@ static PyObject* PyAnyAddressDelete(PyAnyAddressObject* self,
 }
 
 // static method function for Equal
-// bool TWAnyAddressEqual(struct TWAnyAddress* lhs, struct TWAnyAddress* rhs);
+static const char PyAnyAddressEqual_doc[] =
+    "bool TWAnyAddressEqual(struct TWAnyAddress* lhs, struct TWAnyAddress* "
+    "rhs)";
 static PyObject* PyAnyAddressEqual(PyAnyAddressObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
@@ -122,7 +148,8 @@ static PyObject* PyAnyAddressEqual(PyAnyAddressObject* self,
 }
 
 // static method function for IsValid
-// bool TWAnyAddressIsValid(TWString* string, enum TWCoinType coin);
+static const char PyAnyAddressIsValid_doc[] =
+    "bool TWAnyAddressIsValid(TWString* string, enum TWCoinType coin)";
 static PyObject* PyAnyAddressIsValid(PyAnyAddressObject* self,
                                      PyObject* const* args,
                                      Py_ssize_t nargs) {
@@ -148,8 +175,9 @@ static PyObject* PyAnyAddressIsValid(PyAnyAddressObject* self,
 }
 
 // static method function for CreateWithString
-// struct TWAnyAddress* TWAnyAddressCreateWithString(TWString* string, enum
-// TWCoinType coin);
+static const char PyAnyAddressCreateWithString_doc[] =
+    "struct TWAnyAddress* TWAnyAddressCreateWithString(TWString* string, enum "
+    "TWCoinType coin)";
 static PyObject* PyAnyAddressCreateWithString(PyAnyAddressObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
@@ -175,8 +203,9 @@ static PyObject* PyAnyAddressCreateWithString(PyAnyAddressObject* self,
 }
 
 // static method function for CreateWithPublicKey
-// struct TWAnyAddress* TWAnyAddressCreateWithPublicKey(struct TWPublicKey*
-// publicKey, enum TWCoinType coin);
+static const char PyAnyAddressCreateWithPublicKey_doc[] =
+    "struct TWAnyAddress* TWAnyAddressCreateWithPublicKey(struct TWPublicKey* "
+    "publicKey, enum TWCoinType coin)";
 static PyObject* PyAnyAddressCreateWithPublicKey(PyAnyAddressObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
@@ -201,22 +230,30 @@ static PyObject* PyAnyAddressCreateWithPublicKey(PyAnyAddressObject* self,
   return PyAnyAddress_FromTWAnyAddress(result);
 }
 
-static const PyGetSetDef get_set_defs[] = {{"Coin", (getter)PyAnyAddressCoin},
-                                           {}};
+static const PyGetSetDef get_set_defs[] = {
+    {"Description", (getter)PyAnyAddressDescription, nullptr,
+     PyAnyAddressDescription_doc},
+    {"Coin", (getter)PyAnyAddressCoin, nullptr, PyAnyAddressCoin_doc},
+    {"Data", (getter)PyAnyAddressData, nullptr, PyAnyAddressData_doc},
+    {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyAnyAddressDelete, METH_FASTCALL},
-    {"Equal", (PyCFunction)PyAnyAddressEqual, METH_FASTCALL | METH_STATIC},
-    {"IsValid", (PyCFunction)PyAnyAddressIsValid, METH_FASTCALL | METH_STATIC},
+    {"Delete", (PyCFunction)PyAnyAddressDelete, METH_FASTCALL,
+     PyAnyAddressDelete_doc},
+    {"Equal", (PyCFunction)PyAnyAddressEqual, METH_FASTCALL | METH_STATIC,
+     PyAnyAddressEqual_doc},
+    {"IsValid", (PyCFunction)PyAnyAddressIsValid, METH_FASTCALL | METH_STATIC,
+     PyAnyAddressIsValid_doc},
     {"CreateWithString", (PyCFunction)PyAnyAddressCreateWithString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyAnyAddressCreateWithString_doc},
     {"CreateWithPublicKey", (PyCFunction)PyAnyAddressCreateWithPublicKey,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyAnyAddressCreateWithPublicKey_doc},
     {}};
 
 bool PyInit_AnyAddress(PyObject* module) {
   // PyAnyAddressType.tp_new = PyAnyAddress_new;
   // PyAnyAddressType.tp_init = (initproc)PyAnyAddress_init;
+  PyAnyAddressType.tp_dealloc = (destructor)PyAnyAddress_dealloc;
   // PyAnyAddressType.tp_str = (reprfunc)PyAnyAddress_str;
   PyAnyAddressType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyAnyAddressType.tp_methods = (PyMethodDef*)method_defs;

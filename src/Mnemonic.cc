@@ -73,7 +73,8 @@ TWMnemonic* PyMnemonic_GetTWMnemonic(PyObject* object) {
 // }
 
 // static method function for IsValid
-// bool TWMnemonicIsValid(TWString* mnemonic);
+static const char PyMnemonicIsValid_doc[] =
+    "bool TWMnemonicIsValid(TWString* mnemonic)";
 static PyObject* PyMnemonicIsValid(PyMnemonicObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
@@ -93,7 +94,8 @@ static PyObject* PyMnemonicIsValid(PyMnemonicObject* self,
 }
 
 // static method function for IsValidWord
-// bool TWMnemonicIsValidWord(TWString* word);
+static const char PyMnemonicIsValidWord_doc[] =
+    "bool TWMnemonicIsValidWord(TWString* word)";
 static PyObject* PyMnemonicIsValidWord(PyMnemonicObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -113,7 +115,8 @@ static PyObject* PyMnemonicIsValidWord(PyMnemonicObject* self,
 }
 
 // static method function for Suggest
-// TWString* TWMnemonicSuggest(TWString* prefix);
+static const char PyMnemonicSuggest_doc[] =
+    "TWString* TWMnemonicSuggest(TWString* prefix)";
 static PyObject* PyMnemonicSuggest(PyMnemonicObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
@@ -135,10 +138,12 @@ static PyObject* PyMnemonicSuggest(PyMnemonicObject* self,
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"IsValid", (PyCFunction)PyMnemonicIsValid, METH_FASTCALL | METH_STATIC},
+    {"IsValid", (PyCFunction)PyMnemonicIsValid, METH_FASTCALL | METH_STATIC,
+     PyMnemonicIsValid_doc},
     {"IsValidWord", (PyCFunction)PyMnemonicIsValidWord,
-     METH_FASTCALL | METH_STATIC},
-    {"Suggest", (PyCFunction)PyMnemonicSuggest, METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyMnemonicIsValidWord_doc},
+    {"Suggest", (PyCFunction)PyMnemonicSuggest, METH_FASTCALL | METH_STATIC,
+     PyMnemonicSuggest_doc},
     {}};
 
 bool PyInit_Mnemonic(PyObject* module) {

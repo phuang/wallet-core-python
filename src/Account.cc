@@ -54,6 +54,13 @@ TWAccount* PyAccount_GetTWAccount(PyObject* object) {
   return ((PyAccountObject*)object)->value;
 }
 
+static void PyAccount_dealloc(PyAccountObject* self) {
+  if (self->value) {
+    TWAccountDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PyAccount_init(PyAccountObject *self, PyObject *args, PyObject
 // *kwds) {
 //   return 0;
@@ -73,14 +80,37 @@ TWAccount* PyAccount_GetTWAccount(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// getter function for Address
+static const char PyAccountAddress_doc[] =
+    "TWString* TWAccountAddress(struct TWAccount* account)";
+static PyObject* PyAccountAddress(PyAccountObject* self, void*) {
+  return PyUnicode_FromTWString(TWAccountAddress(self->value));
+}
+
+// getter function for DerivationPath
+static const char PyAccountDerivationPath_doc[] =
+    "TWString* TWAccountDerivationPath(struct TWAccount* account)";
+static PyObject* PyAccountDerivationPath(PyAccountObject* self, void*) {
+  return PyUnicode_FromTWString(TWAccountDerivationPath(self->value));
+}
+
+// getter function for ExtendedPublicKey
+static const char PyAccountExtendedPublicKey_doc[] =
+    "TWString* TWAccountExtendedPublicKey(struct TWAccount* account)";
+static PyObject* PyAccountExtendedPublicKey(PyAccountObject* self, void*) {
+  return PyUnicode_FromTWString(TWAccountExtendedPublicKey(self->value));
+}
+
 // getter function for Coin
-// enum TWCoinType TWAccountCoin(struct TWAccount* account);
+static const char PyAccountCoin_doc[] =
+    "enum TWCoinType TWAccountCoin(struct TWAccount* account)";
 static PyObject* PyAccountCoin(PyAccountObject* self, void*) {
   return PyCoinType_FromTWCoinType(TWAccountCoin(self->value));
 }
 
 // method function for Delete
-// void TWAccountDelete(struct TWAccount* account);
+static const char PyAccountDelete_doc[] =
+    "void TWAccountDelete(struct TWAccount* account)";
 static PyObject* PyAccountDelete(PyAccountObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
@@ -94,8 +124,9 @@ static PyObject* PyAccountDelete(PyAccountObject* self,
 }
 
 // static method function for Create
-// struct TWAccount* TWAccountCreate(TWString* address, enum TWCoinType coin,
-// TWString* derivationPath, TWString* extendedPublicKey);
+static const char PyAccountCreate_doc[] =
+    "struct TWAccount* TWAccountCreate(TWString* address, enum TWCoinType "
+    "coin, TWString* derivationPath, TWString* extendedPublicKey)";
 static PyObject* PyAccountCreate(PyAccountObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
@@ -132,16 +163,26 @@ static PyObject* PyAccountCreate(PyAccountObject* self,
   return PyAccount_FromTWAccount(result);
 }
 
-static const PyGetSetDef get_set_defs[] = {{"Coin", (getter)PyAccountCoin}, {}};
+static const PyGetSetDef get_set_defs[] = {
+    {"Address", (getter)PyAccountAddress, nullptr, PyAccountAddress_doc},
+    {"DerivationPath", (getter)PyAccountDerivationPath, nullptr,
+     PyAccountDerivationPath_doc},
+    {"ExtendedPublicKey", (getter)PyAccountExtendedPublicKey, nullptr,
+     PyAccountExtendedPublicKey_doc},
+    {"Coin", (getter)PyAccountCoin, nullptr, PyAccountCoin_doc},
+    {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyAccountDelete, METH_FASTCALL},
-    {"Create", (PyCFunction)PyAccountCreate, METH_FASTCALL | METH_STATIC},
+    {"Delete", (PyCFunction)PyAccountDelete, METH_FASTCALL,
+     PyAccountDelete_doc},
+    {"Create", (PyCFunction)PyAccountCreate, METH_FASTCALL | METH_STATIC,
+     PyAccountCreate_doc},
     {}};
 
 bool PyInit_Account(PyObject* module) {
   // PyAccountType.tp_new = PyAccount_new;
   // PyAccountType.tp_init = (initproc)PyAccount_init;
+  PyAccountType.tp_dealloc = (destructor)PyAccount_dealloc;
   // PyAccountType.tp_str = (reprfunc)PyAccount_str;
   PyAccountType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyAccountType.tp_methods = (PyMethodDef*)method_defs;

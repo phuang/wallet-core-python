@@ -77,7 +77,8 @@ TWEthereumAbiValue* PyEthereumAbiValue_GetTWEthereumAbiValue(PyObject* object) {
 // }
 
 // static method function for EncodeBool
-// TWData* TWEthereumAbiValueEncodeBool(bool value);
+static const char PyEthereumAbiValueEncodeBool_doc[] =
+    "TWData* TWEthereumAbiValueEncodeBool(bool value)";
 static PyObject* PyEthereumAbiValueEncodeBool(PyEthereumAbiValueObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
@@ -97,7 +98,8 @@ static PyObject* PyEthereumAbiValueEncodeBool(PyEthereumAbiValueObject* self,
 }
 
 // static method function for EncodeInt32
-// TWData* TWEthereumAbiValueEncodeInt32(int32_t value);
+static const char PyEthereumAbiValueEncodeInt32_doc[] =
+    "TWData* TWEthereumAbiValueEncodeInt32(int32_t value)";
 static PyObject* PyEthereumAbiValueEncodeInt32(PyEthereumAbiValueObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
@@ -117,7 +119,8 @@ static PyObject* PyEthereumAbiValueEncodeInt32(PyEthereumAbiValueObject* self,
 }
 
 // static method function for EncodeUInt32
-// TWData* TWEthereumAbiValueEncodeUInt32(uint32_t value);
+static const char PyEthereumAbiValueEncodeUInt32_doc[] =
+    "TWData* TWEthereumAbiValueEncodeUInt32(uint32_t value)";
 static PyObject* PyEthereumAbiValueEncodeUInt32(PyEthereumAbiValueObject* self,
                                                 PyObject* const* args,
                                                 Py_ssize_t nargs) {
@@ -137,7 +140,8 @@ static PyObject* PyEthereumAbiValueEncodeUInt32(PyEthereumAbiValueObject* self,
 }
 
 // static method function for EncodeInt256
-// TWData* TWEthereumAbiValueEncodeInt256(TWData* value);
+static const char PyEthereumAbiValueEncodeInt256_doc[] =
+    "TWData* TWEthereumAbiValueEncodeInt256(TWData* value)";
 static PyObject* PyEthereumAbiValueEncodeInt256(PyEthereumAbiValueObject* self,
                                                 PyObject* const* args,
                                                 Py_ssize_t nargs) {
@@ -157,7 +161,8 @@ static PyObject* PyEthereumAbiValueEncodeInt256(PyEthereumAbiValueObject* self,
 }
 
 // static method function for EncodeUInt256
-// TWData* TWEthereumAbiValueEncodeUInt256(TWData* value);
+static const char PyEthereumAbiValueEncodeUInt256_doc[] =
+    "TWData* TWEthereumAbiValueEncodeUInt256(TWData* value)";
 static PyObject* PyEthereumAbiValueEncodeUInt256(PyEthereumAbiValueObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
@@ -177,7 +182,8 @@ static PyObject* PyEthereumAbiValueEncodeUInt256(PyEthereumAbiValueObject* self,
 }
 
 // static method function for EncodeAddress
-// TWData* TWEthereumAbiValueEncodeAddress(TWData* value);
+static const char PyEthereumAbiValueEncodeAddress_doc[] =
+    "TWData* TWEthereumAbiValueEncodeAddress(TWData* value)";
 static PyObject* PyEthereumAbiValueEncodeAddress(PyEthereumAbiValueObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
@@ -197,7 +203,8 @@ static PyObject* PyEthereumAbiValueEncodeAddress(PyEthereumAbiValueObject* self,
 }
 
 // static method function for EncodeString
-// TWData* TWEthereumAbiValueEncodeString(TWString* value);
+static const char PyEthereumAbiValueEncodeString_doc[] =
+    "TWData* TWEthereumAbiValueEncodeString(TWString* value)";
 static PyObject* PyEthereumAbiValueEncodeString(PyEthereumAbiValueObject* self,
                                                 PyObject* const* args,
                                                 Py_ssize_t nargs) {
@@ -217,7 +224,8 @@ static PyObject* PyEthereumAbiValueEncodeString(PyEthereumAbiValueObject* self,
 }
 
 // static method function for EncodeBytes
-// TWData* TWEthereumAbiValueEncodeBytes(TWData* value);
+static const char PyEthereumAbiValueEncodeBytes_doc[] =
+    "TWData* TWEthereumAbiValueEncodeBytes(TWData* value)";
 static PyObject* PyEthereumAbiValueEncodeBytes(PyEthereumAbiValueObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
@@ -237,7 +245,8 @@ static PyObject* PyEthereumAbiValueEncodeBytes(PyEthereumAbiValueObject* self,
 }
 
 // static method function for EncodeBytesDyn
-// TWData* TWEthereumAbiValueEncodeBytesDyn(TWData* value);
+static const char PyEthereumAbiValueEncodeBytesDyn_doc[] =
+    "TWData* TWEthereumAbiValueEncodeBytesDyn(TWData* value)";
 static PyObject* PyEthereumAbiValueEncodeBytesDyn(
     PyEthereumAbiValueObject* self,
     PyObject* const* args,
@@ -258,7 +267,8 @@ static PyObject* PyEthereumAbiValueEncodeBytesDyn(
 }
 
 // static method function for DecodeUInt256
-// TWString* TWEthereumAbiValueDecodeUInt256(TWData* input);
+static const char PyEthereumAbiValueDecodeUInt256_doc[] =
+    "TWString* TWEthereumAbiValueDecodeUInt256(TWData* input)";
 static PyObject* PyEthereumAbiValueDecodeUInt256(PyEthereumAbiValueObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
@@ -278,7 +288,8 @@ static PyObject* PyEthereumAbiValueDecodeUInt256(PyEthereumAbiValueObject* self,
 }
 
 // static method function for DecodeValue
-// TWString* TWEthereumAbiValueDecodeValue(TWData* input, TWString* type);
+static const char PyEthereumAbiValueDecodeValue_doc[] =
+    "TWString* TWEthereumAbiValueDecodeValue(TWData* input, TWString* type)";
 static PyObject* PyEthereumAbiValueDecodeValue(PyEthereumAbiValueObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
@@ -304,7 +315,8 @@ static PyObject* PyEthereumAbiValueDecodeValue(PyEthereumAbiValueObject* self,
 }
 
 // static method function for DecodeArray
-// TWString* TWEthereumAbiValueDecodeArray(TWData* input, TWString* type);
+static const char PyEthereumAbiValueDecodeArray_doc[] =
+    "TWString* TWEthereumAbiValueDecodeArray(TWData* input, TWString* type)";
 static PyObject* PyEthereumAbiValueDecodeArray(PyEthereumAbiValueObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
@@ -333,29 +345,29 @@ static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
     {"EncodeBool", (PyCFunction)PyEthereumAbiValueEncodeBool,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiValueEncodeBool_doc},
     {"EncodeInt32", (PyCFunction)PyEthereumAbiValueEncodeInt32,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiValueEncodeInt32_doc},
     {"EncodeUInt32", (PyCFunction)PyEthereumAbiValueEncodeUInt32,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiValueEncodeUInt32_doc},
     {"EncodeInt256", (PyCFunction)PyEthereumAbiValueEncodeInt256,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiValueEncodeInt256_doc},
     {"EncodeUInt256", (PyCFunction)PyEthereumAbiValueEncodeUInt256,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiValueEncodeUInt256_doc},
     {"EncodeAddress", (PyCFunction)PyEthereumAbiValueEncodeAddress,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiValueEncodeAddress_doc},
     {"EncodeString", (PyCFunction)PyEthereumAbiValueEncodeString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiValueEncodeString_doc},
     {"EncodeBytes", (PyCFunction)PyEthereumAbiValueEncodeBytes,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiValueEncodeBytes_doc},
     {"EncodeBytesDyn", (PyCFunction)PyEthereumAbiValueEncodeBytesDyn,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiValueEncodeBytesDyn_doc},
     {"DecodeUInt256", (PyCFunction)PyEthereumAbiValueDecodeUInt256,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiValueDecodeUInt256_doc},
     {"DecodeValue", (PyCFunction)PyEthereumAbiValueDecodeValue,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiValueDecodeValue_doc},
     {"DecodeArray", (PyCFunction)PyEthereumAbiValueDecodeArray,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiValueDecodeArray_doc},
     {}};
 
 bool PyInit_EthereumAbiValue(PyObject* module) {

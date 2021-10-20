@@ -54,6 +54,13 @@ TWNEARAccount* PyNEARAccount_GetTWNEARAccount(PyObject* object) {
   return ((PyNEARAccountObject*)object)->value;
 }
 
+static void PyNEARAccount_dealloc(PyNEARAccountObject* self) {
+  if (self->value) {
+    TWNEARAccountDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PyNEARAccount_init(PyNEARAccountObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;
@@ -73,8 +80,16 @@ TWNEARAccount* PyNEARAccount_GetTWNEARAccount(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// getter function for Description
+static const char PyNEARAccountDescription_doc[] =
+    "TWString* TWNEARAccountDescription(struct TWNEARAccount* account)";
+static PyObject* PyNEARAccountDescription(PyNEARAccountObject* self, void*) {
+  return PyUnicode_FromTWString(TWNEARAccountDescription(self->value));
+}
+
 // method function for Delete
-// void TWNEARAccountDelete(struct TWNEARAccount* account);
+static const char PyNEARAccountDelete_doc[] =
+    "void TWNEARAccountDelete(struct TWNEARAccount* account)";
 static PyObject* PyNEARAccountDelete(PyNEARAccountObject* self,
                                      PyObject* const* args,
                                      Py_ssize_t nargs) {
@@ -88,7 +103,8 @@ static PyObject* PyNEARAccountDelete(PyNEARAccountObject* self,
 }
 
 // static method function for CreateWithString
-// struct TWNEARAccount* TWNEARAccountCreateWithString(TWString* string);
+static const char PyNEARAccountCreateWithString_doc[] =
+    "struct TWNEARAccount* TWNEARAccountCreateWithString(TWString* string)";
 static PyObject* PyNEARAccountCreateWithString(PyNEARAccountObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
@@ -107,17 +123,22 @@ static PyObject* PyNEARAccountCreateWithString(PyNEARAccountObject* self,
   return PyNEARAccount_FromTWNEARAccount(result);
 }
 
-static const PyGetSetDef get_set_defs[] = {{}};
+static const PyGetSetDef get_set_defs[] = {
+    {"Description", (getter)PyNEARAccountDescription, nullptr,
+     PyNEARAccountDescription_doc},
+    {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyNEARAccountDelete, METH_FASTCALL},
+    {"Delete", (PyCFunction)PyNEARAccountDelete, METH_FASTCALL,
+     PyNEARAccountDelete_doc},
     {"CreateWithString", (PyCFunction)PyNEARAccountCreateWithString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyNEARAccountCreateWithString_doc},
     {}};
 
 bool PyInit_NEARAccount(PyObject* module) {
   // PyNEARAccountType.tp_new = PyNEARAccount_new;
   // PyNEARAccountType.tp_init = (initproc)PyNEARAccount_init;
+  PyNEARAccountType.tp_dealloc = (destructor)PyNEARAccount_dealloc;
   // PyNEARAccountType.tp_str = (reprfunc)PyNEARAccount_str;
   PyNEARAccountType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyNEARAccountType.tp_methods = (PyMethodDef*)method_defs;

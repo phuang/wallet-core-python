@@ -74,7 +74,8 @@ TWBase58* PyBase58_GetTWBase58(PyObject* object) {
 // }
 
 // static method function for Encode
-// TWString* TWBase58Encode(TWData* data);
+static const char PyBase58Encode_doc[] =
+    "TWString* TWBase58Encode(TWData* data)";
 static PyObject* PyBase58Encode(PyBase58Object* self,
                                 PyObject* const* args,
                                 Py_ssize_t nargs) {
@@ -94,7 +95,8 @@ static PyObject* PyBase58Encode(PyBase58Object* self,
 }
 
 // static method function for EncodeNoCheck
-// TWString* TWBase58EncodeNoCheck(TWData* data);
+static const char PyBase58EncodeNoCheck_doc[] =
+    "TWString* TWBase58EncodeNoCheck(TWData* data)";
 static PyObject* PyBase58EncodeNoCheck(PyBase58Object* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -114,7 +116,8 @@ static PyObject* PyBase58EncodeNoCheck(PyBase58Object* self,
 }
 
 // static method function for Decode
-// TWData* TWBase58Decode(TWString* string);
+static const char PyBase58Decode_doc[] =
+    "TWData* TWBase58Decode(TWString* string)";
 static PyObject* PyBase58Decode(PyBase58Object* self,
                                 PyObject* const* args,
                                 Py_ssize_t nargs) {
@@ -134,7 +137,8 @@ static PyObject* PyBase58Decode(PyBase58Object* self,
 }
 
 // static method function for DecodeNoCheck
-// TWData* TWBase58DecodeNoCheck(TWString* string);
+static const char PyBase58DecodeNoCheck_doc[] =
+    "TWData* TWBase58DecodeNoCheck(TWString* string)";
 static PyObject* PyBase58DecodeNoCheck(PyBase58Object* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -156,12 +160,14 @@ static PyObject* PyBase58DecodeNoCheck(PyBase58Object* self,
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"Encode", (PyCFunction)PyBase58Encode, METH_FASTCALL | METH_STATIC},
+    {"Encode", (PyCFunction)PyBase58Encode, METH_FASTCALL | METH_STATIC,
+     PyBase58Encode_doc},
     {"EncodeNoCheck", (PyCFunction)PyBase58EncodeNoCheck,
-     METH_FASTCALL | METH_STATIC},
-    {"Decode", (PyCFunction)PyBase58Decode, METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBase58EncodeNoCheck_doc},
+    {"Decode", (PyCFunction)PyBase58Decode, METH_FASTCALL | METH_STATIC,
+     PyBase58Decode_doc},
     {"DecodeNoCheck", (PyCFunction)PyBase58DecodeNoCheck,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBase58DecodeNoCheck_doc},
     {}};
 
 bool PyInit_Base58(PyObject* module) {

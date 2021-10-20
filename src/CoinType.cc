@@ -185,67 +185,78 @@ static PyObject* PyCoinType_str(PyCoinTypeObject* self) {
 }
 
 // getter function for Blockchain
-// enum TWBlockchain TWCoinTypeBlockchain(enum TWCoinType coin);
+static const char PyCoinTypeBlockchain_doc[] =
+    "enum TWBlockchain TWCoinTypeBlockchain(enum TWCoinType coin)";
 static PyObject* PyCoinTypeBlockchain(PyCoinTypeObject* self, void*) {
   return PyBlockchain_FromTWBlockchain(TWCoinTypeBlockchain(self->value));
 }
 
 // getter function for Purpose
-// enum TWPurpose TWCoinTypePurpose(enum TWCoinType coin);
+static const char PyCoinTypePurpose_doc[] =
+    "enum TWPurpose TWCoinTypePurpose(enum TWCoinType coin)";
 static PyObject* PyCoinTypePurpose(PyCoinTypeObject* self, void*) {
   return PyPurpose_FromTWPurpose(TWCoinTypePurpose(self->value));
 }
 
 // getter function for Curve
-// enum TWCurve TWCoinTypeCurve(enum TWCoinType coin);
+static const char PyCoinTypeCurve_doc[] =
+    "enum TWCurve TWCoinTypeCurve(enum TWCoinType coin)";
 static PyObject* PyCoinTypeCurve(PyCoinTypeObject* self, void*) {
   return PyCurve_FromTWCurve(TWCoinTypeCurve(self->value));
 }
 
 // getter function for XpubVersion
-// enum TWHDVersion TWCoinTypeXpubVersion(enum TWCoinType coin);
+static const char PyCoinTypeXpubVersion_doc[] =
+    "enum TWHDVersion TWCoinTypeXpubVersion(enum TWCoinType coin)";
 static PyObject* PyCoinTypeXpubVersion(PyCoinTypeObject* self, void*) {
   return PyHDVersion_FromTWHDVersion(TWCoinTypeXpubVersion(self->value));
 }
 
 // getter function for XprvVersion
-// enum TWHDVersion TWCoinTypeXprvVersion(enum TWCoinType coin);
+static const char PyCoinTypeXprvVersion_doc[] =
+    "enum TWHDVersion TWCoinTypeXprvVersion(enum TWCoinType coin)";
 static PyObject* PyCoinTypeXprvVersion(PyCoinTypeObject* self, void*) {
   return PyHDVersion_FromTWHDVersion(TWCoinTypeXprvVersion(self->value));
 }
 
 // getter function for HRP
-// enum TWHRP TWCoinTypeHRP(enum TWCoinType coin);
+static const char PyCoinTypeHRP_doc[] =
+    "enum TWHRP TWCoinTypeHRP(enum TWCoinType coin)";
 static PyObject* PyCoinTypeHRP(PyCoinTypeObject* self, void*) {
   return PyHRP_FromTWHRP(TWCoinTypeHRP(self->value));
 }
 
 // getter function for P2pkhPrefix
-// uint8_t TWCoinTypeP2pkhPrefix(enum TWCoinType coin);
+static const char PyCoinTypeP2pkhPrefix_doc[] =
+    "uint8_t TWCoinTypeP2pkhPrefix(enum TWCoinType coin)";
 static PyObject* PyCoinTypeP2pkhPrefix(PyCoinTypeObject* self, void*) {
   return PyLong_FromLong(TWCoinTypeP2pkhPrefix(self->value));
 }
 
 // getter function for P2shPrefix
-// uint8_t TWCoinTypeP2shPrefix(enum TWCoinType coin);
+static const char PyCoinTypeP2shPrefix_doc[] =
+    "uint8_t TWCoinTypeP2shPrefix(enum TWCoinType coin)";
 static PyObject* PyCoinTypeP2shPrefix(PyCoinTypeObject* self, void*) {
   return PyLong_FromLong(TWCoinTypeP2shPrefix(self->value));
 }
 
 // getter function for StaticPrefix
-// uint8_t TWCoinTypeStaticPrefix(enum TWCoinType coin);
+static const char PyCoinTypeStaticPrefix_doc[] =
+    "uint8_t TWCoinTypeStaticPrefix(enum TWCoinType coin)";
 static PyObject* PyCoinTypeStaticPrefix(PyCoinTypeObject* self, void*) {
   return PyLong_FromLong(TWCoinTypeStaticPrefix(self->value));
 }
 
 // getter function for Slip44Id
-// uint32_t TWCoinTypeSlip44Id(enum TWCoinType coin);
+static const char PyCoinTypeSlip44Id_doc[] =
+    "uint32_t TWCoinTypeSlip44Id(enum TWCoinType coin)";
 static PyObject* PyCoinTypeSlip44Id(PyCoinTypeObject* self, void*) {
   return PyLong_FromLong(TWCoinTypeSlip44Id(self->value));
 }
 
 // method function for Validate
-// bool TWCoinTypeValidate(enum TWCoinType coin, TWString* address);
+static const char PyCoinTypeValidate_doc[] =
+    "bool TWCoinTypeValidate(enum TWCoinType coin, TWString* address)";
 static PyObject* PyCoinTypeValidate(PyCoinTypeObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
@@ -265,7 +276,8 @@ static PyObject* PyCoinTypeValidate(PyCoinTypeObject* self,
 }
 
 // method function for DerivationPath
-// TWString* TWCoinTypeDerivationPath(enum TWCoinType coin);
+static const char PyCoinTypeDerivationPath_doc[] =
+    "TWString* TWCoinTypeDerivationPath(enum TWCoinType coin)";
 static PyObject* PyCoinTypeDerivationPath(PyCoinTypeObject* self,
                                           PyObject* const* args,
                                           Py_ssize_t nargs) {
@@ -279,8 +291,9 @@ static PyObject* PyCoinTypeDerivationPath(PyCoinTypeObject* self,
 }
 
 // method function for DeriveAddress
-// TWString* TWCoinTypeDeriveAddress(enum TWCoinType coin, struct TWPrivateKey*
-// privateKey);
+static const char PyCoinTypeDeriveAddress_doc[] =
+    "TWString* TWCoinTypeDeriveAddress(enum TWCoinType coin, struct "
+    "TWPrivateKey* privateKey)";
 static PyObject* PyCoinTypeDeriveAddress(PyCoinTypeObject* self,
                                          PyObject* const* args,
                                          Py_ssize_t nargs) {
@@ -300,8 +313,9 @@ static PyObject* PyCoinTypeDeriveAddress(PyCoinTypeObject* self,
 }
 
 // method function for DeriveAddressFromPublicKey
-// TWString* TWCoinTypeDeriveAddressFromPublicKey(enum TWCoinType coin, struct
-// TWPublicKey* publicKey);
+static const char PyCoinTypeDeriveAddressFromPublicKey_doc[] =
+    "TWString* TWCoinTypeDeriveAddressFromPublicKey(enum TWCoinType coin, "
+    "struct TWPublicKey* publicKey)";
 static PyObject* PyCoinTypeDeriveAddressFromPublicKey(PyCoinTypeObject* self,
                                                       PyObject* const* args,
                                                       Py_ssize_t nargs) {
@@ -321,24 +335,34 @@ static PyObject* PyCoinTypeDeriveAddressFromPublicKey(PyCoinTypeObject* self,
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"Blockchain", (getter)PyCoinTypeBlockchain},
-    {"Purpose", (getter)PyCoinTypePurpose},
-    {"Curve", (getter)PyCoinTypeCurve},
-    {"XpubVersion", (getter)PyCoinTypeXpubVersion},
-    {"XprvVersion", (getter)PyCoinTypeXprvVersion},
-    {"HRP", (getter)PyCoinTypeHRP},
-    {"P2pkhPrefix", (getter)PyCoinTypeP2pkhPrefix},
-    {"P2shPrefix", (getter)PyCoinTypeP2shPrefix},
-    {"StaticPrefix", (getter)PyCoinTypeStaticPrefix},
-    {"Slip44Id", (getter)PyCoinTypeSlip44Id},
+    {"Blockchain", (getter)PyCoinTypeBlockchain, nullptr,
+     PyCoinTypeBlockchain_doc},
+    {"Purpose", (getter)PyCoinTypePurpose, nullptr, PyCoinTypePurpose_doc},
+    {"Curve", (getter)PyCoinTypeCurve, nullptr, PyCoinTypeCurve_doc},
+    {"XpubVersion", (getter)PyCoinTypeXpubVersion, nullptr,
+     PyCoinTypeXpubVersion_doc},
+    {"XprvVersion", (getter)PyCoinTypeXprvVersion, nullptr,
+     PyCoinTypeXprvVersion_doc},
+    {"HRP", (getter)PyCoinTypeHRP, nullptr, PyCoinTypeHRP_doc},
+    {"P2pkhPrefix", (getter)PyCoinTypeP2pkhPrefix, nullptr,
+     PyCoinTypeP2pkhPrefix_doc},
+    {"P2shPrefix", (getter)PyCoinTypeP2shPrefix, nullptr,
+     PyCoinTypeP2shPrefix_doc},
+    {"StaticPrefix", (getter)PyCoinTypeStaticPrefix, nullptr,
+     PyCoinTypeStaticPrefix_doc},
+    {"Slip44Id", (getter)PyCoinTypeSlip44Id, nullptr, PyCoinTypeSlip44Id_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Validate", (PyCFunction)PyCoinTypeValidate, METH_FASTCALL},
-    {"DerivationPath", (PyCFunction)PyCoinTypeDerivationPath, METH_FASTCALL},
-    {"DeriveAddress", (PyCFunction)PyCoinTypeDeriveAddress, METH_FASTCALL},
+    {"Validate", (PyCFunction)PyCoinTypeValidate, METH_FASTCALL,
+     PyCoinTypeValidate_doc},
+    {"DerivationPath", (PyCFunction)PyCoinTypeDerivationPath, METH_FASTCALL,
+     PyCoinTypeDerivationPath_doc},
+    {"DeriveAddress", (PyCFunction)PyCoinTypeDeriveAddress, METH_FASTCALL,
+     PyCoinTypeDeriveAddress_doc},
     {"DeriveAddressFromPublicKey",
-     (PyCFunction)PyCoinTypeDeriveAddressFromPublicKey, METH_FASTCALL},
+     (PyCFunction)PyCoinTypeDeriveAddressFromPublicKey, METH_FASTCALL,
+     PyCoinTypeDeriveAddressFromPublicKey_doc},
     {}};
 
 bool PyInit_CoinType(PyObject* module) {

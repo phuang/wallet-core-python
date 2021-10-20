@@ -54,6 +54,13 @@ TWFIOAccount* PyFIOAccount_GetTWFIOAccount(PyObject* object) {
   return ((PyFIOAccountObject*)object)->value;
 }
 
+static void PyFIOAccount_dealloc(PyFIOAccountObject* self) {
+  if (self->value) {
+    TWFIOAccountDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PyFIOAccount_init(PyFIOAccountObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;
@@ -73,8 +80,16 @@ TWFIOAccount* PyFIOAccount_GetTWFIOAccount(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// getter function for Description
+static const char PyFIOAccountDescription_doc[] =
+    "TWString* TWFIOAccountDescription(struct TWFIOAccount* account)";
+static PyObject* PyFIOAccountDescription(PyFIOAccountObject* self, void*) {
+  return PyUnicode_FromTWString(TWFIOAccountDescription(self->value));
+}
+
 // method function for Delete
-// void TWFIOAccountDelete(struct TWFIOAccount* account);
+static const char PyFIOAccountDelete_doc[] =
+    "void TWFIOAccountDelete(struct TWFIOAccount* account)";
 static PyObject* PyFIOAccountDelete(PyFIOAccountObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
@@ -88,7 +103,8 @@ static PyObject* PyFIOAccountDelete(PyFIOAccountObject* self,
 }
 
 // static method function for CreateWithString
-// struct TWFIOAccount* TWFIOAccountCreateWithString(TWString* string);
+static const char PyFIOAccountCreateWithString_doc[] =
+    "struct TWFIOAccount* TWFIOAccountCreateWithString(TWString* string)";
 static PyObject* PyFIOAccountCreateWithString(PyFIOAccountObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
@@ -107,17 +123,22 @@ static PyObject* PyFIOAccountCreateWithString(PyFIOAccountObject* self,
   return PyFIOAccount_FromTWFIOAccount(result);
 }
 
-static const PyGetSetDef get_set_defs[] = {{}};
+static const PyGetSetDef get_set_defs[] = {
+    {"Description", (getter)PyFIOAccountDescription, nullptr,
+     PyFIOAccountDescription_doc},
+    {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyFIOAccountDelete, METH_FASTCALL},
+    {"Delete", (PyCFunction)PyFIOAccountDelete, METH_FASTCALL,
+     PyFIOAccountDelete_doc},
     {"CreateWithString", (PyCFunction)PyFIOAccountCreateWithString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyFIOAccountCreateWithString_doc},
     {}};
 
 bool PyInit_FIOAccount(PyObject* module) {
   // PyFIOAccountType.tp_new = PyFIOAccount_new;
   // PyFIOAccountType.tp_init = (initproc)PyFIOAccount_init;
+  PyFIOAccountType.tp_dealloc = (destructor)PyFIOAccount_dealloc;
   // PyFIOAccountType.tp_str = (reprfunc)PyFIOAccount_str;
   PyFIOAccountType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyFIOAccountType.tp_methods = (PyMethodDef*)method_defs;

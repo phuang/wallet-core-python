@@ -61,6 +61,13 @@ TWHDWallet* PyHDWallet_GetTWHDWallet(PyObject* object) {
   return ((PyHDWalletObject*)object)->value;
 }
 
+static void PyHDWallet_dealloc(PyHDWalletObject* self) {
+  if (self->value) {
+    TWHDWalletDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PyHDWallet_init(PyHDWalletObject *self, PyObject *args, PyObject
 // *kwds) {
 //   return 0;
@@ -80,8 +87,30 @@ TWHDWallet* PyHDWallet_GetTWHDWallet(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// getter function for Seed
+static const char PyHDWalletSeed_doc[] =
+    "TWData* TWHDWalletSeed(struct TWHDWallet* wallet)";
+static PyObject* PyHDWalletSeed(PyHDWalletObject* self, void*) {
+  return PyByteArray_FromTWData(TWHDWalletSeed(self->value));
+}
+
+// getter function for Mnemonic
+static const char PyHDWalletMnemonic_doc[] =
+    "TWString* TWHDWalletMnemonic(struct TWHDWallet* wallet)";
+static PyObject* PyHDWalletMnemonic(PyHDWalletObject* self, void*) {
+  return PyUnicode_FromTWString(TWHDWalletMnemonic(self->value));
+}
+
+// getter function for Entropy
+static const char PyHDWalletEntropy_doc[] =
+    "TWData* TWHDWalletEntropy(struct TWHDWallet* wallet)";
+static PyObject* PyHDWalletEntropy(PyHDWalletObject* self, void*) {
+  return PyByteArray_FromTWData(TWHDWalletEntropy(self->value));
+}
+
 // method function for Delete
-// void TWHDWalletDelete(struct TWHDWallet* wallet);
+static const char PyHDWalletDelete_doc[] =
+    "void TWHDWalletDelete(struct TWHDWallet* wallet)";
 static PyObject* PyHDWalletDelete(PyHDWalletObject* self,
                                   PyObject* const* args,
                                   Py_ssize_t nargs) {
@@ -95,8 +124,9 @@ static PyObject* PyHDWalletDelete(PyHDWalletObject* self,
 }
 
 // method function for GetMasterKey
-// struct TWPrivateKey* TWHDWalletGetMasterKey(struct TWHDWallet* wallet, enum
-// TWCurve curve);
+static const char PyHDWalletGetMasterKey_doc[] =
+    "struct TWPrivateKey* TWHDWalletGetMasterKey(struct TWHDWallet* wallet, "
+    "enum TWCurve curve)";
 static PyObject* PyHDWalletGetMasterKey(PyHDWalletObject* self,
                                         PyObject* const* args,
                                         Py_ssize_t nargs) {
@@ -116,8 +146,9 @@ static PyObject* PyHDWalletGetMasterKey(PyHDWalletObject* self,
 }
 
 // method function for GetKeyForCoin
-// struct TWPrivateKey* TWHDWalletGetKeyForCoin(struct TWHDWallet* wallet, enum
-// TWCoinType coin);
+static const char PyHDWalletGetKeyForCoin_doc[] =
+    "struct TWPrivateKey* TWHDWalletGetKeyForCoin(struct TWHDWallet* wallet, "
+    "enum TWCoinType coin)";
 static PyObject* PyHDWalletGetKeyForCoin(PyHDWalletObject* self,
                                          PyObject* const* args,
                                          Py_ssize_t nargs) {
@@ -137,8 +168,9 @@ static PyObject* PyHDWalletGetKeyForCoin(PyHDWalletObject* self,
 }
 
 // method function for GetAddressForCoin
-// TWString* TWHDWalletGetAddressForCoin(struct TWHDWallet* wallet, enum
-// TWCoinType coin);
+static const char PyHDWalletGetAddressForCoin_doc[] =
+    "TWString* TWHDWalletGetAddressForCoin(struct TWHDWallet* wallet, enum "
+    "TWCoinType coin)";
 static PyObject* PyHDWalletGetAddressForCoin(PyHDWalletObject* self,
                                              PyObject* const* args,
                                              Py_ssize_t nargs) {
@@ -158,8 +190,9 @@ static PyObject* PyHDWalletGetAddressForCoin(PyHDWalletObject* self,
 }
 
 // method function for GetKey
-// struct TWPrivateKey* TWHDWalletGetKey(struct TWHDWallet* wallet, enum
-// TWCoinType coin, TWString* derivationPath);
+static const char PyHDWalletGetKey_doc[] =
+    "struct TWPrivateKey* TWHDWalletGetKey(struct TWHDWallet* wallet, enum "
+    "TWCoinType coin, TWString* derivationPath)";
 static PyObject* PyHDWalletGetKey(PyHDWalletObject* self,
                                   PyObject* const* args,
                                   Py_ssize_t nargs) {
@@ -185,8 +218,10 @@ static PyObject* PyHDWalletGetKey(PyHDWalletObject* self,
 }
 
 // method function for GetDerivedKey
-// struct TWPrivateKey* TWHDWalletGetDerivedKey(struct TWHDWallet* wallet, enum
-// TWCoinType coin, uint32_t account, uint32_t change, uint32_t address);
+static const char PyHDWalletGetDerivedKey_doc[] =
+    "struct TWPrivateKey* TWHDWalletGetDerivedKey(struct TWHDWallet* wallet, "
+    "enum TWCoinType coin, uint32_t account, uint32_t change, uint32_t "
+    "address)";
 static PyObject* PyHDWalletGetDerivedKey(PyHDWalletObject* self,
                                          PyObject* const* args,
                                          Py_ssize_t nargs) {
@@ -225,8 +260,9 @@ static PyObject* PyHDWalletGetDerivedKey(PyHDWalletObject* self,
 }
 
 // method function for GetExtendedPrivateKey
-// TWString* TWHDWalletGetExtendedPrivateKey(struct TWHDWallet* wallet, enum
-// TWPurpose purpose, enum TWCoinType coin, enum TWHDVersion version);
+static const char PyHDWalletGetExtendedPrivateKey_doc[] =
+    "TWString* TWHDWalletGetExtendedPrivateKey(struct TWHDWallet* wallet, enum "
+    "TWPurpose purpose, enum TWCoinType coin, enum TWHDVersion version)";
 static PyObject* PyHDWalletGetExtendedPrivateKey(PyHDWalletObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
@@ -259,8 +295,9 @@ static PyObject* PyHDWalletGetExtendedPrivateKey(PyHDWalletObject* self,
 }
 
 // method function for GetExtendedPublicKey
-// TWString* TWHDWalletGetExtendedPublicKey(struct TWHDWallet* wallet, enum
-// TWPurpose purpose, enum TWCoinType coin, enum TWHDVersion version);
+static const char PyHDWalletGetExtendedPublicKey_doc[] =
+    "TWString* TWHDWalletGetExtendedPublicKey(struct TWHDWallet* wallet, enum "
+    "TWPurpose purpose, enum TWCoinType coin, enum TWHDVersion version)";
 static PyObject* PyHDWalletGetExtendedPublicKey(PyHDWalletObject* self,
                                                 PyObject* const* args,
                                                 Py_ssize_t nargs) {
@@ -293,7 +330,8 @@ static PyObject* PyHDWalletGetExtendedPublicKey(PyHDWalletObject* self,
 }
 
 // static method function for Create
-// struct TWHDWallet* TWHDWalletCreate(int strength, TWString* passphrase);
+static const char PyHDWalletCreate_doc[] =
+    "struct TWHDWallet* TWHDWalletCreate(int strength, TWString* passphrase)";
 static PyObject* PyHDWalletCreate(PyHDWalletObject* self,
                                   PyObject* const* args,
                                   Py_ssize_t nargs) {
@@ -319,8 +357,9 @@ static PyObject* PyHDWalletCreate(PyHDWalletObject* self,
 }
 
 // static method function for CreateWithMnemonic
-// struct TWHDWallet* TWHDWalletCreateWithMnemonic(TWString* mnemonic, TWString*
-// passphrase);
+static const char PyHDWalletCreateWithMnemonic_doc[] =
+    "struct TWHDWallet* TWHDWalletCreateWithMnemonic(TWString* mnemonic, "
+    "TWString* passphrase)";
 static PyObject* PyHDWalletCreateWithMnemonic(PyHDWalletObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
@@ -346,8 +385,9 @@ static PyObject* PyHDWalletCreateWithMnemonic(PyHDWalletObject* self,
 }
 
 // static method function for CreateWithMnemonicCheck
-// struct TWHDWallet* TWHDWalletCreateWithMnemonicCheck(TWString* mnemonic,
-// TWString* passphrase, bool check);
+static const char PyHDWalletCreateWithMnemonicCheck_doc[] =
+    "struct TWHDWallet* TWHDWalletCreateWithMnemonicCheck(TWString* mnemonic, "
+    "TWString* passphrase, bool check)";
 static PyObject* PyHDWalletCreateWithMnemonicCheck(PyHDWalletObject* self,
                                                    PyObject* const* args,
                                                    Py_ssize_t nargs) {
@@ -380,8 +420,9 @@ static PyObject* PyHDWalletCreateWithMnemonicCheck(PyHDWalletObject* self,
 }
 
 // static method function for CreateWithEntropy
-// struct TWHDWallet* TWHDWalletCreateWithEntropy(TWData* entropy, TWString*
-// passphrase);
+static const char PyHDWalletCreateWithEntropy_doc[] =
+    "struct TWHDWallet* TWHDWalletCreateWithEntropy(TWData* entropy, TWString* "
+    "passphrase)";
 static PyObject* PyHDWalletCreateWithEntropy(PyHDWalletObject* self,
                                              PyObject* const* args,
                                              Py_ssize_t nargs) {
@@ -407,8 +448,9 @@ static PyObject* PyHDWalletCreateWithEntropy(PyHDWalletObject* self,
 }
 
 // static method function for GetPublicKeyFromExtended
-// struct TWPublicKey* TWHDWalletGetPublicKeyFromExtended(TWString* extended,
-// enum TWCoinType coin, TWString* derivationPath);
+static const char PyHDWalletGetPublicKeyFromExtended_doc[] =
+    "struct TWPublicKey* TWHDWalletGetPublicKeyFromExtended(TWString* "
+    "extended, enum TWCoinType coin, TWString* derivationPath)";
 static PyObject* PyHDWalletGetPublicKeyFromExtended(PyHDWalletObject* self,
                                                     PyObject* const* args,
                                                     Py_ssize_t nargs) {
@@ -440,35 +482,46 @@ static PyObject* PyHDWalletGetPublicKeyFromExtended(PyHDWalletObject* self,
   return PyPublicKey_FromTWPublicKey(result);
 }
 
-static const PyGetSetDef get_set_defs[] = {{}};
+static const PyGetSetDef get_set_defs[] = {
+    {"Seed", (getter)PyHDWalletSeed, nullptr, PyHDWalletSeed_doc},
+    {"Mnemonic", (getter)PyHDWalletMnemonic, nullptr, PyHDWalletMnemonic_doc},
+    {"Entropy", (getter)PyHDWalletEntropy, nullptr, PyHDWalletEntropy_doc},
+    {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyHDWalletDelete, METH_FASTCALL},
-    {"GetMasterKey", (PyCFunction)PyHDWalletGetMasterKey, METH_FASTCALL},
-    {"GetKeyForCoin", (PyCFunction)PyHDWalletGetKeyForCoin, METH_FASTCALL},
+    {"Delete", (PyCFunction)PyHDWalletDelete, METH_FASTCALL,
+     PyHDWalletDelete_doc},
+    {"GetMasterKey", (PyCFunction)PyHDWalletGetMasterKey, METH_FASTCALL,
+     PyHDWalletGetMasterKey_doc},
+    {"GetKeyForCoin", (PyCFunction)PyHDWalletGetKeyForCoin, METH_FASTCALL,
+     PyHDWalletGetKeyForCoin_doc},
     {"GetAddressForCoin", (PyCFunction)PyHDWalletGetAddressForCoin,
-     METH_FASTCALL},
-    {"GetKey", (PyCFunction)PyHDWalletGetKey, METH_FASTCALL},
-    {"GetDerivedKey", (PyCFunction)PyHDWalletGetDerivedKey, METH_FASTCALL},
+     METH_FASTCALL, PyHDWalletGetAddressForCoin_doc},
+    {"GetKey", (PyCFunction)PyHDWalletGetKey, METH_FASTCALL,
+     PyHDWalletGetKey_doc},
+    {"GetDerivedKey", (PyCFunction)PyHDWalletGetDerivedKey, METH_FASTCALL,
+     PyHDWalletGetDerivedKey_doc},
     {"GetExtendedPrivateKey", (PyCFunction)PyHDWalletGetExtendedPrivateKey,
-     METH_FASTCALL},
+     METH_FASTCALL, PyHDWalletGetExtendedPrivateKey_doc},
     {"GetExtendedPublicKey", (PyCFunction)PyHDWalletGetExtendedPublicKey,
-     METH_FASTCALL},
-    {"Create", (PyCFunction)PyHDWalletCreate, METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL, PyHDWalletGetExtendedPublicKey_doc},
+    {"Create", (PyCFunction)PyHDWalletCreate, METH_FASTCALL | METH_STATIC,
+     PyHDWalletCreate_doc},
     {"CreateWithMnemonic", (PyCFunction)PyHDWalletCreateWithMnemonic,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyHDWalletCreateWithMnemonic_doc},
     {"CreateWithMnemonicCheck", (PyCFunction)PyHDWalletCreateWithMnemonicCheck,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyHDWalletCreateWithMnemonicCheck_doc},
     {"CreateWithEntropy", (PyCFunction)PyHDWalletCreateWithEntropy,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyHDWalletCreateWithEntropy_doc},
     {"GetPublicKeyFromExtended",
      (PyCFunction)PyHDWalletGetPublicKeyFromExtended,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyHDWalletGetPublicKeyFromExtended_doc},
     {}};
 
 bool PyInit_HDWallet(PyObject* module) {
   // PyHDWalletType.tp_new = PyHDWallet_new;
   // PyHDWalletType.tp_init = (initproc)PyHDWallet_init;
+  PyHDWalletType.tp_dealloc = (destructor)PyHDWallet_dealloc;
   // PyHDWalletType.tp_str = (reprfunc)PyHDWallet_str;
   PyHDWalletType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyHDWalletType.tp_methods = (PyMethodDef*)method_defs;

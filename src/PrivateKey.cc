@@ -57,6 +57,13 @@ TWPrivateKey* PyPrivateKey_GetTWPrivateKey(PyObject* object) {
   return ((PyPrivateKeyObject*)object)->value;
 }
 
+static void PyPrivateKey_dealloc(PyPrivateKeyObject* self) {
+  if (self->value) {
+    TWPrivateKeyDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PyPrivateKey_init(PyPrivateKeyObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;
@@ -76,8 +83,16 @@ TWPrivateKey* PyPrivateKey_GetTWPrivateKey(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// getter function for Data
+static const char PyPrivateKeyData_doc[] =
+    "TWData* TWPrivateKeyData(struct TWPrivateKey* pk)";
+static PyObject* PyPrivateKeyData(PyPrivateKeyObject* self, void*) {
+  return PyByteArray_FromTWData(TWPrivateKeyData(self->value));
+}
+
 // method function for Delete
-// void TWPrivateKeyDelete(struct TWPrivateKey* pk);
+static const char PyPrivateKeyDelete_doc[] =
+    "void TWPrivateKeyDelete(struct TWPrivateKey* pk)";
 static PyObject* PyPrivateKeyDelete(PyPrivateKeyObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
@@ -91,8 +106,9 @@ static PyObject* PyPrivateKeyDelete(PyPrivateKeyObject* self,
 }
 
 // method function for GetPublicKeySecp256k1
-// struct TWPublicKey* TWPrivateKeyGetPublicKeySecp256k1(struct TWPrivateKey*
-// pk, bool compressed);
+static const char PyPrivateKeyGetPublicKeySecp256k1_doc[] =
+    "struct TWPublicKey* TWPrivateKeyGetPublicKeySecp256k1(struct "
+    "TWPrivateKey* pk, bool compressed)";
 static PyObject* PyPrivateKeyGetPublicKeySecp256k1(PyPrivateKeyObject* self,
                                                    PyObject* const* args,
                                                    Py_ssize_t nargs) {
@@ -112,8 +128,9 @@ static PyObject* PyPrivateKeyGetPublicKeySecp256k1(PyPrivateKeyObject* self,
 }
 
 // method function for GetPublicKeyNist256p1
-// struct TWPublicKey* TWPrivateKeyGetPublicKeyNist256p1(struct TWPrivateKey*
-// pk);
+static const char PyPrivateKeyGetPublicKeyNist256p1_doc[] =
+    "struct TWPublicKey* TWPrivateKeyGetPublicKeyNist256p1(struct "
+    "TWPrivateKey* pk)";
 static PyObject* PyPrivateKeyGetPublicKeyNist256p1(PyPrivateKeyObject* self,
                                                    PyObject* const* args,
                                                    Py_ssize_t nargs) {
@@ -127,7 +144,9 @@ static PyObject* PyPrivateKeyGetPublicKeyNist256p1(PyPrivateKeyObject* self,
 }
 
 // method function for GetPublicKeyEd25519
-// struct TWPublicKey* TWPrivateKeyGetPublicKeyEd25519(struct TWPrivateKey* pk);
+static const char PyPrivateKeyGetPublicKeyEd25519_doc[] =
+    "struct TWPublicKey* TWPrivateKeyGetPublicKeyEd25519(struct TWPrivateKey* "
+    "pk)";
 static PyObject* PyPrivateKeyGetPublicKeyEd25519(PyPrivateKeyObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
@@ -141,8 +160,9 @@ static PyObject* PyPrivateKeyGetPublicKeyEd25519(PyPrivateKeyObject* self,
 }
 
 // method function for GetPublicKeyEd25519Blake2b
-// struct TWPublicKey* TWPrivateKeyGetPublicKeyEd25519Blake2b(struct
-// TWPrivateKey* pk);
+static const char PyPrivateKeyGetPublicKeyEd25519Blake2b_doc[] =
+    "struct TWPublicKey* TWPrivateKeyGetPublicKeyEd25519Blake2b(struct "
+    "TWPrivateKey* pk)";
 static PyObject* PyPrivateKeyGetPublicKeyEd25519Blake2b(
     PyPrivateKeyObject* self,
     PyObject* const* args,
@@ -157,8 +177,9 @@ static PyObject* PyPrivateKeyGetPublicKeyEd25519Blake2b(
 }
 
 // method function for GetPublicKeyEd25519Extended
-// struct TWPublicKey* TWPrivateKeyGetPublicKeyEd25519Extended(struct
-// TWPrivateKey* pk);
+static const char PyPrivateKeyGetPublicKeyEd25519Extended_doc[] =
+    "struct TWPublicKey* TWPrivateKeyGetPublicKeyEd25519Extended(struct "
+    "TWPrivateKey* pk)";
 static PyObject* PyPrivateKeyGetPublicKeyEd25519Extended(
     PyPrivateKeyObject* self,
     PyObject* const* args,
@@ -173,8 +194,9 @@ static PyObject* PyPrivateKeyGetPublicKeyEd25519Extended(
 }
 
 // method function for GetPublicKeyCurve25519
-// struct TWPublicKey* TWPrivateKeyGetPublicKeyCurve25519(struct TWPrivateKey*
-// pk);
+static const char PyPrivateKeyGetPublicKeyCurve25519_doc[] =
+    "struct TWPublicKey* TWPrivateKeyGetPublicKeyCurve25519(struct "
+    "TWPrivateKey* pk)";
 static PyObject* PyPrivateKeyGetPublicKeyCurve25519(PyPrivateKeyObject* self,
                                                     PyObject* const* args,
                                                     Py_ssize_t nargs) {
@@ -188,8 +210,9 @@ static PyObject* PyPrivateKeyGetPublicKeyCurve25519(PyPrivateKeyObject* self,
 }
 
 // method function for GetSharedKey
-// TWData* TWPrivateKeyGetSharedKey(const struct TWPrivateKey* pk, const struct
-// TWPublicKey* publicKey, enum TWCurve curve);
+static const char PyPrivateKeyGetSharedKey_doc[] =
+    "TWData* TWPrivateKeyGetSharedKey(const struct TWPrivateKey* pk, const "
+    "struct TWPublicKey* publicKey, enum TWCurve curve)";
 static PyObject* PyPrivateKeyGetSharedKey(PyPrivateKeyObject* self,
                                           PyObject* const* args,
                                           Py_ssize_t nargs) {
@@ -215,8 +238,9 @@ static PyObject* PyPrivateKeyGetSharedKey(PyPrivateKeyObject* self,
 }
 
 // method function for Sign
-// TWData* TWPrivateKeySign(struct TWPrivateKey* pk, TWData* digest, enum
-// TWCurve curve);
+static const char PyPrivateKeySign_doc[] =
+    "TWData* TWPrivateKeySign(struct TWPrivateKey* pk, TWData* digest, enum "
+    "TWCurve curve)";
 static PyObject* PyPrivateKeySign(PyPrivateKeyObject* self,
                                   PyObject* const* args,
                                   Py_ssize_t nargs) {
@@ -242,8 +266,9 @@ static PyObject* PyPrivateKeySign(PyPrivateKeyObject* self,
 }
 
 // method function for SignAsDER
-// TWData* TWPrivateKeySignAsDER(struct TWPrivateKey* pk, TWData* digest, enum
-// TWCurve curve);
+static const char PyPrivateKeySignAsDER_doc[] =
+    "TWData* TWPrivateKeySignAsDER(struct TWPrivateKey* pk, TWData* digest, "
+    "enum TWCurve curve)";
 static PyObject* PyPrivateKeySignAsDER(PyPrivateKeyObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -269,8 +294,9 @@ static PyObject* PyPrivateKeySignAsDER(PyPrivateKeyObject* self,
 }
 
 // method function for SignSchnorr
-// TWData* TWPrivateKeySignSchnorr(struct TWPrivateKey* pk, TWData* message,
-// enum TWCurve curve);
+static const char PyPrivateKeySignSchnorr_doc[] =
+    "TWData* TWPrivateKeySignSchnorr(struct TWPrivateKey* pk, TWData* message, "
+    "enum TWCurve curve)";
 static PyObject* PyPrivateKeySignSchnorr(PyPrivateKeyObject* self,
                                          PyObject* const* args,
                                          Py_ssize_t nargs) {
@@ -296,7 +322,8 @@ static PyObject* PyPrivateKeySignSchnorr(PyPrivateKeyObject* self,
 }
 
 // static method function for Create
-// struct TWPrivateKey* TWPrivateKeyCreate();
+static const char PyPrivateKeyCreate_doc[] =
+    "struct TWPrivateKey* TWPrivateKeyCreate()";
 static PyObject* PyPrivateKeyCreate(PyPrivateKeyObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
@@ -310,7 +337,8 @@ static PyObject* PyPrivateKeyCreate(PyPrivateKeyObject* self,
 }
 
 // static method function for CreateWithData
-// struct TWPrivateKey* TWPrivateKeyCreateWithData(TWData* data);
+static const char PyPrivateKeyCreateWithData_doc[] =
+    "struct TWPrivateKey* TWPrivateKeyCreateWithData(TWData* data)";
 static PyObject* PyPrivateKeyCreateWithData(PyPrivateKeyObject* self,
                                             PyObject* const* args,
                                             Py_ssize_t nargs) {
@@ -330,7 +358,8 @@ static PyObject* PyPrivateKeyCreateWithData(PyPrivateKeyObject* self,
 }
 
 // static method function for CreateCopy
-// struct TWPrivateKey* TWPrivateKeyCreateCopy(struct TWPrivateKey* key);
+static const char PyPrivateKeyCreateCopy_doc[] =
+    "struct TWPrivateKey* TWPrivateKeyCreateCopy(struct TWPrivateKey* key)";
 static PyObject* PyPrivateKeyCreateCopy(PyPrivateKeyObject* self,
                                         PyObject* const* args,
                                         Py_ssize_t nargs) {
@@ -350,7 +379,8 @@ static PyObject* PyPrivateKeyCreateCopy(PyPrivateKeyObject* self,
 }
 
 // static method function for IsValid
-// bool TWPrivateKeyIsValid(TWData* data, enum TWCurve curve);
+static const char PyPrivateKeyIsValid_doc[] =
+    "bool TWPrivateKeyIsValid(TWData* data, enum TWCurve curve)";
 static PyObject* PyPrivateKeyIsValid(PyPrivateKeyObject* self,
                                      PyObject* const* args,
                                      Py_ssize_t nargs) {
@@ -375,37 +405,49 @@ static PyObject* PyPrivateKeyIsValid(PyPrivateKeyObject* self,
   return PyBool_FromLong(result);
 }
 
-static const PyGetSetDef get_set_defs[] = {{}};
+static const PyGetSetDef get_set_defs[] = {
+    {"Data", (getter)PyPrivateKeyData, nullptr, PyPrivateKeyData_doc},
+    {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyPrivateKeyDelete, METH_FASTCALL},
+    {"Delete", (PyCFunction)PyPrivateKeyDelete, METH_FASTCALL,
+     PyPrivateKeyDelete_doc},
     {"GetPublicKeySecp256k1", (PyCFunction)PyPrivateKeyGetPublicKeySecp256k1,
-     METH_FASTCALL},
+     METH_FASTCALL, PyPrivateKeyGetPublicKeySecp256k1_doc},
     {"GetPublicKeyNist256p1", (PyCFunction)PyPrivateKeyGetPublicKeyNist256p1,
-     METH_FASTCALL},
+     METH_FASTCALL, PyPrivateKeyGetPublicKeyNist256p1_doc},
     {"GetPublicKeyEd25519", (PyCFunction)PyPrivateKeyGetPublicKeyEd25519,
-     METH_FASTCALL},
+     METH_FASTCALL, PyPrivateKeyGetPublicKeyEd25519_doc},
     {"GetPublicKeyEd25519Blake2b",
-     (PyCFunction)PyPrivateKeyGetPublicKeyEd25519Blake2b, METH_FASTCALL},
+     (PyCFunction)PyPrivateKeyGetPublicKeyEd25519Blake2b, METH_FASTCALL,
+     PyPrivateKeyGetPublicKeyEd25519Blake2b_doc},
     {"GetPublicKeyEd25519Extended",
-     (PyCFunction)PyPrivateKeyGetPublicKeyEd25519Extended, METH_FASTCALL},
+     (PyCFunction)PyPrivateKeyGetPublicKeyEd25519Extended, METH_FASTCALL,
+     PyPrivateKeyGetPublicKeyEd25519Extended_doc},
     {"GetPublicKeyCurve25519", (PyCFunction)PyPrivateKeyGetPublicKeyCurve25519,
-     METH_FASTCALL},
-    {"GetSharedKey", (PyCFunction)PyPrivateKeyGetSharedKey, METH_FASTCALL},
-    {"Sign", (PyCFunction)PyPrivateKeySign, METH_FASTCALL},
-    {"SignAsDER", (PyCFunction)PyPrivateKeySignAsDER, METH_FASTCALL},
-    {"SignSchnorr", (PyCFunction)PyPrivateKeySignSchnorr, METH_FASTCALL},
-    {"Create", (PyCFunction)PyPrivateKeyCreate, METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL, PyPrivateKeyGetPublicKeyCurve25519_doc},
+    {"GetSharedKey", (PyCFunction)PyPrivateKeyGetSharedKey, METH_FASTCALL,
+     PyPrivateKeyGetSharedKey_doc},
+    {"Sign", (PyCFunction)PyPrivateKeySign, METH_FASTCALL,
+     PyPrivateKeySign_doc},
+    {"SignAsDER", (PyCFunction)PyPrivateKeySignAsDER, METH_FASTCALL,
+     PyPrivateKeySignAsDER_doc},
+    {"SignSchnorr", (PyCFunction)PyPrivateKeySignSchnorr, METH_FASTCALL,
+     PyPrivateKeySignSchnorr_doc},
+    {"Create", (PyCFunction)PyPrivateKeyCreate, METH_FASTCALL | METH_STATIC,
+     PyPrivateKeyCreate_doc},
     {"CreateWithData", (PyCFunction)PyPrivateKeyCreateWithData,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyPrivateKeyCreateWithData_doc},
     {"CreateCopy", (PyCFunction)PyPrivateKeyCreateCopy,
-     METH_FASTCALL | METH_STATIC},
-    {"IsValid", (PyCFunction)PyPrivateKeyIsValid, METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyPrivateKeyCreateCopy_doc},
+    {"IsValid", (PyCFunction)PyPrivateKeyIsValid, METH_FASTCALL | METH_STATIC,
+     PyPrivateKeyIsValid_doc},
     {}};
 
 bool PyInit_PrivateKey(PyObject* module) {
   // PyPrivateKeyType.tp_new = PyPrivateKey_new;
   // PyPrivateKeyType.tp_init = (initproc)PyPrivateKey_init;
+  PyPrivateKeyType.tp_dealloc = (destructor)PyPrivateKey_dealloc;
   // PyPrivateKeyType.tp_str = (reprfunc)PyPrivateKey_str;
   PyPrivateKeyType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyPrivateKeyType.tp_methods = (PyMethodDef*)method_defs;

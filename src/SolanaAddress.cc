@@ -54,6 +54,13 @@ TWSolanaAddress* PySolanaAddress_GetTWSolanaAddress(PyObject* object) {
   return ((PySolanaAddressObject*)object)->value;
 }
 
+static void PySolanaAddress_dealloc(PySolanaAddressObject* self) {
+  if (self->value) {
+    TWSolanaAddressDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PySolanaAddress_init(PySolanaAddressObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;
@@ -73,8 +80,17 @@ TWSolanaAddress* PySolanaAddress_GetTWSolanaAddress(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// getter function for Description
+static const char PySolanaAddressDescription_doc[] =
+    "TWString* TWSolanaAddressDescription(struct TWSolanaAddress* address)";
+static PyObject* PySolanaAddressDescription(PySolanaAddressObject* self,
+                                            void*) {
+  return PyUnicode_FromTWString(TWSolanaAddressDescription(self->value));
+}
+
 // method function for Delete
-// void TWSolanaAddressDelete(struct TWSolanaAddress* address);
+static const char PySolanaAddressDelete_doc[] =
+    "void TWSolanaAddressDelete(struct TWSolanaAddress* address)";
 static PyObject* PySolanaAddressDelete(PySolanaAddressObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -88,8 +104,9 @@ static PyObject* PySolanaAddressDelete(PySolanaAddressObject* self,
 }
 
 // method function for DefaultTokenAddress
-// TWString* TWSolanaAddressDefaultTokenAddress(struct TWSolanaAddress* address,
-// TWString* tokenMintAddress);
+static const char PySolanaAddressDefaultTokenAddress_doc[] =
+    "TWString* TWSolanaAddressDefaultTokenAddress(struct TWSolanaAddress* "
+    "address, TWString* tokenMintAddress)";
 static PyObject* PySolanaAddressDefaultTokenAddress(PySolanaAddressObject* self,
                                                     PyObject* const* args,
                                                     Py_ssize_t nargs) {
@@ -110,7 +127,8 @@ static PyObject* PySolanaAddressDefaultTokenAddress(PySolanaAddressObject* self,
 }
 
 // static method function for CreateWithString
-// struct TWSolanaAddress* TWSolanaAddressCreateWithString(TWString* string);
+static const char PySolanaAddressCreateWithString_doc[] =
+    "struct TWSolanaAddress* TWSolanaAddressCreateWithString(TWString* string)";
 static PyObject* PySolanaAddressCreateWithString(PySolanaAddressObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
@@ -129,19 +147,24 @@ static PyObject* PySolanaAddressCreateWithString(PySolanaAddressObject* self,
   return PySolanaAddress_FromTWSolanaAddress(result);
 }
 
-static const PyGetSetDef get_set_defs[] = {{}};
+static const PyGetSetDef get_set_defs[] = {
+    {"Description", (getter)PySolanaAddressDescription, nullptr,
+     PySolanaAddressDescription_doc},
+    {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PySolanaAddressDelete, METH_FASTCALL},
+    {"Delete", (PyCFunction)PySolanaAddressDelete, METH_FASTCALL,
+     PySolanaAddressDelete_doc},
     {"DefaultTokenAddress", (PyCFunction)PySolanaAddressDefaultTokenAddress,
-     METH_FASTCALL},
+     METH_FASTCALL, PySolanaAddressDefaultTokenAddress_doc},
     {"CreateWithString", (PyCFunction)PySolanaAddressCreateWithString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PySolanaAddressCreateWithString_doc},
     {}};
 
 bool PyInit_SolanaAddress(PyObject* module) {
   // PySolanaAddressType.tp_new = PySolanaAddress_new;
   // PySolanaAddressType.tp_init = (initproc)PySolanaAddress_init;
+  PySolanaAddressType.tp_dealloc = (destructor)PySolanaAddress_dealloc;
   // PySolanaAddressType.tp_str = (reprfunc)PySolanaAddress_str;
   PySolanaAddressType.tp_getset = (PyGetSetDef*)get_set_defs;
   PySolanaAddressType.tp_methods = (PyMethodDef*)method_defs;

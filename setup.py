@@ -19,14 +19,19 @@ for line in open(os.path.join(WALLET_CORE_BUILD, 'CMakeCache.txt')):
         link_args.append('--coverage')
         break
 
+compile_args = []
+
 module = Extension('walletcore',
                     include_dirs = [ WALLET_CORE_INCLUDE ],
                     library_dirs = [ WALLET_CORE_BUILD, TREZOR_CRYPTO ],
                     libraries = [ 'TrustWalletCore', 'protobuf' , 'TrezorCrypto'],
+                    extra_compile_args = compile_args,
                     extra_link_args = link_args,
                     sources = glob('src/*.cc'))
 
-setup (name = 'walletcore',
-       version = '1.0',
-       description = 'Trust wallet core',
-       ext_modules = [module])
+setup(name = 'walletcore',
+      version = '1.0',
+      description = 'Trust wallet core',
+      author = 'Peng Huang',
+      author_email = 'shawn.p.huang@gmail.com',
+      ext_modules = [module])

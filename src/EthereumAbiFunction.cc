@@ -58,6 +58,13 @@ TWEthereumAbiFunction* PyEthereumAbiFunction_GetTWEthereumAbiFunction(
   return ((PyEthereumAbiFunctionObject*)object)->value;
 }
 
+static void PyEthereumAbiFunction_dealloc(PyEthereumAbiFunctionObject* self) {
+  if (self->value) {
+    TWEthereumAbiFunctionDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PyEthereumAbiFunction_init(PyEthereumAbiFunctionObject *self,
 // PyObject *args, PyObject *kwds) {
 //   return 0;
@@ -80,7 +87,8 @@ TWEthereumAbiFunction* PyEthereumAbiFunction_GetTWEthereumAbiFunction(
 // }
 
 // method function for Delete
-// void TWEthereumAbiFunctionDelete(struct TWEthereumAbiFunction* fn);
+static const char PyEthereumAbiFunctionDelete_doc[] =
+    "void TWEthereumAbiFunctionDelete(struct TWEthereumAbiFunction* fn)";
 static PyObject* PyEthereumAbiFunctionDelete(PyEthereumAbiFunctionObject* self,
                                              PyObject* const* args,
                                              Py_ssize_t nargs) {
@@ -94,7 +102,8 @@ static PyObject* PyEthereumAbiFunctionDelete(PyEthereumAbiFunctionObject* self,
 }
 
 // method function for GetType
-// TWString* TWEthereumAbiFunctionGetType(struct TWEthereumAbiFunction* fn);
+static const char PyEthereumAbiFunctionGetType_doc[] =
+    "TWString* TWEthereumAbiFunctionGetType(struct TWEthereumAbiFunction* fn)";
 static PyObject* PyEthereumAbiFunctionGetType(PyEthereumAbiFunctionObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
@@ -108,8 +117,9 @@ static PyObject* PyEthereumAbiFunctionGetType(PyEthereumAbiFunctionObject* self,
 }
 
 // method function for AddParamUInt8
-// int TWEthereumAbiFunctionAddParamUInt8(struct TWEthereumAbiFunction* fn,
-// uint8_t val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamUInt8_doc[] =
+    "int TWEthereumAbiFunctionAddParamUInt8(struct TWEthereumAbiFunction* fn, "
+    "uint8_t val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamUInt8(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -136,8 +146,9 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt8(
 }
 
 // method function for AddParamUInt16
-// int TWEthereumAbiFunctionAddParamUInt16(struct TWEthereumAbiFunction* fn,
-// uint16_t val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamUInt16_doc[] =
+    "int TWEthereumAbiFunctionAddParamUInt16(struct TWEthereumAbiFunction* fn, "
+    "uint16_t val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamUInt16(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -164,8 +175,9 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt16(
 }
 
 // method function for AddParamUInt32
-// int TWEthereumAbiFunctionAddParamUInt32(struct TWEthereumAbiFunction* fn,
-// uint32_t val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamUInt32_doc[] =
+    "int TWEthereumAbiFunctionAddParamUInt32(struct TWEthereumAbiFunction* fn, "
+    "uint32_t val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamUInt32(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -192,8 +204,9 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt32(
 }
 
 // method function for AddParamUInt64
-// int TWEthereumAbiFunctionAddParamUInt64(struct TWEthereumAbiFunction* fn,
-// uint64_t val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamUInt64_doc[] =
+    "int TWEthereumAbiFunctionAddParamUInt64(struct TWEthereumAbiFunction* fn, "
+    "uint64_t val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamUInt64(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -220,8 +233,9 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt64(
 }
 
 // method function for AddParamUInt256
-// int TWEthereumAbiFunctionAddParamUInt256(struct TWEthereumAbiFunction* fn,
-// TWData* val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamUInt256_doc[] =
+    "int TWEthereumAbiFunctionAddParamUInt256(struct TWEthereumAbiFunction* "
+    "fn, TWData* val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamUInt256(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -249,8 +263,9 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt256(
 }
 
 // method function for AddParamUIntN
-// int TWEthereumAbiFunctionAddParamUIntN(struct TWEthereumAbiFunction* fn, int
-// bits, TWData* val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamUIntN_doc[] =
+    "int TWEthereumAbiFunctionAddParamUIntN(struct TWEthereumAbiFunction* fn, "
+    "int bits, TWData* val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamUIntN(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -284,8 +299,9 @@ static PyObject* PyEthereumAbiFunctionAddParamUIntN(
 }
 
 // method function for AddParamInt8
-// int TWEthereumAbiFunctionAddParamInt8(struct TWEthereumAbiFunction* fn,
-// int8_t val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamInt8_doc[] =
+    "int TWEthereumAbiFunctionAddParamInt8(struct TWEthereumAbiFunction* fn, "
+    "int8_t val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamInt8(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -312,8 +328,9 @@ static PyObject* PyEthereumAbiFunctionAddParamInt8(
 }
 
 // method function for AddParamInt16
-// int TWEthereumAbiFunctionAddParamInt16(struct TWEthereumAbiFunction* fn,
-// int16_t val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamInt16_doc[] =
+    "int TWEthereumAbiFunctionAddParamInt16(struct TWEthereumAbiFunction* fn, "
+    "int16_t val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamInt16(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -340,8 +357,9 @@ static PyObject* PyEthereumAbiFunctionAddParamInt16(
 }
 
 // method function for AddParamInt32
-// int TWEthereumAbiFunctionAddParamInt32(struct TWEthereumAbiFunction* fn,
-// int32_t val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamInt32_doc[] =
+    "int TWEthereumAbiFunctionAddParamInt32(struct TWEthereumAbiFunction* fn, "
+    "int32_t val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamInt32(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -368,8 +386,9 @@ static PyObject* PyEthereumAbiFunctionAddParamInt32(
 }
 
 // method function for AddParamInt64
-// int TWEthereumAbiFunctionAddParamInt64(struct TWEthereumAbiFunction* fn,
-// int64_t val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamInt64_doc[] =
+    "int TWEthereumAbiFunctionAddParamInt64(struct TWEthereumAbiFunction* fn, "
+    "int64_t val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamInt64(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -396,8 +415,9 @@ static PyObject* PyEthereumAbiFunctionAddParamInt64(
 }
 
 // method function for AddParamInt256
-// int TWEthereumAbiFunctionAddParamInt256(struct TWEthereumAbiFunction* fn,
-// TWData* val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamInt256_doc[] =
+    "int TWEthereumAbiFunctionAddParamInt256(struct TWEthereumAbiFunction* fn, "
+    "TWData* val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamInt256(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -425,8 +445,9 @@ static PyObject* PyEthereumAbiFunctionAddParamInt256(
 }
 
 // method function for AddParamIntN
-// int TWEthereumAbiFunctionAddParamIntN(struct TWEthereumAbiFunction* fn, int
-// bits, TWData* val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamIntN_doc[] =
+    "int TWEthereumAbiFunctionAddParamIntN(struct TWEthereumAbiFunction* fn, "
+    "int bits, TWData* val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamIntN(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -460,8 +481,9 @@ static PyObject* PyEthereumAbiFunctionAddParamIntN(
 }
 
 // method function for AddParamBool
-// int TWEthereumAbiFunctionAddParamBool(struct TWEthereumAbiFunction* fn, bool
-// val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamBool_doc[] =
+    "int TWEthereumAbiFunctionAddParamBool(struct TWEthereumAbiFunction* fn, "
+    "bool val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamBool(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -488,8 +510,9 @@ static PyObject* PyEthereumAbiFunctionAddParamBool(
 }
 
 // method function for AddParamString
-// int TWEthereumAbiFunctionAddParamString(struct TWEthereumAbiFunction* fn,
-// TWString* val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamString_doc[] =
+    "int TWEthereumAbiFunctionAddParamString(struct TWEthereumAbiFunction* fn, "
+    "TWString* val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamString(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -517,8 +540,9 @@ static PyObject* PyEthereumAbiFunctionAddParamString(
 }
 
 // method function for AddParamAddress
-// int TWEthereumAbiFunctionAddParamAddress(struct TWEthereumAbiFunction* fn,
-// TWData* val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamAddress_doc[] =
+    "int TWEthereumAbiFunctionAddParamAddress(struct TWEthereumAbiFunction* "
+    "fn, TWData* val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamAddress(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -546,8 +570,9 @@ static PyObject* PyEthereumAbiFunctionAddParamAddress(
 }
 
 // method function for AddParamBytes
-// int TWEthereumAbiFunctionAddParamBytes(struct TWEthereumAbiFunction* fn,
-// TWData* val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamBytes_doc[] =
+    "int TWEthereumAbiFunctionAddParamBytes(struct TWEthereumAbiFunction* fn, "
+    "TWData* val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamBytes(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -575,8 +600,9 @@ static PyObject* PyEthereumAbiFunctionAddParamBytes(
 }
 
 // method function for AddParamBytesFix
-// int TWEthereumAbiFunctionAddParamBytesFix(struct TWEthereumAbiFunction* fn,
-// size_t size, TWData* val, bool isOutput);
+static const char PyEthereumAbiFunctionAddParamBytesFix_doc[] =
+    "int TWEthereumAbiFunctionAddParamBytesFix(struct TWEthereumAbiFunction* "
+    "fn, size_t size, TWData* val, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamBytesFix(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -610,8 +636,9 @@ static PyObject* PyEthereumAbiFunctionAddParamBytesFix(
 }
 
 // method function for AddParamArray
-// int TWEthereumAbiFunctionAddParamArray(struct TWEthereumAbiFunction* fn, bool
-// isOutput);
+static const char PyEthereumAbiFunctionAddParamArray_doc[] =
+    "int TWEthereumAbiFunctionAddParamArray(struct TWEthereumAbiFunction* fn, "
+    "bool isOutput)";
 static PyObject* PyEthereumAbiFunctionAddParamArray(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -632,8 +659,9 @@ static PyObject* PyEthereumAbiFunctionAddParamArray(
 }
 
 // method function for GetParamUInt8
-// uint8_t TWEthereumAbiFunctionGetParamUInt8(struct TWEthereumAbiFunction* fn,
-// int idx, bool isOutput);
+static const char PyEthereumAbiFunctionGetParamUInt8_doc[] =
+    "uint8_t TWEthereumAbiFunctionGetParamUInt8(struct TWEthereumAbiFunction* "
+    "fn, int idx, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionGetParamUInt8(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -660,8 +688,9 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt8(
 }
 
 // method function for GetParamUInt64
-// uint64_t TWEthereumAbiFunctionGetParamUInt64(struct TWEthereumAbiFunction*
-// fn, int idx, bool isOutput);
+static const char PyEthereumAbiFunctionGetParamUInt64_doc[] =
+    "uint64_t TWEthereumAbiFunctionGetParamUInt64(struct "
+    "TWEthereumAbiFunction* fn, int idx, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionGetParamUInt64(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -689,8 +718,9 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt64(
 }
 
 // method function for GetParamUInt256
-// TWData* TWEthereumAbiFunctionGetParamUInt256(struct TWEthereumAbiFunction*
-// fn, int idx, bool isOutput);
+static const char PyEthereumAbiFunctionGetParamUInt256_doc[] =
+    "TWData* TWEthereumAbiFunctionGetParamUInt256(struct "
+    "TWEthereumAbiFunction* fn, int idx, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionGetParamUInt256(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -718,8 +748,9 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt256(
 }
 
 // method function for GetParamBool
-// bool TWEthereumAbiFunctionGetParamBool(struct TWEthereumAbiFunction* fn, int
-// idx, bool isOutput);
+static const char PyEthereumAbiFunctionGetParamBool_doc[] =
+    "bool TWEthereumAbiFunctionGetParamBool(struct TWEthereumAbiFunction* fn, "
+    "int idx, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionGetParamBool(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -746,8 +777,9 @@ static PyObject* PyEthereumAbiFunctionGetParamBool(
 }
 
 // method function for GetParamString
-// TWString* TWEthereumAbiFunctionGetParamString(struct TWEthereumAbiFunction*
-// fn, int idx, bool isOutput);
+static const char PyEthereumAbiFunctionGetParamString_doc[] =
+    "TWString* TWEthereumAbiFunctionGetParamString(struct "
+    "TWEthereumAbiFunction* fn, int idx, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionGetParamString(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -775,8 +807,9 @@ static PyObject* PyEthereumAbiFunctionGetParamString(
 }
 
 // method function for GetParamAddress
-// TWData* TWEthereumAbiFunctionGetParamAddress(struct TWEthereumAbiFunction*
-// fn, int idx, bool isOutput);
+static const char PyEthereumAbiFunctionGetParamAddress_doc[] =
+    "TWData* TWEthereumAbiFunctionGetParamAddress(struct "
+    "TWEthereumAbiFunction* fn, int idx, bool isOutput)";
 static PyObject* PyEthereumAbiFunctionGetParamAddress(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -804,8 +837,9 @@ static PyObject* PyEthereumAbiFunctionGetParamAddress(
 }
 
 // method function for AddInArrayParamUInt8
-// int TWEthereumAbiFunctionAddInArrayParamUInt8(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, uint8_t val);
+static const char PyEthereumAbiFunctionAddInArrayParamUInt8_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamUInt8(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, uint8_t val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt8(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -833,8 +867,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt8(
 }
 
 // method function for AddInArrayParamUInt16
-// int TWEthereumAbiFunctionAddInArrayParamUInt16(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, uint16_t val);
+static const char PyEthereumAbiFunctionAddInArrayParamUInt16_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamUInt16(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, uint16_t val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt16(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -862,8 +897,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt16(
 }
 
 // method function for AddInArrayParamUInt32
-// int TWEthereumAbiFunctionAddInArrayParamUInt32(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, uint32_t val);
+static const char PyEthereumAbiFunctionAddInArrayParamUInt32_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamUInt32(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, uint32_t val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt32(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -891,8 +927,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt32(
 }
 
 // method function for AddInArrayParamUInt64
-// int TWEthereumAbiFunctionAddInArrayParamUInt64(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, uint64_t val);
+static const char PyEthereumAbiFunctionAddInArrayParamUInt64_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamUInt64(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, uint64_t val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt64(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -920,8 +957,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt64(
 }
 
 // method function for AddInArrayParamUInt256
-// int TWEthereumAbiFunctionAddInArrayParamUInt256(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, TWData* val);
+static const char PyEthereumAbiFunctionAddInArrayParamUInt256_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamUInt256(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, TWData* val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt256(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -949,8 +987,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt256(
 }
 
 // method function for AddInArrayParamUIntN
-// int TWEthereumAbiFunctionAddInArrayParamUIntN(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, int bits, TWData* val);
+static const char PyEthereumAbiFunctionAddInArrayParamUIntN_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamUIntN(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, int bits, TWData* val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamUIntN(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -984,8 +1023,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUIntN(
 }
 
 // method function for AddInArrayParamInt8
-// int TWEthereumAbiFunctionAddInArrayParamInt8(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, int8_t val);
+static const char PyEthereumAbiFunctionAddInArrayParamInt8_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamInt8(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, int8_t val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamInt8(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -1013,8 +1053,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt8(
 }
 
 // method function for AddInArrayParamInt16
-// int TWEthereumAbiFunctionAddInArrayParamInt16(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, int16_t val);
+static const char PyEthereumAbiFunctionAddInArrayParamInt16_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamInt16(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, int16_t val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamInt16(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -1042,8 +1083,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt16(
 }
 
 // method function for AddInArrayParamInt32
-// int TWEthereumAbiFunctionAddInArrayParamInt32(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, int32_t val);
+static const char PyEthereumAbiFunctionAddInArrayParamInt32_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamInt32(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, int32_t val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamInt32(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -1071,8 +1113,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt32(
 }
 
 // method function for AddInArrayParamInt64
-// int TWEthereumAbiFunctionAddInArrayParamInt64(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, int64_t val);
+static const char PyEthereumAbiFunctionAddInArrayParamInt64_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamInt64(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, int64_t val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamInt64(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -1100,8 +1143,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt64(
 }
 
 // method function for AddInArrayParamInt256
-// int TWEthereumAbiFunctionAddInArrayParamInt256(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, TWData* val);
+static const char PyEthereumAbiFunctionAddInArrayParamInt256_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamInt256(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, TWData* val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamInt256(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -1129,8 +1173,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt256(
 }
 
 // method function for AddInArrayParamIntN
-// int TWEthereumAbiFunctionAddInArrayParamIntN(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, int bits, TWData* val);
+static const char PyEthereumAbiFunctionAddInArrayParamIntN_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamIntN(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, int bits, TWData* val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamIntN(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -1164,8 +1209,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamIntN(
 }
 
 // method function for AddInArrayParamBool
-// int TWEthereumAbiFunctionAddInArrayParamBool(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, bool val);
+static const char PyEthereumAbiFunctionAddInArrayParamBool_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamBool(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, bool val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamBool(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -1193,8 +1239,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBool(
 }
 
 // method function for AddInArrayParamString
-// int TWEthereumAbiFunctionAddInArrayParamString(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, TWString* val);
+static const char PyEthereumAbiFunctionAddInArrayParamString_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamString(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, TWString* val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamString(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -1222,8 +1269,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamString(
 }
 
 // method function for AddInArrayParamAddress
-// int TWEthereumAbiFunctionAddInArrayParamAddress(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, TWData* val);
+static const char PyEthereumAbiFunctionAddInArrayParamAddress_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamAddress(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, TWData* val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamAddress(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -1251,8 +1299,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamAddress(
 }
 
 // method function for AddInArrayParamBytes
-// int TWEthereumAbiFunctionAddInArrayParamBytes(struct TWEthereumAbiFunction*
-// fn, int arrayIdx, TWData* val);
+static const char PyEthereumAbiFunctionAddInArrayParamBytes_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamBytes(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, TWData* val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamBytes(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -1280,8 +1329,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytes(
 }
 
 // method function for AddInArrayParamBytesFix
-// int TWEthereumAbiFunctionAddInArrayParamBytesFix(struct
-// TWEthereumAbiFunction* fn, int arrayIdx, size_t size, TWData* val);
+static const char PyEthereumAbiFunctionAddInArrayParamBytesFix_doc[] =
+    "int TWEthereumAbiFunctionAddInArrayParamBytesFix(struct "
+    "TWEthereumAbiFunction* fn, int arrayIdx, size_t size, TWData* val)";
 static PyObject* PyEthereumAbiFunctionAddInArrayParamBytesFix(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -1315,8 +1365,9 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytesFix(
 }
 
 // static method function for CreateWithString
-// struct TWEthereumAbiFunction* TWEthereumAbiFunctionCreateWithString(TWString*
-// name);
+static const char PyEthereumAbiFunctionCreateWithString_doc[] =
+    "struct TWEthereumAbiFunction* "
+    "TWEthereumAbiFunctionCreateWithString(TWString* name)";
 static PyObject* PyEthereumAbiFunctionCreateWithString(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -1340,97 +1391,118 @@ static PyObject* PyEthereumAbiFunctionCreateWithString(
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyEthereumAbiFunctionDelete, METH_FASTCALL},
-    {"GetType", (PyCFunction)PyEthereumAbiFunctionGetType, METH_FASTCALL},
+    {"Delete", (PyCFunction)PyEthereumAbiFunctionDelete, METH_FASTCALL,
+     PyEthereumAbiFunctionDelete_doc},
+    {"GetType", (PyCFunction)PyEthereumAbiFunctionGetType, METH_FASTCALL,
+     PyEthereumAbiFunctionGetType_doc},
     {"AddParamUInt8", (PyCFunction)PyEthereumAbiFunctionAddParamUInt8,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamUInt8_doc},
     {"AddParamUInt16", (PyCFunction)PyEthereumAbiFunctionAddParamUInt16,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamUInt16_doc},
     {"AddParamUInt32", (PyCFunction)PyEthereumAbiFunctionAddParamUInt32,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamUInt32_doc},
     {"AddParamUInt64", (PyCFunction)PyEthereumAbiFunctionAddParamUInt64,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamUInt64_doc},
     {"AddParamUInt256", (PyCFunction)PyEthereumAbiFunctionAddParamUInt256,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamUInt256_doc},
     {"AddParamUIntN", (PyCFunction)PyEthereumAbiFunctionAddParamUIntN,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamUIntN_doc},
     {"AddParamInt8", (PyCFunction)PyEthereumAbiFunctionAddParamInt8,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamInt8_doc},
     {"AddParamInt16", (PyCFunction)PyEthereumAbiFunctionAddParamInt16,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamInt16_doc},
     {"AddParamInt32", (PyCFunction)PyEthereumAbiFunctionAddParamInt32,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamInt32_doc},
     {"AddParamInt64", (PyCFunction)PyEthereumAbiFunctionAddParamInt64,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamInt64_doc},
     {"AddParamInt256", (PyCFunction)PyEthereumAbiFunctionAddParamInt256,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamInt256_doc},
     {"AddParamIntN", (PyCFunction)PyEthereumAbiFunctionAddParamIntN,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamIntN_doc},
     {"AddParamBool", (PyCFunction)PyEthereumAbiFunctionAddParamBool,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamBool_doc},
     {"AddParamString", (PyCFunction)PyEthereumAbiFunctionAddParamString,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamString_doc},
     {"AddParamAddress", (PyCFunction)PyEthereumAbiFunctionAddParamAddress,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamAddress_doc},
     {"AddParamBytes", (PyCFunction)PyEthereumAbiFunctionAddParamBytes,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamBytes_doc},
     {"AddParamBytesFix", (PyCFunction)PyEthereumAbiFunctionAddParamBytesFix,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamBytesFix_doc},
     {"AddParamArray", (PyCFunction)PyEthereumAbiFunctionAddParamArray,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionAddParamArray_doc},
     {"GetParamUInt8", (PyCFunction)PyEthereumAbiFunctionGetParamUInt8,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionGetParamUInt8_doc},
     {"GetParamUInt64", (PyCFunction)PyEthereumAbiFunctionGetParamUInt64,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionGetParamUInt64_doc},
     {"GetParamUInt256", (PyCFunction)PyEthereumAbiFunctionGetParamUInt256,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionGetParamUInt256_doc},
     {"GetParamBool", (PyCFunction)PyEthereumAbiFunctionGetParamBool,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionGetParamBool_doc},
     {"GetParamString", (PyCFunction)PyEthereumAbiFunctionGetParamString,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionGetParamString_doc},
     {"GetParamAddress", (PyCFunction)PyEthereumAbiFunctionGetParamAddress,
-     METH_FASTCALL},
+     METH_FASTCALL, PyEthereumAbiFunctionGetParamAddress_doc},
     {"AddInArrayParamUInt8",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamUInt8, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamUInt8, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamUInt8_doc},
     {"AddInArrayParamUInt16",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamUInt16, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamUInt16, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamUInt16_doc},
     {"AddInArrayParamUInt32",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamUInt32, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamUInt32, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamUInt32_doc},
     {"AddInArrayParamUInt64",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamUInt64, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamUInt64, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamUInt64_doc},
     {"AddInArrayParamUInt256",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamUInt256, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamUInt256, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamUInt256_doc},
     {"AddInArrayParamUIntN",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamUIntN, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamUIntN, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamUIntN_doc},
     {"AddInArrayParamInt8",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamInt8, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamInt8, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamInt8_doc},
     {"AddInArrayParamInt16",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamInt16, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamInt16, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamInt16_doc},
     {"AddInArrayParamInt32",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamInt32, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamInt32, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamInt32_doc},
     {"AddInArrayParamInt64",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamInt64, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamInt64, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamInt64_doc},
     {"AddInArrayParamInt256",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamInt256, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamInt256, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamInt256_doc},
     {"AddInArrayParamIntN",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamIntN, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamIntN, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamIntN_doc},
     {"AddInArrayParamBool",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamBool, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamBool, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamBool_doc},
     {"AddInArrayParamString",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamString, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamString, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamString_doc},
     {"AddInArrayParamAddress",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamAddress, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamAddress, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamAddress_doc},
     {"AddInArrayParamBytes",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamBytes, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamBytes, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamBytes_doc},
     {"AddInArrayParamBytesFix",
-     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamBytesFix, METH_FASTCALL},
+     (PyCFunction)PyEthereumAbiFunctionAddInArrayParamBytesFix, METH_FASTCALL,
+     PyEthereumAbiFunctionAddInArrayParamBytesFix_doc},
     {"CreateWithString", (PyCFunction)PyEthereumAbiFunctionCreateWithString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyEthereumAbiFunctionCreateWithString_doc},
     {}};
 
 bool PyInit_EthereumAbiFunction(PyObject* module) {
   // PyEthereumAbiFunctionType.tp_new = PyEthereumAbiFunction_new;
   // PyEthereumAbiFunctionType.tp_init = (initproc)PyEthereumAbiFunction_init;
+  PyEthereumAbiFunctionType.tp_dealloc =
+      (destructor)PyEthereumAbiFunction_dealloc;
   // PyEthereumAbiFunctionType.tp_str = (reprfunc)PyEthereumAbiFunction_str;
   PyEthereumAbiFunctionType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyEthereumAbiFunctionType.tp_methods = (PyMethodDef*)method_defs;

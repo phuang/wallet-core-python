@@ -56,6 +56,13 @@ TWBitcoinAddress* PyBitcoinAddress_GetTWBitcoinAddress(PyObject* object) {
   return ((PyBitcoinAddressObject*)object)->value;
 }
 
+static void PyBitcoinAddress_dealloc(PyBitcoinAddressObject* self) {
+  if (self->value) {
+    TWBitcoinAddressDelete(self->value);
+  }
+  Py_TYPE(self)->tp_free(self);
+}
+
 // static int PyBitcoinAddress_init(PyBitcoinAddressObject *self, PyObject
 // *args, PyObject *kwds) {
 //   return 0;
@@ -75,14 +82,31 @@ TWBitcoinAddress* PyBitcoinAddress_GetTWBitcoinAddress(PyObject* object) {
 //   return PyUnicode_FromString(str);
 // }
 
+// getter function for Description
+static const char PyBitcoinAddressDescription_doc[] =
+    "TWString* TWBitcoinAddressDescription(struct TWBitcoinAddress* address)";
+static PyObject* PyBitcoinAddressDescription(PyBitcoinAddressObject* self,
+                                             void*) {
+  return PyUnicode_FromTWString(TWBitcoinAddressDescription(self->value));
+}
+
 // getter function for Prefix
-// uint8_t TWBitcoinAddressPrefix(struct TWBitcoinAddress* address);
+static const char PyBitcoinAddressPrefix_doc[] =
+    "uint8_t TWBitcoinAddressPrefix(struct TWBitcoinAddress* address)";
 static PyObject* PyBitcoinAddressPrefix(PyBitcoinAddressObject* self, void*) {
   return PyLong_FromLong(TWBitcoinAddressPrefix(self->value));
 }
 
+// getter function for Keyhash
+static const char PyBitcoinAddressKeyhash_doc[] =
+    "TWData* TWBitcoinAddressKeyhash(struct TWBitcoinAddress* address)";
+static PyObject* PyBitcoinAddressKeyhash(PyBitcoinAddressObject* self, void*) {
+  return PyByteArray_FromTWData(TWBitcoinAddressKeyhash(self->value));
+}
+
 // method function for Delete
-// void TWBitcoinAddressDelete(struct TWBitcoinAddress* address);
+static const char PyBitcoinAddressDelete_doc[] =
+    "void TWBitcoinAddressDelete(struct TWBitcoinAddress* address)";
 static PyObject* PyBitcoinAddressDelete(PyBitcoinAddressObject* self,
                                         PyObject* const* args,
                                         Py_ssize_t nargs) {
@@ -96,8 +120,9 @@ static PyObject* PyBitcoinAddressDelete(PyBitcoinAddressObject* self,
 }
 
 // static method function for Equal
-// bool TWBitcoinAddressEqual(struct TWBitcoinAddress* lhs, struct
-// TWBitcoinAddress* rhs);
+static const char PyBitcoinAddressEqual_doc[] =
+    "bool TWBitcoinAddressEqual(struct TWBitcoinAddress* lhs, struct "
+    "TWBitcoinAddress* rhs)";
 static PyObject* PyBitcoinAddressEqual(PyBitcoinAddressObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
@@ -123,7 +148,8 @@ static PyObject* PyBitcoinAddressEqual(PyBitcoinAddressObject* self,
 }
 
 // static method function for IsValid
-// bool TWBitcoinAddressIsValid(TWData* data);
+static const char PyBitcoinAddressIsValid_doc[] =
+    "bool TWBitcoinAddressIsValid(TWData* data)";
 static PyObject* PyBitcoinAddressIsValid(PyBitcoinAddressObject* self,
                                          PyObject* const* args,
                                          Py_ssize_t nargs) {
@@ -143,7 +169,8 @@ static PyObject* PyBitcoinAddressIsValid(PyBitcoinAddressObject* self,
 }
 
 // static method function for IsValidString
-// bool TWBitcoinAddressIsValidString(TWString* string);
+static const char PyBitcoinAddressIsValidString_doc[] =
+    "bool TWBitcoinAddressIsValidString(TWString* string)";
 static PyObject* PyBitcoinAddressIsValidString(PyBitcoinAddressObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
@@ -163,7 +190,9 @@ static PyObject* PyBitcoinAddressIsValidString(PyBitcoinAddressObject* self,
 }
 
 // static method function for CreateWithString
-// struct TWBitcoinAddress* TWBitcoinAddressCreateWithString(TWString* string);
+static const char PyBitcoinAddressCreateWithString_doc[] =
+    "struct TWBitcoinAddress* TWBitcoinAddressCreateWithString(TWString* "
+    "string)";
 static PyObject* PyBitcoinAddressCreateWithString(PyBitcoinAddressObject* self,
                                                   PyObject* const* args,
                                                   Py_ssize_t nargs) {
@@ -183,7 +212,8 @@ static PyObject* PyBitcoinAddressCreateWithString(PyBitcoinAddressObject* self,
 }
 
 // static method function for CreateWithData
-// struct TWBitcoinAddress* TWBitcoinAddressCreateWithData(TWData* data);
+static const char PyBitcoinAddressCreateWithData_doc[] =
+    "struct TWBitcoinAddress* TWBitcoinAddressCreateWithData(TWData* data)";
 static PyObject* PyBitcoinAddressCreateWithData(PyBitcoinAddressObject* self,
                                                 PyObject* const* args,
                                                 Py_ssize_t nargs) {
@@ -203,8 +233,9 @@ static PyObject* PyBitcoinAddressCreateWithData(PyBitcoinAddressObject* self,
 }
 
 // static method function for CreateWithPublicKey
-// struct TWBitcoinAddress* TWBitcoinAddressCreateWithPublicKey(struct
-// TWPublicKey* publicKey, uint8_t prefix);
+static const char PyBitcoinAddressCreateWithPublicKey_doc[] =
+    "struct TWBitcoinAddress* TWBitcoinAddressCreateWithPublicKey(struct "
+    "TWPublicKey* publicKey, uint8_t prefix)";
 static PyObject* PyBitcoinAddressCreateWithPublicKey(
     PyBitcoinAddressObject* self,
     PyObject* const* args,
@@ -231,27 +262,35 @@ static PyObject* PyBitcoinAddressCreateWithPublicKey(
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"Prefix", (getter)PyBitcoinAddressPrefix},
+    {"Description", (getter)PyBitcoinAddressDescription, nullptr,
+     PyBitcoinAddressDescription_doc},
+    {"Prefix", (getter)PyBitcoinAddressPrefix, nullptr,
+     PyBitcoinAddressPrefix_doc},
+    {"Keyhash", (getter)PyBitcoinAddressKeyhash, nullptr,
+     PyBitcoinAddressKeyhash_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Delete", (PyCFunction)PyBitcoinAddressDelete, METH_FASTCALL},
-    {"Equal", (PyCFunction)PyBitcoinAddressEqual, METH_FASTCALL | METH_STATIC},
+    {"Delete", (PyCFunction)PyBitcoinAddressDelete, METH_FASTCALL,
+     PyBitcoinAddressDelete_doc},
+    {"Equal", (PyCFunction)PyBitcoinAddressEqual, METH_FASTCALL | METH_STATIC,
+     PyBitcoinAddressEqual_doc},
     {"IsValid", (PyCFunction)PyBitcoinAddressIsValid,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBitcoinAddressIsValid_doc},
     {"IsValidString", (PyCFunction)PyBitcoinAddressIsValidString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBitcoinAddressIsValidString_doc},
     {"CreateWithString", (PyCFunction)PyBitcoinAddressCreateWithString,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBitcoinAddressCreateWithString_doc},
     {"CreateWithData", (PyCFunction)PyBitcoinAddressCreateWithData,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBitcoinAddressCreateWithData_doc},
     {"CreateWithPublicKey", (PyCFunction)PyBitcoinAddressCreateWithPublicKey,
-     METH_FASTCALL | METH_STATIC},
+     METH_FASTCALL | METH_STATIC, PyBitcoinAddressCreateWithPublicKey_doc},
     {}};
 
 bool PyInit_BitcoinAddress(PyObject* module) {
   // PyBitcoinAddressType.tp_new = PyBitcoinAddress_new;
   // PyBitcoinAddressType.tp_init = (initproc)PyBitcoinAddress_init;
+  PyBitcoinAddressType.tp_dealloc = (destructor)PyBitcoinAddress_dealloc;
   // PyBitcoinAddressType.tp_str = (reprfunc)PyBitcoinAddress_str;
   PyBitcoinAddressType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyBitcoinAddressType.tp_methods = (PyMethodDef*)method_defs;
