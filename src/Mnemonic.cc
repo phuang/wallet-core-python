@@ -76,7 +76,8 @@ static PyObject* PyMnemonicIsValid(PyMnemonicObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -97,7 +98,8 @@ static PyObject* PyMnemonicIsValidWord(PyMnemonicObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -118,7 +120,8 @@ static PyObject* PyMnemonicSuggest(PyMnemonicObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 

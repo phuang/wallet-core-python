@@ -91,7 +91,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
         prepare_args = []
         prepare_args.append(T('''
   if (nargs != ${nargs}) {
-    PyErr_Format(PyExc_TypeError, "Expect ${nargs} instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect ${nargs} args, but %d args are passed in.", nargs);
     return nullptr;
   }
 ''').substitute(nargs = len(args)))

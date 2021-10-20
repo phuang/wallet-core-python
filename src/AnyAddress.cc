@@ -108,7 +108,8 @@ static PyObject* PyAnyAddressDelete(PyAnyAddressObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -124,7 +125,8 @@ static PyObject* PyAnyAddressEqual(PyAnyAddressObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -151,7 +153,8 @@ static PyObject* PyAnyAddressIsValid(PyAnyAddressObject* self,
                                      PyObject* const* args,
                                      Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -179,7 +182,8 @@ static PyObject* PyAnyAddressCreateWithString(PyAnyAddressObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -207,7 +211,8 @@ static PyObject* PyAnyAddressCreateWithPublicKey(PyAnyAddressObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 

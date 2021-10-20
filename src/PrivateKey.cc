@@ -94,7 +94,8 @@ static PyObject* PyPrivateKeyDelete(PyPrivateKeyObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -110,7 +111,8 @@ static PyObject* PyPrivateKeyGetPublicKeySecp256k1(PyPrivateKeyObject* self,
                                                    PyObject* const* args,
                                                    Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -132,7 +134,8 @@ static PyObject* PyPrivateKeyGetPublicKeyNist256p1(PyPrivateKeyObject* self,
                                                    PyObject* const* args,
                                                    Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -148,7 +151,8 @@ static PyObject* PyPrivateKeyGetPublicKeyEd25519(PyPrivateKeyObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -165,7 +169,8 @@ static PyObject* PyPrivateKeyGetPublicKeyEd25519Blake2b(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -182,7 +187,8 @@ static PyObject* PyPrivateKeyGetPublicKeyEd25519Extended(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -198,7 +204,8 @@ static PyObject* PyPrivateKeyGetPublicKeyCurve25519(PyPrivateKeyObject* self,
                                                     PyObject* const* args,
                                                     Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -214,7 +221,8 @@ static PyObject* PyPrivateKeyGetSharedKey(PyPrivateKeyObject* self,
                                           PyObject* const* args,
                                           Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -242,7 +250,8 @@ static PyObject* PyPrivateKeySign(PyPrivateKeyObject* self,
                                   PyObject* const* args,
                                   Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -270,7 +279,8 @@ static PyObject* PyPrivateKeySignAsDER(PyPrivateKeyObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -298,7 +308,8 @@ static PyObject* PyPrivateKeySignSchnorr(PyPrivateKeyObject* self,
                                          PyObject* const* args,
                                          Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -325,7 +336,8 @@ static PyObject* PyPrivateKeyCreate(PyPrivateKeyObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -340,7 +352,8 @@ static PyObject* PyPrivateKeyCreateWithData(PyPrivateKeyObject* self,
                                             PyObject* const* args,
                                             Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -361,7 +374,8 @@ static PyObject* PyPrivateKeyCreateCopy(PyPrivateKeyObject* self,
                                         PyObject* const* args,
                                         Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -382,7 +396,8 @@ static PyObject* PyPrivateKeyIsValid(PyPrivateKeyObject* self,
                                      PyObject* const* args,
                                      Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 

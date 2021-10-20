@@ -139,7 +139,8 @@ static PyObject* PyBitcoinScriptDelete(PyBitcoinScriptObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -155,7 +156,8 @@ static PyObject* PyBitcoinScriptMatchPayToPubkey(PyBitcoinScriptObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -172,7 +174,8 @@ static PyObject* PyBitcoinScriptMatchPayToPubkeyHash(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -189,7 +192,8 @@ static PyObject* PyBitcoinScriptMatchPayToScriptHash(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -206,7 +210,8 @@ static PyObject* PyBitcoinScriptMatchPayToWitnessPublicKeyHash(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -223,7 +228,8 @@ static PyObject* PyBitcoinScriptMatchPayToWitnessScriptHash(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -238,7 +244,8 @@ static PyObject* PyBitcoinScriptEncode(PyBitcoinScriptObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -253,7 +260,8 @@ static PyObject* PyBitcoinScriptCreate(PyBitcoinScriptObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -268,7 +276,8 @@ static PyObject* PyBitcoinScriptCreateWithData(PyBitcoinScriptObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -290,7 +299,8 @@ static PyObject* PyBitcoinScriptCreateCopy(PyBitcoinScriptObject* self,
                                            PyObject* const* args,
                                            Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -312,7 +322,8 @@ static PyObject* PyBitcoinScriptEqual(PyBitcoinScriptObject* self,
                                       PyObject* const* args,
                                       Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -340,7 +351,8 @@ static PyObject* PyBitcoinScriptBuildPayToPublicKey(PyBitcoinScriptObject* self,
                                                     PyObject* const* args,
                                                     Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -363,7 +375,8 @@ static PyObject* PyBitcoinScriptBuildPayToPublicKeyHash(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -386,7 +399,8 @@ static PyObject* PyBitcoinScriptBuildPayToScriptHash(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -409,7 +423,8 @@ static PyObject* PyBitcoinScriptBuildPayToWitnessPubkeyHash(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -433,7 +448,8 @@ static PyObject* PyBitcoinScriptBuildPayToWitnessScriptHash(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -457,7 +473,8 @@ static PyObject* PyBitcoinScriptLockScriptForAddress(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -485,7 +502,8 @@ static PyObject* PyBitcoinScriptHashTypeForCoin(PyBitcoinScriptObject* self,
                                                 PyObject* const* args,
                                                 Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 

@@ -78,7 +78,8 @@ static PyObject* PyAESEncryptCBC(PyAESObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
   if (nargs != 4) {
-    PyErr_Format(PyExc_TypeError, "Expect 4 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 4 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -118,7 +119,8 @@ static PyObject* PyAESDecryptCBC(PyAESObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
   if (nargs != 4) {
-    PyErr_Format(PyExc_TypeError, "Expect 4 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 4 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -157,7 +159,8 @@ static PyObject* PyAESEncryptCTR(PyAESObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
   if (nargs != 3) {
-    PyErr_Format(PyExc_TypeError, "Expect 3 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -190,7 +193,8 @@ static PyObject* PyAESDecryptCTR(PyAESObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
   if (nargs != 3) {
-    PyErr_Format(PyExc_TypeError, "Expect 3 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 

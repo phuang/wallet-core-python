@@ -75,7 +75,8 @@ static PyObject* PyHashSHA1(PyHashObject* self,
                             PyObject* const* args,
                             Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -95,7 +96,8 @@ static PyObject* PyHashSHA256(PyHashObject* self,
                               PyObject* const* args,
                               Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -115,7 +117,8 @@ static PyObject* PyHashSHA512(PyHashObject* self,
                               PyObject* const* args,
                               Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -136,7 +139,8 @@ static PyObject* PyHashSHA512_256(PyHashObject* self,
                                   PyObject* const* args,
                                   Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -157,7 +161,8 @@ static PyObject* PyHashKeccak256(PyHashObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -178,7 +183,8 @@ static PyObject* PyHashKeccak512(PyHashObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -198,7 +204,8 @@ static PyObject* PyHashSHA3_256(PyHashObject* self,
                                 PyObject* const* args,
                                 Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -218,7 +225,8 @@ static PyObject* PyHashSHA3_512(PyHashObject* self,
                                 PyObject* const* args,
                                 Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -238,7 +246,8 @@ static PyObject* PyHashRIPEMD(PyHashObject* self,
                               PyObject* const* args,
                               Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -258,7 +267,8 @@ static PyObject* PyHashBlake256(PyHashObject* self,
                                 PyObject* const* args,
                                 Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -279,7 +289,8 @@ static PyObject* PyHashBlake2b(PyHashObject* self,
                                PyObject* const* args,
                                Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -306,7 +317,8 @@ static PyObject* PyHashGroestl512(PyHashObject* self,
                                   PyObject* const* args,
                                   Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -327,7 +339,8 @@ static PyObject* PyHashXXHash64(PyHashObject* self,
                                 PyObject* const* args,
                                 Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -354,7 +367,8 @@ static PyObject* PyHashTwoXXHash64Concat(PyHashObject* self,
                                          PyObject* const* args,
                                          Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -375,7 +389,8 @@ static PyObject* PyHashSHA256SHA256(PyHashObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -396,7 +411,8 @@ static PyObject* PyHashSHA256RIPEMD(PyHashObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -417,7 +433,8 @@ static PyObject* PyHashSHA3_256RIPEMD(PyHashObject* self,
                                       PyObject* const* args,
                                       Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -438,7 +455,8 @@ static PyObject* PyHashBlake256Blake256(PyHashObject* self,
                                         PyObject* const* args,
                                         Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -459,7 +477,8 @@ static PyObject* PyHashBlake256RIPEMD(PyHashObject* self,
                                       PyObject* const* args,
                                       Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -480,7 +499,8 @@ static PyObject* PyHashGroestl512Groestl512(PyHashObject* self,
                                             PyObject* const* args,
                                             Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 

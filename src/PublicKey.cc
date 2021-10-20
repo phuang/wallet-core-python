@@ -128,7 +128,8 @@ static PyObject* PyPublicKeyDelete(PyPublicKeyObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -144,7 +145,8 @@ static PyObject* PyPublicKeyVerify(PyPublicKeyObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -172,7 +174,8 @@ static PyObject* PyPublicKeyVerifySchnorr(PyPublicKeyObject* self,
                                           PyObject* const* args,
                                           Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -200,7 +203,8 @@ static PyObject* PyPublicKeyCreateWithData(PyPublicKeyObject* self,
                                            PyObject* const* args,
                                            Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -227,7 +231,8 @@ static PyObject* PyPublicKeyIsValid(PyPublicKeyObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -255,7 +260,8 @@ static PyObject* PyPublicKeyRecover(PyPublicKeyObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 

@@ -88,7 +88,8 @@ static PyObject* PyEthereumAbiFunctionDelete(PyEthereumAbiFunctionObject* self,
                                              PyObject* const* args,
                                              Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -103,7 +104,8 @@ static PyObject* PyEthereumAbiFunctionGetType(PyEthereumAbiFunctionObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -120,7 +122,8 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt8(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -149,7 +152,8 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt16(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -178,7 +182,8 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt32(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -207,7 +212,8 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt64(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -236,7 +242,8 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt256(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -266,7 +273,8 @@ static PyObject* PyEthereumAbiFunctionAddParamUIntN(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 3) {
-    PyErr_Format(PyExc_TypeError, "Expect 3 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -302,7 +310,8 @@ static PyObject* PyEthereumAbiFunctionAddParamInt8(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -331,7 +340,8 @@ static PyObject* PyEthereumAbiFunctionAddParamInt16(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -360,7 +370,8 @@ static PyObject* PyEthereumAbiFunctionAddParamInt32(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -389,7 +400,8 @@ static PyObject* PyEthereumAbiFunctionAddParamInt64(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -418,7 +430,8 @@ static PyObject* PyEthereumAbiFunctionAddParamInt256(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -448,7 +461,8 @@ static PyObject* PyEthereumAbiFunctionAddParamIntN(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 3) {
-    PyErr_Format(PyExc_TypeError, "Expect 3 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -484,7 +498,8 @@ static PyObject* PyEthereumAbiFunctionAddParamBool(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -513,7 +528,8 @@ static PyObject* PyEthereumAbiFunctionAddParamString(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -543,7 +559,8 @@ static PyObject* PyEthereumAbiFunctionAddParamAddress(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -573,7 +590,8 @@ static PyObject* PyEthereumAbiFunctionAddParamBytes(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -603,7 +621,8 @@ static PyObject* PyEthereumAbiFunctionAddParamBytesFix(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 3) {
-    PyErr_Format(PyExc_TypeError, "Expect 3 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -639,7 +658,8 @@ static PyObject* PyEthereumAbiFunctionAddParamArray(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -662,7 +682,8 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt8(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -691,7 +712,8 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt64(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -721,7 +743,8 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt256(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -751,7 +774,8 @@ static PyObject* PyEthereumAbiFunctionGetParamBool(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -780,7 +804,8 @@ static PyObject* PyEthereumAbiFunctionGetParamString(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -810,7 +835,8 @@ static PyObject* PyEthereumAbiFunctionGetParamAddress(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -840,7 +866,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt8(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -870,7 +897,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt16(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -900,7 +928,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt32(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -930,7 +959,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt64(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -960,7 +990,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt256(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -990,7 +1021,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUIntN(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 3) {
-    PyErr_Format(PyExc_TypeError, "Expect 3 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -1026,7 +1058,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt8(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -1056,7 +1089,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt16(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -1086,7 +1120,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt32(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -1116,7 +1151,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt64(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -1146,7 +1182,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt256(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -1176,7 +1213,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamIntN(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 3) {
-    PyErr_Format(PyExc_TypeError, "Expect 3 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -1212,7 +1250,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBool(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -1242,7 +1281,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamString(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -1272,7 +1312,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamAddress(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -1302,7 +1343,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytes(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -1332,7 +1374,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytesFix(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 3) {
-    PyErr_Format(PyExc_TypeError, "Expect 3 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -1368,7 +1411,8 @@ static PyObject* PyEthereumAbiFunctionCreateWithString(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 

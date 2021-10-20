@@ -79,7 +79,8 @@ static PyObject* PyEthereumAbiValueEncodeBool(PyEthereumAbiValueObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -100,7 +101,8 @@ static PyObject* PyEthereumAbiValueEncodeInt32(PyEthereumAbiValueObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -121,7 +123,8 @@ static PyObject* PyEthereumAbiValueEncodeUInt32(PyEthereumAbiValueObject* self,
                                                 PyObject* const* args,
                                                 Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -142,7 +145,8 @@ static PyObject* PyEthereumAbiValueEncodeInt256(PyEthereumAbiValueObject* self,
                                                 PyObject* const* args,
                                                 Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -163,7 +167,8 @@ static PyObject* PyEthereumAbiValueEncodeUInt256(PyEthereumAbiValueObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -184,7 +189,8 @@ static PyObject* PyEthereumAbiValueEncodeAddress(PyEthereumAbiValueObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -205,7 +211,8 @@ static PyObject* PyEthereumAbiValueEncodeString(PyEthereumAbiValueObject* self,
                                                 PyObject* const* args,
                                                 Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -226,7 +233,8 @@ static PyObject* PyEthereumAbiValueEncodeBytes(PyEthereumAbiValueObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -248,7 +256,8 @@ static PyObject* PyEthereumAbiValueEncodeBytesDyn(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -269,7 +278,8 @@ static PyObject* PyEthereumAbiValueDecodeUInt256(PyEthereumAbiValueObject* self,
                                                  PyObject* const* args,
                                                  Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -290,7 +300,8 @@ static PyObject* PyEthereumAbiValueDecodeValue(PyEthereumAbiValueObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -317,7 +328,8 @@ static PyObject* PyEthereumAbiValueDecodeArray(PyEthereumAbiValueObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 

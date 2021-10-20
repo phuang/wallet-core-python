@@ -77,7 +77,8 @@ static PyObject* PyBase58Encode(PyBase58Object* self,
                                 PyObject* const* args,
                                 Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -98,7 +99,8 @@ static PyObject* PyBase58EncodeNoCheck(PyBase58Object* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -119,7 +121,8 @@ static PyObject* PyBase58Decode(PyBase58Object* self,
                                 PyObject* const* args,
                                 Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -140,7 +143,8 @@ static PyObject* PyBase58DecodeNoCheck(PyBase58Object* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 

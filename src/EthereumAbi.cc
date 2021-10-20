@@ -79,7 +79,8 @@ static PyObject* PyEthereumAbiEncode(PyEthereumAbiObject* self,
                                      PyObject* const* args,
                                      Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -102,7 +103,8 @@ static PyObject* PyEthereumAbiDecodeOutput(PyEthereumAbiObject* self,
                                            PyObject* const* args,
                                            Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -130,7 +132,8 @@ static PyObject* PyEthereumAbiDecodeCall(PyEthereumAbiObject* self,
                                          PyObject* const* args,
                                          Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -157,7 +160,8 @@ static PyObject* PyEthereumAbiEncodeTyped(PyEthereumAbiObject* self,
                                           PyObject* const* args,
                                           Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 

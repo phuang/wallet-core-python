@@ -112,7 +112,8 @@ static PyObject* PyAccountDelete(PyAccountObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -128,7 +129,8 @@ static PyObject* PyAccountCreate(PyAccountObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
   if (nargs != 4) {
-    PyErr_Format(PyExc_TypeError, "Expect 4 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 4 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 

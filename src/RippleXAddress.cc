@@ -100,7 +100,8 @@ static PyObject* PyRippleXAddressDelete(PyRippleXAddressObject* self,
                                         PyObject* const* args,
                                         Py_ssize_t nargs) {
   if (nargs != 0) {
-    PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 0 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -116,7 +117,8 @@ static PyObject* PyRippleXAddressEqual(PyRippleXAddressObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -143,7 +145,8 @@ static PyObject* PyRippleXAddressIsValidString(PyRippleXAddressObject* self,
                                                PyObject* const* args,
                                                Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -165,7 +168,8 @@ static PyObject* PyRippleXAddressCreateWithString(PyRippleXAddressObject* self,
                                                   PyObject* const* args,
                                                   Py_ssize_t nargs) {
   if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
@@ -188,7 +192,8 @@ static PyObject* PyRippleXAddressCreateWithPublicKey(
     PyObject* const* args,
     Py_ssize_t nargs) {
   if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
     return nullptr;
   }
 
