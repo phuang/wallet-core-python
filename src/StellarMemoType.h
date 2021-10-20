@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWStellarMemoType.h>
 
 struct PyStellarMemoTypeObject {
-  PyObject_HEAD const TWStellarMemoType value;
+  PyObject_HEAD;
+  const TWStellarMemoType value;
 };
 
 // Returns true if the object is a PyStellarMemoType.

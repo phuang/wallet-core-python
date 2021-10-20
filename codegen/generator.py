@@ -18,23 +18,6 @@ class Generator:
         filepath = os.path.join(DIR, 'templates', filename)
         return T(open(filepath).read())
 
-    def generate(self):
-        names = []
-        for enum in self._parser._enums:
-            self.generate_enum(enum)
-            names.append(enum._name[2:])
-        names.sort()
-
-        includes = '\n'.join(['#include "{}.h"'.format(f) for f in names])
-        functions = '\n'.join(['  PyInit_{},'.format(f) for f in names])
-
-        values = { 'functions' : functions, 'includes' : includes }
-        with open(os.path.join(OUTPUT_DIR, 'module.cc'), 'w') as out:
-            template = self.template('module.cc')
-            out.write(template.substitute(values))
-
-        self.format()
-
     def format(self):
         # format generated c/c++ source code
         os.system('/usr/bin/clang-format -style=Chromium -i \
@@ -99,12 +82,27 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
         for i, arg in enumerate(args):
             print(arg._name)
             print(arg._type._name)
-            if arg._type._name == 'TWString':
+            if arg._type._name == 'bool':
+                arg_type  = 'Bool'
+                get_ctype = 'PyBool_IsTrue'
+                call_args.append('arg{}'.format(i))
+                used_types.add('Bool')
+            elif arg._type._name == 'int':
+                arg_type  = 'Long'
+                get_ctype = 'PyLong_AsLong'
+                call_args.append('arg{}'.format(i))
+            elif arg._type._name == 'TWString':
                 assert arg._type._is_ptr
                 arg_type  = 'Unicode'
                 get_ctype = 'PyUnicode_GetTWString'
                 call_args.append('arg{}.get()'.format(i))
                 used_types.add('String')
+            elif arg._type._name == 'TWData':
+                assert arg._type._is_ptr
+                arg_type  = 'ByteArray'
+                get_ctype = 'PyByteArray_GetTWData'
+                call_args.append('arg{}.get()'.format(i))
+                used_types.add('Data')
             else:
                 continue
             values = {
@@ -113,6 +111,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 'get_ctype' : get_ctype,
             }
             prepare_args.append(template.substitute(values))
+
         prepare_args = '\n'.join(prepare_args)
         call_args = ', '.join(call_args)
         return prepare_args, call_args, used_types
@@ -120,6 +119,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
     def process_methods(self, name, methods):
         template = T('''
 // method function for ${method_name}
+// ${cfunction}
 static PyObject* Py${name}${method_name}(Py${name}Object *self,
                                          PyObject *const *args,
                                          Py_ssize_t nargs) {
@@ -148,6 +148,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
             call_args = 'self->value, '  + call_args if call_args else 'self->value'
             used_types |= types
             values = {
+                'cfunction' : str(method),
                 'name' : name,
                 'method_name' : method_name,
                 'prepare_args' : prepare_args,
@@ -206,6 +207,60 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         with open(os.path.join(OUTPUT_DIR, name) + '.h', 'w') as out:
             template = self.template('enum.h')
             out.write(template.substitute(values))
+
+    def generate_class(self, class_):
+        name = class_._name
+        assert name.startswith('TW')
+        name = name[2:]
+        used_types = set()
+
+        prop_includes, prop_functions, getsetdefs = self.process_properties(name, class_._properties)
+        method_includes, method_functions, methoddefs = self.process_methods(name, class_._methods)
+
+        includes = prop_includes + method_includes
+        includes = '\n'.join(includes)
+        functions = prop_functions + method_functions
+        functions = '\n'.join(functions)
+
+        getsetdefs = '\n  '.join(getsetdefs)
+        methoddefs = '\n  '.join(methoddefs)
+
+        values = {
+            'name' : name,
+            'includes' : includes,
+            'getsetdefs' : getsetdefs,
+            'methoddefs' : methoddefs,
+            'functions' : functions
+        }
+
+        with open(os.path.join(OUTPUT_DIR, name) + '.cc', 'w') as out:
+            template = self.template('class.cc')
+            out.write(template.substitute(values))
+
+        with open(os.path.join(OUTPUT_DIR, name) + '.h', 'w') as out:
+            template = self.template('class.h')
+            out.write(template.substitute(values))
+
+    def generate(self):
+        names = []
+        for enum in self._parser._enums:
+            self.generate_enum(enum)
+            names.append(enum._name[2:])
+
+        for class_ in self._parser._classes:
+            self.generate_class(class_)
+            names.append(class_._name[2:])
+
+        names.sort()
+        includes = '\n'.join(['#include "{}.h"'.format(f) for f in names])
+        functions = '\n'.join(['  PyInit_{},'.format(f) for f in names])
+
+        values = { 'functions' : functions, 'includes' : includes }
+        with open(os.path.join(OUTPUT_DIR, 'module.cc'), 'w') as out:
+            template = self.template('module.cc')
+            out.write(template.substitute(values))
+
+        self.format()
 
 
 if __name__ == '__main__':

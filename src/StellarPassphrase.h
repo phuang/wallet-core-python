@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWStellarPassphrase.h>
 
 struct PyStellarPassphraseObject {
-  PyObject_HEAD const TWStellarPassphrase value;
+  PyObject_HEAD;
+  const TWStellarPassphrase value;
 };
 
 // Returns true if the object is a PyStellarPassphrase.

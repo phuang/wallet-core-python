@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWSS58AddressType.h>
 
 struct PySS58AddressTypeObject {
-  PyObject_HEAD const TWSS58AddressType value;
+  PyObject_HEAD;
+  const TWSS58AddressType value;
 };
 
 // Returns true if the object is a PySS58AddressType.

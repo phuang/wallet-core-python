@@ -15,26 +15,29 @@
   I(None)
 
 static PyTypeObject PyCurveType = {
-    PyVarObject_HEAD_INIT(NULL, 0) "walletcore.Curve", /* tp_name */
-    sizeof(PyCurveObject),                             /* tp_basicsize */
-    0,                                                 /* tp_itemsize */
-    0,                                                 /* tp_dealloc */
-    0,                                                 /* tp_print */
-    0,                                                 /* tp_getattr */
-    0,                                                 /* tp_setattr */
-    0,                                                 /* tp_reserved */
-    0,                                                 /* tp_repr */
-    0,                                                 /* tp_as_number */
-    0,                                                 /* tp_as_sequence */
-    0,                                                 /* tp_as_mapping */
-    0,                                                 /* tp_hash  */
-    0,                                                 /* tp_call */
-    0,                                                 /* tp_str */
-    0,                                                 /* tp_getattro */
-    0,                                                 /* tp_setattro */
-    0,                                                 /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT,                                /* tp_flags */
-    nullptr,                                           /* tp_doc */
+    // clang-format off
+    PyVarObject_HEAD_INIT(NULL, 0)
+    // clang-format on
+    "walletcore.Curve",    /* tp_name */
+    sizeof(PyCurveObject), /* tp_basicsize */
+    0,                     /* tp_itemsize */
+    0,                     /* tp_dealloc */
+    0,                     /* tp_print */
+    0,                     /* tp_getattr */
+    0,                     /* tp_setattr */
+    0,                     /* tp_reserved */
+    0,                     /* tp_repr */
+    0,                     /* tp_as_number */
+    0,                     /* tp_as_sequence */
+    0,                     /* tp_as_mapping */
+    0,                     /* tp_hash  */
+    0,                     /* tp_call */
+    0,                     /* tp_str */
+    0,                     /* tp_getattro */
+    0,                     /* tp_setattro */
+    0,                     /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,    /* tp_flags */
+    nullptr,               /* tp_doc */
 };
 
 bool PyCurve_Check(PyObject* object) {

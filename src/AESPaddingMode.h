@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWAESPaddingMode.h>
 
 struct PyAESPaddingModeObject {
-  PyObject_HEAD const TWAESPaddingMode value;
+  PyObject_HEAD;
+  const TWAESPaddingMode value;
 };
 
 // Returns true if the object is a PyAESPaddingMode.

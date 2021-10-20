@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWHRP.h>
 
 struct PyHRPObject {
-  PyObject_HEAD const TWHRP value;
+  PyObject_HEAD;
+  const TWHRP value;
 };
 
 // Returns true if the object is a PyHRP.

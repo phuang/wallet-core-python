@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWStellarVersionByte.h>
 
 struct PyStellarVersionByteObject {
-  PyObject_HEAD const TWStellarVersionByte value;
+  PyObject_HEAD;
+  const TWStellarVersionByte value;
 };
 
 // Returns true if the object is a PyStellarVersionByte.

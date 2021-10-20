@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWCoinType.h>
 
 struct PyCoinTypeObject {
-  PyObject_HEAD const TWCoinType value;
+  PyObject_HEAD;
+  const TWCoinType value;
 };
 
 // Returns true if the object is a PyCoinType.

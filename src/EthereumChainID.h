@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWEthereumChainID.h>
 
 struct PyEthereumChainIDObject {
-  PyObject_HEAD const TWEthereumChainID value;
+  PyObject_HEAD;
+  const TWEthereumChainID value;
 };
 
 // Returns true if the object is a PyEthereumChainID.

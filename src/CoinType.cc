@@ -89,26 +89,29 @@
   I(Ronin)
 
 static PyTypeObject PyCoinTypeType = {
-    PyVarObject_HEAD_INIT(NULL, 0) "walletcore.CoinType", /* tp_name */
-    sizeof(PyCoinTypeObject),                             /* tp_basicsize */
-    0,                                                    /* tp_itemsize */
-    0,                                                    /* tp_dealloc */
-    0,                                                    /* tp_print */
-    0,                                                    /* tp_getattr */
-    0,                                                    /* tp_setattr */
-    0,                                                    /* tp_reserved */
-    0,                                                    /* tp_repr */
-    0,                                                    /* tp_as_number */
-    0,                                                    /* tp_as_sequence */
-    0,                                                    /* tp_as_mapping */
-    0,                                                    /* tp_hash  */
-    0,                                                    /* tp_call */
-    0,                                                    /* tp_str */
-    0,                                                    /* tp_getattro */
-    0,                                                    /* tp_setattro */
-    0,                                                    /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT,                                   /* tp_flags */
-    nullptr,                                              /* tp_doc */
+    // clang-format off
+    PyVarObject_HEAD_INIT(NULL, 0)
+    // clang-format on
+    "walletcore.CoinType",    /* tp_name */
+    sizeof(PyCoinTypeObject), /* tp_basicsize */
+    0,                        /* tp_itemsize */
+    0,                        /* tp_dealloc */
+    0,                        /* tp_print */
+    0,                        /* tp_getattr */
+    0,                        /* tp_setattr */
+    0,                        /* tp_reserved */
+    0,                        /* tp_repr */
+    0,                        /* tp_as_number */
+    0,                        /* tp_as_sequence */
+    0,                        /* tp_as_mapping */
+    0,                        /* tp_hash  */
+    0,                        /* tp_call */
+    0,                        /* tp_str */
+    0,                        /* tp_getattro */
+    0,                        /* tp_setattro */
+    0,                        /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,       /* tp_flags */
+    nullptr,                  /* tp_doc */
 };
 
 bool PyCoinType_Check(PyObject* object) {
@@ -225,6 +228,7 @@ static PyObject* PyCoinTypeSlip44Id(PyCoinTypeObject* self, void*) {
 }
 
 // method function for Validate
+// bool TWCoinTypeValidate(enum TWCoinType coin, TWString * address)
 static PyObject* PyCoinTypeValidate(PyCoinTypeObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {

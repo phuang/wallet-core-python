@@ -10,7 +10,10 @@
   I(Kin)
 
 static PyTypeObject PyStellarPassphraseType = {
-    PyVarObject_HEAD_INIT(NULL, 0) "walletcore.StellarPassphrase", /* tp_name */
+    // clang-format off
+    PyVarObject_HEAD_INIT(NULL, 0)
+    // clang-format on
+    "walletcore.StellarPassphrase",    /* tp_name */
     sizeof(PyStellarPassphraseObject), /* tp_basicsize */
     0,                                 /* tp_itemsize */
     0,                                 /* tp_dealloc */

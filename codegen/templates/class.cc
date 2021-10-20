@@ -2,16 +2,12 @@
 
 #include "${name}.h"
 
-#include <algorithm>
-#include <iterator>
-
 ${includes}
 
-#define CONSTANTS(I) \
-${constants}
-
 static PyTypeObject Py${name}Type = {
+    // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
+    // clang-format on
     "walletcore.${name}",      /* tp_name */
     sizeof(Py${name}Object),   /* tp_basicsize */
     0,                         /* tp_itemsize */
@@ -39,62 +35,36 @@ bool Py${name}_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &Py${name}Type) != 0;
 }
 
-// Create Py${name} from enum TW${name}. It returns the same Py${name} instance
-// for the same enum TW${name} value.
-PyObject* Py${name}_FromTW${name}(TW${name} value) {
-  struct ValuePair {
-    const TW${name} value;
-    PyObject* pyvalue;
-  };
-#define I(name) { TW${name}##name, nullptr },
-  static ValuePair constants[] = {
-    CONSTANTS(I)
-  };
-#undef I
-
-  ValuePair* value_pair =
-      std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair& v) { return v.value == value; });
-
-  if (!value_pair) {
-    PyErr_Format(PyExc_ValueError, "Invalid ${name} value: %d", value);
+// Create Py${name} from enum TW${name}.
+PyObject* Py${name}_FromTW${name}(TW${name}* value) {
+  if (!value)
     return nullptr;
-  }
 
-  if (!value_pair->pyvalue) {
-    auto* pyvalue = PyObject_New(Py${name}Object, &Py${name}Type);
-    *const_cast<TW${name}*>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject*)pyvalue;
-  }
-
-  Py_INCREF(value_pair->pyvalue);
-  return value_pair->pyvalue;
-}
-
-static int Py${name}_init(Py${name}Object *self, PyObject *args, PyObject *kwds) {
-  return 0;
-}
-
-static PyObject* Py${name}_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
-  int value = 0;
-  if (!PyArg_ParseTuple(args, "|i", &value)) {
+  Py${name}Object* object = PyObject_New(Py${name}Object, &Py${name}Type);
+  if (!object)
     return nullptr;
-  }
-  return Py${name}_FromTW${name}((TW${name})value);
+
+  object->value = value;
+
+  return (PyObject*)object;
 }
 
-static PyObject* Py${name}_str(Py${name}Object *self) {
-  const char* str = "Unknown";
-  switch(self->value) {
-#define I(name)           \
-    case TW${name}##name: \
-      str = #name;        \
-      break;
-    CONSTANTS(I)
-#undef I
-  }
-  return PyUnicode_FromString(str);
-}
+// static int Py${name}_init(Py${name}Object *self, PyObject *args, PyObject *kwds) {
+//   return 0;
+// }
+
+// static PyObject* Py${name}_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
+//   int value = 0;
+//   if (!PyArg_ParseTuple(args, "|i", &value)) {
+//     return nullptr;
+//   }
+//   return Py${name}_FromTW${name}((TW${name})value);
+// }
+
+// static PyObject* Py${name}_str(Py${name}Object *self) {
+//   const char* str = "Unknown";
+//   return PyUnicode_FromString(str);
+// }
 
 ${functions}
 
@@ -108,9 +78,9 @@ ${methoddefs}
 
 bool PyInit_${name}(PyObject *module) {
 
-  Py${name}Type.tp_new = Py${name}_new;
-  Py${name}Type.tp_init = (initproc)Py${name}_init;
-  Py${name}Type.tp_str = (reprfunc)Py${name}_str;
+  // Py${name}Type.tp_new = Py${name}_new;
+  // Py${name}Type.tp_init = (initproc)Py${name}_init;
+  // Py${name}Type.tp_str = (reprfunc)Py${name}_str;
   Py${name}Type.tp_getset = (PyGetSetDef*)get_set_defs;
   Py${name}Type.tp_methods = (PyMethodDef*)method_defs;
 
@@ -122,14 +92,6 @@ bool PyInit_${name}(PyObject *module) {
     Py_DECREF(&Py${name}Type);
     return false;
   }
-
-  PyObject* dict = Py${name}Type.tp_dict;
-  (void)dict;
-
-#define I(name) \
-  PyDict_SetItemString(dict, #name, Py${name}_FromTW${name}(TW${name}##name));
-  CONSTANTS(I)
-#undef I
 
   return true;
 }

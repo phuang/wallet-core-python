@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWBitcoinSigHashType.h>
 
 struct PyBitcoinSigHashTypeObject {
-  PyObject_HEAD const TWBitcoinSigHashType value;
+  PyObject_HEAD;
+  const TWBitcoinSigHashType value;
 };
 
 // Returns true if the object is a PyBitcoinSigHashType.

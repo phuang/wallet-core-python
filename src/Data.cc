@@ -1,14 +1,14 @@
 #include "Data.h"
 
-PyObject* PyByteArray_FromTWData(TWData* data) {
+PyObject* PyByteArray_FromTWData(const TWDataPtr& data) {
   if (!data)
     return nullptr;
 
-  return PyByteArray_FromStringAndSize((const char*)TWDataBytes(data),
-                                       TWDataSize(data));
+  return PyByteArray_FromStringAndSize((const char*)TWDataBytes(data.get()),
+                                       TWDataSize(data.get()));
 }
 
-TWData* PyByteArray_GetTWData(PyObject* object) {
+TWDataPtr PyByteArray_GetTWData(PyObject* object) {
   if (!PyByteArray_Check(object))
     return nullptr;
 

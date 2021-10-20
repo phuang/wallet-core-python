@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWPurpose.h>
 
 struct PyPurposeObject {
-  PyObject_HEAD const TWPurpose value;
+  PyObject_HEAD;
+  const TWPurpose value;
 };
 
 // Returns true if the object is a PyPurpose.

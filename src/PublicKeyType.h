@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWPublicKeyType.h>
 
 struct PyPublicKeyTypeObject {
-  PyObject_HEAD const TWPublicKeyType value;
+  PyObject_HEAD;
+  const TWPublicKeyType value;
 };
 
 // Returns true if the object is a PyPublicKeyType.

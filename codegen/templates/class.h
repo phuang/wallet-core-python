@@ -8,17 +8,15 @@
 #include <TrustWalletCore/TW${name}.h>
 
 struct Py${name}Object {
-  PyObject_HEAD
-  const TW${name} value;
+  PyObject_HEAD;
+  TW${name}* value;
 };
 
 // Returns true if the object is a Py${name}.
 bool Py${name}_Check(PyObject* object);
 
-// Create Py${name} from an enum TW${name} value.
-// Note: it returns the same Py${name} instance for the same enum TW${name} value.
-// the caller should release the reference after using.
-PyObject* Py${name}_FromTW${name}(TW${name} value);
+// Create Py${name} from an TW${name}.
+PyObject* Py${name}_FromTW${name}(TW${name}* value);
 
 // Initialize for Py${name}. It is called by python module init function.
 bool PyInit_${name}(PyObject *module);

@@ -10,7 +10,10 @@
   I(PKCS7)
 
 static PyTypeObject PyAESPaddingModeType = {
-    PyVarObject_HEAD_INIT(NULL, 0) "walletcore.AESPaddingMode", /* tp_name */
+    // clang-format off
+    PyVarObject_HEAD_INIT(NULL, 0)
+    // clang-format on
+    "walletcore.AESPaddingMode",    /* tp_name */
     sizeof(PyAESPaddingModeObject), /* tp_basicsize */
     0,                              /* tp_itemsize */
     0,                              /* tp_dealloc */

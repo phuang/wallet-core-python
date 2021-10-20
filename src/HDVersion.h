@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWHDVersion.h>
 
 struct PyHDVersionObject {
-  PyObject_HEAD const TWHDVersion value;
+  PyObject_HEAD;
+  const TWHDVersion value;
 };
 
 // Returns true if the object is a PyHDVersion.

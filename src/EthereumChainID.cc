@@ -27,7 +27,10 @@
   I(Ronin)
 
 static PyTypeObject PyEthereumChainIDType = {
-    PyVarObject_HEAD_INIT(NULL, 0) "walletcore.EthereumChainID", /* tp_name */
+    // clang-format off
+    PyVarObject_HEAD_INIT(NULL, 0)
+    // clang-format on
+    "walletcore.EthereumChainID",    /* tp_name */
     sizeof(PyEthereumChainIDObject), /* tp_basicsize */
     0,                               /* tp_itemsize */
     0,                               /* tp_dealloc */

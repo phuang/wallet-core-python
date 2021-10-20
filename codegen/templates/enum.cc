@@ -11,7 +11,9 @@ ${includes}
 ${constants}
 
 static PyTypeObject Py${name}Type = {
+    // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
+    // clang-format on
     "walletcore.${name}",      /* tp_name */
     sizeof(Py${name}Object),   /* tp_basicsize */
     0,                         /* tp_itemsize */

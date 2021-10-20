@@ -10,7 +10,10 @@
   I(Kusama)
 
 static PyTypeObject PySS58AddressTypeType = {
-    PyVarObject_HEAD_INIT(NULL, 0) "walletcore.SS58AddressType", /* tp_name */
+    // clang-format off
+    PyVarObject_HEAD_INIT(NULL, 0)
+    // clang-format on
+    "walletcore.SS58AddressType",    /* tp_name */
     sizeof(PySS58AddressTypeObject), /* tp_basicsize */
     0,                               /* tp_itemsize */
     0,                               /* tp_dealloc */

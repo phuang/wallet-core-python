@@ -4,36 +4,74 @@
 #include <Python.h>
 
 #include "AESPaddingMode.h"
+#include "Account.h"
+#include "AnyAddress.h"
+#include "BitcoinAddress.h"
+#include "BitcoinScript.h"
 #include "BitcoinSigHashType.h"
 #include "Blockchain.h"
 #include "CoinType.h"
 #include "Curve.h"
+#include "EthereumAbi.h"
+#include "EthereumAbiFunction.h"
+#include "EthereumAbiValue.h"
 #include "EthereumChainID.h"
+#include "EthereumFee.h"
+#include "FIOAccount.h"
+#include "GroestlcoinAddress.h"
 #include "HDVersion.h"
+#include "HDWallet.h"
 #include "HRP.h"
+#include "Mnemonic.h"
+#include "NEARAccount.h"
+#include "PrivateKey.h"
+#include "PublicKey.h"
 #include "PublicKeyType.h"
 #include "Purpose.h"
+#include "RippleXAddress.h"
 #include "SS58AddressType.h"
+#include "SegwitAddress.h"
+#include "SolanaAddress.h"
 #include "StellarMemoType.h"
 #include "StellarPassphrase.h"
 #include "StellarVersionByte.h"
+#include "StoredKey.h"
 
 typedef bool (*InitProc)(PyObject* module);
 const InitProc init_functions[] = {
     PyInit_AESPaddingMode,
+    PyInit_Account,
+    PyInit_AnyAddress,
+    PyInit_BitcoinAddress,
+    PyInit_BitcoinScript,
     PyInit_BitcoinSigHashType,
     PyInit_Blockchain,
     PyInit_CoinType,
     PyInit_Curve,
+    PyInit_EthereumAbi,
+    PyInit_EthereumAbiFunction,
+    PyInit_EthereumAbiValue,
     PyInit_EthereumChainID,
+    PyInit_EthereumFee,
+    PyInit_FIOAccount,
+    PyInit_GroestlcoinAddress,
     PyInit_HDVersion,
+    PyInit_HDWallet,
     PyInit_HRP,
+    PyInit_Mnemonic,
+    PyInit_NEARAccount,
+    PyInit_PrivateKey,
+    PyInit_PublicKey,
     PyInit_PublicKeyType,
     PyInit_Purpose,
+    PyInit_RippleXAddress,
     PyInit_SS58AddressType,
+    PyInit_SegwitAddress,
+    PyInit_SolanaAddress,
     PyInit_StellarMemoType,
     PyInit_StellarPassphrase,
     PyInit_StellarVersionByte,
+    PyInit_StoredKey,
 };
 
 PyMODINIT_FUNC PyInit_walletcore(void) {

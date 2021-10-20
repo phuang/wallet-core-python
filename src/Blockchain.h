@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWBlockchain.h>
 
 struct PyBlockchainObject {
-  PyObject_HEAD const TWBlockchain value;
+  PyObject_HEAD;
+  const TWBlockchain value;
 };
 
 // Returns true if the object is a PyBlockchain.

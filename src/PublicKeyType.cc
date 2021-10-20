@@ -16,7 +16,10 @@
   I(ED25519Extended)
 
 static PyTypeObject PyPublicKeyTypeType = {
-    PyVarObject_HEAD_INIT(NULL, 0) "walletcore.PublicKeyType", /* tp_name */
+    // clang-format off
+    PyVarObject_HEAD_INIT(NULL, 0)
+    // clang-format on
+    "walletcore.PublicKeyType",    /* tp_name */
     sizeof(PyPublicKeyTypeObject), /* tp_basicsize */
     0,                             /* tp_itemsize */
     0,                             /* tp_dealloc */

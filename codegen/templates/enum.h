@@ -8,7 +8,7 @@
 #include <TrustWalletCore/TW${name}.h>
 
 struct Py${name}Object {
-  PyObject_HEAD
+  PyObject_HEAD;
   const TW${name} value;
 };
 

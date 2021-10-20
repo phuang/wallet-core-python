@@ -8,7 +8,8 @@
 #include <TrustWalletCore/TWCurve.h>
 
 struct PyCurveObject {
-  PyObject_HEAD const TWCurve value;
+  PyObject_HEAD;
+  const TWCurve value;
 };
 
 // Returns true if the object is a PyCurve.
