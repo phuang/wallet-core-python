@@ -72,6 +72,12 @@ PyObject* PyStellarPassphrase_FromTWStellarPassphrase(
   return value_pair->pyvalue;
 }
 
+TWStellarPassphrase PyStellarPassphrase_GetTWStellarPassphrase(
+    PyObject* object) {
+  assert(PyStellarPassphrase_Check(object));
+  return ((PyStellarPassphraseObject*)object)->value;
+}
+
 static int PyStellarPassphrase_init(PyStellarPassphraseObject* self,
                                     PyObject* args,
                                     PyObject* kwds) {

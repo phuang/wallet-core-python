@@ -2,6 +2,9 @@
 
 #include "BitcoinAddress.h"
 
+#include "Data.h"
+#include "String.h"
+
 static PyTypeObject PyBitcoinAddressType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -47,6 +50,11 @@ PyObject* PyBitcoinAddress_FromTWBitcoinAddress(TWBitcoinAddress* value) {
   return (PyObject*)object;
 }
 
+TWBitcoinAddress* PyBitcoinAddress_GetTWBitcoinAddress(PyObject* object) {
+  assert(PyBitcoinAddress_Check(object));
+  return ((PyBitcoinAddressObject*)object)->value;
+}
+
 // static int PyBitcoinAddress_init(PyBitcoinAddressObject *self, PyObject
 // *args, PyObject *kwds) {
 //   return 0;
@@ -67,15 +75,89 @@ PyObject* PyBitcoinAddress_FromTWBitcoinAddress(TWBitcoinAddress* value) {
 // }
 
 // getter function for Prefix
+// uint8_t TWBitcoinAddressPrefix(struct TWBitcoinAddress* address);
 static PyObject* PyBitcoinAddressPrefix(PyBitcoinAddressObject* self, void*) {
   return PyLong_FromLong(TWBitcoinAddressPrefix(self->value));
+}
+
+// static method function for Equal
+// bool TWBitcoinAddressEqual(struct TWBitcoinAddress* lhs, struct
+// TWBitcoinAddress* rhs);
+static PyObject* PyBitcoinAddressEqual(PyBitcoinAddressObject* self,
+                                       PyObject* const* args,
+                                       Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyBitcoinAddress_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type BitcoinAddress");
+    return nullptr;
+  }
+  auto arg0 = PyBitcoinAddress_GetTWBitcoinAddress(args[0]);
+
+  if (!PyBitcoinAddress_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type BitcoinAddress");
+    return nullptr;
+  }
+  auto arg1 = PyBitcoinAddress_GetTWBitcoinAddress(args[1]);
+
+  bool result = TWBitcoinAddressEqual(arg0, arg1);
+  return PyBool_FromLong(result);
+}
+
+// static method function for IsValid
+// bool TWBitcoinAddressIsValid(TWData* data);
+static PyObject* PyBitcoinAddressIsValid(PyBitcoinAddressObject* self,
+                                         PyObject* const* args,
+                                         Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyByteArray_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+    return nullptr;
+  }
+  auto arg0 = PyByteArray_GetTWData(args[0]);
+
+  bool result = TWBitcoinAddressIsValid(arg0.get());
+  return PyBool_FromLong(result);
+}
+
+// static method function for IsValidString
+// bool TWBitcoinAddressIsValidString(TWString* string);
+static PyObject* PyBitcoinAddressIsValidString(PyBitcoinAddressObject* self,
+                                               PyObject* const* args,
+                                               Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  bool result = TWBitcoinAddressIsValidString(arg0.get());
+  return PyBool_FromLong(result);
 }
 
 static const PyGetSetDef get_set_defs[] = {
     {"Prefix", (getter)PyBitcoinAddressPrefix},
     {}};
 
-static const PyMethodDef method_defs[] = {{}};
+static const PyMethodDef method_defs[] = {
+    {"Equal", (PyCFunction)PyBitcoinAddressEqual, METH_FASTCALL | METH_STATIC},
+    {"IsValid", (PyCFunction)PyBitcoinAddressIsValid,
+     METH_FASTCALL | METH_STATIC},
+    {"IsValidString", (PyCFunction)PyBitcoinAddressIsValidString,
+     METH_FASTCALL | METH_STATIC},
+    {}};
 
 bool PyInit_BitcoinAddress(PyObject* module) {
   // PyBitcoinAddressType.tp_new = PyBitcoinAddress_new;

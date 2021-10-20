@@ -148,6 +148,11 @@ PyObject* PyCoinType_FromTWCoinType(TWCoinType value) {
   return value_pair->pyvalue;
 }
 
+TWCoinType PyCoinType_GetTWCoinType(PyObject* object) {
+  assert(PyCoinType_Check(object));
+  return ((PyCoinTypeObject*)object)->value;
+}
+
 static int PyCoinType_init(PyCoinTypeObject* self,
                            PyObject* args,
                            PyObject* kwds) {
@@ -178,57 +183,67 @@ static PyObject* PyCoinType_str(PyCoinTypeObject* self) {
 }
 
 // getter function for Blockchain
+// enum TWBlockchain TWCoinTypeBlockchain(enum TWCoinType coin);
 static PyObject* PyCoinTypeBlockchain(PyCoinTypeObject* self, void*) {
   return PyBlockchain_FromTWBlockchain(TWCoinTypeBlockchain(self->value));
 }
 
 // getter function for Purpose
+// enum TWPurpose TWCoinTypePurpose(enum TWCoinType coin);
 static PyObject* PyCoinTypePurpose(PyCoinTypeObject* self, void*) {
   return PyPurpose_FromTWPurpose(TWCoinTypePurpose(self->value));
 }
 
 // getter function for Curve
+// enum TWCurve TWCoinTypeCurve(enum TWCoinType coin);
 static PyObject* PyCoinTypeCurve(PyCoinTypeObject* self, void*) {
   return PyCurve_FromTWCurve(TWCoinTypeCurve(self->value));
 }
 
 // getter function for XpubVersion
+// enum TWHDVersion TWCoinTypeXpubVersion(enum TWCoinType coin);
 static PyObject* PyCoinTypeXpubVersion(PyCoinTypeObject* self, void*) {
   return PyHDVersion_FromTWHDVersion(TWCoinTypeXpubVersion(self->value));
 }
 
 // getter function for XprvVersion
+// enum TWHDVersion TWCoinTypeXprvVersion(enum TWCoinType coin);
 static PyObject* PyCoinTypeXprvVersion(PyCoinTypeObject* self, void*) {
   return PyHDVersion_FromTWHDVersion(TWCoinTypeXprvVersion(self->value));
 }
 
 // getter function for HRP
+// enum TWHRP TWCoinTypeHRP(enum TWCoinType coin);
 static PyObject* PyCoinTypeHRP(PyCoinTypeObject* self, void*) {
   return PyHRP_FromTWHRP(TWCoinTypeHRP(self->value));
 }
 
 // getter function for P2pkhPrefix
+// uint8_t TWCoinTypeP2pkhPrefix(enum TWCoinType coin);
 static PyObject* PyCoinTypeP2pkhPrefix(PyCoinTypeObject* self, void*) {
   return PyLong_FromLong(TWCoinTypeP2pkhPrefix(self->value));
 }
 
 // getter function for P2shPrefix
+// uint8_t TWCoinTypeP2shPrefix(enum TWCoinType coin);
 static PyObject* PyCoinTypeP2shPrefix(PyCoinTypeObject* self, void*) {
   return PyLong_FromLong(TWCoinTypeP2shPrefix(self->value));
 }
 
 // getter function for StaticPrefix
+// uint8_t TWCoinTypeStaticPrefix(enum TWCoinType coin);
 static PyObject* PyCoinTypeStaticPrefix(PyCoinTypeObject* self, void*) {
   return PyLong_FromLong(TWCoinTypeStaticPrefix(self->value));
 }
 
 // getter function for Slip44Id
+// uint32_t TWCoinTypeSlip44Id(enum TWCoinType coin);
 static PyObject* PyCoinTypeSlip44Id(PyCoinTypeObject* self, void*) {
   return PyLong_FromLong(TWCoinTypeSlip44Id(self->value));
 }
 
 // method function for Validate
-// bool TWCoinTypeValidate(enum TWCoinType coin, TWString * address)
+// bool TWCoinTypeValidate(enum TWCoinType coin, TWString* address);
 static PyObject* PyCoinTypeValidate(PyCoinTypeObject* self,
                                     PyObject* const* args,
                                     Py_ssize_t nargs) {

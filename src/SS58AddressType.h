@@ -20,6 +20,9 @@ bool PySS58AddressType_Check(PyObject* object);
 // TWSS58AddressType value. the caller should release the reference after using.
 PyObject* PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value);
 
+// Get enum TWSS58AddressType value from a PySS58AddressType object.
+TWSS58AddressType PySS58AddressType_GetTWSS58AddressType(PyObject* object);
+
 // Initialize for PySS58AddressType. It is called by python module init
 // function.
 bool PyInit_SS58AddressType(PyObject* module);

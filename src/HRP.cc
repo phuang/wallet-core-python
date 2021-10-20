@@ -91,6 +91,11 @@ PyObject* PyHRP_FromTWHRP(TWHRP value) {
   return value_pair->pyvalue;
 }
 
+TWHRP PyHRP_GetTWHRP(PyObject* object) {
+  assert(PyHRP_Check(object));
+  return ((PyHRPObject*)object)->value;
+}
+
 static int PyHRP_init(PyHRPObject* self, PyObject* args, PyObject* kwds) {
   return 0;
 }

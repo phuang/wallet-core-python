@@ -70,6 +70,11 @@ PyObject* PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value) {
   return value_pair->pyvalue;
 }
 
+TWSS58AddressType PySS58AddressType_GetTWSS58AddressType(PyObject* object) {
+  assert(PySS58AddressType_Check(object));
+  return ((PySS58AddressTypeObject*)object)->value;
+}
+
 static int PySS58AddressType_init(PySS58AddressTypeObject* self,
                                   PyObject* args,
                                   PyObject* kwds) {

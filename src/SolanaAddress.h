@@ -18,5 +18,8 @@ bool PySolanaAddress_Check(PyObject* object);
 // Create PySolanaAddress from an TWSolanaAddress.
 PyObject* PySolanaAddress_FromTWSolanaAddress(TWSolanaAddress* value);
 
+// Get enum TWSolanaAddress value from a PySolanaAddress object.
+TWSolanaAddress* PySolanaAddress_GetTWSolanaAddress(PyObject* object);
+
 // Initialize for PySolanaAddress. It is called by python module init function.
 bool PyInit_SolanaAddress(PyObject* module);

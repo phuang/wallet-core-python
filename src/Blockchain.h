@@ -20,5 +20,8 @@ bool PyBlockchain_Check(PyObject* object);
 // TWBlockchain value. the caller should release the reference after using.
 PyObject* PyBlockchain_FromTWBlockchain(TWBlockchain value);
 
+// Get enum TWBlockchain value from a PyBlockchain object.
+TWBlockchain PyBlockchain_GetTWBlockchain(PyObject* object);
+
 // Initialize for PyBlockchain. It is called by python module init function.
 bool PyInit_Blockchain(PyObject* module);

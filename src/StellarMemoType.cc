@@ -73,6 +73,11 @@ PyObject* PyStellarMemoType_FromTWStellarMemoType(TWStellarMemoType value) {
   return value_pair->pyvalue;
 }
 
+TWStellarMemoType PyStellarMemoType_GetTWStellarMemoType(PyObject* object) {
+  assert(PyStellarMemoType_Check(object));
+  return ((PyStellarMemoTypeObject*)object)->value;
+}
+
 static int PyStellarMemoType_init(PyStellarMemoTypeObject* self,
                                   PyObject* args,
                                   PyObject* kwds) {

@@ -20,6 +20,9 @@ bool PyStellarMemoType_Check(PyObject* object);
 // TWStellarMemoType value. the caller should release the reference after using.
 PyObject* PyStellarMemoType_FromTWStellarMemoType(TWStellarMemoType value);
 
+// Get enum TWStellarMemoType value from a PyStellarMemoType object.
+TWStellarMemoType PyStellarMemoType_GetTWStellarMemoType(PyObject* object);
+
 // Initialize for PyStellarMemoType. It is called by python module init
 // function.
 bool PyInit_StellarMemoType(PyObject* module);

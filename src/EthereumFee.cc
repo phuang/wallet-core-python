@@ -47,6 +47,11 @@ PyObject* PyEthereumFee_FromTWEthereumFee(TWEthereumFee* value) {
   return (PyObject*)object;
 }
 
+TWEthereumFee* PyEthereumFee_GetTWEthereumFee(PyObject* object) {
+  assert(PyEthereumFee_Check(object));
+  return ((PyEthereumFeeObject*)object)->value;
+}
+
 // static int PyEthereumFee_init(PyEthereumFeeObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;

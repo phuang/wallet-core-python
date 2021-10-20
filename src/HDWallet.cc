@@ -46,6 +46,11 @@ PyObject* PyHDWallet_FromTWHDWallet(TWHDWallet* value) {
   return (PyObject*)object;
 }
 
+TWHDWallet* PyHDWallet_GetTWHDWallet(PyObject* object) {
+  assert(PyHDWallet_Check(object));
+  return ((PyHDWalletObject*)object)->value;
+}
+
 // static int PyHDWallet_init(PyHDWalletObject *self, PyObject *args, PyObject
 // *kwds) {
 //   return 0;

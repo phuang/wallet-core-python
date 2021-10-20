@@ -3,6 +3,7 @@
 #include "SegwitAddress.h"
 
 #include "HRP.h"
+#include "String.h"
 
 static PyTypeObject PySegwitAddressType = {
     // clang-format off
@@ -49,6 +50,11 @@ PyObject* PySegwitAddress_FromTWSegwitAddress(TWSegwitAddress* value) {
   return (PyObject*)object;
 }
 
+TWSegwitAddress* PySegwitAddress_GetTWSegwitAddress(PyObject* object) {
+  assert(PySegwitAddress_Check(object));
+  return ((PySegwitAddressObject*)object)->value;
+}
+
 // static int PySegwitAddress_init(PySegwitAddressObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;
@@ -69,14 +75,66 @@ PyObject* PySegwitAddress_FromTWSegwitAddress(TWSegwitAddress* value) {
 // }
 
 // getter function for HRP
+// enum TWHRP TWSegwitAddressHRP(struct TWSegwitAddress* address);
 static PyObject* PySegwitAddressHRP(PySegwitAddressObject* self, void*) {
   return PyHRP_FromTWHRP(TWSegwitAddressHRP(self->value));
+}
+
+// static method function for Equal
+// bool TWSegwitAddressEqual(struct TWSegwitAddress* lhs, struct
+// TWSegwitAddress* rhs);
+static PyObject* PySegwitAddressEqual(PySegwitAddressObject* self,
+                                      PyObject* const* args,
+                                      Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PySegwitAddress_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type SegwitAddress");
+    return nullptr;
+  }
+  auto arg0 = PySegwitAddress_GetTWSegwitAddress(args[0]);
+
+  if (!PySegwitAddress_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type SegwitAddress");
+    return nullptr;
+  }
+  auto arg1 = PySegwitAddress_GetTWSegwitAddress(args[1]);
+
+  bool result = TWSegwitAddressEqual(arg0, arg1);
+  return PyBool_FromLong(result);
+}
+
+// static method function for IsValidString
+// bool TWSegwitAddressIsValidString(TWString* string);
+static PyObject* PySegwitAddressIsValidString(PySegwitAddressObject* self,
+                                              PyObject* const* args,
+                                              Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  bool result = TWSegwitAddressIsValidString(arg0.get());
+  return PyBool_FromLong(result);
 }
 
 static const PyGetSetDef get_set_defs[] = {{"HRP", (getter)PySegwitAddressHRP},
                                            {}};
 
-static const PyMethodDef method_defs[] = {{}};
+static const PyMethodDef method_defs[] = {
+    {"Equal", (PyCFunction)PySegwitAddressEqual, METH_FASTCALL | METH_STATIC},
+    {"IsValidString", (PyCFunction)PySegwitAddressIsValidString,
+     METH_FASTCALL | METH_STATIC},
+    {}};
 
 bool PyInit_SegwitAddress(PyObject* module) {
   // PySegwitAddressType.tp_new = PySegwitAddress_new;

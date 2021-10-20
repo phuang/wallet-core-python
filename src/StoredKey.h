@@ -18,5 +18,8 @@ bool PyStoredKey_Check(PyObject* object);
 // Create PyStoredKey from an TWStoredKey.
 PyObject* PyStoredKey_FromTWStoredKey(TWStoredKey* value);
 
+// Get enum TWStoredKey value from a PyStoredKey object.
+TWStoredKey* PyStoredKey_GetTWStoredKey(PyObject* object);
+
 // Initialize for PyStoredKey. It is called by python module init function.
 bool PyInit_StoredKey(PyObject* module);

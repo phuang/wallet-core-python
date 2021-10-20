@@ -18,5 +18,8 @@ bool PyNEARAccount_Check(PyObject* object);
 // Create PyNEARAccount from an TWNEARAccount.
 PyObject* PyNEARAccount_FromTWNEARAccount(TWNEARAccount* value);
 
+// Get enum TWNEARAccount value from a PyNEARAccount object.
+TWNEARAccount* PyNEARAccount_GetTWNEARAccount(PyObject* object);
+
 // Initialize for PyNEARAccount. It is called by python module init function.
 bool PyInit_NEARAccount(PyObject* module);

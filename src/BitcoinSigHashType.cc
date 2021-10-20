@@ -77,6 +77,12 @@ PyObject* PyBitcoinSigHashType_FromTWBitcoinSigHashType(
   return value_pair->pyvalue;
 }
 
+TWBitcoinSigHashType PyBitcoinSigHashType_GetTWBitcoinSigHashType(
+    PyObject* object) {
+  assert(PyBitcoinSigHashType_Check(object));
+  return ((PyBitcoinSigHashTypeObject*)object)->value;
+}
+
 static int PyBitcoinSigHashType_init(PyBitcoinSigHashTypeObject* self,
                                      PyObject* args,
                                      PyObject* kwds) {
@@ -108,7 +114,7 @@ static PyObject* PyBitcoinSigHashType_str(PyBitcoinSigHashTypeObject* self) {
 }
 
 // method function for IsSingle
-// bool TWBitcoinSigHashTypeIsSingle(enum TWBitcoinSigHashType type)
+// bool TWBitcoinSigHashTypeIsSingle(enum TWBitcoinSigHashType type);
 static PyObject* PyBitcoinSigHashTypeIsSingle(PyBitcoinSigHashTypeObject* self,
                                               PyObject* const* args,
                                               Py_ssize_t nargs) {
@@ -122,7 +128,7 @@ static PyObject* PyBitcoinSigHashTypeIsSingle(PyBitcoinSigHashTypeObject* self,
 }
 
 // method function for IsNone
-// bool TWBitcoinSigHashTypeIsNone(enum TWBitcoinSigHashType type)
+// bool TWBitcoinSigHashTypeIsNone(enum TWBitcoinSigHashType type);
 static PyObject* PyBitcoinSigHashTypeIsNone(PyBitcoinSigHashTypeObject* self,
                                             PyObject* const* args,
                                             Py_ssize_t nargs) {

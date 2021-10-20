@@ -18,5 +18,8 @@ bool PyPrivateKey_Check(PyObject* object);
 // Create PyPrivateKey from an TWPrivateKey.
 PyObject* PyPrivateKey_FromTWPrivateKey(TWPrivateKey* value);
 
+// Get enum TWPrivateKey value from a PyPrivateKey object.
+TWPrivateKey* PyPrivateKey_GetTWPrivateKey(PyObject* object);
+
 // Initialize for PyPrivateKey. It is called by python module init function.
 bool PyInit_PrivateKey(PyObject* module);

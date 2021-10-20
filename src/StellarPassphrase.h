@@ -22,6 +22,10 @@ bool PyStellarPassphrase_Check(PyObject* object);
 PyObject* PyStellarPassphrase_FromTWStellarPassphrase(
     TWStellarPassphrase value);
 
+// Get enum TWStellarPassphrase value from a PyStellarPassphrase object.
+TWStellarPassphrase PyStellarPassphrase_GetTWStellarPassphrase(
+    PyObject* object);
+
 // Initialize for PyStellarPassphrase. It is called by python module init
 // function.
 bool PyInit_StellarPassphrase(PyObject* module);

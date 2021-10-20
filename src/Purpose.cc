@@ -71,6 +71,11 @@ PyObject* PyPurpose_FromTWPurpose(TWPurpose value) {
   return value_pair->pyvalue;
 }
 
+TWPurpose PyPurpose_GetTWPurpose(PyObject* object) {
+  assert(PyPurpose_Check(object));
+  return ((PyPurposeObject*)object)->value;
+}
+
 static int PyPurpose_init(PyPurposeObject* self,
                           PyObject* args,
                           PyObject* kwds) {

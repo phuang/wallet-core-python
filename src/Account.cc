@@ -48,6 +48,11 @@ PyObject* PyAccount_FromTWAccount(TWAccount* value) {
   return (PyObject*)object;
 }
 
+TWAccount* PyAccount_GetTWAccount(PyObject* object) {
+  assert(PyAccount_Check(object));
+  return ((PyAccountObject*)object)->value;
+}
+
 // static int PyAccount_init(PyAccountObject *self, PyObject *args, PyObject
 // *kwds) {
 //   return 0;
@@ -68,6 +73,7 @@ PyObject* PyAccount_FromTWAccount(TWAccount* value) {
 // }
 
 // getter function for Coin
+// enum TWCoinType TWAccountCoin(struct TWAccount* account);
 static PyObject* PyAccountCoin(PyAccountObject* self, void*) {
   return PyCoinType_FromTWCoinType(TWAccountCoin(self->value));
 }

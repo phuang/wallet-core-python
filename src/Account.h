@@ -18,5 +18,8 @@ bool PyAccount_Check(PyObject* object);
 // Create PyAccount from an TWAccount.
 PyObject* PyAccount_FromTWAccount(TWAccount* value);
 
+// Get enum TWAccount value from a PyAccount object.
+TWAccount* PyAccount_GetTWAccount(PyObject* object);
+
 // Initialize for PyAccount. It is called by python module init function.
 bool PyInit_Account(PyObject* module);

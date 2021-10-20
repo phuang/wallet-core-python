@@ -47,6 +47,11 @@ PyObject* PyFIOAccount_FromTWFIOAccount(TWFIOAccount* value) {
   return (PyObject*)object;
 }
 
+TWFIOAccount* PyFIOAccount_GetTWFIOAccount(PyObject* object) {
+  assert(PyFIOAccount_Check(object));
+  return ((PyFIOAccountObject*)object)->value;
+}
+
 // static int PyFIOAccount_init(PyFIOAccountObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;

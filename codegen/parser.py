@@ -46,9 +46,9 @@ class Type:
             words.append(self._type)
         words.append(self._name)
         if self._is_ptr:
-            words.append('*')
-        return ' '.join(words)
-
+            return ' '.join(words) + '*'
+        else:
+            return ' '.join(words)
 
 class Argument:
     def __init__(self, text):

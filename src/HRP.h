@@ -20,5 +20,8 @@ bool PyHRP_Check(PyObject* object);
 // the caller should release the reference after using.
 PyObject* PyHRP_FromTWHRP(TWHRP value);
 
+// Get enum TWHRP value from a PyHRP object.
+TWHRP PyHRP_GetTWHRP(PyObject* object);
+
 // Initialize for PyHRP. It is called by python module init function.
 bool PyInit_HRP(PyObject* module);

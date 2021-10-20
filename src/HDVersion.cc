@@ -82,6 +82,11 @@ PyObject* PyHDVersion_FromTWHDVersion(TWHDVersion value) {
   return value_pair->pyvalue;
 }
 
+TWHDVersion PyHDVersion_GetTWHDVersion(PyObject* object) {
+  assert(PyHDVersion_Check(object));
+  return ((PyHDVersionObject*)object)->value;
+}
+
 static int PyHDVersion_init(PyHDVersionObject* self,
                             PyObject* args,
                             PyObject* kwds) {
@@ -112,11 +117,13 @@ static PyObject* PyHDVersion_str(PyHDVersionObject* self) {
 }
 
 // getter function for IsPublic
+// bool TWHDVersionIsPublic(enum TWHDVersion version);
 static PyObject* PyHDVersionIsPublic(PyHDVersionObject* self, void*) {
   return PyBool_FromLong(TWHDVersionIsPublic(self->value));
 }
 
 // getter function for IsPrivate
+// bool TWHDVersionIsPrivate(enum TWHDVersion version);
 static PyObject* PyHDVersionIsPrivate(PyHDVersionObject* self, void*) {
   return PyBool_FromLong(TWHDVersionIsPrivate(self->value));
 }

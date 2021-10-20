@@ -18,5 +18,8 @@ bool PyMnemonic_Check(PyObject* object);
 // Create PyMnemonic from an TWMnemonic.
 PyObject* PyMnemonic_FromTWMnemonic(TWMnemonic* value);
 
+// Get enum TWMnemonic value from a PyMnemonic object.
+TWMnemonic* PyMnemonic_GetTWMnemonic(PyObject* object);
+
 // Initialize for PyMnemonic. It is called by python module init function.
 bool PyInit_Mnemonic(PyObject* module);

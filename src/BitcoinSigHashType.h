@@ -22,6 +22,10 @@ bool PyBitcoinSigHashType_Check(PyObject* object);
 PyObject* PyBitcoinSigHashType_FromTWBitcoinSigHashType(
     TWBitcoinSigHashType value);
 
+// Get enum TWBitcoinSigHashType value from a PyBitcoinSigHashType object.
+TWBitcoinSigHashType PyBitcoinSigHashType_GetTWBitcoinSigHashType(
+    PyObject* object);
+
 // Initialize for PyBitcoinSigHashType. It is called by python module init
 // function.
 bool PyInit_BitcoinSigHashType(PyObject* module);

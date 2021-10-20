@@ -20,5 +20,8 @@ bool PyHDVersion_Check(PyObject* object);
 // value. the caller should release the reference after using.
 PyObject* PyHDVersion_FromTWHDVersion(TWHDVersion value);
 
+// Get enum TWHDVersion value from a PyHDVersion object.
+TWHDVersion PyHDVersion_GetTWHDVersion(PyObject* object);
+
 // Initialize for PyHDVersion. It is called by python module init function.
 bool PyInit_HDVersion(PyObject* module);

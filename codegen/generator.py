@@ -26,6 +26,7 @@ class Generator:
     def process_properties(self, name, props):
         template = T('''
 // getter function for ${prop_name}
+// ${c_property};
 static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
   return ${return}(TW${name}${prop_name}(self->value));
 }\n''')
@@ -46,6 +47,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 continue
 
             values = {
+                'c_property' : str(prop),
                 'name' : name,
                 'prop_name' : prop_name,
                 'return' : return_,
@@ -103,6 +105,18 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 get_ctype = 'PyByteArray_GetTWData'
                 call_args.append('arg{}.get()'.format(i))
                 used_types.add('Data')
+            elif arg._type._type == 'enum':
+                assert not arg._type._is_ptr
+                arg_type  = arg._type._name[2:]
+                get_ctype = 'Py{0}_GetTW{0}'.format(arg_type)
+                call_args.append('arg{}'.format(i))
+                used_types.add(arg_type)
+            elif arg._type._type == 'struct':
+                assert arg._type._is_ptr
+                arg_type  = arg._type._name[2:]
+                get_ctype = 'Py{0}_GetTW{0}'.format(arg_type)
+                call_args.append('arg{}'.format(i))
+                used_types.add(arg_type)
             else:
                 continue
             values = {
@@ -116,10 +130,10 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
         call_args = ', '.join(call_args)
         return prepare_args, call_args, used_types
 
-    def process_methods(self, name, methods):
+    def process_methods(self, name, methods, is_static):
         template = T('''
-// method function for ${method_name}
-// ${cfunction}
+// ${static}method function for ${method_name}
+// ${c_function};
 static PyObject* Py${name}${method_name}(Py${name}Object *self,
                                          PyObject *const *args,
                                          Py_ssize_t nargs) {
@@ -144,11 +158,15 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
                 return_ = 'Py{}_FromTW{}'.format(return_type[2:])
             else:
                 continue
-            prepare_args, call_args, types = self.process_arguments(method._args[1:])
-            call_args = 'self->value, '  + call_args if call_args else 'self->value'
+            if not is_static:
+                prepare_args, call_args, types = self.process_arguments(method._args[1:])
+                call_args = 'self->value, '  + call_args if call_args else 'self->value'
+            else:
+                prepare_args, call_args, types = self.process_arguments(method._args)
             used_types |= types
             values = {
-                'cfunction' : str(method),
+                'static' : 'static ' if is_static else '',
+                'c_function' : str(method),
                 'name' : name,
                 'method_name' : method_name,
                 'prepare_args' : prepare_args,
@@ -160,11 +178,13 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
             functions.append(function)
             methoddefs.append(method_name)
 
+        used_types.discard(name)
         includes = list(used_types)
         includes.sort()
         includes = [ '#include "{}.h"'.format(n) for n in includes]
 
-        methoddefs = [ '{{ "{1}", (PyCFunction)Py{0}{1}, METH_FASTCALL }},'.format(name, m) for m in methoddefs ] + [ '{}' ]
+        flags = 'METH_FASTCALL | METH_STATIC' if is_static else 'METH_FASTCALL'
+        methoddefs = [ '{{ "{1}", (PyCFunction)Py{0}{1}, {2} }},'.format(name, m, flags) for m in methoddefs ]
         return includes, functions, methoddefs
 
     def generate_enum(self, enum):
@@ -181,14 +201,15 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         constants = '\n'.join(constants)
 
         prop_includes, prop_functions, getsetdefs = self.process_properties(name, enum._properties)
-        method_includes, method_functions, methoddefs = self.process_methods(name, enum._methods)
+        method_includes, method_functions, methoddefs = self.process_methods(name, enum._methods, False)
+        static_method_includes, static_method_functions, static_methoddefs = self.process_methods(name, enum._static_methods, True)
 
-        includes = prop_includes + method_includes
+        includes = prop_includes + method_includes + static_method_includes
         includes = '\n'.join(includes)
-        functions = prop_functions + method_functions
+        functions = prop_functions + method_functions + static_method_functions
         functions = '\n'.join(functions)
-
         getsetdefs = '\n  '.join(getsetdefs)
+        methoddefs = methoddefs + static_methoddefs + [ '{}' ]
         methoddefs = '\n  '.join(methoddefs)
 
         values = {
@@ -215,14 +236,15 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         used_types = set()
 
         prop_includes, prop_functions, getsetdefs = self.process_properties(name, class_._properties)
-        method_includes, method_functions, methoddefs = self.process_methods(name, class_._methods)
+        method_includes, method_functions, methoddefs = self.process_methods(name, class_._methods, False)
+        static_method_includes, static_method_functions, static_methoddefs = self.process_methods(name, class_._static_methods, True)
 
-        includes = prop_includes + method_includes
+        includes = prop_includes + method_includes + static_method_includes
         includes = '\n'.join(includes)
-        functions = prop_functions + method_functions
+        functions = prop_functions + method_functions + static_method_functions
         functions = '\n'.join(functions)
-
         getsetdefs = '\n  '.join(getsetdefs)
+        methoddefs = methoddefs + static_methoddefs + [ '{}' ]
         methoddefs = '\n  '.join(methoddefs)
 
         values = {

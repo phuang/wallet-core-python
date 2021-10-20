@@ -18,6 +18,9 @@ bool PyEthereumAbiValue_Check(PyObject* object);
 // Create PyEthereumAbiValue from an TWEthereumAbiValue.
 PyObject* PyEthereumAbiValue_FromTWEthereumAbiValue(TWEthereumAbiValue* value);
 
+// Get enum TWEthereumAbiValue value from a PyEthereumAbiValue object.
+TWEthereumAbiValue* PyEthereumAbiValue_GetTWEthereumAbiValue(PyObject* object);
+
 // Initialize for PyEthereumAbiValue. It is called by python module init
 // function.
 bool PyInit_EthereumAbiValue(PyObject* module);

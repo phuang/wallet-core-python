@@ -22,6 +22,10 @@ bool PyStellarVersionByte_Check(PyObject* object);
 PyObject* PyStellarVersionByte_FromTWStellarVersionByte(
     TWStellarVersionByte value);
 
+// Get enum TWStellarVersionByte value from a PyStellarVersionByte object.
+TWStellarVersionByte PyStellarVersionByte_GetTWStellarVersionByte(
+    PyObject* object);
+
 // Initialize for PyStellarVersionByte. It is called by python module init
 // function.
 bool PyInit_StellarVersionByte(PyObject* module);

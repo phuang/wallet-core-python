@@ -20,5 +20,8 @@ bool PyPurpose_Check(PyObject* object);
 // value. the caller should release the reference after using.
 PyObject* PyPurpose_FromTWPurpose(TWPurpose value);
 
+// Get enum TWPurpose value from a PyPurpose object.
+TWPurpose PyPurpose_GetTWPurpose(PyObject* object);
+
 // Initialize for PyPurpose. It is called by python module init function.
 bool PyInit_Purpose(PyObject* module);

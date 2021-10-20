@@ -47,6 +47,11 @@ PyObject* PyEthereumAbiValue_FromTWEthereumAbiValue(TWEthereumAbiValue* value) {
   return (PyObject*)object;
 }
 
+TWEthereumAbiValue* PyEthereumAbiValue_GetTWEthereumAbiValue(PyObject* object) {
+  assert(PyEthereumAbiValue_Check(object));
+  return ((PyEthereumAbiValueObject*)object)->value;
+}
+
 // static int PyEthereumAbiValue_init(PyEthereumAbiValueObject *self, PyObject
 // *args, PyObject *kwds) {
 //   return 0;

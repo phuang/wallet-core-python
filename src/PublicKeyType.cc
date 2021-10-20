@@ -75,6 +75,11 @@ PyObject* PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType value) {
   return value_pair->pyvalue;
 }
 
+TWPublicKeyType PyPublicKeyType_GetTWPublicKeyType(PyObject* object) {
+  assert(PyPublicKeyType_Check(object));
+  return ((PyPublicKeyTypeObject*)object)->value;
+}
+
 static int PyPublicKeyType_init(PyPublicKeyTypeObject* self,
                                 PyObject* args,
                                 PyObject* kwds) {

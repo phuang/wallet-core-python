@@ -47,6 +47,11 @@ PyObject* PySolanaAddress_FromTWSolanaAddress(TWSolanaAddress* value) {
   return (PyObject*)object;
 }
 
+TWSolanaAddress* PySolanaAddress_GetTWSolanaAddress(PyObject* object) {
+  assert(PySolanaAddress_Check(object));
+  return ((PySolanaAddressObject*)object)->value;
+}
+
 // static int PySolanaAddress_init(PySolanaAddressObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;

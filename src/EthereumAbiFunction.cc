@@ -50,6 +50,12 @@ PyObject* PyEthereumAbiFunction_FromTWEthereumAbiFunction(
   return (PyObject*)object;
 }
 
+TWEthereumAbiFunction* PyEthereumAbiFunction_GetTWEthereumAbiFunction(
+    PyObject* object) {
+  assert(PyEthereumAbiFunction_Check(object));
+  return ((PyEthereumAbiFunctionObject*)object)->value;
+}
+
 // static int PyEthereumAbiFunction_init(PyEthereumAbiFunctionObject *self,
 // PyObject *args, PyObject *kwds) {
 //   return 0;
@@ -72,8 +78,8 @@ PyObject* PyEthereumAbiFunction_FromTWEthereumAbiFunction(
 // }
 
 // method function for GetParamUInt8
-// uint8_t TWEthereumAbiFunctionGetParamUInt8(struct TWEthereumAbiFunction * fn,
-// int idx, bool isOutput)
+// uint8_t TWEthereumAbiFunctionGetParamUInt8(struct TWEthereumAbiFunction* fn,
+// int idx, bool isOutput);
 static PyObject* PyEthereumAbiFunctionGetParamUInt8(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,
@@ -100,8 +106,8 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt8(
 }
 
 // method function for GetParamBool
-// bool TWEthereumAbiFunctionGetParamBool(struct TWEthereumAbiFunction * fn, int
-// idx, bool isOutput)
+// bool TWEthereumAbiFunctionGetParamBool(struct TWEthereumAbiFunction* fn, int
+// idx, bool isOutput);
 static PyObject* PyEthereumAbiFunctionGetParamBool(
     PyEthereumAbiFunctionObject* self,
     PyObject* const* args,

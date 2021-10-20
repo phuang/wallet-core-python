@@ -18,5 +18,8 @@ bool PyEthereumAbi_Check(PyObject* object);
 // Create PyEthereumAbi from an TWEthereumAbi.
 PyObject* PyEthereumAbi_FromTWEthereumAbi(TWEthereumAbi* value);
 
+// Get enum TWEthereumAbi value from a PyEthereumAbi object.
+TWEthereumAbi* PyEthereumAbi_GetTWEthereumAbi(PyObject* object);
+
 // Initialize for PyEthereumAbi. It is called by python module init function.
 bool PyInit_EthereumAbi(PyObject* module);

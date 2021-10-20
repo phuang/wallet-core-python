@@ -2,6 +2,8 @@
 
 #include "BitcoinScript.h"
 
+#include "CoinType.h"
+
 static PyTypeObject PyBitcoinScriptType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -47,6 +49,11 @@ PyObject* PyBitcoinScript_FromTWBitcoinScript(TWBitcoinScript* value) {
   return (PyObject*)object;
 }
 
+TWBitcoinScript* PyBitcoinScript_GetTWBitcoinScript(PyObject* object) {
+  assert(PyBitcoinScript_Check(object));
+  return ((PyBitcoinScriptObject*)object)->value;
+}
+
 // static int PyBitcoinScript_init(PyBitcoinScriptObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;
@@ -67,12 +74,15 @@ PyObject* PyBitcoinScript_FromTWBitcoinScript(TWBitcoinScript* value) {
 // }
 
 // getter function for IsPayToScriptHash
+// bool TWBitcoinScriptIsPayToScriptHash(const struct TWBitcoinScript* script);
 static PyObject* PyBitcoinScriptIsPayToScriptHash(PyBitcoinScriptObject* self,
                                                   void*) {
   return PyBool_FromLong(TWBitcoinScriptIsPayToScriptHash(self->value));
 }
 
 // getter function for IsPayToWitnessScriptHash
+// bool TWBitcoinScriptIsPayToWitnessScriptHash(const struct TWBitcoinScript*
+// script);
 static PyObject* PyBitcoinScriptIsPayToWitnessScriptHash(
     PyBitcoinScriptObject* self,
     void*) {
@@ -80,6 +90,8 @@ static PyObject* PyBitcoinScriptIsPayToWitnessScriptHash(
 }
 
 // getter function for IsPayToWitnessPublicKeyHash
+// bool TWBitcoinScriptIsPayToWitnessPublicKeyHash(const struct TWBitcoinScript*
+// script);
 static PyObject* PyBitcoinScriptIsPayToWitnessPublicKeyHash(
     PyBitcoinScriptObject* self,
     void*) {
@@ -88,9 +100,57 @@ static PyObject* PyBitcoinScriptIsPayToWitnessPublicKeyHash(
 }
 
 // getter function for IsWitnessProgram
+// bool TWBitcoinScriptIsWitnessProgram(const struct TWBitcoinScript* script);
 static PyObject* PyBitcoinScriptIsWitnessProgram(PyBitcoinScriptObject* self,
                                                  void*) {
   return PyBool_FromLong(TWBitcoinScriptIsWitnessProgram(self->value));
+}
+
+// static method function for Equal
+// bool TWBitcoinScriptEqual(const struct TWBitcoinScript* lhs, const struct
+// TWBitcoinScript* rhs);
+static PyObject* PyBitcoinScriptEqual(PyBitcoinScriptObject* self,
+                                      PyObject* const* args,
+                                      Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyBitcoinScript_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type BitcoinScript");
+    return nullptr;
+  }
+  auto arg0 = PyBitcoinScript_GetTWBitcoinScript(args[0]);
+
+  if (!PyBitcoinScript_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type BitcoinScript");
+    return nullptr;
+  }
+  auto arg1 = PyBitcoinScript_GetTWBitcoinScript(args[1]);
+
+  bool result = TWBitcoinScriptEqual(arg0, arg1);
+  return PyBool_FromLong(result);
+}
+
+// static method function for HashTypeForCoin
+// uint32_t TWBitcoinScriptHashTypeForCoin(enum TWCoinType coinType);
+static PyObject* PyBitcoinScriptHashTypeForCoin(PyBitcoinScriptObject* self,
+                                                PyObject* const* args,
+                                                Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyCoinType_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+
+  uint32_t result = TWBitcoinScriptHashTypeForCoin(arg0);
+  return PyLong_FromLong(result);
 }
 
 static const PyGetSetDef get_set_defs[] = {
@@ -102,7 +162,11 @@ static const PyGetSetDef get_set_defs[] = {
     {"IsWitnessProgram", (getter)PyBitcoinScriptIsWitnessProgram},
     {}};
 
-static const PyMethodDef method_defs[] = {{}};
+static const PyMethodDef method_defs[] = {
+    {"Equal", (PyCFunction)PyBitcoinScriptEqual, METH_FASTCALL | METH_STATIC},
+    {"HashTypeForCoin", (PyCFunction)PyBitcoinScriptHashTypeForCoin,
+     METH_FASTCALL | METH_STATIC},
+    {}};
 
 bool PyInit_BitcoinScript(PyObject* module) {
   // PyBitcoinScriptType.tp_new = PyBitcoinScript_new;

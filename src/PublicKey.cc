@@ -49,6 +49,11 @@ PyObject* PyPublicKey_FromTWPublicKey(TWPublicKey* value) {
   return (PyObject*)object;
 }
 
+TWPublicKey* PyPublicKey_GetTWPublicKey(PyObject* object) {
+  assert(PyPublicKey_Check(object));
+  return ((PyPublicKeyObject*)object)->value;
+}
+
 // static int PyPublicKey_init(PyPublicKeyObject *self, PyObject *args, PyObject
 // *kwds) {
 //   return 0;
@@ -69,18 +74,20 @@ PyObject* PyPublicKey_FromTWPublicKey(TWPublicKey* value) {
 // }
 
 // getter function for IsCompressed
+// bool TWPublicKeyIsCompressed(struct TWPublicKey* pk);
 static PyObject* PyPublicKeyIsCompressed(PyPublicKeyObject* self, void*) {
   return PyBool_FromLong(TWPublicKeyIsCompressed(self->value));
 }
 
 // getter function for KeyType
+// enum TWPublicKeyType TWPublicKeyKeyType(struct TWPublicKey* publicKey);
 static PyObject* PyPublicKeyKeyType(PyPublicKeyObject* self, void*) {
   return PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyKeyType(self->value));
 }
 
 // method function for Verify
-// bool TWPublicKeyVerify(struct TWPublicKey * pk, TWData * signature, TWData *
-// message)
+// bool TWPublicKeyVerify(struct TWPublicKey* pk, TWData* signature, TWData*
+// message);
 static PyObject* PyPublicKeyVerify(PyPublicKeyObject* self,
                                    PyObject* const* args,
                                    Py_ssize_t nargs) {
@@ -106,8 +113,8 @@ static PyObject* PyPublicKeyVerify(PyPublicKeyObject* self,
 }
 
 // method function for VerifySchnorr
-// bool TWPublicKeyVerifySchnorr(struct TWPublicKey * pk, TWData * signature,
-// TWData * message)
+// bool TWPublicKeyVerifySchnorr(struct TWPublicKey* pk, TWData* signature,
+// TWData* message);
 static PyObject* PyPublicKeyVerifySchnorr(PyPublicKeyObject* self,
                                           PyObject* const* args,
                                           Py_ssize_t nargs) {
@@ -132,6 +139,32 @@ static PyObject* PyPublicKeyVerifySchnorr(PyPublicKeyObject* self,
   return PyBool_FromLong(result);
 }
 
+// static method function for IsValid
+// bool TWPublicKeyIsValid(TWData* data, enum TWPublicKeyType type);
+static PyObject* PyPublicKeyIsValid(PyPublicKeyObject* self,
+                                    PyObject* const* args,
+                                    Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyByteArray_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+    return nullptr;
+  }
+  auto arg0 = PyByteArray_GetTWData(args[0]);
+
+  if (!PyPublicKeyType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type PublicKeyType");
+    return nullptr;
+  }
+  auto arg1 = PyPublicKeyType_GetTWPublicKeyType(args[1]);
+
+  bool result = TWPublicKeyIsValid(arg0.get(), arg1);
+  return PyBool_FromLong(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {
     {"IsCompressed", (getter)PyPublicKeyIsCompressed},
     {"KeyType", (getter)PyPublicKeyKeyType},
@@ -140,6 +173,7 @@ static const PyGetSetDef get_set_defs[] = {
 static const PyMethodDef method_defs[] = {
     {"Verify", (PyCFunction)PyPublicKeyVerify, METH_FASTCALL},
     {"VerifySchnorr", (PyCFunction)PyPublicKeyVerifySchnorr, METH_FASTCALL},
+    {"IsValid", (PyCFunction)PyPublicKeyIsValid, METH_FASTCALL | METH_STATIC},
     {}};
 
 bool PyInit_PublicKey(PyObject* module) {

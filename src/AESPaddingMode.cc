@@ -69,6 +69,11 @@ PyObject* PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode value) {
   return value_pair->pyvalue;
 }
 
+TWAESPaddingMode PyAESPaddingMode_GetTWAESPaddingMode(PyObject* object) {
+  assert(PyAESPaddingMode_Check(object));
+  return ((PyAESPaddingModeObject*)object)->value;
+}
+
 static int PyAESPaddingMode_init(PyAESPaddingModeObject* self,
                                  PyObject* args,
                                  PyObject* kwds) {

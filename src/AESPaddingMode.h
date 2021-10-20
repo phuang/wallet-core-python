@@ -20,5 +20,8 @@ bool PyAESPaddingMode_Check(PyObject* object);
 // TWAESPaddingMode value. the caller should release the reference after using.
 PyObject* PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode value);
 
+// Get enum TWAESPaddingMode value from a PyAESPaddingMode object.
+TWAESPaddingMode PyAESPaddingMode_GetTWAESPaddingMode(PyObject* object);
+
 // Initialize for PyAESPaddingMode. It is called by python module init function.
 bool PyInit_AESPaddingMode(PyObject* module);

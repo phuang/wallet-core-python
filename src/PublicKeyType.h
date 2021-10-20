@@ -20,5 +20,8 @@ bool PyPublicKeyType_Check(PyObject* object);
 // TWPublicKeyType value. the caller should release the reference after using.
 PyObject* PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType value);
 
+// Get enum TWPublicKeyType value from a PyPublicKeyType object.
+TWPublicKeyType PyPublicKeyType_GetTWPublicKeyType(PyObject* object);
+
 // Initialize for PyPublicKeyType. It is called by python module init function.
 bool PyInit_PublicKeyType(PyObject* module);

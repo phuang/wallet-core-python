@@ -19,6 +19,10 @@ bool PyGroestlcoinAddress_Check(PyObject* object);
 PyObject* PyGroestlcoinAddress_FromTWGroestlcoinAddress(
     TWGroestlcoinAddress* value);
 
+// Get enum TWGroestlcoinAddress value from a PyGroestlcoinAddress object.
+TWGroestlcoinAddress* PyGroestlcoinAddress_GetTWGroestlcoinAddress(
+    PyObject* object);
+
 // Initialize for PyGroestlcoinAddress. It is called by python module init
 // function.
 bool PyInit_GroestlcoinAddress(PyObject* module);

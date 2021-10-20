@@ -87,6 +87,11 @@ PyObject* PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value) {
   return value_pair->pyvalue;
 }
 
+TWEthereumChainID PyEthereumChainID_GetTWEthereumChainID(PyObject* object) {
+  assert(PyEthereumChainID_Check(object));
+  return ((PyEthereumChainIDObject*)object)->value;
+}
+
 static int PyEthereumChainID_init(PyEthereumChainIDObject* self,
                                   PyObject* args,
                                   PyObject* kwds) {

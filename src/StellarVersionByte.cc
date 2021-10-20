@@ -75,6 +75,12 @@ PyObject* PyStellarVersionByte_FromTWStellarVersionByte(
   return value_pair->pyvalue;
 }
 
+TWStellarVersionByte PyStellarVersionByte_GetTWStellarVersionByte(
+    PyObject* object) {
+  assert(PyStellarVersionByte_Check(object));
+  return ((PyStellarVersionByteObject*)object)->value;
+}
+
 static int PyStellarVersionByte_init(PyStellarVersionByteObject* self,
                                      PyObject* args,
                                      PyObject* kwds) {

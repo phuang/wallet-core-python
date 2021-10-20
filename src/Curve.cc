@@ -74,6 +74,11 @@ PyObject* PyCurve_FromTWCurve(TWCurve value) {
   return value_pair->pyvalue;
 }
 
+TWCurve PyCurve_GetTWCurve(PyObject* object) {
+  assert(PyCurve_Check(object));
+  return ((PyCurveObject*)object)->value;
+}
+
 static int PyCurve_init(PyCurveObject* self, PyObject* args, PyObject* kwds) {
   return 0;
 }

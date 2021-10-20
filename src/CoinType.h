@@ -20,5 +20,8 @@ bool PyCoinType_Check(PyObject* object);
 // value. the caller should release the reference after using.
 PyObject* PyCoinType_FromTWCoinType(TWCoinType value);
 
+// Get enum TWCoinType value from a PyCoinType object.
+TWCoinType PyCoinType_GetTWCoinType(PyObject* object);
+
 // Initialize for PyCoinType. It is called by python module init function.
 bool PyInit_CoinType(PyObject* module);

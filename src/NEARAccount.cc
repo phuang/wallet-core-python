@@ -47,6 +47,11 @@ PyObject* PyNEARAccount_FromTWNEARAccount(TWNEARAccount* value) {
   return (PyObject*)object;
 }
 
+TWNEARAccount* PyNEARAccount_GetTWNEARAccount(PyObject* object) {
+  assert(PyNEARAccount_Check(object));
+  return ((PyNEARAccountObject*)object)->value;
+}
+
 // static int PyNEARAccount_init(PyNEARAccountObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;

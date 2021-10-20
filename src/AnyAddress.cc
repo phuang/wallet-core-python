@@ -3,6 +3,7 @@
 #include "AnyAddress.h"
 
 #include "CoinType.h"
+#include "String.h"
 
 static PyTypeObject PyAnyAddressType = {
     // clang-format off
@@ -49,6 +50,11 @@ PyObject* PyAnyAddress_FromTWAnyAddress(TWAnyAddress* value) {
   return (PyObject*)object;
 }
 
+TWAnyAddress* PyAnyAddress_GetTWAnyAddress(PyObject* object) {
+  assert(PyAnyAddress_Check(object));
+  return ((PyAnyAddressObject*)object)->value;
+}
+
 // static int PyAnyAddress_init(PyAnyAddressObject *self, PyObject *args,
 // PyObject *kwds) {
 //   return 0;
@@ -69,14 +75,70 @@ PyObject* PyAnyAddress_FromTWAnyAddress(TWAnyAddress* value) {
 // }
 
 // getter function for Coin
+// enum TWCoinType TWAnyAddressCoin(struct TWAnyAddress* address);
 static PyObject* PyAnyAddressCoin(PyAnyAddressObject* self, void*) {
   return PyCoinType_FromTWCoinType(TWAnyAddressCoin(self->value));
+}
+
+// static method function for Equal
+// bool TWAnyAddressEqual(struct TWAnyAddress* lhs, struct TWAnyAddress* rhs);
+static PyObject* PyAnyAddressEqual(PyAnyAddressObject* self,
+                                   PyObject* const* args,
+                                   Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyAnyAddress_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type AnyAddress");
+    return nullptr;
+  }
+  auto arg0 = PyAnyAddress_GetTWAnyAddress(args[0]);
+
+  if (!PyAnyAddress_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type AnyAddress");
+    return nullptr;
+  }
+  auto arg1 = PyAnyAddress_GetTWAnyAddress(args[1]);
+
+  bool result = TWAnyAddressEqual(arg0, arg1);
+  return PyBool_FromLong(result);
+}
+
+// static method function for IsValid
+// bool TWAnyAddressIsValid(TWString* string, enum TWCoinType coin);
+static PyObject* PyAnyAddressIsValid(PyAnyAddressObject* self,
+                                     PyObject* const* args,
+                                     Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  bool result = TWAnyAddressIsValid(arg0.get(), arg1);
+  return PyBool_FromLong(result);
 }
 
 static const PyGetSetDef get_set_defs[] = {{"Coin", (getter)PyAnyAddressCoin},
                                            {}};
 
-static const PyMethodDef method_defs[] = {{}};
+static const PyMethodDef method_defs[] = {
+    {"Equal", (PyCFunction)PyAnyAddressEqual, METH_FASTCALL | METH_STATIC},
+    {"IsValid", (PyCFunction)PyAnyAddressIsValid, METH_FASTCALL | METH_STATIC},
+    {}};
 
 bool PyInit_AnyAddress(PyObject* module) {
   // PyAnyAddressType.tp_new = PyAnyAddress_new;

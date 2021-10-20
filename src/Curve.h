@@ -20,5 +20,8 @@ bool PyCurve_Check(PyObject* object);
 // the caller should release the reference after using.
 PyObject* PyCurve_FromTWCurve(TWCurve value);
 
+// Get enum TWCurve value from a PyCurve object.
+TWCurve PyCurve_GetTWCurve(PyObject* object);
+
 // Initialize for PyCurve. It is called by python module init function.
 bool PyInit_Curve(PyObject* module);

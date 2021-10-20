@@ -49,6 +49,11 @@ PyObject* PyStoredKey_FromTWStoredKey(TWStoredKey* value) {
   return (PyObject*)object;
 }
 
+TWStoredKey* PyStoredKey_GetTWStoredKey(PyObject* object) {
+  assert(PyStoredKey_Check(object));
+  return ((PyStoredKeyObject*)object)->value;
+}
+
 // static int PyStoredKey_init(PyStoredKeyObject *self, PyObject *args, PyObject
 // *kwds) {
 //   return 0;
@@ -69,12 +74,13 @@ PyObject* PyStoredKey_FromTWStoredKey(TWStoredKey* value) {
 // }
 
 // getter function for IsMnemonic
+// bool TWStoredKeyIsMnemonic(struct TWStoredKey* key);
 static PyObject* PyStoredKeyIsMnemonic(PyStoredKeyObject* self, void*) {
   return PyBool_FromLong(TWStoredKeyIsMnemonic(self->value));
 }
 
 // method function for Store
-// bool TWStoredKeyStore(struct TWStoredKey * key, TWString * path)
+// bool TWStoredKeyStore(struct TWStoredKey* key, TWString* path);
 static PyObject* PyStoredKeyStore(PyStoredKeyObject* self,
                                   PyObject* const* args,
                                   Py_ssize_t nargs) {
@@ -94,7 +100,7 @@ static PyObject* PyStoredKeyStore(PyStoredKeyObject* self,
 }
 
 // method function for FixAddresses
-// bool TWStoredKeyFixAddresses(struct TWStoredKey * key, TWData * password)
+// bool TWStoredKeyFixAddresses(struct TWStoredKey* key, TWData* password);
 static PyObject* PyStoredKeyFixAddresses(PyStoredKeyObject* self,
                                          PyObject* const* args,
                                          Py_ssize_t nargs) {

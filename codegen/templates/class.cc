@@ -49,6 +49,11 @@ PyObject* Py${name}_FromTW${name}(TW${name}* value) {
   return (PyObject*)object;
 }
 
+TW${name}* Py${name}_GetTW${name}(PyObject* object) {
+  assert(Py${name}_Check(object));
+  return ((Py${name}Object*)object)->value;
+}
+
 // static int Py${name}_init(Py${name}Object *self, PyObject *args, PyObject *kwds) {
 //   return 0;
 // }

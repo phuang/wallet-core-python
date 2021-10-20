@@ -2,6 +2,8 @@
 
 #include "Mnemonic.h"
 
+#include "String.h"
+
 static PyTypeObject PyMnemonicType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -46,6 +48,11 @@ PyObject* PyMnemonic_FromTWMnemonic(TWMnemonic* value) {
   return (PyObject*)object;
 }
 
+TWMnemonic* PyMnemonic_GetTWMnemonic(PyObject* object) {
+  assert(PyMnemonic_Check(object));
+  return ((PyMnemonicObject*)object)->value;
+}
+
 // static int PyMnemonic_init(PyMnemonicObject *self, PyObject *args, PyObject
 // *kwds) {
 //   return 0;
@@ -65,9 +72,53 @@ PyObject* PyMnemonic_FromTWMnemonic(TWMnemonic* value) {
 //   return PyUnicode_FromString(str);
 // }
 
+// static method function for IsValid
+// bool TWMnemonicIsValid(TWString* mnemonic);
+static PyObject* PyMnemonicIsValid(PyMnemonicObject* self,
+                                   PyObject* const* args,
+                                   Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  bool result = TWMnemonicIsValid(arg0.get());
+  return PyBool_FromLong(result);
+}
+
+// static method function for IsValidWord
+// bool TWMnemonicIsValidWord(TWString* word);
+static PyObject* PyMnemonicIsValidWord(PyMnemonicObject* self,
+                                       PyObject* const* args,
+                                       Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 instead of %d.", nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  bool result = TWMnemonicIsValidWord(arg0.get());
+  return PyBool_FromLong(result);
+}
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
-static const PyMethodDef method_defs[] = {{}};
+static const PyMethodDef method_defs[] = {
+    {"IsValid", (PyCFunction)PyMnemonicIsValid, METH_FASTCALL | METH_STATIC},
+    {"IsValidWord", (PyCFunction)PyMnemonicIsValidWord,
+     METH_FASTCALL | METH_STATIC},
+    {}};
 
 bool PyInit_Mnemonic(PyObject* module) {
   // PyMnemonicType.tp_new = PyMnemonic_new;

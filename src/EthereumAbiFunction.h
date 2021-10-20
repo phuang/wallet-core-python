@@ -19,6 +19,10 @@ bool PyEthereumAbiFunction_Check(PyObject* object);
 PyObject* PyEthereumAbiFunction_FromTWEthereumAbiFunction(
     TWEthereumAbiFunction* value);
 
+// Get enum TWEthereumAbiFunction value from a PyEthereumAbiFunction object.
+TWEthereumAbiFunction* PyEthereumAbiFunction_GetTWEthereumAbiFunction(
+    PyObject* object);
+
 // Initialize for PyEthereumAbiFunction. It is called by python module init
 // function.
 bool PyInit_EthereumAbiFunction(PyObject* module);

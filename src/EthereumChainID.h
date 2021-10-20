@@ -20,6 +20,9 @@ bool PyEthereumChainID_Check(PyObject* object);
 // TWEthereumChainID value. the caller should release the reference after using.
 PyObject* PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value);
 
+// Get enum TWEthereumChainID value from a PyEthereumChainID object.
+TWEthereumChainID PyEthereumChainID_GetTWEthereumChainID(PyObject* object);
+
 // Initialize for PyEthereumChainID. It is called by python module init
 // function.
 bool PyInit_EthereumChainID(PyObject* module);

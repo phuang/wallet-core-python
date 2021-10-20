@@ -18,5 +18,8 @@ bool PyAnyAddress_Check(PyObject* object);
 // Create PyAnyAddress from an TWAnyAddress.
 PyObject* PyAnyAddress_FromTWAnyAddress(TWAnyAddress* value);
 
+// Get enum TWAnyAddress value from a PyAnyAddress object.
+TWAnyAddress* PyAnyAddress_GetTWAnyAddress(PyObject* object);
+
 // Initialize for PyAnyAddress. It is called by python module init function.
 bool PyInit_AnyAddress(PyObject* module);

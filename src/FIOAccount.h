@@ -18,5 +18,8 @@ bool PyFIOAccount_Check(PyObject* object);
 // Create PyFIOAccount from an TWFIOAccount.
 PyObject* PyFIOAccount_FromTWFIOAccount(TWFIOAccount* value);
 
+// Get enum TWFIOAccount value from a PyFIOAccount object.
+TWFIOAccount* PyFIOAccount_GetTWFIOAccount(PyObject* object);
+
 // Initialize for PyFIOAccount. It is called by python module init function.
 bool PyInit_FIOAccount(PyObject* module);

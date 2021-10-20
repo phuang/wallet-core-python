@@ -100,6 +100,11 @@ PyObject* PyBlockchain_FromTWBlockchain(TWBlockchain value) {
   return value_pair->pyvalue;
 }
 
+TWBlockchain PyBlockchain_GetTWBlockchain(PyObject* object) {
+  assert(PyBlockchain_Check(object));
+  return ((PyBlockchainObject*)object)->value;
+}
+
 static int PyBlockchain_init(PyBlockchainObject* self,
                              PyObject* args,
                              PyObject* kwds) {

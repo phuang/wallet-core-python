@@ -18,5 +18,8 @@ bool PyHDWallet_Check(PyObject* object);
 // Create PyHDWallet from an TWHDWallet.
 PyObject* PyHDWallet_FromTWHDWallet(TWHDWallet* value);
 
+// Get enum TWHDWallet value from a PyHDWallet object.
+TWHDWallet* PyHDWallet_GetTWHDWallet(PyObject* object);
+
 // Initialize for PyHDWallet. It is called by python module init function.
 bool PyInit_HDWallet(PyObject* module);

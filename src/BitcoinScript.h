@@ -18,5 +18,8 @@ bool PyBitcoinScript_Check(PyObject* object);
 // Create PyBitcoinScript from an TWBitcoinScript.
 PyObject* PyBitcoinScript_FromTWBitcoinScript(TWBitcoinScript* value);
 
+// Get enum TWBitcoinScript value from a PyBitcoinScript object.
+TWBitcoinScript* PyBitcoinScript_GetTWBitcoinScript(PyObject* object);
+
 // Initialize for PyBitcoinScript. It is called by python module init function.
 bool PyInit_BitcoinScript(PyObject* module);
