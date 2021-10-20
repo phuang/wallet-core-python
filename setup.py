@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2021 Peng Huang <shawn.p.huang@gmail.com>
 # This file is part of wallet-core-python.
 #

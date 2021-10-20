@@ -1,4 +1,3 @@
-#/usr/bin/env python3
 #!/usr/bin/env python3
 # Copyright 2021 Peng Huang <shawn.p.huang@gmail.com>
 # This file is part of wallet-core-python.
@@ -94,7 +93,7 @@ class Function:
 
     def __str__(self):
         args = map(str, self._args)
-        return '%s %s(%s)' % (str(self._type), self._name, ', '.join(args))
+        return '{} {}({})'.format(str(self._type), self._name, ', '.join(args))
 
 
 class Entity:
@@ -170,7 +169,7 @@ class Enum(Entity):
         line = self._file.readline()
         self._name = re.findall(r'^enum (\w+) {', line)[0]
 
-        print('Found enum %s' % self._name)
+        print('Found enum ' + self._name)
 
         # parse constants in the enum
         self._constants = []
@@ -195,10 +194,10 @@ class Enum(Entity):
 
     def __str__(self):
         lines = []
-        lines.append('TW_EXPORT_ENUM(%s)' % self._enum_type)
-        lines.append('enum %s {' % self._name)
+        lines.append('TW_EXPORT_ENUM({})'.format(self._enum_type))
+        lines.append('enum {} {'.format(self._name))
         for name, value in self._constants:
-            lines.append('%s = %s' % (name, value))
+            lines.append('{} = {}'.format(name, value))
         lines.append('}')
         lines.append(Entity.__str__(self))
         return '\n'.join(lines)
@@ -218,7 +217,7 @@ class Class(Entity):
         # parse struct TWName; or struct TWName {
         line = self._file.readline()
         self._name = re.findall(r'^struct (\w+)', line)[0]
-        print('Found %s %s' % (self._type, self._name))
+        print('Found {} {}'.format(self._type, self._name))
 
         # parse rest of the file
         Entity.parse(self)
