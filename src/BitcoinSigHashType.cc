@@ -112,7 +112,8 @@ static PyObject* PyBitcoinSigHashTypeIsSingle(PyBitcoinSigHashTypeObject* self,
   if (nargs != 0) {
     PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
     return nullptr;
-  };
+  }
+
   bool result = TWBitcoinSigHashTypeIsSingle(self->value);
   return PyBool_FromLong(result);
 }
@@ -124,7 +125,8 @@ static PyObject* PyBitcoinSigHashTypeIsNone(PyBitcoinSigHashTypeObject* self,
   if (nargs != 0) {
     PyErr_Format(PyExc_TypeError, "Expect 0 instead of %d.", nargs);
     return nullptr;
-  };
+  }
+
   bool result = TWBitcoinSigHashTypeIsNone(self->value);
   return PyBool_FromLong(result);
 }

@@ -123,7 +123,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
 static PyObject* Py${name}${method_name}(Py${name}Object *self,
                                          PyObject *const *args,
                                          Py_ssize_t nargs) {
-  ${prepare_args};
+  ${prepare_args}
   ${return_type} result = TW${name}${method_name}(${call_args});
   return ${return}(result);
 }\n''')

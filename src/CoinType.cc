@@ -238,7 +238,7 @@ static PyObject* PyCoinTypeValidate(PyCoinTypeObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  ;
+
   bool result = TWCoinTypeValidate(self->value, arg0.get());
   return PyBool_FromLong(result);
 }
