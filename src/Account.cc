@@ -1,4 +1,20 @@
-// This is a GENERATED FILE, changes made here WILL BE LOST.
+// Copyright 2021 Peng Huang <shawn.p.huang@gmail.com>
+// This file is part of wallet-core-python.
+//
+// Foobar is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Foobar is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
+//
+// NOTE: this is a GENERATED FILE, changes made here WILL BE LOST.
 
 #include "Account.h"
 
@@ -60,25 +76,6 @@ static void PyAccount_dealloc(PyAccountObject* self) {
   }
   Py_TYPE(self)->tp_free(self);
 }
-
-// static int PyAccount_init(PyAccountObject *self, PyObject *args, PyObject
-// *kwds) {
-//   return 0;
-// }
-
-// static PyObject* PyAccount_new(PyTypeObject *subtype, PyObject *args,
-// PyObject *kwds) {
-//   int value = 0;
-//   if (!PyArg_ParseTuple(args, "|i", &value)) {
-//     return nullptr;
-//   }
-//   return PyAccount_FromTWAccount((TWAccount)value);
-// }
-
-// static PyObject* PyAccount_str(PyAccountObject *self) {
-//   const char* str = "Unknown";
-//   return PyUnicode_FromString(str);
-// }
 
 // getter function for Address
 static const char PyAccountAddress_doc[] =
@@ -180,10 +177,7 @@ static const PyMethodDef method_defs[] = {
     {}};
 
 bool PyInit_Account(PyObject* module) {
-  // PyAccountType.tp_new = PyAccount_new;
-  // PyAccountType.tp_init = (initproc)PyAccount_init;
   PyAccountType.tp_dealloc = (destructor)PyAccount_dealloc;
-  // PyAccountType.tp_str = (reprfunc)PyAccount_str;
   PyAccountType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyAccountType.tp_methods = (PyMethodDef*)method_defs;
 

@@ -1,4 +1,20 @@
-// This is a GENERATED FILE, changes made here WILL BE LOST.
+// Copyright 2021 Peng Huang <shawn.p.huang@gmail.com>
+// This file is part of wallet-core-python.
+//
+// Foobar is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Foobar is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
+//
+// NOTE: this is a GENERATED FILE, changes made here WILL BE LOST.
 
 #include "RippleXAddress.h"
 
@@ -61,25 +77,6 @@ static void PyRippleXAddress_dealloc(PyRippleXAddressObject* self) {
   }
   Py_TYPE(self)->tp_free(self);
 }
-
-// static int PyRippleXAddress_init(PyRippleXAddressObject *self, PyObject
-// *args, PyObject *kwds) {
-//   return 0;
-// }
-
-// static PyObject* PyRippleXAddress_new(PyTypeObject *subtype, PyObject *args,
-// PyObject *kwds) {
-//   int value = 0;
-//   if (!PyArg_ParseTuple(args, "|i", &value)) {
-//     return nullptr;
-//   }
-//   return PyRippleXAddress_FromTWRippleXAddress((TWRippleXAddress)value);
-// }
-
-// static PyObject* PyRippleXAddress_str(PyRippleXAddressObject *self) {
-//   const char* str = "Unknown";
-//   return PyUnicode_FromString(str);
-// }
 
 // getter function for Description
 static const char PyRippleXAddressDescription_doc[] =
@@ -231,10 +228,7 @@ static const PyMethodDef method_defs[] = {
     {}};
 
 bool PyInit_RippleXAddress(PyObject* module) {
-  // PyRippleXAddressType.tp_new = PyRippleXAddress_new;
-  // PyRippleXAddressType.tp_init = (initproc)PyRippleXAddress_init;
   PyRippleXAddressType.tp_dealloc = (destructor)PyRippleXAddress_dealloc;
-  // PyRippleXAddressType.tp_str = (reprfunc)PyRippleXAddress_str;
   PyRippleXAddressType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyRippleXAddressType.tp_methods = (PyMethodDef*)method_defs;
 

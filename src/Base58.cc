@@ -1,4 +1,20 @@
-// This is a GENERATED FILE, changes made here WILL BE LOST.
+// Copyright 2021 Peng Huang <shawn.p.huang@gmail.com>
+// This file is part of wallet-core-python.
+//
+// Foobar is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Foobar is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
+//
+// NOTE: this is a GENERATED FILE, changes made here WILL BE LOST.
 
 #include "Base58.h"
 
@@ -53,25 +69,6 @@ TWBase58* PyBase58_GetTWBase58(PyObject* object) {
   assert(PyBase58_Check(object));
   return ((PyBase58Object*)object)->value;
 }
-
-// static int PyBase58_init(PyBase58Object *self, PyObject *args, PyObject
-// *kwds) {
-//   return 0;
-// }
-
-// static PyObject* PyBase58_new(PyTypeObject *subtype, PyObject *args, PyObject
-// *kwds) {
-//   int value = 0;
-//   if (!PyArg_ParseTuple(args, "|i", &value)) {
-//     return nullptr;
-//   }
-//   return PyBase58_FromTWBase58((TWBase58)value);
-// }
-
-// static PyObject* PyBase58_str(PyBase58Object *self) {
-//   const char* str = "Unknown";
-//   return PyUnicode_FromString(str);
-// }
 
 // static method function for Encode
 static const char PyBase58Encode_doc[] =
@@ -171,9 +168,6 @@ static const PyMethodDef method_defs[] = {
     {}};
 
 bool PyInit_Base58(PyObject* module) {
-  // PyBase58Type.tp_new = PyBase58_new;
-  // PyBase58Type.tp_init = (initproc)PyBase58_init;
-  // PyBase58Type.tp_str = (reprfunc)PyBase58_str;
   PyBase58Type.tp_getset = (PyGetSetDef*)get_set_defs;
   PyBase58Type.tp_methods = (PyMethodDef*)method_defs;
 

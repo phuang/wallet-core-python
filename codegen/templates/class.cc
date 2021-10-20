@@ -1,4 +1,20 @@
-// This is a GENERATED FILE, changes made here WILL BE LOST.
+// Copyright 2021 Peng Huang <shawn.p.huang@gmail.com>
+// This file is part of wallet-core-python.
+//
+// Foobar is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Foobar is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
+//
+// NOTE: this is a GENERATED FILE, changes made here WILL BE LOST.
 
 #include "${name}.h"
 
@@ -61,23 +77,6 @@ static void Py${name}_dealloc(Py${name}Object *self) {
   Py_TYPE(self)->tp_free(self);
 }
 
-// static int Py${name}_init(Py${name}Object *self, PyObject *args, PyObject *kwds) {
-//   return 0;
-// }
-
-// static PyObject* Py${name}_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds) {
-//   int value = 0;
-//   if (!PyArg_ParseTuple(args, "|i", &value)) {
-//     return nullptr;
-//   }
-//   return Py${name}_FromTW${name}((TW${name})value);
-// }
-
-// static PyObject* Py${name}_str(Py${name}Object *self) {
-//   const char* str = "Unknown";
-//   return PyUnicode_FromString(str);
-// }
-
 ${functions}
 
 static const PyGetSetDef get_set_defs[] = {
@@ -89,11 +88,7 @@ ${methoddefs}
 };
 
 bool PyInit_${name}(PyObject *module) {
-
-  // Py${name}Type.tp_new = Py${name}_new;
-  // Py${name}Type.tp_init = (initproc)Py${name}_init;
   Py${name}Type.tp_dealloc = (destructor)Py${name}_dealloc;
-  // Py${name}Type.tp_str = (reprfunc)Py${name}_str;
   Py${name}Type.tp_getset = (PyGetSetDef*)get_set_defs;
   Py${name}Type.tp_methods = (PyMethodDef*)method_defs;
 

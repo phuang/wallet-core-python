@@ -1,4 +1,20 @@
-// This is a GENERATED FILE, changes made here WILL BE LOST.
+// Copyright 2021 Peng Huang <shawn.p.huang@gmail.com>
+// This file is part of wallet-core-python.
+//
+// Foobar is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Foobar is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
+//
+// NOTE: this is a GENERATED FILE, changes made here WILL BE LOST.
 
 #include "FIOAccount.h"
 
@@ -61,25 +77,6 @@ static void PyFIOAccount_dealloc(PyFIOAccountObject* self) {
   Py_TYPE(self)->tp_free(self);
 }
 
-// static int PyFIOAccount_init(PyFIOAccountObject *self, PyObject *args,
-// PyObject *kwds) {
-//   return 0;
-// }
-
-// static PyObject* PyFIOAccount_new(PyTypeObject *subtype, PyObject *args,
-// PyObject *kwds) {
-//   int value = 0;
-//   if (!PyArg_ParseTuple(args, "|i", &value)) {
-//     return nullptr;
-//   }
-//   return PyFIOAccount_FromTWFIOAccount((TWFIOAccount)value);
-// }
-
-// static PyObject* PyFIOAccount_str(PyFIOAccountObject *self) {
-//   const char* str = "Unknown";
-//   return PyUnicode_FromString(str);
-// }
-
 // getter function for Description
 static const char PyFIOAccountDescription_doc[] =
     "TWString* TWFIOAccountDescription(struct TWFIOAccount* account)";
@@ -136,10 +133,7 @@ static const PyMethodDef method_defs[] = {
     {}};
 
 bool PyInit_FIOAccount(PyObject* module) {
-  // PyFIOAccountType.tp_new = PyFIOAccount_new;
-  // PyFIOAccountType.tp_init = (initproc)PyFIOAccount_init;
   PyFIOAccountType.tp_dealloc = (destructor)PyFIOAccount_dealloc;
-  // PyFIOAccountType.tp_str = (reprfunc)PyFIOAccount_str;
   PyFIOAccountType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyFIOAccountType.tp_methods = (PyMethodDef*)method_defs;
 

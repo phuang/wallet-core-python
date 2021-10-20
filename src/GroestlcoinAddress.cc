@@ -1,4 +1,20 @@
-// This is a GENERATED FILE, changes made here WILL BE LOST.
+// Copyright 2021 Peng Huang <shawn.p.huang@gmail.com>
+// This file is part of wallet-core-python.
+//
+// Foobar is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Foobar is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
+//
+// NOTE: this is a GENERATED FILE, changes made here WILL BE LOST.
 
 #include "GroestlcoinAddress.h"
 
@@ -63,26 +79,6 @@ static void PyGroestlcoinAddress_dealloc(PyGroestlcoinAddressObject* self) {
   }
   Py_TYPE(self)->tp_free(self);
 }
-
-// static int PyGroestlcoinAddress_init(PyGroestlcoinAddressObject *self,
-// PyObject *args, PyObject *kwds) {
-//   return 0;
-// }
-
-// static PyObject* PyGroestlcoinAddress_new(PyTypeObject *subtype, PyObject
-// *args, PyObject *kwds) {
-//   int value = 0;
-//   if (!PyArg_ParseTuple(args, "|i", &value)) {
-//     return nullptr;
-//   }
-//   return
-//   PyGroestlcoinAddress_FromTWGroestlcoinAddress((TWGroestlcoinAddress)value);
-// }
-
-// static PyObject* PyGroestlcoinAddress_str(PyGroestlcoinAddressObject *self) {
-//   const char* str = "Unknown";
-//   return PyUnicode_FromString(str);
-// }
 
 // getter function for Description
 static const char PyGroestlcoinAddressDescription_doc[] =
@@ -236,11 +232,8 @@ static const PyMethodDef method_defs[] = {
     {}};
 
 bool PyInit_GroestlcoinAddress(PyObject* module) {
-  // PyGroestlcoinAddressType.tp_new = PyGroestlcoinAddress_new;
-  // PyGroestlcoinAddressType.tp_init = (initproc)PyGroestlcoinAddress_init;
   PyGroestlcoinAddressType.tp_dealloc =
       (destructor)PyGroestlcoinAddress_dealloc;
-  // PyGroestlcoinAddressType.tp_str = (reprfunc)PyGroestlcoinAddress_str;
   PyGroestlcoinAddressType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyGroestlcoinAddressType.tp_methods = (PyMethodDef*)method_defs;
 

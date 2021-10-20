@@ -1,4 +1,20 @@
-// This is a GENERATED FILE, changes made here WILL BE LOST.
+// Copyright 2021 Peng Huang <shawn.p.huang@gmail.com>
+// This file is part of wallet-core-python.
+//
+// Foobar is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Foobar is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
+//
+// NOTE: this is a GENERATED FILE, changes made here WILL BE LOST.
 
 #include "HDWallet.h"
 
@@ -67,25 +83,6 @@ static void PyHDWallet_dealloc(PyHDWalletObject* self) {
   }
   Py_TYPE(self)->tp_free(self);
 }
-
-// static int PyHDWallet_init(PyHDWalletObject *self, PyObject *args, PyObject
-// *kwds) {
-//   return 0;
-// }
-
-// static PyObject* PyHDWallet_new(PyTypeObject *subtype, PyObject *args,
-// PyObject *kwds) {
-//   int value = 0;
-//   if (!PyArg_ParseTuple(args, "|i", &value)) {
-//     return nullptr;
-//   }
-//   return PyHDWallet_FromTWHDWallet((TWHDWallet)value);
-// }
-
-// static PyObject* PyHDWallet_str(PyHDWalletObject *self) {
-//   const char* str = "Unknown";
-//   return PyUnicode_FromString(str);
-// }
 
 // getter function for Seed
 static const char PyHDWalletSeed_doc[] =
@@ -519,10 +516,7 @@ static const PyMethodDef method_defs[] = {
     {}};
 
 bool PyInit_HDWallet(PyObject* module) {
-  // PyHDWalletType.tp_new = PyHDWallet_new;
-  // PyHDWalletType.tp_init = (initproc)PyHDWallet_init;
   PyHDWalletType.tp_dealloc = (destructor)PyHDWallet_dealloc;
-  // PyHDWalletType.tp_str = (reprfunc)PyHDWallet_str;
   PyHDWalletType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyHDWalletType.tp_methods = (PyMethodDef*)method_defs;
 

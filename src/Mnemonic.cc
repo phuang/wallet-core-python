@@ -1,4 +1,20 @@
-// This is a GENERATED FILE, changes made here WILL BE LOST.
+// Copyright 2021 Peng Huang <shawn.p.huang@gmail.com>
+// This file is part of wallet-core-python.
+//
+// Foobar is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Foobar is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
+//
+// NOTE: this is a GENERATED FILE, changes made here WILL BE LOST.
 
 #include "Mnemonic.h"
 
@@ -52,25 +68,6 @@ TWMnemonic* PyMnemonic_GetTWMnemonic(PyObject* object) {
   assert(PyMnemonic_Check(object));
   return ((PyMnemonicObject*)object)->value;
 }
-
-// static int PyMnemonic_init(PyMnemonicObject *self, PyObject *args, PyObject
-// *kwds) {
-//   return 0;
-// }
-
-// static PyObject* PyMnemonic_new(PyTypeObject *subtype, PyObject *args,
-// PyObject *kwds) {
-//   int value = 0;
-//   if (!PyArg_ParseTuple(args, "|i", &value)) {
-//     return nullptr;
-//   }
-//   return PyMnemonic_FromTWMnemonic((TWMnemonic)value);
-// }
-
-// static PyObject* PyMnemonic_str(PyMnemonicObject *self) {
-//   const char* str = "Unknown";
-//   return PyUnicode_FromString(str);
-// }
 
 // static method function for IsValid
 static const char PyMnemonicIsValid_doc[] =
@@ -147,9 +144,6 @@ static const PyMethodDef method_defs[] = {
     {}};
 
 bool PyInit_Mnemonic(PyObject* module) {
-  // PyMnemonicType.tp_new = PyMnemonic_new;
-  // PyMnemonicType.tp_init = (initproc)PyMnemonic_init;
-  // PyMnemonicType.tp_str = (reprfunc)PyMnemonic_str;
   PyMnemonicType.tp_getset = (PyGetSetDef*)get_set_defs;
   PyMnemonicType.tp_methods = (PyMethodDef*)method_defs;
 
