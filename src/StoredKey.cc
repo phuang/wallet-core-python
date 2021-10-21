@@ -107,6 +107,13 @@ static PyObject* PyStoredKeyIsMnemonic(PyStoredKeyObject* self, void*) {
   return PyBool_FromLong(TWStoredKeyIsMnemonic(self->value));
 }
 
+// getter function for AccountCount
+static const char PyStoredKeyAccountCount_doc[] =
+    "size_t TWStoredKeyAccountCount(struct TWStoredKey* key)";
+static PyObject* PyStoredKeyAccountCount(PyStoredKeyObject* self, void*) {
+  return PyLong_FromLong(TWStoredKeyAccountCount(self->value));
+}
+
 // method function for Account
 static const char PyStoredKeyAccount_doc[] =
     "struct TWAccount* TWStoredKeyAccount(struct TWStoredKey* key, size_t "
@@ -544,6 +551,8 @@ static const PyGetSetDef get_set_defs[] = {
     {"Name", (getter)PyStoredKeyName, nullptr, PyStoredKeyName_doc},
     {"IsMnemonic", (getter)PyStoredKeyIsMnemonic, nullptr,
      PyStoredKeyIsMnemonic_doc},
+    {"AccountCount", (getter)PyStoredKeyAccountCount, nullptr,
+     PyStoredKeyAccountCount_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {

@@ -84,6 +84,13 @@ static void PyBitcoinScript_dealloc(PyBitcoinScriptObject* self) {
   Py_TYPE(self)->tp_free(self);
 }
 
+// getter function for Size
+static const char PyBitcoinScriptSize_doc[] =
+    "size_t TWBitcoinScriptSize(const struct TWBitcoinScript* script)";
+static PyObject* PyBitcoinScriptSize(PyBitcoinScriptObject* self, void*) {
+  return PyLong_FromLong(TWBitcoinScriptSize(self->value));
+}
+
 // getter function for Data
 static const char PyBitcoinScriptData_doc[] =
     "TWData* TWBitcoinScriptData(const struct TWBitcoinScript* script)";
@@ -507,6 +514,7 @@ static PyObject* PyBitcoinScriptHashTypeForCoin(PyBitcoinScriptObject* self,
 }
 
 static const PyGetSetDef get_set_defs[] = {
+    {"Size", (getter)PyBitcoinScriptSize, nullptr, PyBitcoinScriptSize_doc},
     {"Data", (getter)PyBitcoinScriptData, nullptr, PyBitcoinScriptData_doc},
     {"ScriptHash", (getter)PyBitcoinScriptScriptHash, nullptr,
      PyBitcoinScriptScriptHash_doc},

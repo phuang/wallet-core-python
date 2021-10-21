@@ -19,8 +19,10 @@ from glob import glob
 from distutils.core import setup, Extension
 
 # Use clang since wallet-core headers don't compile with gcc
-os.environ['CC'] = 'clang'
-os.environ['CXX'] = 'clang++'
+if 'CC' not in os.environ:
+    os.environ['CC'] = 'clang'
+if 'CXX' not in os.environ:
+    os.environ['CXX'] = 'clang++'
 
 WALLET_CORE_ROOT = 'wallet-core'
 WALLET_CORE_INCLUDE = os.path.join(WALLET_CORE_ROOT, 'include')

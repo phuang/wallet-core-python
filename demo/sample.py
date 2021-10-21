@@ -16,6 +16,7 @@
 # along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
 
 import walletcore as core
+import base64
 
 def main():
   print('''
