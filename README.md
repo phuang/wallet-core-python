@@ -22,7 +22,7 @@ python3 setup.py install
 
 ```
 
-# Generate python binding from wallet-core (optional)
+# Generate python binding from wallet-core
 This step is optional, the repository alreay includes generated python binding source code.
 ```
 python3 codegen/generator.py
