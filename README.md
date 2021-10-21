@@ -17,8 +17,11 @@ git submodule update
 # Build wallet-core-python
 python3 setup.py build
 
-# Install wallet-core-python
-python3 setup.py install
+# Install wallet-core-python in $HOME directory
+python3 setup.py install --prefix=~/.local
+
+# Or install wallet-core-python in global python library directory
+# sudo python3 setup.py install
 
 ```
 
