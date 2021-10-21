@@ -17,15 +17,62 @@
 
 import walletcore as core
 
-wallet_a = core.HDWallet.Create(128, 'aabbcc')
-mnemonic = wallet_a.Mnemonic
-address = wallet_a.GetAddressForCoin(core.CoinType.Bitcoin)
-print('mnemonic="{}"'.format(mnemonic))
-print('BTC address="{}"'.format(address))
+def create_wallet():
+  print('=== creat wallet')
+  wallet = core.HDWallet.Create(128, 'aabbcc')
+  mnemonic = wallet.Mnemonic
+  entropy = wallet.Entropy
+  print('mnemonic="{}"'.format(mnemonic))
+  print('Entropy="{}" size={}'.format(entropy, len(entropy)))
 
-wallet_b = core.HDWallet.CreateWithMnemonic(mnemonic, '')
-print(wallet_b)
-address = wallet_a.GetAddressForCoin(core.CoinType.Bitcoin)
-print('BTC address="{}"'.format(address))
+  address = wallet.GetAddressForCoin(core.CoinType.Bitcoin)
+  print('BTC address="{}"'.format(address))
 
-print('Mnemonic suggest for "be":{}'.format(core.Mnemonic.Suggest('be')))
+  address = wallet.GetAddressForCoin(core.CoinType.Ethereum)
+  print('ETH address="{}"'.format(address))
+
+def wallet_demo():
+  print('=== demo')
+
+  mnemonic = 'ordinary order ball reunion risk slab desert humor hire turtle now process'
+  wallet = core.HDWallet.CreateWithMnemonic(mnemonic, '123')
+
+  # coin type: we use Ethereum
+  coinType = core.CoinType.Ethereum
+  print('Working with coin: {} {}'.format(
+    core.CoinTypeConfiguration.GetName(coinType),
+    core.CoinTypeConfiguration.GetSymbol(coinType)))
+
+  # Derive default address.
+  address = wallet.GetAddressForCoin(coinType)
+  print('Default address: "{}"'.format(address))
+
+  customDerivationPaths = [
+    "m/44'/60'/1'/0/0",
+    "m/44'/60'/0'/8/8"
+  ]
+  for path in customDerivationPaths:
+    secretPrivateKeyCustom = wallet.GetKey(coinType, path)
+    addressCustom = coinType.DeriveAddress(secretPrivateKeyCustom)
+    print('custom address for derivation path {}: "{}"'.format(path, addressCustom))
+
+  customDerivationPaths = [
+    "m/44/60/1/0/0",
+    "m/44/60/0/8/8"
+  ]
+  for path in customDerivationPaths:
+    secretPrivateKeyCustom = wallet.GetKey(coinType, path)
+    addressCustom = coinType.DeriveAddress(secretPrivateKeyCustom)
+    print('custom address for derivation path {}: "{}"'.format(path, addressCustom))
+
+
+def mnemonic_demo():
+  print('=== mnemonic demo')
+  suggestion = core.Mnemonic.Suggest('be')
+  print('Mnemonic suggestion for "be": {}'.format(suggestion))
+
+
+if __name__ == '__main__':
+  create_wallet()
+  wallet_demo()
+  mnemonic_demo()

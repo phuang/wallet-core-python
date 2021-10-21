@@ -378,6 +378,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
             self.generate_struct(struct)
             names.append(struct._name[2:])
 
+        names.append('AnySigner')
         names.sort()
         includes = '\n'.join(['#include "{}.h"'.format(f) for f in names])
         functions = '\n'.join(['  PyInit_{},'.format(f) for f in names])

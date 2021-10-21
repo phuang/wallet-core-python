@@ -30,8 +30,6 @@ class TWStringPtr
                                                              &TWStringDelete) {}
 };
 
-#define WRAPS(s) TWStringPtr(s)
-
 // Create a PyUnicode from a TWString.
 PyObject* PyUnicode_FromTWString(const TWStringPtr& str);
 
