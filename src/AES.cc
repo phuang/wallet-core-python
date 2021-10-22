@@ -64,23 +64,23 @@ static PyObject* PyAESEncryptCBC(PyAESObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
-  if (!PyByteArray_Check(args[2])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type ByteArray");
+  if (!PyBytes_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
-  auto arg2 = PyByteArray_GetTWData(args[2]);
+  auto arg2 = PyBytes_GetTWData(args[2]);
 
   if (!PyAESPaddingMode_Check(args[3])) {
     PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type AESPaddingMode");
@@ -89,7 +89,7 @@ static PyObject* PyAESEncryptCBC(PyAESObject* self,
   auto arg3 = PyAESPaddingMode_GetTWAESPaddingMode(args[3]);
 
   TWDataPtr result = TWAESEncryptCBC(arg0.get(), arg1.get(), arg2.get(), arg3);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for DecryptCBC
@@ -105,23 +105,23 @@ static PyObject* PyAESDecryptCBC(PyAESObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
-  if (!PyByteArray_Check(args[2])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type ByteArray");
+  if (!PyBytes_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
-  auto arg2 = PyByteArray_GetTWData(args[2]);
+  auto arg2 = PyBytes_GetTWData(args[2]);
 
   if (!PyAESPaddingMode_Check(args[3])) {
     PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type AESPaddingMode");
@@ -130,7 +130,7 @@ static PyObject* PyAESDecryptCBC(PyAESObject* self,
   auto arg3 = PyAESPaddingMode_GetTWAESPaddingMode(args[3]);
 
   TWDataPtr result = TWAESDecryptCBC(arg0.get(), arg1.get(), arg2.get(), arg3);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for EncryptCTR
@@ -145,26 +145,26 @@ static PyObject* PyAESEncryptCTR(PyAESObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
-  if (!PyByteArray_Check(args[2])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type ByteArray");
+  if (!PyBytes_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
-  auto arg2 = PyByteArray_GetTWData(args[2]);
+  auto arg2 = PyBytes_GetTWData(args[2]);
 
   TWDataPtr result = TWAESEncryptCTR(arg0.get(), arg1.get(), arg2.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for DecryptCTR
@@ -179,26 +179,26 @@ static PyObject* PyAESDecryptCTR(PyAESObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
-  if (!PyByteArray_Check(args[2])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type ByteArray");
+  if (!PyBytes_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
-  auto arg2 = PyByteArray_GetTWData(args[2]);
+  auto arg2 = PyBytes_GetTWData(args[2]);
 
   TWDataPtr result = TWAESDecryptCTR(arg0.get(), arg1.get(), arg2.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};

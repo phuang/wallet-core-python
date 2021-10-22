@@ -61,14 +61,14 @@ static PyObject* PyHashSHA1(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashSHA1(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for SHA256
@@ -82,14 +82,14 @@ static PyObject* PyHashSHA256(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashSHA256(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for SHA512
@@ -103,14 +103,14 @@ static PyObject* PyHashSHA512(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashSHA512(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for SHA512_256
@@ -125,14 +125,14 @@ static PyObject* PyHashSHA512_256(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashSHA512_256(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for Keccak256
@@ -147,14 +147,14 @@ static PyObject* PyHashKeccak256(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashKeccak256(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for Keccak512
@@ -169,14 +169,14 @@ static PyObject* PyHashKeccak512(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashKeccak512(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for SHA3_256
@@ -190,14 +190,14 @@ static PyObject* PyHashSHA3_256(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashSHA3_256(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for SHA3_512
@@ -211,14 +211,14 @@ static PyObject* PyHashSHA3_512(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashSHA3_512(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for RIPEMD
@@ -232,14 +232,14 @@ static PyObject* PyHashRIPEMD(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashRIPEMD(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for Blake256
@@ -253,14 +253,14 @@ static PyObject* PyHashBlake256(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashBlake256(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for Blake2b
@@ -275,11 +275,11 @@ static PyObject* PyHashBlake2b(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
@@ -288,7 +288,7 @@ static PyObject* PyHashBlake2b(PyHashObject* self,
   auto arg1 = PyLong_AsLong(args[1]);
 
   TWDataPtr result = TWHashBlake2b(arg0.get(), arg1);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for Groestl512
@@ -303,14 +303,14 @@ static PyObject* PyHashGroestl512(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashGroestl512(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for XXHash64
@@ -325,11 +325,11 @@ static PyObject* PyHashXXHash64(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
@@ -338,7 +338,7 @@ static PyObject* PyHashXXHash64(PyHashObject* self,
   auto arg1 = PyLong_AsLongLong(args[1]);
 
   TWDataPtr result = TWHashXXHash64(arg0.get(), arg1);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for TwoXXHash64Concat
@@ -353,14 +353,14 @@ static PyObject* PyHashTwoXXHash64Concat(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashTwoXXHash64Concat(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for SHA256SHA256
@@ -375,14 +375,14 @@ static PyObject* PyHashSHA256SHA256(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashSHA256SHA256(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for SHA256RIPEMD
@@ -397,14 +397,14 @@ static PyObject* PyHashSHA256RIPEMD(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashSHA256RIPEMD(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for SHA3_256RIPEMD
@@ -419,14 +419,14 @@ static PyObject* PyHashSHA3_256RIPEMD(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashSHA3_256RIPEMD(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for Blake256Blake256
@@ -441,14 +441,14 @@ static PyObject* PyHashBlake256Blake256(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashBlake256Blake256(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for Blake256RIPEMD
@@ -463,14 +463,14 @@ static PyObject* PyHashBlake256RIPEMD(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashBlake256RIPEMD(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for Groestl512Groestl512
@@ -485,14 +485,14 @@ static PyObject* PyHashGroestl512Groestl512(PyHashObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWHashGroestl512Groestl512(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};

@@ -103,7 +103,7 @@ static PyObject* PyAnyAddressCoin(PyAnyAddressObject* self, void*) {
 static const char PyAnyAddressData_doc[] =
     "TWData* TWAnyAddressData(struct TWAnyAddress* address)";
 static PyObject* PyAnyAddressData(PyAnyAddressObject* self, void*) {
-  return PyByteArray_FromTWData(TWAnyAddressData(self->value));
+  return PyBytes_FromTWData(TWAnyAddressData(self->value));
 }
 
 // static method function for Equal

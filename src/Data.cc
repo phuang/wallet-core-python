@@ -16,18 +16,18 @@
 
 #include "Data.h"
 
-PyObject* PyByteArray_FromTWData(const TWDataPtr& data) {
+PyObject* PyBytes_FromTWData(const TWDataPtr& data) {
   if (!data)
     return nullptr;
 
-  return PyByteArray_FromStringAndSize((const char*)TWDataBytes(data.get()),
-                                       TWDataSize(data.get()));
+  return PyBytes_FromStringAndSize((const char*)TWDataBytes(data.get()),
+                                   TWDataSize(data.get()));
 }
 
-TWDataPtr PyByteArray_GetTWData(PyObject* object) {
-  if (!PyByteArray_Check(object))
+TWDataPtr PyBytes_GetTWData(PyObject* object) {
+  if (!PyBytes_Check(object))
     return nullptr;
 
-  return TWDataCreateWithBytes((const uint8_t*)PyByteArray_AS_STRING(object),
-                               PyByteArray_GET_SIZE(object));
+  return TWDataCreateWithBytes((const uint8_t*)PyBytes_AS_STRING(object),
+                               PyBytes_GET_SIZE(object));
 }

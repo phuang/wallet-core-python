@@ -266,14 +266,14 @@ static PyObject* PyStoredKeyDecryptPrivateKey(PyStoredKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWDataPtr result = TWStoredKeyDecryptPrivateKey(self->value, arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // method function for DecryptMnemonic
@@ -289,11 +289,11 @@ static PyObject* PyStoredKeyDecryptMnemonic(PyStoredKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWStringPtr result = TWStoredKeyDecryptMnemonic(self->value, arg0.get());
   return PyUnicode_FromTWString(result);
@@ -318,11 +318,11 @@ static PyObject* PyStoredKeyPrivateKey(PyStoredKeyObject* self,
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   TWPrivateKey* result = TWStoredKeyPrivateKey(self->value, arg0, arg1.get());
   return PyPrivateKey_FromTWPrivateKey(result);
@@ -341,11 +341,11 @@ static PyObject* PyStoredKeyWallet(PyStoredKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWHDWallet* result = TWStoredKeyWallet(self->value, arg0.get());
   return PyHDWallet_FromTWHDWallet(result);
@@ -364,7 +364,7 @@ static PyObject* PyStoredKeyExportJSON(PyStoredKeyObject* self,
   }
 
   TWDataPtr result = TWStoredKeyExportJSON(self->value);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // method function for FixAddresses
@@ -379,11 +379,11 @@ static PyObject* PyStoredKeyFixAddresses(PyStoredKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   bool result = TWStoredKeyFixAddresses(self->value, arg0.get());
   return PyBool_FromLong(result);
@@ -424,11 +424,11 @@ static PyObject* PyStoredKeyImportPrivateKey(PyStoredKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
@@ -436,11 +436,11 @@ static PyObject* PyStoredKeyImportPrivateKey(PyStoredKeyObject* self,
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
 
-  if (!PyByteArray_Check(args[2])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type ByteArray");
+  if (!PyBytes_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
-  auto arg2 = PyByteArray_GetTWData(args[2]);
+  auto arg2 = PyBytes_GetTWData(args[2]);
 
   if (!PyCoinType_Check(args[3])) {
     PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type CoinType");
@@ -478,11 +478,11 @@ static PyObject* PyStoredKeyImportHDWallet(PyStoredKeyObject* self,
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
 
-  if (!PyByteArray_Check(args[2])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type ByteArray");
+  if (!PyBytes_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
-  auto arg2 = PyByteArray_GetTWData(args[2]);
+  auto arg2 = PyBytes_GetTWData(args[2]);
 
   if (!PyCoinType_Check(args[3])) {
     PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type CoinType");
@@ -507,11 +507,11 @@ static PyObject* PyStoredKeyImportJSON(PyStoredKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWStoredKey* result = TWStoredKeyImportJSON(arg0.get());
   return PyStoredKey_FromTWStoredKey(result);
@@ -535,11 +535,11 @@ static PyObject* PyStoredKeyCreate(PyStoredKeyObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   TWStoredKey* result = TWStoredKeyCreate(arg0.get(), arg1.get());
   return PyStoredKey_FromTWStoredKey(result);

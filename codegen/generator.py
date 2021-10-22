@@ -84,7 +84,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
             elif prop._type._name == 'TWData':
                 prop_type = prop._type._name[2:]
                 used_types.add('Data')
-                return_ = 'PyByteArray_FromTWData'
+                return_ = 'PyBytes_FromTWData'
             else:
                 raise Exception('Not support property type: ' + str(prop._type))
 
@@ -150,8 +150,8 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 used_types.add('String')
             elif arg._type._name == 'TWData':
                 assert arg._type._is_ptr
-                arg_type  = 'ByteArray'
-                get_ctype = 'PyByteArray_GetTWData'
+                arg_type  = 'Bytes'
+                get_ctype = 'PyBytes_GetTWData'
                 call_args.append('arg{}.get()'.format(i))
                 used_types.add('Data')
             elif arg._type._type == 'enum':
@@ -232,7 +232,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
             elif method._type._name == 'TWData':
                 return_type = 'TWDataPtr'
                 used_types.add('Data')
-                return_ = 'PyByteArray_FromTWData'
+                return_ = 'PyBytes_FromTWData'
             elif method._type._name == 'TWString':
                 return_type = 'TWStringPtr'
                 used_types.add('String')

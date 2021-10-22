@@ -95,14 +95,14 @@ static PyObject* PyBitcoinScriptSize(PyBitcoinScriptObject* self, void*) {
 static const char PyBitcoinScriptData_doc[] =
     "TWData* TWBitcoinScriptData(const struct TWBitcoinScript* script)";
 static PyObject* PyBitcoinScriptData(PyBitcoinScriptObject* self, void*) {
-  return PyByteArray_FromTWData(TWBitcoinScriptData(self->value));
+  return PyBytes_FromTWData(TWBitcoinScriptData(self->value));
 }
 
 // getter function for ScriptHash
 static const char PyBitcoinScriptScriptHash_doc[] =
     "TWData* TWBitcoinScriptScriptHash(const struct TWBitcoinScript* script)";
 static PyObject* PyBitcoinScriptScriptHash(PyBitcoinScriptObject* self, void*) {
-  return PyByteArray_FromTWData(TWBitcoinScriptScriptHash(self->value));
+  return PyBytes_FromTWData(TWBitcoinScriptScriptHash(self->value));
 }
 
 // getter function for IsPayToScriptHash
@@ -158,7 +158,7 @@ static PyObject* PyBitcoinScriptMatchPayToPubkey(PyBitcoinScriptObject* self,
   }
 
   TWDataPtr result = TWBitcoinScriptMatchPayToPubkey(self->value);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // method function for MatchPayToPubkeyHash
@@ -176,7 +176,7 @@ static PyObject* PyBitcoinScriptMatchPayToPubkeyHash(
   }
 
   TWDataPtr result = TWBitcoinScriptMatchPayToPubkeyHash(self->value);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // method function for MatchPayToScriptHash
@@ -194,7 +194,7 @@ static PyObject* PyBitcoinScriptMatchPayToScriptHash(
   }
 
   TWDataPtr result = TWBitcoinScriptMatchPayToScriptHash(self->value);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // method function for MatchPayToWitnessPublicKeyHash
@@ -212,7 +212,7 @@ static PyObject* PyBitcoinScriptMatchPayToWitnessPublicKeyHash(
   }
 
   TWDataPtr result = TWBitcoinScriptMatchPayToWitnessPublicKeyHash(self->value);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // method function for MatchPayToWitnessScriptHash
@@ -230,7 +230,7 @@ static PyObject* PyBitcoinScriptMatchPayToWitnessScriptHash(
   }
 
   TWDataPtr result = TWBitcoinScriptMatchPayToWitnessScriptHash(self->value);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // method function for Encode
@@ -246,7 +246,7 @@ static PyObject* PyBitcoinScriptEncode(PyBitcoinScriptObject* self,
   }
 
   TWDataPtr result = TWBitcoinScriptEncode(self->value);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for Create
@@ -277,11 +277,11 @@ static PyObject* PyBitcoinScriptCreateWithData(PyBitcoinScriptObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWBitcoinScript* result = TWBitcoinScriptCreateWithData(arg0.get());
   return PyBitcoinScript_FromTWBitcoinScript(result);
@@ -352,11 +352,11 @@ static PyObject* PyBitcoinScriptBuildPayToPublicKey(PyBitcoinScriptObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWBitcoinScript* result = TWBitcoinScriptBuildPayToPublicKey(arg0.get());
   return PyBitcoinScript_FromTWBitcoinScript(result);
@@ -376,11 +376,11 @@ static PyObject* PyBitcoinScriptBuildPayToPublicKeyHash(
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWBitcoinScript* result = TWBitcoinScriptBuildPayToPublicKeyHash(arg0.get());
   return PyBitcoinScript_FromTWBitcoinScript(result);
@@ -400,11 +400,11 @@ static PyObject* PyBitcoinScriptBuildPayToScriptHash(
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWBitcoinScript* result = TWBitcoinScriptBuildPayToScriptHash(arg0.get());
   return PyBitcoinScript_FromTWBitcoinScript(result);
@@ -424,11 +424,11 @@ static PyObject* PyBitcoinScriptBuildPayToWitnessPubkeyHash(
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWBitcoinScript* result =
       TWBitcoinScriptBuildPayToWitnessPubkeyHash(arg0.get());
@@ -449,11 +449,11 @@ static PyObject* PyBitcoinScriptBuildPayToWitnessScriptHash(
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWBitcoinScript* result =
       TWBitcoinScriptBuildPayToWitnessScriptHash(arg0.get());

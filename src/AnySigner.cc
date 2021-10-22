@@ -62,11 +62,11 @@ static PyObject* PyAnySignerSign(PyAnySignerObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyCoinType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
@@ -75,7 +75,7 @@ static PyObject* PyAnySignerSign(PyAnySignerObject* self,
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
 
   TWDataPtr result = TWAnySignerSign(arg0.get(), arg1);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for SignJSON
@@ -97,11 +97,11 @@ static PyObject* PyAnySignerSignJSON(PyAnySignerObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   if (!PyCoinType_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type CoinType");
@@ -147,11 +147,11 @@ static PyObject* PyAnySignerPlan(PyAnySignerObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyCoinType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
@@ -160,7 +160,7 @@ static PyObject* PyAnySignerPlan(PyAnySignerObject* self,
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
 
   TWDataPtr result = TWAnySignerPlan(arg0.get(), arg1);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};

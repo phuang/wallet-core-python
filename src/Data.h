@@ -28,6 +28,6 @@ class TWDataPtr : public std::unique_ptr<TWData, decltype(&TWDataDelete)> {
       : std::unique_ptr<TWData, decltype(&TWDataDelete)>(p, &TWDataDelete) {}
 };
 
-PyObject* PyByteArray_FromTWData(const TWDataPtr& data);
+PyObject* PyBytes_FromTWData(const TWDataPtr& data);
 
-TWDataPtr PyByteArray_GetTWData(PyObject* object);
+TWDataPtr PyBytes_GetTWData(PyObject* object);

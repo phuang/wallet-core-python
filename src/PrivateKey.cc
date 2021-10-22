@@ -89,7 +89,7 @@ static void PyPrivateKey_dealloc(PyPrivateKeyObject* self) {
 static const char PyPrivateKeyData_doc[] =
     "TWData* TWPrivateKeyData(struct TWPrivateKey* pk)";
 static PyObject* PyPrivateKeyData(PyPrivateKeyObject* self, void*) {
-  return PyByteArray_FromTWData(TWPrivateKeyData(self->value));
+  return PyBytes_FromTWData(TWPrivateKeyData(self->value));
 }
 
 // method function for GetPublicKeySecp256k1
@@ -228,7 +228,7 @@ static PyObject* PyPrivateKeyGetSharedKey(PyPrivateKeyObject* self,
   auto arg1 = PyCurve_GetTWCurve(args[1]);
 
   TWDataPtr result = TWPrivateKeyGetSharedKey(self->value, arg0, arg1);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // method function for Sign
@@ -244,11 +244,11 @@ static PyObject* PyPrivateKeySign(PyPrivateKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyCurve_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Curve");
@@ -257,7 +257,7 @@ static PyObject* PyPrivateKeySign(PyPrivateKeyObject* self,
   auto arg1 = PyCurve_GetTWCurve(args[1]);
 
   TWDataPtr result = TWPrivateKeySign(self->value, arg0.get(), arg1);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // method function for SignAsDER
@@ -273,11 +273,11 @@ static PyObject* PyPrivateKeySignAsDER(PyPrivateKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyCurve_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Curve");
@@ -286,7 +286,7 @@ static PyObject* PyPrivateKeySignAsDER(PyPrivateKeyObject* self,
   auto arg1 = PyCurve_GetTWCurve(args[1]);
 
   TWDataPtr result = TWPrivateKeySignAsDER(self->value, arg0.get(), arg1);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // method function for SignSchnorr
@@ -302,11 +302,11 @@ static PyObject* PyPrivateKeySignSchnorr(PyPrivateKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyCurve_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Curve");
@@ -315,7 +315,7 @@ static PyObject* PyPrivateKeySignSchnorr(PyPrivateKeyObject* self,
   auto arg1 = PyCurve_GetTWCurve(args[1]);
 
   TWDataPtr result = TWPrivateKeySignSchnorr(self->value, arg0.get(), arg1);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for Create
@@ -346,11 +346,11 @@ static PyObject* PyPrivateKeyCreateWithData(PyPrivateKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWPrivateKey* result = TWPrivateKeyCreateWithData(arg0.get());
   return PyPrivateKey_FromTWPrivateKey(result);
@@ -390,11 +390,11 @@ static PyObject* PyPrivateKeyIsValid(PyPrivateKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyCurve_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Curve");

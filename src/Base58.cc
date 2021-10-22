@@ -63,11 +63,11 @@ static PyObject* PyBase58Encode(PyBase58Object* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWStringPtr result = TWBase58Encode(arg0.get());
   return PyUnicode_FromTWString(result);
@@ -85,11 +85,11 @@ static PyObject* PyBase58EncodeNoCheck(PyBase58Object* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWStringPtr result = TWBase58EncodeNoCheck(arg0.get());
   return PyUnicode_FromTWString(result);
@@ -114,7 +114,7 @@ static PyObject* PyBase58Decode(PyBase58Object* self,
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
   TWDataPtr result = TWBase58Decode(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for DecodeNoCheck
@@ -136,7 +136,7 @@ static PyObject* PyBase58DecodeNoCheck(PyBase58Object* self,
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
   TWDataPtr result = TWBase58DecodeNoCheck(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};

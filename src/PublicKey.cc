@@ -109,7 +109,7 @@ static PyObject* PyPublicKeyUncompressed(PyPublicKeyObject* self, void*) {
 static const char PyPublicKeyData_doc[] =
     "TWData* TWPublicKeyData(struct TWPublicKey* pk)";
 static PyObject* PyPublicKeyData(PyPublicKeyObject* self, void*) {
-  return PyByteArray_FromTWData(TWPublicKeyData(self->value));
+  return PyBytes_FromTWData(TWPublicKeyData(self->value));
 }
 
 // getter function for KeyType
@@ -139,17 +139,17 @@ static PyObject* PyPublicKeyVerify(PyPublicKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   bool result = TWPublicKeyVerify(self->value, arg0.get(), arg1.get());
   return PyBool_FromLong(result);
@@ -168,17 +168,17 @@ static PyObject* PyPublicKeyVerifySchnorr(PyPublicKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   bool result = TWPublicKeyVerifySchnorr(self->value, arg0.get(), arg1.get());
   return PyBool_FromLong(result);
@@ -197,11 +197,11 @@ static PyObject* PyPublicKeyCreateWithData(PyPublicKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyPublicKeyType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type PublicKeyType");
@@ -225,11 +225,11 @@ static PyObject* PyPublicKeyIsValid(PyPublicKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyPublicKeyType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type PublicKeyType");
@@ -254,17 +254,17 @@ static PyObject* PyPublicKeyRecover(PyPublicKeyObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   TWPublicKey* result = TWPublicKeyRecover(arg0.get(), arg1.get());
   return PyPublicKey_FromTWPublicKey(result);

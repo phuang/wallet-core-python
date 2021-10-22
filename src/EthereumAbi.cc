@@ -72,7 +72,7 @@ static PyObject* PyEthereumAbiEncode(PyEthereumAbiObject* self,
   auto arg0 = PyEthereumAbiFunction_GetTWEthereumAbiFunction(args[0]);
 
   TWDataPtr result = TWEthereumAbiEncode(arg0);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for DecodeOutput
@@ -95,11 +95,11 @@ static PyObject* PyEthereumAbiDecodeOutput(PyEthereumAbiObject* self,
   }
   auto arg0 = PyEthereumAbiFunction_GetTWEthereumAbiFunction(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   bool result = TWEthereumAbiDecodeOutput(arg0, arg1.get());
   return PyBool_FromLong(result);
@@ -117,11 +117,11 @@ static PyObject* PyEthereumAbiDecodeCall(PyEthereumAbiObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
@@ -152,7 +152,7 @@ static PyObject* PyEthereumAbiEncodeTyped(PyEthereumAbiObject* self,
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
   TWDataPtr result = TWEthereumAbiEncodeTyped(arg0.get());
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};

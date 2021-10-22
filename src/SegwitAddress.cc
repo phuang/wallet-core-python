@@ -105,7 +105,7 @@ static const char PySegwitAddressWitnessProgram_doc[] =
     "TWData* TWSegwitAddressWitnessProgram(struct TWSegwitAddress* address)";
 static PyObject* PySegwitAddressWitnessProgram(PySegwitAddressObject* self,
                                                void*) {
-  return PyByteArray_FromTWData(TWSegwitAddressWitnessProgram(self->value));
+  return PyBytes_FromTWData(TWSegwitAddressWitnessProgram(self->value));
 }
 
 // static method function for Equal

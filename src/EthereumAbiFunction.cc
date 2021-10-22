@@ -236,11 +236,11 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt256(
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
@@ -273,11 +273,11 @@ static PyObject* PyEthereumAbiFunctionAddParamUIntN(
   }
   auto arg0 = PyLong_AsLong(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   if (!PyBool_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bool");
@@ -424,11 +424,11 @@ static PyObject* PyEthereumAbiFunctionAddParamInt256(
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
@@ -461,11 +461,11 @@ static PyObject* PyEthereumAbiFunctionAddParamIntN(
   }
   auto arg0 = PyLong_AsLong(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   if (!PyBool_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bool");
@@ -553,11 +553,11 @@ static PyObject* PyEthereumAbiFunctionAddParamAddress(
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
@@ -584,11 +584,11 @@ static PyObject* PyEthereumAbiFunctionAddParamBytes(
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
@@ -621,11 +621,11 @@ static PyObject* PyEthereumAbiFunctionAddParamBytesFix(
   }
   auto arg0 = PyLong_AsLong(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   if (!PyBool_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bool");
@@ -751,7 +751,7 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt256(
 
   TWDataPtr result =
       TWEthereumAbiFunctionGetParamUInt256(self->value, arg0, arg1);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // method function for GetParamBool
@@ -843,7 +843,7 @@ static PyObject* PyEthereumAbiFunctionGetParamAddress(
 
   TWDataPtr result =
       TWEthereumAbiFunctionGetParamAddress(self->value, arg0, arg1);
-  return PyByteArray_FromTWData(result);
+  return PyBytes_FromTWData(result);
 }
 
 // method function for AddInArrayParamUInt8
@@ -990,11 +990,11 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt256(
   }
   auto arg0 = PyLong_AsLong(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   int result = TWEthereumAbiFunctionAddInArrayParamUInt256(self->value, arg0,
                                                            arg1.get());
@@ -1027,11 +1027,11 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUIntN(
   }
   auto arg1 = PyLong_AsLong(args[1]);
 
-  if (!PyByteArray_Check(args[2])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type ByteArray");
+  if (!PyBytes_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
-  auto arg2 = PyByteArray_GetTWData(args[2]);
+  auto arg2 = PyBytes_GetTWData(args[2]);
 
   int result = TWEthereumAbiFunctionAddInArrayParamUIntN(self->value, arg0,
                                                          arg1, arg2.get());
@@ -1182,11 +1182,11 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt256(
   }
   auto arg0 = PyLong_AsLong(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamInt256(self->value, arg0, arg1.get());
@@ -1219,11 +1219,11 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamIntN(
   }
   auto arg1 = PyLong_AsLong(args[1]);
 
-  if (!PyByteArray_Check(args[2])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type ByteArray");
+  if (!PyBytes_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
-  auto arg2 = PyByteArray_GetTWData(args[2]);
+  auto arg2 = PyBytes_GetTWData(args[2]);
 
   int result = TWEthereumAbiFunctionAddInArrayParamIntN(self->value, arg0, arg1,
                                                         arg2.get());
@@ -1312,11 +1312,11 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamAddress(
   }
   auto arg0 = PyLong_AsLong(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   int result = TWEthereumAbiFunctionAddInArrayParamAddress(self->value, arg0,
                                                            arg1.get());
@@ -1343,11 +1343,11 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytes(
   }
   auto arg0 = PyLong_AsLong(args[0]);
 
-  if (!PyByteArray_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type ByteArray");
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
-  auto arg1 = PyByteArray_GetTWData(args[1]);
+  auto arg1 = PyBytes_GetTWData(args[1]);
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamBytes(self->value, arg0, arg1.get());
@@ -1380,11 +1380,11 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytesFix(
   }
   auto arg1 = PyLong_AsLong(args[1]);
 
-  if (!PyByteArray_Check(args[2])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type ByteArray");
+  if (!PyBytes_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
-  auto arg2 = PyByteArray_GetTWData(args[2]);
+  auto arg2 = PyBytes_GetTWData(args[2]);
 
   int result = TWEthereumAbiFunctionAddInArrayParamBytesFix(self->value, arg0,
                                                             arg1, arg2.get());

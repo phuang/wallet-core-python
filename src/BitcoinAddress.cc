@@ -103,7 +103,7 @@ static PyObject* PyBitcoinAddressPrefix(PyBitcoinAddressObject* self, void*) {
 static const char PyBitcoinAddressKeyhash_doc[] =
     "TWData* TWBitcoinAddressKeyhash(struct TWBitcoinAddress* address)";
 static PyObject* PyBitcoinAddressKeyhash(PyBitcoinAddressObject* self, void*) {
-  return PyByteArray_FromTWData(TWBitcoinAddressKeyhash(self->value));
+  return PyBytes_FromTWData(TWBitcoinAddressKeyhash(self->value));
 }
 
 // static method function for Equal
@@ -147,11 +147,11 @@ static PyObject* PyBitcoinAddressIsValid(PyBitcoinAddressObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   bool result = TWBitcoinAddressIsValid(arg0.get());
   return PyBool_FromLong(result);
@@ -214,11 +214,11 @@ static PyObject* PyBitcoinAddressCreateWithData(PyBitcoinAddressObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   TWBitcoinAddress* result = TWBitcoinAddressCreateWithData(arg0.get());
   return PyBitcoinAddress_FromTWBitcoinAddress(result);

@@ -93,7 +93,7 @@ static void PyHDWallet_dealloc(PyHDWalletObject* self) {
 static const char PyHDWalletSeed_doc[] =
     "TWData* TWHDWalletSeed(struct TWHDWallet* wallet)";
 static PyObject* PyHDWalletSeed(PyHDWalletObject* self, void*) {
-  return PyByteArray_FromTWData(TWHDWalletSeed(self->value));
+  return PyBytes_FromTWData(TWHDWalletSeed(self->value));
 }
 
 // getter function for Mnemonic
@@ -107,7 +107,7 @@ static PyObject* PyHDWalletMnemonic(PyHDWalletObject* self, void*) {
 static const char PyHDWalletEntropy_doc[] =
     "TWData* TWHDWalletEntropy(struct TWHDWallet* wallet)";
 static PyObject* PyHDWalletEntropy(PyHDWalletObject* self, void*) {
-  return PyByteArray_FromTWData(TWHDWalletEntropy(self->value));
+  return PyBytes_FromTWData(TWHDWalletEntropy(self->value));
 }
 
 // method function for GetMasterKey
@@ -429,11 +429,11 @@ static PyObject* PyHDWalletCreateWithEntropy(PyHDWalletObject* self,
     return nullptr;
   }
 
-  if (!PyByteArray_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type ByteArray");
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
     return nullptr;
   }
-  auto arg0 = PyByteArray_GetTWData(args[0]);
+  auto arg0 = PyBytes_GetTWData(args[0]);
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
