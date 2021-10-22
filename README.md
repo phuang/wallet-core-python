@@ -11,7 +11,7 @@ cd wallet-core-python
 git submodule init
 git submodule update
 
-# Build wallet core
+# Build wallet-core
 (cd wallet-core/; ./bootstrap.sh)
 
 # Build wallet-core-python
