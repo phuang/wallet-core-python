@@ -147,8 +147,9 @@ static PyObject* PyHDVersionIsPrivate(PyHDVersionObject* self, void*) {
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"IsPublic", (getter)PyHDVersionIsPublic, nullptr, PyHDVersionIsPublic_doc},
-    {"IsPrivate", (getter)PyHDVersionIsPrivate, nullptr,
+    {"is_public", (getter)PyHDVersionIsPublic, nullptr,
+     PyHDVersionIsPublic_doc},
+    {"is_private", (getter)PyHDVersionIsPrivate, nullptr,
      PyHDVersionIsPrivate_doc},
     {}};
 

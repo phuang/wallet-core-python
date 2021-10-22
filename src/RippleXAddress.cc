@@ -203,19 +203,19 @@ static PyObject* PyRippleXAddressCreateWithPublicKey(
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"Description", (getter)PyRippleXAddressDescription, nullptr,
+    {"description", (getter)PyRippleXAddressDescription, nullptr,
      PyRippleXAddressDescription_doc},
-    {"Tag", (getter)PyRippleXAddressTag, nullptr, PyRippleXAddressTag_doc},
+    {"tag", (getter)PyRippleXAddressTag, nullptr, PyRippleXAddressTag_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Equal", (PyCFunction)PyRippleXAddressEqual, METH_FASTCALL | METH_STATIC,
+    {"equal", (PyCFunction)PyRippleXAddressEqual, METH_FASTCALL | METH_STATIC,
      PyRippleXAddressEqual_doc},
-    {"IsValidString", (PyCFunction)PyRippleXAddressIsValidString,
+    {"is_valid_string", (PyCFunction)PyRippleXAddressIsValidString,
      METH_FASTCALL | METH_STATIC, PyRippleXAddressIsValidString_doc},
-    {"CreateWithString", (PyCFunction)PyRippleXAddressCreateWithString,
+    {"create_with_string", (PyCFunction)PyRippleXAddressCreateWithString,
      METH_FASTCALL | METH_STATIC, PyRippleXAddressCreateWithString_doc},
-    {"CreateWithPublicKey", (PyCFunction)PyRippleXAddressCreateWithPublicKey,
+    {"create_with_public_key", (PyCFunction)PyRippleXAddressCreateWithPublicKey,
      METH_FASTCALL | METH_STATIC, PyRippleXAddressCreateWithPublicKey_doc},
     {}};
 

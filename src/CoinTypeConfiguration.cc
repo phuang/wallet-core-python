@@ -207,17 +207,18 @@ static PyObject* PyCoinTypeConfigurationGetName(
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"GetSymbol", (PyCFunction)PyCoinTypeConfigurationGetSymbol,
+    {"get_symbol", (PyCFunction)PyCoinTypeConfigurationGetSymbol,
      METH_FASTCALL | METH_STATIC, PyCoinTypeConfigurationGetSymbol_doc},
-    {"GetDecimals", (PyCFunction)PyCoinTypeConfigurationGetDecimals,
+    {"get_decimals", (PyCFunction)PyCoinTypeConfigurationGetDecimals,
      METH_FASTCALL | METH_STATIC, PyCoinTypeConfigurationGetDecimals_doc},
-    {"GetTransactionURL", (PyCFunction)PyCoinTypeConfigurationGetTransactionURL,
+    {"get_transaction_url",
+     (PyCFunction)PyCoinTypeConfigurationGetTransactionURL,
      METH_FASTCALL | METH_STATIC, PyCoinTypeConfigurationGetTransactionURL_doc},
-    {"GetAccountURL", (PyCFunction)PyCoinTypeConfigurationGetAccountURL,
+    {"get_account_url", (PyCFunction)PyCoinTypeConfigurationGetAccountURL,
      METH_FASTCALL | METH_STATIC, PyCoinTypeConfigurationGetAccountURL_doc},
-    {"GetID", (PyCFunction)PyCoinTypeConfigurationGetID,
+    {"get_id", (PyCFunction)PyCoinTypeConfigurationGetID,
      METH_FASTCALL | METH_STATIC, PyCoinTypeConfigurationGetID_doc},
-    {"GetName", (PyCFunction)PyCoinTypeConfigurationGetName,
+    {"get_name", (PyCFunction)PyCoinTypeConfigurationGetName,
      METH_FASTCALL | METH_STATIC, PyCoinTypeConfigurationGetName_doc},
     {}};
 

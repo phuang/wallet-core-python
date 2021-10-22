@@ -207,18 +207,18 @@ static PyObject* PyGroestlcoinAddressCreateWithPublicKey(
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"Description", (getter)PyGroestlcoinAddressDescription, nullptr,
+    {"description", (getter)PyGroestlcoinAddressDescription, nullptr,
      PyGroestlcoinAddressDescription_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Equal", (PyCFunction)PyGroestlcoinAddressEqual,
+    {"equal", (PyCFunction)PyGroestlcoinAddressEqual,
      METH_FASTCALL | METH_STATIC, PyGroestlcoinAddressEqual_doc},
-    {"IsValidString", (PyCFunction)PyGroestlcoinAddressIsValidString,
+    {"is_valid_string", (PyCFunction)PyGroestlcoinAddressIsValidString,
      METH_FASTCALL | METH_STATIC, PyGroestlcoinAddressIsValidString_doc},
-    {"CreateWithString", (PyCFunction)PyGroestlcoinAddressCreateWithString,
+    {"create_with_string", (PyCFunction)PyGroestlcoinAddressCreateWithString,
      METH_FASTCALL | METH_STATIC, PyGroestlcoinAddressCreateWithString_doc},
-    {"CreateWithPublicKey",
+    {"create_with_public_key",
      (PyCFunction)PyGroestlcoinAddressCreateWithPublicKey,
      METH_FASTCALL | METH_STATIC, PyGroestlcoinAddressCreateWithPublicKey_doc},
     {}};

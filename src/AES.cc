@@ -204,13 +204,13 @@ static PyObject* PyAESDecryptCTR(PyAESObject* self,
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"EncryptCBC", (PyCFunction)PyAESEncryptCBC, METH_FASTCALL | METH_STATIC,
+    {"encrypt_cbc", (PyCFunction)PyAESEncryptCBC, METH_FASTCALL | METH_STATIC,
      PyAESEncryptCBC_doc},
-    {"DecryptCBC", (PyCFunction)PyAESDecryptCBC, METH_FASTCALL | METH_STATIC,
+    {"decrypt_cbc", (PyCFunction)PyAESDecryptCBC, METH_FASTCALL | METH_STATIC,
      PyAESDecryptCBC_doc},
-    {"EncryptCTR", (PyCFunction)PyAESEncryptCTR, METH_FASTCALL | METH_STATIC,
+    {"encrypt_ctr", (PyCFunction)PyAESEncryptCTR, METH_FASTCALL | METH_STATIC,
      PyAESEncryptCTR_doc},
-    {"DecryptCTR", (PyCFunction)PyAESDecryptCTR, METH_FASTCALL | METH_STATIC,
+    {"decrypt_ctr", (PyCFunction)PyAESDecryptCTR, METH_FASTCALL | METH_STATIC,
      PyAESDecryptCTR_doc},
     {}};
 

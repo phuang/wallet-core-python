@@ -152,16 +152,16 @@ static PyObject* PyAccountCreate(PyAccountObject* self,
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"Address", (getter)PyAccountAddress, nullptr, PyAccountAddress_doc},
-    {"DerivationPath", (getter)PyAccountDerivationPath, nullptr,
+    {"address", (getter)PyAccountAddress, nullptr, PyAccountAddress_doc},
+    {"derivation_path", (getter)PyAccountDerivationPath, nullptr,
      PyAccountDerivationPath_doc},
-    {"ExtendedPublicKey", (getter)PyAccountExtendedPublicKey, nullptr,
+    {"extended_public_key", (getter)PyAccountExtendedPublicKey, nullptr,
      PyAccountExtendedPublicKey_doc},
-    {"Coin", (getter)PyAccountCoin, nullptr, PyAccountCoin_doc},
+    {"coin", (getter)PyAccountCoin, nullptr, PyAccountCoin_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Create", (PyCFunction)PyAccountCreate, METH_FASTCALL | METH_STATIC,
+    {"create", (PyCFunction)PyAccountCreate, METH_FASTCALL | METH_STATIC,
      PyAccountCreate_doc},
     {}};
 

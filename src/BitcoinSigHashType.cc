@@ -164,9 +164,9 @@ static PyObject* PyBitcoinSigHashTypeIsNone(PyBitcoinSigHashTypeObject* self,
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"IsSingle", (PyCFunction)PyBitcoinSigHashTypeIsSingle, METH_FASTCALL,
+    {"is_single", (PyCFunction)PyBitcoinSigHashTypeIsSingle, METH_FASTCALL,
      PyBitcoinSigHashTypeIsSingle_doc},
-    {"IsNone", (PyCFunction)PyBitcoinSigHashTypeIsNone, METH_FASTCALL,
+    {"is_none", (PyCFunction)PyBitcoinSigHashTypeIsNone, METH_FASTCALL,
      PyBitcoinSigHashTypeIsNone_doc},
     {}};
 

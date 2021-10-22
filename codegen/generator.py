@@ -33,6 +33,20 @@ class Generator:
         self._parser = Parser()
         self._tmp_dir = mkdtemp()
 
+    def py_name(self, name):
+        py_name = [name[0].lower()]
+        last_is_upper = True
+        for c in name[1:]:
+            if not c.isupper():
+                last_is_upper = False
+                py_name.append(c)
+            else:
+                if not last_is_upper:
+                    py_name.append('_')
+                    last_is_upper = True
+                py_name.append(c.lower())
+        return ''.join(py_name)
+
     def template(self, filename):
         filepath = os.path.join(DIR, 'templates', filename)
         return T(open(filepath).read())
@@ -88,7 +102,10 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
         includes.sort()
         includes = [ '#include "{}.h"'.format(n) for n in includes]
 
-        getsetdefs = [ '{{ "{1}", (getter)Py{0}{1}, nullptr, Py{0}{1}_doc }},'.format(name, p) for p in getsetdefs ] + [ '{}' ]
+        getsetdefs_format = '{{ "{2}", (getter)Py{0}{1}, nullptr, Py{0}{1}_doc }},'
+        getsetdefs = [
+            getsetdefs_format.format(name, p, self.py_name(p)) \
+            for p in getsetdefs ] + [ '{}' ]
         return includes, functions, getsetdefs
 
     def process_arguments(self, args):
@@ -251,7 +268,10 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         includes = [ '#include "{}.h"'.format(n) for n in includes]
 
         flags = 'METH_FASTCALL | METH_STATIC' if is_static else 'METH_FASTCALL'
-        methoddefs = [ '{{ "{1}", (PyCFunction)Py{0}{1}, {2}, Py{0}{1}_doc }},'.format(name, m, flags) for m in methoddefs ]
+        methoddef_fomat = '{{ "{0}", (PyCFunction)Py{1}{2}, {3}, Py{1}{2}_doc }},'
+        methoddefs = [
+            methoddef_fomat.format(self.py_name(m), name, m, flags) \
+            for m in methoddefs ]
         return includes, functions, methoddefs
 
     def generate_enum(self, enum):

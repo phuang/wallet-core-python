@@ -142,13 +142,13 @@ static PyObject* PyBase58DecodeNoCheck(PyBase58Object* self,
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"Encode", (PyCFunction)PyBase58Encode, METH_FASTCALL | METH_STATIC,
+    {"encode", (PyCFunction)PyBase58Encode, METH_FASTCALL | METH_STATIC,
      PyBase58Encode_doc},
-    {"EncodeNoCheck", (PyCFunction)PyBase58EncodeNoCheck,
+    {"encode_no_check", (PyCFunction)PyBase58EncodeNoCheck,
      METH_FASTCALL | METH_STATIC, PyBase58EncodeNoCheck_doc},
-    {"Decode", (PyCFunction)PyBase58Decode, METH_FASTCALL | METH_STATIC,
+    {"decode", (PyCFunction)PyBase58Decode, METH_FASTCALL | METH_STATIC,
      PyBase58Decode_doc},
-    {"DecodeNoCheck", (PyCFunction)PyBase58DecodeNoCheck,
+    {"decode_no_check", (PyCFunction)PyBase58DecodeNoCheck,
      METH_FASTCALL | METH_STATIC, PyBase58DecodeNoCheck_doc},
     {}};
 

@@ -158,13 +158,13 @@ static PyObject* PyEthereumAbiEncodeTyped(PyEthereumAbiObject* self,
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"Encode", (PyCFunction)PyEthereumAbiEncode, METH_FASTCALL | METH_STATIC,
+    {"encode", (PyCFunction)PyEthereumAbiEncode, METH_FASTCALL | METH_STATIC,
      PyEthereumAbiEncode_doc},
-    {"DecodeOutput", (PyCFunction)PyEthereumAbiDecodeOutput,
+    {"decode_output", (PyCFunction)PyEthereumAbiDecodeOutput,
      METH_FASTCALL | METH_STATIC, PyEthereumAbiDecodeOutput_doc},
-    {"DecodeCall", (PyCFunction)PyEthereumAbiDecodeCall,
+    {"decode_call", (PyCFunction)PyEthereumAbiDecodeCall,
      METH_FASTCALL | METH_STATIC, PyEthereumAbiDecodeCall_doc},
-    {"EncodeTyped", (PyCFunction)PyEthereumAbiEncodeTyped,
+    {"encode_typed", (PyCFunction)PyEthereumAbiEncodeTyped,
      METH_FASTCALL | METH_STATIC, PyEthereumAbiEncodeTyped_doc},
     {}};
 

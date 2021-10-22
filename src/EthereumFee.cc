@@ -75,7 +75,7 @@ static PyObject* PyEthereumFeeSuggest(PyEthereumFeeObject* self,
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"Suggest", (PyCFunction)PyEthereumFeeSuggest, METH_FASTCALL | METH_STATIC,
+    {"suggest", (PyCFunction)PyEthereumFeeSuggest, METH_FASTCALL | METH_STATIC,
      PyEthereumFeeSuggest_doc},
     {}};
 

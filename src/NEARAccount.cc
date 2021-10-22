@@ -112,12 +112,12 @@ static PyObject* PyNEARAccountCreateWithString(PyNEARAccountObject* self,
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"Description", (getter)PyNEARAccountDescription, nullptr,
+    {"description", (getter)PyNEARAccountDescription, nullptr,
      PyNEARAccountDescription_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"CreateWithString", (PyCFunction)PyNEARAccountCreateWithString,
+    {"create_with_string", (PyCFunction)PyNEARAccountCreateWithString,
      METH_FASTCALL | METH_STATIC, PyNEARAccountCreateWithString_doc},
     {}};
 

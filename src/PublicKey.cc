@@ -271,28 +271,28 @@ static PyObject* PyPublicKeyRecover(PyPublicKeyObject* self,
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"IsCompressed", (getter)PyPublicKeyIsCompressed, nullptr,
+    {"is_compressed", (getter)PyPublicKeyIsCompressed, nullptr,
      PyPublicKeyIsCompressed_doc},
-    {"Compressed", (getter)PyPublicKeyCompressed, nullptr,
+    {"compressed", (getter)PyPublicKeyCompressed, nullptr,
      PyPublicKeyCompressed_doc},
-    {"Uncompressed", (getter)PyPublicKeyUncompressed, nullptr,
+    {"uncompressed", (getter)PyPublicKeyUncompressed, nullptr,
      PyPublicKeyUncompressed_doc},
-    {"Data", (getter)PyPublicKeyData, nullptr, PyPublicKeyData_doc},
-    {"KeyType", (getter)PyPublicKeyKeyType, nullptr, PyPublicKeyKeyType_doc},
-    {"Description", (getter)PyPublicKeyDescription, nullptr,
+    {"data", (getter)PyPublicKeyData, nullptr, PyPublicKeyData_doc},
+    {"key_type", (getter)PyPublicKeyKeyType, nullptr, PyPublicKeyKeyType_doc},
+    {"description", (getter)PyPublicKeyDescription, nullptr,
      PyPublicKeyDescription_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Verify", (PyCFunction)PyPublicKeyVerify, METH_FASTCALL,
+    {"verify", (PyCFunction)PyPublicKeyVerify, METH_FASTCALL,
      PyPublicKeyVerify_doc},
-    {"VerifySchnorr", (PyCFunction)PyPublicKeyVerifySchnorr, METH_FASTCALL,
+    {"verify_schnorr", (PyCFunction)PyPublicKeyVerifySchnorr, METH_FASTCALL,
      PyPublicKeyVerifySchnorr_doc},
-    {"CreateWithData", (PyCFunction)PyPublicKeyCreateWithData,
+    {"create_with_data", (PyCFunction)PyPublicKeyCreateWithData,
      METH_FASTCALL | METH_STATIC, PyPublicKeyCreateWithData_doc},
-    {"IsValid", (PyCFunction)PyPublicKeyIsValid, METH_FASTCALL | METH_STATIC,
+    {"is_valid", (PyCFunction)PyPublicKeyIsValid, METH_FASTCALL | METH_STATIC,
      PyPublicKeyIsValid_doc},
-    {"Recover", (PyCFunction)PyPublicKeyRecover, METH_FASTCALL | METH_STATIC,
+    {"recover", (PyCFunction)PyPublicKeyRecover, METH_FASTCALL | METH_STATIC,
      PyPublicKeyRecover_doc},
     {}};
 

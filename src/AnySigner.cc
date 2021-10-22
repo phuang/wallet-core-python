@@ -166,13 +166,13 @@ static PyObject* PyAnySignerPlan(PyAnySignerObject* self,
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"Sign", (PyCFunction)PyAnySignerSign, METH_FASTCALL | METH_STATIC,
+    {"sign", (PyCFunction)PyAnySignerSign, METH_FASTCALL | METH_STATIC,
      PyAnySignerSign_doc},
-    {"SignJSON", (PyCFunction)PyAnySignerSignJSON, METH_FASTCALL | METH_STATIC,
+    {"sign_json", (PyCFunction)PyAnySignerSignJSON, METH_FASTCALL | METH_STATIC,
      PyAnySignerSignJSON_doc},
-    {"SupportsJSON", (PyCFunction)PyAnySignerSupportsJSON,
+    {"supports_json", (PyCFunction)PyAnySignerSupportsJSON,
      METH_FASTCALL | METH_STATIC, PyAnySignerSupportsJSON_doc},
-    {"Plan", (PyCFunction)PyAnySignerPlan, METH_FASTCALL | METH_STATIC,
+    {"plan", (PyCFunction)PyAnySignerPlan, METH_FASTCALL | METH_STATIC,
      PyAnySignerPlan_doc},
     {}};
 

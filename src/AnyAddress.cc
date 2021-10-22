@@ -222,20 +222,20 @@ static PyObject* PyAnyAddressCreateWithPublicKey(PyAnyAddressObject* self,
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"Description", (getter)PyAnyAddressDescription, nullptr,
+    {"description", (getter)PyAnyAddressDescription, nullptr,
      PyAnyAddressDescription_doc},
-    {"Coin", (getter)PyAnyAddressCoin, nullptr, PyAnyAddressCoin_doc},
-    {"Data", (getter)PyAnyAddressData, nullptr, PyAnyAddressData_doc},
+    {"coin", (getter)PyAnyAddressCoin, nullptr, PyAnyAddressCoin_doc},
+    {"data", (getter)PyAnyAddressData, nullptr, PyAnyAddressData_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Equal", (PyCFunction)PyAnyAddressEqual, METH_FASTCALL | METH_STATIC,
+    {"equal", (PyCFunction)PyAnyAddressEqual, METH_FASTCALL | METH_STATIC,
      PyAnyAddressEqual_doc},
-    {"IsValid", (PyCFunction)PyAnyAddressIsValid, METH_FASTCALL | METH_STATIC,
+    {"is_valid", (PyCFunction)PyAnyAddressIsValid, METH_FASTCALL | METH_STATIC,
      PyAnyAddressIsValid_doc},
-    {"CreateWithString", (PyCFunction)PyAnyAddressCreateWithString,
+    {"create_with_string", (PyCFunction)PyAnyAddressCreateWithString,
      METH_FASTCALL | METH_STATIC, PyAnyAddressCreateWithString_doc},
-    {"CreateWithPublicKey", (PyCFunction)PyAnyAddressCreateWithPublicKey,
+    {"create_with_public_key", (PyCFunction)PyAnyAddressCreateWithPublicKey,
      METH_FASTCALL | METH_STATIC, PyAnyAddressCreateWithPublicKey_doc},
     {}};
 

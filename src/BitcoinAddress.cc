@@ -255,26 +255,26 @@ static PyObject* PyBitcoinAddressCreateWithPublicKey(
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"Description", (getter)PyBitcoinAddressDescription, nullptr,
+    {"description", (getter)PyBitcoinAddressDescription, nullptr,
      PyBitcoinAddressDescription_doc},
-    {"Prefix", (getter)PyBitcoinAddressPrefix, nullptr,
+    {"prefix", (getter)PyBitcoinAddressPrefix, nullptr,
      PyBitcoinAddressPrefix_doc},
-    {"Keyhash", (getter)PyBitcoinAddressKeyhash, nullptr,
+    {"keyhash", (getter)PyBitcoinAddressKeyhash, nullptr,
      PyBitcoinAddressKeyhash_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Equal", (PyCFunction)PyBitcoinAddressEqual, METH_FASTCALL | METH_STATIC,
+    {"equal", (PyCFunction)PyBitcoinAddressEqual, METH_FASTCALL | METH_STATIC,
      PyBitcoinAddressEqual_doc},
-    {"IsValid", (PyCFunction)PyBitcoinAddressIsValid,
+    {"is_valid", (PyCFunction)PyBitcoinAddressIsValid,
      METH_FASTCALL | METH_STATIC, PyBitcoinAddressIsValid_doc},
-    {"IsValidString", (PyCFunction)PyBitcoinAddressIsValidString,
+    {"is_valid_string", (PyCFunction)PyBitcoinAddressIsValidString,
      METH_FASTCALL | METH_STATIC, PyBitcoinAddressIsValidString_doc},
-    {"CreateWithString", (PyCFunction)PyBitcoinAddressCreateWithString,
+    {"create_with_string", (PyCFunction)PyBitcoinAddressCreateWithString,
      METH_FASTCALL | METH_STATIC, PyBitcoinAddressCreateWithString_doc},
-    {"CreateWithData", (PyCFunction)PyBitcoinAddressCreateWithData,
+    {"create_with_data", (PyCFunction)PyBitcoinAddressCreateWithData,
      METH_FASTCALL | METH_STATIC, PyBitcoinAddressCreateWithData_doc},
-    {"CreateWithPublicKey", (PyCFunction)PyBitcoinAddressCreateWithPublicKey,
+    {"create_with_public_key", (PyCFunction)PyBitcoinAddressCreateWithPublicKey,
      METH_FASTCALL | METH_STATIC, PyBitcoinAddressCreateWithPublicKey_doc},
     {}};
 

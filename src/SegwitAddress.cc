@@ -211,21 +211,21 @@ static PyObject* PySegwitAddressCreateWithPublicKey(PySegwitAddressObject* self,
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"Description", (getter)PySegwitAddressDescription, nullptr,
+    {"description", (getter)PySegwitAddressDescription, nullptr,
      PySegwitAddressDescription_doc},
-    {"HRP", (getter)PySegwitAddressHRP, nullptr, PySegwitAddressHRP_doc},
-    {"WitnessProgram", (getter)PySegwitAddressWitnessProgram, nullptr,
+    {"hrp", (getter)PySegwitAddressHRP, nullptr, PySegwitAddressHRP_doc},
+    {"witness_program", (getter)PySegwitAddressWitnessProgram, nullptr,
      PySegwitAddressWitnessProgram_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"Equal", (PyCFunction)PySegwitAddressEqual, METH_FASTCALL | METH_STATIC,
+    {"equal", (PyCFunction)PySegwitAddressEqual, METH_FASTCALL | METH_STATIC,
      PySegwitAddressEqual_doc},
-    {"IsValidString", (PyCFunction)PySegwitAddressIsValidString,
+    {"is_valid_string", (PyCFunction)PySegwitAddressIsValidString,
      METH_FASTCALL | METH_STATIC, PySegwitAddressIsValidString_doc},
-    {"CreateWithString", (PyCFunction)PySegwitAddressCreateWithString,
+    {"create_with_string", (PyCFunction)PySegwitAddressCreateWithString,
      METH_FASTCALL | METH_STATIC, PySegwitAddressCreateWithString_doc},
-    {"CreateWithPublicKey", (PyCFunction)PySegwitAddressCreateWithPublicKey,
+    {"create_with_public_key", (PyCFunction)PySegwitAddressCreateWithPublicKey,
      METH_FASTCALL | METH_STATIC, PySegwitAddressCreateWithPublicKey_doc},
     {}};
 

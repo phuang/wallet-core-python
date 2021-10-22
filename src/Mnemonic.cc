@@ -119,11 +119,11 @@ static PyObject* PyMnemonicSuggest(PyMnemonicObject* self,
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
-    {"IsValid", (PyCFunction)PyMnemonicIsValid, METH_FASTCALL | METH_STATIC,
+    {"is_valid", (PyCFunction)PyMnemonicIsValid, METH_FASTCALL | METH_STATIC,
      PyMnemonicIsValid_doc},
-    {"IsValidWord", (PyCFunction)PyMnemonicIsValidWord,
+    {"is_valid_word", (PyCFunction)PyMnemonicIsValidWord,
      METH_FASTCALL | METH_STATIC, PyMnemonicIsValidWord_doc},
-    {"Suggest", (PyCFunction)PyMnemonicSuggest, METH_FASTCALL | METH_STATIC,
+    {"suggest", (PyCFunction)PyMnemonicSuggest, METH_FASTCALL | METH_STATIC,
      PyMnemonicSuggest_doc},
     {}};
 

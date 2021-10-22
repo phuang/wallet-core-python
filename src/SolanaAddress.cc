@@ -137,14 +137,14 @@ static PyObject* PySolanaAddressCreateWithString(PySolanaAddressObject* self,
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"Description", (getter)PySolanaAddressDescription, nullptr,
+    {"description", (getter)PySolanaAddressDescription, nullptr,
      PySolanaAddressDescription_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"DefaultTokenAddress", (PyCFunction)PySolanaAddressDefaultTokenAddress,
+    {"default_token_address", (PyCFunction)PySolanaAddressDefaultTokenAddress,
      METH_FASTCALL, PySolanaAddressDefaultTokenAddress_doc},
-    {"CreateWithString", (PyCFunction)PySolanaAddressCreateWithString,
+    {"create_with_string", (PyCFunction)PySolanaAddressCreateWithString,
      METH_FASTCALL | METH_STATIC, PySolanaAddressCreateWithString_doc},
     {}};
 

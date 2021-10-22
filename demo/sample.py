@@ -30,45 +30,45 @@ def main():
 
   # Create a new multi-coin HD wallet, with new recovery phrase (mnemonic)
   print('Creating a new HD wallet ... ')
-  wallet = core.HDWallet.Create(128, '')
+  wallet = core.HDWallet.create(128, '')
   print('Done.')
   print('Secret mnemonic for new wallet:')
-  print(wallet.Mnemonic)
+  print(wallet.mnemonic)
 
   # Alternative: Import wallet with existing recovery phrase (mnemonic)
   print('Importing an HD wallet from earlier ... ')
-  secretMnemonic = 'ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal'
-  wallet = core.HDWallet.CreateWithMnemonic(secretMnemonic, '')
+  secret_mnemonic = 'ripple scissors kick mammal hire column oak again sun offer wealth tomorrow wagon turn fatal'
+  wallet = core.HDWallet.create_with_mnemonic(secret_mnemonic, '')
   print('Done.')
   print('Secret mnemonic for new wallet:')
-  print(wallet.Mnemonic)
+  print(wallet.mnemonic)
 
   # coin type: we use Ethereum
-  coinType = core.CoinType.Ethereum
+  coin_type = core.CoinType.Ethereum
   print('Working with coin: {} {}'.format(
-    core.CoinTypeConfiguration.GetName(coinType),
-    core.CoinTypeConfiguration.GetSymbol(coinType)))
+    core.CoinTypeConfiguration.get_name(coin_type),
+    core.CoinTypeConfiguration.get_symbol(coin_type)))
 
   # Derive default address.
   print('Obtaining default address ... ')
-  address = wallet.GetAddressForCoin(coinType)
+  address = wallet.get_address_for_coin(coin_type)
   print('Default address: "{}"'.format(address))
 
 
   # Alternative: Derive address using default derivation path.
   # Done in 2 steps: derive private key, then address from private key.
   # Note that private key is passed around between the two calls by the wallet -- be always cautious when handling secrets, avoid the risk of leaking secrets.
-  print('Default derivation path:  ' + coinType.DerivationPath())
-  secretPrivateKeyDefault = wallet.GetKeyForCoin(coinType)
-  addressDefault = coinType.DeriveAddress(secretPrivateKeyDefault)
-  print('Address from default key: ' + addressDefault)
+  print('Default derivation path:  ' + coin_type.derivation_path())
+  secret_private_key_default = wallet.get_key_for_coin(coin_type)
+  address_default = coin_type.derive_address(secret_private_key_default)
+  print('Address from default key: ' + address_default)
 
   # Alternative: Derive address using custom derivation path.
   # Done in 2 steps: derive private key, then address.
-  customDerivationPath = "m/44'/60'/1'/0/0"
-  secretPrivateKeyCustom = wallet.GetKey(coinType, customDerivationPath)
-  addressCustom = coinType.DeriveAddress(secretPrivateKeyCustom)
-  print('custom address for derivation path {}: "{}"'.format(customDerivationPath, addressCustom))
+  custom_derivation_path = "m/44'/60'/1'/0/0"
+  secret_private_key_custom = wallet.get_key(coin_type, custom_derivation_path)
+  address_custom = coin_type.derive_address(secret_private_key_custom)
+  print('custom address for derivation path {}: "{}"'.format(custom_derivation_path, address_custom))
 
   # Steps for sending:
   # 1. put together a send message (contains sender and receiver address, amount, gas price, etc.)
@@ -77,8 +77,8 @@ def main():
   # Note that Signer input and output are represented as protobuf binary messages, for which support is missing in C++.
   # Therefore some direct serialization/parsing is done in helper methods.
   print('SEND funds:')
-  dummyReceiverAddress = '0xC37054b3b48C3317082E7ba872d7753D13da4986'
-  secretPrivKey = secretPrivateKeyDefault.Data
+  dummy_receiver_address = '0xC37054b3b48C3317082E7ba872d7753D13da4986'
+  secret_priv_key = secret_private_key_default.data
 
   print('preparing transaction (using AnySigner) ... ')
   chainIdB64 = 'AQ=='        # base64(parse_hex("01"))
@@ -96,18 +96,18 @@ def main():
        "amount":"{}"
      }}
    }}
-}}'''.format(chainIdB64, gasPriceB64, gasLimitB64, dummyReceiverAddress, amountB64)
+}}'''.format(chainIdB64, gasPriceB64, gasLimitB64, dummy_receiver_address, amountB64)
 
   print('transaction: ' + transaction)
 
   print('signing transaction ... ')
 
   json = transaction
-  signedTransaction = core.AnySigner.SignJSON(json, secretPrivKey, coinType)
+  signed_transaction = core.AnySigner.sign_json(json, secret_priv_key, coin_type)
 
   print('done')
   print('Signed transaction data (to be broadcast to network):  (len {}) "{}"'.format(
-    len(signedTransaction), signedTransaction))
+    len(signed_transaction), signed_transaction))
   # see e.g. https://github.com/flightwallet/decode-eth-tx for checking binary output content
 
 if __name__ == '__main__':

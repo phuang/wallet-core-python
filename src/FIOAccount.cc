@@ -112,12 +112,12 @@ static PyObject* PyFIOAccountCreateWithString(PyFIOAccountObject* self,
 }
 
 static const PyGetSetDef get_set_defs[] = {
-    {"Description", (getter)PyFIOAccountDescription, nullptr,
+    {"description", (getter)PyFIOAccountDescription, nullptr,
      PyFIOAccountDescription_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
-    {"CreateWithString", (PyCFunction)PyFIOAccountCreateWithString,
+    {"create_with_string", (PyCFunction)PyFIOAccountCreateWithString,
      METH_FASTCALL | METH_STATIC, PyFIOAccountCreateWithString_doc},
     {}};
 

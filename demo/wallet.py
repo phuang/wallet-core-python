@@ -19,21 +19,21 @@ import walletcore as core
 
 def create_wallet():
   print('=== creat wallet')
-  wallet = core.HDWallet.Create(128, 'aabbcc')
-  mnemonic = wallet.Mnemonic
-  entropy = wallet.Entropy
+  wallet = core.HDWallet.create(128, 'aabbcc')
+  mnemonic = wallet.mnemonic
+  entropy = wallet.entropy
   print('mnemonic="{}"'.format(mnemonic))
   print('Entropy="{}" size={}'.format(entropy, len(entropy)))
 
-  address = wallet.GetAddressForCoin(core.CoinType.Bitcoin)
+  address = wallet.get_address_for_coin(core.CoinType.Bitcoin)
   print('BTC address="{}"'.format(address))
 
-  address = wallet.GetAddressForCoin(core.CoinType.Ethereum)
+  address = wallet.get_address_for_coin(core.CoinType.Ethereum)
   print('ETH address="{}"'.format(address))
 
 def mnemonic_demo():
   print('=== mnemonic demo')
-  suggestion = core.Mnemonic.Suggest('be')
+  suggestion = core.Mnemonic.suggest('be')
   print('Mnemonic suggestion for "be": {}'.format(suggestion))
 
 
