@@ -22,17 +22,18 @@
 #include <Python.h>
 #include <TrustWalletCore/TWString.h>
 
+// std::unique_ptr for holding TWString*
 class TWStringPtr
     : public std::unique_ptr<TWString, decltype(&TWStringDelete)> {
  public:
+  TWStringPtr() : TWStringPtr(nullptr) {}
   TWStringPtr(TWString* p)
       : std::unique_ptr<TWString, decltype(&TWStringDelete)>(p,
                                                              &TWStringDelete) {}
 };
 
-// Create a PyUnicode from a TWString.
+// Create a PyUnicode object from a TWString.
 PyObject* PyUnicode_FromTWString(const TWStringPtr& str);
 
-// Get content of PyUnicode in a new allocated TWString, the caller should
-// release after using.
+// Get content of a PyUnicode in a new allocated TWString.
 TWStringPtr PyUnicode_GetTWString(PyObject* object);

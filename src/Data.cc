@@ -26,8 +26,10 @@ PyObject* PyBytes_FromTWData(const TWDataPtr& data) {
 
 TWDataPtr PyBytes_GetTWData(PyObject* object) {
   if (!PyBytes_Check(object))
-    return nullptr;
+    return {};
 
-  return TWDataCreateWithBytes((const uint8_t*)PyBytes_AS_STRING(object),
-                               PyBytes_GET_SIZE(object));
+  TWData* result =
+      TWDataCreateWithBytes((const uint8_t*)PyBytes_AS_STRING(object),
+                            PyBytes_GET_SIZE(object));
+  return TWDataPtr(result);
 }
