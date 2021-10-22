@@ -63,7 +63,7 @@ bool PyStoredKey_Check(PyObject* object) {
 // Create PyStoredKey from enum TWStoredKey.
 PyObject* PyStoredKey_FromTWStoredKey(TWStoredKey* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PyStoredKeyObject* object = PyObject_New(PyStoredKeyObject, &PyStoredKeyType);
   if (!object)

@@ -59,7 +59,7 @@ bool Py${name}_Check(PyObject* object) {
 // Create Py${name} from enum TW${name}.
 PyObject* Py${name}_FromTW${name}(TW${name}* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   Py${name}Object* object = PyObject_New(Py${name}Object, &Py${name}Type);
   if (!object)

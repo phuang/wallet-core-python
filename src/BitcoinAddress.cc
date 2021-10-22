@@ -60,7 +60,7 @@ bool PyBitcoinAddress_Check(PyObject* object) {
 // Create PyBitcoinAddress from enum TWBitcoinAddress.
 PyObject* PyBitcoinAddress_FromTWBitcoinAddress(TWBitcoinAddress* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PyBitcoinAddressObject* object =
       PyObject_New(PyBitcoinAddressObject, &PyBitcoinAddressType);

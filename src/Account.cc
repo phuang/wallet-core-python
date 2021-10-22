@@ -59,7 +59,7 @@ bool PyAccount_Check(PyObject* object) {
 // Create PyAccount from enum TWAccount.
 PyObject* PyAccount_FromTWAccount(TWAccount* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PyAccountObject* object = PyObject_New(PyAccountObject, &PyAccountType);
   if (!object)

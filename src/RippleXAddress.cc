@@ -59,7 +59,7 @@ bool PyRippleXAddress_Check(PyObject* object) {
 // Create PyRippleXAddress from enum TWRippleXAddress.
 PyObject* PyRippleXAddress_FromTWRippleXAddress(TWRippleXAddress* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PyRippleXAddressObject* object =
       PyObject_New(PyRippleXAddressObject, &PyRippleXAddressType);

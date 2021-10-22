@@ -61,7 +61,7 @@ bool PyEthereumAbiFunction_Check(PyObject* object) {
 PyObject* PyEthereumAbiFunction_FromTWEthereumAbiFunction(
     TWEthereumAbiFunction* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PyEthereumAbiFunctionObject* object =
       PyObject_New(PyEthereumAbiFunctionObject, &PyEthereumAbiFunctionType);

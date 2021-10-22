@@ -61,7 +61,7 @@ bool PyAnyAddress_Check(PyObject* object) {
 // Create PyAnyAddress from enum TWAnyAddress.
 PyObject* PyAnyAddress_FromTWAnyAddress(TWAnyAddress* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PyAnyAddressObject* object =
       PyObject_New(PyAnyAddressObject, &PyAnyAddressType);

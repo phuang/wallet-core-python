@@ -58,7 +58,7 @@ bool PyNEARAccount_Check(PyObject* object) {
 // Create PyNEARAccount from enum TWNEARAccount.
 PyObject* PyNEARAccount_FromTWNEARAccount(TWNEARAccount* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PyNEARAccountObject* object =
       PyObject_New(PyNEARAccountObject, &PyNEARAccountType);

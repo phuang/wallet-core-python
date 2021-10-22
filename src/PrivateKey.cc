@@ -61,7 +61,7 @@ bool PyPrivateKey_Check(PyObject* object) {
 // Create PyPrivateKey from enum TWPrivateKey.
 PyObject* PyPrivateKey_FromTWPrivateKey(TWPrivateKey* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PyPrivateKeyObject* object =
       PyObject_New(PyPrivateKeyObject, &PyPrivateKeyType);

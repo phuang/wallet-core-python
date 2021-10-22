@@ -18,7 +18,7 @@
 
 PyObject* PyBytes_FromTWData(const TWDataPtr& data) {
   if (!data)
-    return nullptr;
+    Py_RETURN_NONE;
 
   return PyBytes_FromStringAndSize((const char*)TWDataBytes(data.get()),
                                    TWDataSize(data.get()));

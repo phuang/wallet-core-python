@@ -61,7 +61,7 @@ bool PySegwitAddress_Check(PyObject* object) {
 // Create PySegwitAddress from enum TWSegwitAddress.
 PyObject* PySegwitAddress_FromTWSegwitAddress(TWSegwitAddress* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PySegwitAddressObject* object =
       PyObject_New(PySegwitAddressObject, &PySegwitAddressType);

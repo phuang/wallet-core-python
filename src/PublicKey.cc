@@ -61,7 +61,7 @@ bool PyPublicKey_Check(PyObject* object) {
 // Create PyPublicKey from enum TWPublicKey.
 PyObject* PyPublicKey_FromTWPublicKey(TWPublicKey* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PyPublicKeyObject* object = PyObject_New(PyPublicKeyObject, &PyPublicKeyType);
   if (!object)

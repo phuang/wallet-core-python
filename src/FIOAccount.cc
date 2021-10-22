@@ -58,7 +58,7 @@ bool PyFIOAccount_Check(PyObject* object) {
 // Create PyFIOAccount from enum TWFIOAccount.
 PyObject* PyFIOAccount_FromTWFIOAccount(TWFIOAccount* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PyFIOAccountObject* object =
       PyObject_New(PyFIOAccountObject, &PyFIOAccountType);

@@ -60,7 +60,7 @@ bool PyBitcoinScript_Check(PyObject* object) {
 // Create PyBitcoinScript from enum TWBitcoinScript.
 PyObject* PyBitcoinScript_FromTWBitcoinScript(TWBitcoinScript* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PyBitcoinScriptObject* object =
       PyObject_New(PyBitcoinScriptObject, &PyBitcoinScriptType);

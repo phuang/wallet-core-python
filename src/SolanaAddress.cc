@@ -58,7 +58,7 @@ bool PySolanaAddress_Check(PyObject* object) {
 // Create PySolanaAddress from enum TWSolanaAddress.
 PyObject* PySolanaAddress_FromTWSolanaAddress(TWSolanaAddress* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PySolanaAddressObject* object =
       PyObject_New(PySolanaAddressObject, &PySolanaAddressType);

@@ -18,7 +18,7 @@
 
 PyObject* PyUnicode_FromTWString(const TWStringPtr& str) {
   if (!str)
-    return nullptr;
+    Py_RETURN_NONE;
 
   return PyUnicode_FromStringAndSize(TWStringUTF8Bytes(str.get()),
                                      TWStringSize(str.get()));

@@ -66,7 +66,7 @@ bool PyHDWallet_Check(PyObject* object) {
 // Create PyHDWallet from enum TWHDWallet.
 PyObject* PyHDWallet_FromTWHDWallet(TWHDWallet* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PyHDWalletObject* object = PyObject_New(PyHDWalletObject, &PyHDWalletType);
   if (!object)

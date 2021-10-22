@@ -60,7 +60,7 @@ bool PyGroestlcoinAddress_Check(PyObject* object) {
 PyObject* PyGroestlcoinAddress_FromTWGroestlcoinAddress(
     TWGroestlcoinAddress* value) {
   if (!value)
-    return nullptr;
+    Py_RETURN_NONE;
 
   PyGroestlcoinAddressObject* object =
       PyObject_New(PyGroestlcoinAddressObject, &PyGroestlcoinAddressType);
