@@ -48,8 +48,21 @@ module = Extension('walletcore',
                     sources = glob('src/*.cc'))
 
 setup(name = 'walletcore',
-      version = '1.0',
+      version = '0.1.0',
       description = 'Trust wallet core',
       author = 'Peng Huang',
       author_email = 'shawn.p.huang@gmail.com',
-      ext_modules = [module])
+      url = 'https://github.com/phuang/wallet-core-python',
+      download_url = '',
+      keywords = [ 'cryptocurrency', 'wallet' ],
+      ext_modules = [module],
+      classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Developers',
+        'Operating System :: POSIX :: Linux',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'License :: OSI Approved :: GPL3',
+        'Programming Language :: C++',
+        '',
+      ],
+  )
