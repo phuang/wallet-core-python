@@ -136,15 +136,20 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
 
   auto checked_arg${i} = NumericCast<${arg_ctype}>(unchecked_arg${i});
   if (!checked_arg${i}) {
-      PyErr_Format(PyExc_ValueError, "The value '%lld' of arg ${i} doesn't fit in a c type ${arg_ctype}.", unchecked_arg${i});
+      PyErr_Format(PyExc_ValueError,
+                   "The value '%lld' of arg ${i} doesn't fit in a c type ${arg_ctype}.",
+                   unchecked_arg${i});
       return nullptr;
   }
 
   const auto& arg${i} = checked_arg${i}.value();
 ''')
         call_args = []
+        int_types = {
+            'int8_t', 'uint8_t', 'int16_t', 'uint16_t', 'int',
+            'int32_t', 'uint32_t', 'size_t', 'int64_t', 'uint64_t'
+        }
         used_types = set()
-        int_types = set(['int8_t', 'uint8_t', 'int16_t', 'uint16_t', 'int', 'int32_t', 'uint32_t', 'size_t', 'int64_t', 'uint64_t'])
         for i, arg in enumerate(args):
             need_checked_cast = False
             if arg._type._name == 'bool':

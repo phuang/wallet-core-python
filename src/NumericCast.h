@@ -31,33 +31,33 @@ inline std::optional<Dst> NumericCast(Src value) {
   // unsigned <-- unsigned
   if ((not DstLim::is_signed) and (not SrcLim::is_signed)) {
     if (positive_overflow_possible and (value > DstLim::max())) {
-      return {};
+      return std::nullopt;
     }
   }
   // unsigned <-- signed
   else if ((not DstLim::is_signed) and SrcLim::is_signed) {
     if (positive_overflow_possible and (value > DstLim::max())) {
-      return {};
+      return std::nullopt;
     } else if (negative_overflow_possible and (value < 0)) {
-      return {};
+      return std::nullopt;
     }
 
   }
   // signed <-- unsigned
   else if (DstLim::is_signed and (not SrcLim::is_signed)) {
     if (positive_overflow_possible and (value > DstLim::max())) {
-      return {};
+      return std::nullopt;
     }
   }
   // signed <-- signed
   else if (DstLim::is_signed and SrcLim::is_signed) {
     if (positive_overflow_possible and (value > DstLim::max())) {
-      return {};
+      return std::nullopt;
     } else if (negative_overflow_possible and (value < DstLim::lowest())) {
-      return {};
+      return std::nullopt;
     }
   }
 
   // limits have been checked, therefore safe to cast
-  return static_cast<Dst>(value);
+  return std::make_optional(static_cast<Dst>(value));
 }
