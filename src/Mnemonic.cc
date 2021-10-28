@@ -67,9 +67,6 @@ static PyObject* PyMnemonicIsValid(PyMnemonicObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   bool result = TWMnemonicIsValid(arg0.get());
   return PyBool_FromLong(result);
@@ -92,9 +89,6 @@ static PyObject* PyMnemonicIsValidWord(PyMnemonicObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   bool result = TWMnemonicIsValidWord(arg0.get());
   return PyBool_FromLong(result);
@@ -117,9 +111,6 @@ static PyObject* PyMnemonicSuggest(PyMnemonicObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStringPtr result = TWMnemonicSuggest(arg0.get());
   return PyUnicode_FromTWString(result);

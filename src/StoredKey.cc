@@ -169,18 +169,12 @@ static PyObject* PyStoredKeyAccountForCoin(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyHDWallet_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type HDWallet");
     return nullptr;
   }
   auto arg1 = PyHDWallet_GetTWHDWallet(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWAccount* result = TWStoredKeyAccountForCoin(self->value, arg0, arg1);
   return PyAccount_FromTWAccount(result);
@@ -204,9 +198,6 @@ static PyObject* PyStoredKeyRemoveAccountForCoin(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStoredKeyRemoveAccountForCoin(self->value, arg0);
   return nullptr;
@@ -231,36 +222,24 @@ static PyObject* PyStoredKeyAddAccount(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyCoinType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
     return nullptr;
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyUnicode_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Unicode");
     return nullptr;
   }
   auto arg2 = PyUnicode_GetTWString(args[2]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyUnicode_Check(args[3])) {
     PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type Unicode");
     return nullptr;
   }
   auto arg3 = PyUnicode_GetTWString(args[3]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStoredKeyAddAccount(self->value, arg0.get(), arg1, arg2.get(), arg3.get());
   return nullptr;
@@ -283,9 +262,6 @@ static PyObject* PyStoredKeyStore(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   bool result = TWStoredKeyStore(self->value, arg0.get());
   return PyBool_FromLong(result);
@@ -309,9 +285,6 @@ static PyObject* PyStoredKeyDecryptPrivateKey(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWDataPtr result = TWStoredKeyDecryptPrivateKey(self->value, arg0.get());
   return PyBytes_FromTWData(result);
@@ -335,9 +308,6 @@ static PyObject* PyStoredKeyDecryptMnemonic(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStringPtr result = TWStoredKeyDecryptMnemonic(self->value, arg0.get());
   return PyUnicode_FromTWString(result);
@@ -361,18 +331,12 @@ static PyObject* PyStoredKeyPrivateKey(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBytes_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWPrivateKey* result = TWStoredKeyPrivateKey(self->value, arg0, arg1.get());
   return PyPrivateKey_FromTWPrivateKey(result);
@@ -396,9 +360,6 @@ static PyObject* PyStoredKeyWallet(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWHDWallet* result = TWStoredKeyWallet(self->value, arg0.get());
   return PyHDWallet_FromTWHDWallet(result);
@@ -437,9 +398,6 @@ static PyObject* PyStoredKeyFixAddresses(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   bool result = TWStoredKeyFixAddresses(self->value, arg0.get());
   return PyBool_FromLong(result);
@@ -462,9 +420,6 @@ static PyObject* PyStoredKeyLoad(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStoredKey* result = TWStoredKeyLoad(arg0.get());
   return PyStoredKey_FromTWStoredKey(result);
@@ -488,36 +443,24 @@ static PyObject* PyStoredKeyImportPrivateKey(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
     return nullptr;
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBytes_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
   auto arg2 = PyBytes_GetTWData(args[2]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyCoinType_Check(args[3])) {
     PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type CoinType");
     return nullptr;
   }
   auto arg3 = PyCoinType_GetTWCoinType(args[3]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStoredKey* result =
       TWStoredKeyImportPrivateKey(arg0.get(), arg1.get(), arg2.get(), arg3);
@@ -542,36 +485,24 @@ static PyObject* PyStoredKeyImportHDWallet(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
     return nullptr;
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBytes_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
   auto arg2 = PyBytes_GetTWData(args[2]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyCoinType_Check(args[3])) {
     PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type CoinType");
     return nullptr;
   }
   auto arg3 = PyCoinType_GetTWCoinType(args[3]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStoredKey* result =
       TWStoredKeyImportHDWallet(arg0.get(), arg1.get(), arg2.get(), arg3);
@@ -595,9 +526,6 @@ static PyObject* PyStoredKeyImportJSON(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStoredKey* result = TWStoredKeyImportJSON(arg0.get());
   return PyStoredKey_FromTWStoredKey(result);
@@ -620,18 +548,12 @@ static PyObject* PyStoredKeyCreate(PyStoredKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBytes_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStoredKey* result = TWStoredKeyCreate(arg0.get(), arg1.get());
   return PyStoredKey_FromTWStoredKey(result);

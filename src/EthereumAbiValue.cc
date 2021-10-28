@@ -70,9 +70,6 @@ static PyObject* PyEthereumAbiValueEncodeBool(PyEthereumAbiValueObject* self,
     return nullptr;
   }
   auto arg0 = PyBool_IsTrue(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWDataPtr result = TWEthereumAbiValueEncodeBool(arg0);
   return PyBytes_FromTWData(result);
@@ -165,9 +162,6 @@ static PyObject* PyEthereumAbiValueEncodeInt256(PyEthereumAbiValueObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWDataPtr result = TWEthereumAbiValueEncodeInt256(arg0.get());
   return PyBytes_FromTWData(result);
@@ -190,9 +184,6 @@ static PyObject* PyEthereumAbiValueEncodeUInt256(PyEthereumAbiValueObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWDataPtr result = TWEthereumAbiValueEncodeUInt256(arg0.get());
   return PyBytes_FromTWData(result);
@@ -215,9 +206,6 @@ static PyObject* PyEthereumAbiValueEncodeAddress(PyEthereumAbiValueObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWDataPtr result = TWEthereumAbiValueEncodeAddress(arg0.get());
   return PyBytes_FromTWData(result);
@@ -240,9 +228,6 @@ static PyObject* PyEthereumAbiValueEncodeString(PyEthereumAbiValueObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWDataPtr result = TWEthereumAbiValueEncodeString(arg0.get());
   return PyBytes_FromTWData(result);
@@ -265,9 +250,6 @@ static PyObject* PyEthereumAbiValueEncodeBytes(PyEthereumAbiValueObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWDataPtr result = TWEthereumAbiValueEncodeBytes(arg0.get());
   return PyBytes_FromTWData(result);
@@ -291,9 +273,6 @@ static PyObject* PyEthereumAbiValueEncodeBytesDyn(
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWDataPtr result = TWEthereumAbiValueEncodeBytesDyn(arg0.get());
   return PyBytes_FromTWData(result);
@@ -316,9 +295,6 @@ static PyObject* PyEthereumAbiValueDecodeUInt256(PyEthereumAbiValueObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStringPtr result = TWEthereumAbiValueDecodeUInt256(arg0.get());
   return PyUnicode_FromTWString(result);
@@ -341,18 +317,12 @@ static PyObject* PyEthereumAbiValueDecodeValue(PyEthereumAbiValueObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
     return nullptr;
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStringPtr result = TWEthereumAbiValueDecodeValue(arg0.get(), arg1.get());
   return PyUnicode_FromTWString(result);
@@ -375,18 +345,12 @@ static PyObject* PyEthereumAbiValueDecodeArray(PyEthereumAbiValueObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
     return nullptr;
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStringPtr result = TWEthereumAbiValueDecodeArray(arg0.get(), arg1.get());
   return PyUnicode_FromTWString(result);

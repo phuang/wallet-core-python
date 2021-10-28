@@ -68,9 +68,6 @@ static PyObject* PyBase58Encode(PyBase58Object* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStringPtr result = TWBase58Encode(arg0.get());
   return PyUnicode_FromTWString(result);
@@ -93,9 +90,6 @@ static PyObject* PyBase58EncodeNoCheck(PyBase58Object* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStringPtr result = TWBase58EncodeNoCheck(arg0.get());
   return PyUnicode_FromTWString(result);
@@ -118,9 +112,6 @@ static PyObject* PyBase58Decode(PyBase58Object* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWDataPtr result = TWBase58Decode(arg0.get());
   return PyBytes_FromTWData(result);
@@ -143,9 +134,6 @@ static PyObject* PyBase58DecodeNoCheck(PyBase58Object* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWDataPtr result = TWBase58DecodeNoCheck(arg0.get());
   return PyBytes_FromTWData(result);

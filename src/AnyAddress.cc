@@ -124,18 +124,12 @@ static PyObject* PyAnyAddressEqual(PyAnyAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyAnyAddress_GetTWAnyAddress(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyAnyAddress_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type AnyAddress");
     return nullptr;
   }
   auto arg1 = PyAnyAddress_GetTWAnyAddress(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   bool result = TWAnyAddressEqual(arg0, arg1);
   return PyBool_FromLong(result);
@@ -158,18 +152,12 @@ static PyObject* PyAnyAddressIsValid(PyAnyAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyCoinType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
     return nullptr;
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   bool result = TWAnyAddressIsValid(arg0.get(), arg1);
   return PyBool_FromLong(result);
@@ -193,18 +181,12 @@ static PyObject* PyAnyAddressCreateWithString(PyAnyAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyCoinType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
     return nullptr;
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWAnyAddress* result = TWAnyAddressCreateWithString(arg0.get(), arg1);
   return PyAnyAddress_FromTWAnyAddress(result);
@@ -228,18 +210,12 @@ static PyObject* PyAnyAddressCreateWithPublicKey(PyAnyAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyCoinType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
     return nullptr;
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWAnyAddress* result = TWAnyAddressCreateWithPublicKey(arg0, arg1);
   return PyAnyAddress_FromTWAnyAddress(result);

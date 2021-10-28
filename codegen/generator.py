@@ -123,9 +123,6 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
     return nullptr;
   }
   auto arg${i} = ${get_ctype}(args[${i}]);
-  if (PyErr_Occurred()) {
-      return nullptr;
-  }
 ''')
         template_with_checked_cast = T('''
   if (!Py${arg_type}_Check(args[${i}])) {

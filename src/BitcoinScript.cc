@@ -282,9 +282,6 @@ static PyObject* PyBitcoinScriptCreateWithData(PyBitcoinScriptObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWBitcoinScript* result = TWBitcoinScriptCreateWithData(arg0.get());
   return PyBitcoinScript_FromTWBitcoinScript(result);
@@ -308,9 +305,6 @@ static PyObject* PyBitcoinScriptCreateCopy(PyBitcoinScriptObject* self,
     return nullptr;
   }
   auto arg0 = PyBitcoinScript_GetTWBitcoinScript(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWBitcoinScript* result = TWBitcoinScriptCreateCopy(arg0);
   return PyBitcoinScript_FromTWBitcoinScript(result);
@@ -334,18 +328,12 @@ static PyObject* PyBitcoinScriptEqual(PyBitcoinScriptObject* self,
     return nullptr;
   }
   auto arg0 = PyBitcoinScript_GetTWBitcoinScript(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBitcoinScript_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type BitcoinScript");
     return nullptr;
   }
   auto arg1 = PyBitcoinScript_GetTWBitcoinScript(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   bool result = TWBitcoinScriptEqual(arg0, arg1);
   return PyBool_FromLong(result);
@@ -369,9 +357,6 @@ static PyObject* PyBitcoinScriptBuildPayToPublicKey(PyBitcoinScriptObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWBitcoinScript* result = TWBitcoinScriptBuildPayToPublicKey(arg0.get());
   return PyBitcoinScript_FromTWBitcoinScript(result);
@@ -396,9 +381,6 @@ static PyObject* PyBitcoinScriptBuildPayToPublicKeyHash(
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWBitcoinScript* result = TWBitcoinScriptBuildPayToPublicKeyHash(arg0.get());
   return PyBitcoinScript_FromTWBitcoinScript(result);
@@ -423,9 +405,6 @@ static PyObject* PyBitcoinScriptBuildPayToScriptHash(
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWBitcoinScript* result = TWBitcoinScriptBuildPayToScriptHash(arg0.get());
   return PyBitcoinScript_FromTWBitcoinScript(result);
@@ -450,9 +429,6 @@ static PyObject* PyBitcoinScriptBuildPayToWitnessPubkeyHash(
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWBitcoinScript* result =
       TWBitcoinScriptBuildPayToWitnessPubkeyHash(arg0.get());
@@ -478,9 +454,6 @@ static PyObject* PyBitcoinScriptBuildPayToWitnessScriptHash(
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWBitcoinScript* result =
       TWBitcoinScriptBuildPayToWitnessScriptHash(arg0.get());
@@ -506,18 +479,12 @@ static PyObject* PyBitcoinScriptLockScriptForAddress(
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyCoinType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
     return nullptr;
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWBitcoinScript* result =
       TWBitcoinScriptLockScriptForAddress(arg0.get(), arg1);
@@ -541,9 +508,6 @@ static PyObject* PyBitcoinScriptHashTypeForCoin(PyBitcoinScriptObject* self,
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   uint32_t result = TWBitcoinScriptHashTypeForCoin(arg0);
   return PyLong_FromLong(result);

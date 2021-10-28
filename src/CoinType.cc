@@ -287,9 +287,6 @@ static PyObject* PyCoinTypeValidate(PyCoinTypeObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   bool result = TWCoinTypeValidate(self->value, arg0.get());
   return PyBool_FromLong(result);
@@ -329,9 +326,6 @@ static PyObject* PyCoinTypeDeriveAddress(PyCoinTypeObject* self,
     return nullptr;
   }
   auto arg0 = PyPrivateKey_GetTWPrivateKey(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStringPtr result = TWCoinTypeDeriveAddress(self->value, arg0);
   return PyUnicode_FromTWString(result);
@@ -355,9 +349,6 @@ static PyObject* PyCoinTypeDeriveAddressFromPublicKey(PyCoinTypeObject* self,
     return nullptr;
   }
   auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStringPtr result = TWCoinTypeDeriveAddressFromPublicKey(self->value, arg0);
   return PyUnicode_FromTWString(result);

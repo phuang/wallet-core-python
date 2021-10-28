@@ -117,18 +117,12 @@ static PyObject* PyRippleXAddressEqual(PyRippleXAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyRippleXAddress_GetTWRippleXAddress(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyRippleXAddress_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type RippleXAddress");
     return nullptr;
   }
   auto arg1 = PyRippleXAddress_GetTWRippleXAddress(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   bool result = TWRippleXAddressEqual(arg0, arg1);
   return PyBool_FromLong(result);
@@ -151,9 +145,6 @@ static PyObject* PyRippleXAddressIsValidString(PyRippleXAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   bool result = TWRippleXAddressIsValidString(arg0.get());
   return PyBool_FromLong(result);
@@ -177,9 +168,6 @@ static PyObject* PyRippleXAddressCreateWithString(PyRippleXAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWRippleXAddress* result = TWRippleXAddressCreateWithString(arg0.get());
   return PyRippleXAddress_FromTWRippleXAddress(result);
@@ -204,9 +192,6 @@ static PyObject* PyRippleXAddressCreateWithPublicKey(
     return nullptr;
   }
   auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");

@@ -141,9 +141,6 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt8(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddParamUInt8(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -187,9 +184,6 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt16(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddParamUInt16(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -233,9 +227,6 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt32(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddParamUInt32(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -279,9 +270,6 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt64(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddParamUInt64(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -306,18 +294,12 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt256(
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result =
       TWEthereumAbiFunctionAddParamUInt256(self->value, arg0.get(), arg1);
@@ -362,18 +344,12 @@ static PyObject* PyEthereumAbiFunctionAddParamUIntN(
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBool_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bool");
     return nullptr;
   }
   auto arg2 = PyBool_IsTrue(args[2]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result =
       TWEthereumAbiFunctionAddParamUIntN(self->value, arg0, arg1.get(), arg2);
@@ -418,9 +394,6 @@ static PyObject* PyEthereumAbiFunctionAddParamInt8(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddParamInt8(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -464,9 +437,6 @@ static PyObject* PyEthereumAbiFunctionAddParamInt16(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddParamInt16(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -510,9 +480,6 @@ static PyObject* PyEthereumAbiFunctionAddParamInt32(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddParamInt32(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -556,9 +523,6 @@ static PyObject* PyEthereumAbiFunctionAddParamInt64(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddParamInt64(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -583,18 +547,12 @@ static PyObject* PyEthereumAbiFunctionAddParamInt256(
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result =
       TWEthereumAbiFunctionAddParamInt256(self->value, arg0.get(), arg1);
@@ -639,18 +597,12 @@ static PyObject* PyEthereumAbiFunctionAddParamIntN(
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBool_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bool");
     return nullptr;
   }
   auto arg2 = PyBool_IsTrue(args[2]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result =
       TWEthereumAbiFunctionAddParamIntN(self->value, arg0, arg1.get(), arg2);
@@ -676,18 +628,12 @@ static PyObject* PyEthereumAbiFunctionAddParamBool(
     return nullptr;
   }
   auto arg0 = PyBool_IsTrue(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddParamBool(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -712,18 +658,12 @@ static PyObject* PyEthereumAbiFunctionAddParamString(
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result =
       TWEthereumAbiFunctionAddParamString(self->value, arg0.get(), arg1);
@@ -749,18 +689,12 @@ static PyObject* PyEthereumAbiFunctionAddParamAddress(
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result =
       TWEthereumAbiFunctionAddParamAddress(self->value, arg0.get(), arg1);
@@ -786,18 +720,12 @@ static PyObject* PyEthereumAbiFunctionAddParamBytes(
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result =
       TWEthereumAbiFunctionAddParamBytes(self->value, arg0.get(), arg1);
@@ -842,18 +770,12 @@ static PyObject* PyEthereumAbiFunctionAddParamBytesFix(
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyBool_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bool");
     return nullptr;
   }
   auto arg2 = PyBool_IsTrue(args[2]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddParamBytesFix(self->value, arg0,
                                                      arg1.get(), arg2);
@@ -879,9 +801,6 @@ static PyObject* PyEthereumAbiFunctionAddParamArray(
     return nullptr;
   }
   auto arg0 = PyBool_IsTrue(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddParamArray(self->value, arg0);
   return PyLong_FromLong(result);
@@ -925,9 +844,6 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt8(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   uint8_t result = TWEthereumAbiFunctionGetParamUInt8(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -971,9 +887,6 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt64(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   uint64_t result =
       TWEthereumAbiFunctionGetParamUInt64(self->value, arg0, arg1);
@@ -1018,9 +931,6 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt256(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWDataPtr result =
       TWEthereumAbiFunctionGetParamUInt256(self->value, arg0, arg1);
@@ -1065,9 +975,6 @@ static PyObject* PyEthereumAbiFunctionGetParamBool(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   bool result = TWEthereumAbiFunctionGetParamBool(self->value, arg0, arg1);
   return PyBool_FromLong(result);
@@ -1111,9 +1018,6 @@ static PyObject* PyEthereumAbiFunctionGetParamString(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWStringPtr result =
       TWEthereumAbiFunctionGetParamString(self->value, arg0, arg1);
@@ -1158,9 +1062,6 @@ static PyObject* PyEthereumAbiFunctionGetParamAddress(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWDataPtr result =
       TWEthereumAbiFunctionGetParamAddress(self->value, arg0, arg1);
@@ -1433,9 +1334,6 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt256(
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddInArrayParamUInt256(self->value, arg0,
                                                            arg1.get());
@@ -1499,9 +1397,6 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUIntN(
     return nullptr;
   }
   auto arg2 = PyBytes_GetTWData(args[2]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddInArrayParamUIntN(self->value, arg0,
                                                          arg1, arg2.get());
@@ -1774,9 +1669,6 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt256(
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamInt256(self->value, arg0, arg1.get());
@@ -1840,9 +1732,6 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamIntN(
     return nullptr;
   }
   auto arg2 = PyBytes_GetTWData(args[2]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddInArrayParamIntN(self->value, arg0, arg1,
                                                         arg2.get());
@@ -1887,9 +1776,6 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBool(
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamBool(self->value, arg0, arg1);
@@ -1934,9 +1820,6 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamString(
     return nullptr;
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamString(self->value, arg0, arg1.get());
@@ -1981,9 +1864,6 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamAddress(
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddInArrayParamAddress(self->value, arg0,
                                                            arg1.get());
@@ -2028,9 +1908,6 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytes(
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamBytes(self->value, arg0, arg1.get());
@@ -2094,9 +1971,6 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytesFix(
     return nullptr;
   }
   auto arg2 = PyBytes_GetTWData(args[2]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   int result = TWEthereumAbiFunctionAddInArrayParamBytesFix(self->value, arg0,
                                                             arg1, arg2.get());
@@ -2122,9 +1996,6 @@ static PyObject* PyEthereumAbiFunctionCreateWithString(
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWEthereumAbiFunction* result =
       TWEthereumAbiFunctionCreateWithString(arg0.get());

@@ -115,9 +115,6 @@ static PyObject* PyGroestlcoinAddressEqual(PyGroestlcoinAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyGroestlcoinAddress_GetTWGroestlcoinAddress(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyGroestlcoinAddress_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError,
@@ -125,9 +122,6 @@ static PyObject* PyGroestlcoinAddressEqual(PyGroestlcoinAddressObject* self,
     return nullptr;
   }
   auto arg1 = PyGroestlcoinAddress_GetTWGroestlcoinAddress(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   bool result = TWGroestlcoinAddressEqual(arg0, arg1);
   return PyBool_FromLong(result);
@@ -151,9 +145,6 @@ static PyObject* PyGroestlcoinAddressIsValidString(
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   bool result = TWGroestlcoinAddressIsValidString(arg0.get());
   return PyBool_FromLong(result);
@@ -178,9 +169,6 @@ static PyObject* PyGroestlcoinAddressCreateWithString(
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   TWGroestlcoinAddress* result =
       TWGroestlcoinAddressCreateWithString(arg0.get());
@@ -207,9 +195,6 @@ static PyObject* PyGroestlcoinAddressCreateWithPublicKey(
     return nullptr;
   }
   auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
