@@ -126,12 +126,18 @@ static PyObject* PySegwitAddressEqual(PySegwitAddressObject* self,
     return nullptr;
   }
   auto arg0 = PySegwitAddress_GetTWSegwitAddress(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PySegwitAddress_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type SegwitAddress");
     return nullptr;
   }
   auto arg1 = PySegwitAddress_GetTWSegwitAddress(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   bool result = TWSegwitAddressEqual(arg0, arg1);
   return PyBool_FromLong(result);
@@ -154,6 +160,9 @@ static PyObject* PySegwitAddressIsValidString(PySegwitAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   bool result = TWSegwitAddressIsValidString(arg0.get());
   return PyBool_FromLong(result);
@@ -176,6 +185,9 @@ static PyObject* PySegwitAddressCreateWithString(PySegwitAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWSegwitAddress* result = TWSegwitAddressCreateWithString(arg0.get());
   return PySegwitAddress_FromTWSegwitAddress(result);
@@ -199,12 +211,18 @@ static PyObject* PySegwitAddressCreateWithPublicKey(PySegwitAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyHRP_GetTWHRP(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyPublicKey_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type PublicKey");
     return nullptr;
   }
   auto arg1 = PyPublicKey_GetTWPublicKey(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWSegwitAddress* result = TWSegwitAddressCreateWithPublicKey(arg0, arg1);
   return PySegwitAddress_FromTWSegwitAddress(result);

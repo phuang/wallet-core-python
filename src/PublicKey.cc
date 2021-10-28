@@ -144,12 +144,18 @@ static PyObject* PyPublicKeyVerify(PyPublicKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBytes_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   bool result = TWPublicKeyVerify(self->value, arg0.get(), arg1.get());
   return PyBool_FromLong(result);
@@ -173,12 +179,18 @@ static PyObject* PyPublicKeyVerifySchnorr(PyPublicKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBytes_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   bool result = TWPublicKeyVerifySchnorr(self->value, arg0.get(), arg1.get());
   return PyBool_FromLong(result);
@@ -202,12 +214,18 @@ static PyObject* PyPublicKeyCreateWithData(PyPublicKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyPublicKeyType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type PublicKeyType");
     return nullptr;
   }
   auto arg1 = PyPublicKeyType_GetTWPublicKeyType(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWPublicKey* result = TWPublicKeyCreateWithData(arg0.get(), arg1);
   return PyPublicKey_FromTWPublicKey(result);
@@ -230,12 +248,18 @@ static PyObject* PyPublicKeyIsValid(PyPublicKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyPublicKeyType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type PublicKeyType");
     return nullptr;
   }
   auto arg1 = PyPublicKeyType_GetTWPublicKeyType(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   bool result = TWPublicKeyIsValid(arg0.get(), arg1);
   return PyBool_FromLong(result);
@@ -259,12 +283,18 @@ static PyObject* PyPublicKeyRecover(PyPublicKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBytes_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWPublicKey* result = TWPublicKeyRecover(arg0.get(), arg1.get());
   return PyPublicKey_FromTWPublicKey(result);

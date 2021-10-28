@@ -69,6 +69,9 @@ static PyObject* PyCoinTypeConfigurationGetSymbol(
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWStringPtr result = TWCoinTypeConfigurationGetSymbol(arg0);
   return PyUnicode_FromTWString(result);
@@ -92,6 +95,9 @@ static PyObject* PyCoinTypeConfigurationGetDecimals(
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWCoinTypeConfigurationGetDecimals(arg0);
   return PyLong_FromLong(result);
@@ -116,12 +122,18 @@ static PyObject* PyCoinTypeConfigurationGetTransactionURL(
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
     return nullptr;
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWStringPtr result =
       TWCoinTypeConfigurationGetTransactionURL(arg0, arg1.get());
@@ -147,12 +159,18 @@ static PyObject* PyCoinTypeConfigurationGetAccountURL(
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
     return nullptr;
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWStringPtr result = TWCoinTypeConfigurationGetAccountURL(arg0, arg1.get());
   return PyUnicode_FromTWString(result);
@@ -176,6 +194,9 @@ static PyObject* PyCoinTypeConfigurationGetID(
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWStringPtr result = TWCoinTypeConfigurationGetID(arg0);
   return PyUnicode_FromTWString(result);
@@ -199,6 +220,9 @@ static PyObject* PyCoinTypeConfigurationGetName(
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWStringPtr result = TWCoinTypeConfigurationGetName(arg0);
   return PyUnicode_FromTWString(result);

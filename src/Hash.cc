@@ -19,6 +19,7 @@
 #include "Hash.h"
 
 #include "Data.h"
+#include "NumericCast.h"
 
 struct PyHashObject {
   PyObject_HEAD;
@@ -66,6 +67,9 @@ static PyObject* PyHashSHA1(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashSHA1(arg0.get());
   return PyBytes_FromTWData(result);
@@ -87,6 +91,9 @@ static PyObject* PyHashSHA256(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashSHA256(arg0.get());
   return PyBytes_FromTWData(result);
@@ -108,6 +115,9 @@ static PyObject* PyHashSHA512(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashSHA512(arg0.get());
   return PyBytes_FromTWData(result);
@@ -130,6 +140,9 @@ static PyObject* PyHashSHA512_256(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashSHA512_256(arg0.get());
   return PyBytes_FromTWData(result);
@@ -152,6 +165,9 @@ static PyObject* PyHashKeccak256(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashKeccak256(arg0.get());
   return PyBytes_FromTWData(result);
@@ -174,6 +190,9 @@ static PyObject* PyHashKeccak512(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashKeccak512(arg0.get());
   return PyBytes_FromTWData(result);
@@ -195,6 +214,9 @@ static PyObject* PyHashSHA3_256(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashSHA3_256(arg0.get());
   return PyBytes_FromTWData(result);
@@ -216,6 +238,9 @@ static PyObject* PyHashSHA3_512(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashSHA3_512(arg0.get());
   return PyBytes_FromTWData(result);
@@ -237,6 +262,9 @@ static PyObject* PyHashRIPEMD(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashRIPEMD(arg0.get());
   return PyBytes_FromTWData(result);
@@ -258,6 +286,9 @@ static PyObject* PyHashBlake256(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashBlake256(arg0.get());
   return PyBytes_FromTWData(result);
@@ -280,12 +311,28 @@ static PyObject* PyHashBlake2b(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<size_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a size_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   TWDataPtr result = TWHashBlake2b(arg0.get(), arg1);
   return PyBytes_FromTWData(result);
@@ -308,6 +355,9 @@ static PyObject* PyHashGroestl512(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashGroestl512(arg0.get());
   return PyBytes_FromTWData(result);
@@ -330,12 +380,28 @@ static PyObject* PyHashXXHash64(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLongLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<uint64_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a uint64_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   TWDataPtr result = TWHashXXHash64(arg0.get(), arg1);
   return PyBytes_FromTWData(result);
@@ -358,6 +424,9 @@ static PyObject* PyHashTwoXXHash64Concat(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashTwoXXHash64Concat(arg0.get());
   return PyBytes_FromTWData(result);
@@ -380,6 +449,9 @@ static PyObject* PyHashSHA256SHA256(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashSHA256SHA256(arg0.get());
   return PyBytes_FromTWData(result);
@@ -402,6 +474,9 @@ static PyObject* PyHashSHA256RIPEMD(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashSHA256RIPEMD(arg0.get());
   return PyBytes_FromTWData(result);
@@ -424,6 +499,9 @@ static PyObject* PyHashSHA3_256RIPEMD(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashSHA3_256RIPEMD(arg0.get());
   return PyBytes_FromTWData(result);
@@ -446,6 +524,9 @@ static PyObject* PyHashBlake256Blake256(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashBlake256Blake256(arg0.get());
   return PyBytes_FromTWData(result);
@@ -468,6 +549,9 @@ static PyObject* PyHashBlake256RIPEMD(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashBlake256RIPEMD(arg0.get());
   return PyBytes_FromTWData(result);
@@ -490,6 +574,9 @@ static PyObject* PyHashGroestl512Groestl512(PyHashObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWHashGroestl512Groestl512(arg0.get());
   return PyBytes_FromTWData(result);

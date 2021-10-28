@@ -37,7 +37,7 @@ for line in open(os.path.join(WALLET_CORE_BUILD, 'CMakeCache.txt')):
         link_args.append('--coverage')
         break
 
-compile_args = []
+compile_args = [ '-std=c++17' ]
 
 module = Extension('walletcore',
                     include_dirs = [ WALLET_CORE_INCLUDE ],

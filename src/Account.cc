@@ -128,24 +128,36 @@ static PyObject* PyAccountCreate(PyAccountObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyCoinType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
     return nullptr;
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyUnicode_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Unicode");
     return nullptr;
   }
   auto arg2 = PyUnicode_GetTWString(args[2]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyUnicode_Check(args[3])) {
     PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type Unicode");
     return nullptr;
   }
   auto arg3 = PyUnicode_GetTWString(args[3]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWAccount* result = TWAccountCreate(arg0.get(), arg1, arg2.get(), arg3.get());
   return PyAccount_FromTWAccount(result);

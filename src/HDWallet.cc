@@ -23,6 +23,7 @@
 #include "Curve.h"
 #include "Data.h"
 #include "HDVersion.h"
+#include "NumericCast.h"
 #include "PrivateKey.h"
 #include "PublicKey.h"
 #include "Purpose.h"
@@ -128,6 +129,9 @@ static PyObject* PyHDWalletGetMasterKey(PyHDWalletObject* self,
     return nullptr;
   }
   auto arg0 = PyCurve_GetTWCurve(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWPrivateKey* result = TWHDWalletGetMasterKey(self->value, arg0);
   return PyPrivateKey_FromTWPrivateKey(result);
@@ -151,6 +155,9 @@ static PyObject* PyHDWalletGetKeyForCoin(PyHDWalletObject* self,
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWPrivateKey* result = TWHDWalletGetKeyForCoin(self->value, arg0);
   return PyPrivateKey_FromTWPrivateKey(result);
@@ -174,6 +181,9 @@ static PyObject* PyHDWalletGetAddressForCoin(PyHDWalletObject* self,
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWStringPtr result = TWHDWalletGetAddressForCoin(self->value, arg0);
   return PyUnicode_FromTWString(result);
@@ -197,12 +207,18 @@ static PyObject* PyHDWalletGetKey(PyHDWalletObject* self,
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
     return nullptr;
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWPrivateKey* result = TWHDWalletGetKey(self->value, arg0, arg1.get());
   return PyPrivateKey_FromTWPrivateKey(result);
@@ -227,24 +243,66 @@ static PyObject* PyHDWalletGetDerivedKey(PyHDWalletObject* self,
     return nullptr;
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<uint32_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a uint32_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   if (!PyLong_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Long");
     return nullptr;
   }
-  auto arg2 = PyLong_AsLong(args[2]);
+  auto unchecked_arg2 = PyLong_AsLongLong(args[2]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg2 = NumericCast<uint32_t>(unchecked_arg2);
+  if (!checked_arg2) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 2 doesn't fit in a uint32_t.",
+                 unchecked_arg2);
+    return nullptr;
+  }
+
+  const auto& arg2 = checked_arg2.value();
 
   if (!PyLong_Check(args[3])) {
     PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type Long");
     return nullptr;
   }
-  auto arg3 = PyLong_AsLong(args[3]);
+  auto unchecked_arg3 = PyLong_AsLongLong(args[3]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg3 = NumericCast<uint32_t>(unchecked_arg3);
+  if (!checked_arg3) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 3 doesn't fit in a uint32_t.",
+                 unchecked_arg3);
+    return nullptr;
+  }
+
+  const auto& arg3 = checked_arg3.value();
 
   TWPrivateKey* result =
       TWHDWalletGetDerivedKey(self->value, arg0, arg1, arg2, arg3);
@@ -269,18 +327,27 @@ static PyObject* PyHDWalletGetExtendedPrivateKey(PyHDWalletObject* self,
     return nullptr;
   }
   auto arg0 = PyPurpose_GetTWPurpose(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyCoinType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
     return nullptr;
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyHDVersion_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type HDVersion");
     return nullptr;
   }
   auto arg2 = PyHDVersion_GetTWHDVersion(args[2]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWStringPtr result =
       TWHDWalletGetExtendedPrivateKey(self->value, arg0, arg1, arg2);
@@ -305,18 +372,27 @@ static PyObject* PyHDWalletGetExtendedPublicKey(PyHDWalletObject* self,
     return nullptr;
   }
   auto arg0 = PyPurpose_GetTWPurpose(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyCoinType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
     return nullptr;
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyHDVersion_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type HDVersion");
     return nullptr;
   }
   auto arg2 = PyHDVersion_GetTWHDVersion(args[2]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWStringPtr result =
       TWHDWalletGetExtendedPublicKey(self->value, arg0, arg1, arg2);
@@ -339,13 +415,29 @@ static PyObject* PyHDWalletCreate(PyHDWalletObject* self,
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
     return nullptr;
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWHDWallet* result = TWHDWalletCreate(arg0, arg1.get());
   return PyHDWallet_FromTWHDWallet(result);
@@ -369,12 +461,18 @@ static PyObject* PyHDWalletCreateWithMnemonic(PyHDWalletObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
     return nullptr;
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWHDWallet* result = TWHDWalletCreateWithMnemonic(arg0.get(), arg1.get());
   return PyHDWallet_FromTWHDWallet(result);
@@ -398,18 +496,27 @@ static PyObject* PyHDWalletCreateWithMnemonicCheck(PyHDWalletObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
     return nullptr;
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBool_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bool");
     return nullptr;
   }
   auto arg2 = PyBool_IsTrue(args[2]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWHDWallet* result =
       TWHDWalletCreateWithMnemonicCheck(arg0.get(), arg1.get(), arg2);
@@ -434,12 +541,18 @@ static PyObject* PyHDWalletCreateWithEntropy(PyHDWalletObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
     return nullptr;
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWHDWallet* result = TWHDWalletCreateWithEntropy(arg0.get(), arg1.get());
   return PyHDWallet_FromTWHDWallet(result);
@@ -463,18 +576,27 @@ static PyObject* PyHDWalletGetPublicKeyFromExtended(PyHDWalletObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyCoinType_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
     return nullptr;
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyUnicode_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Unicode");
     return nullptr;
   }
   auto arg2 = PyUnicode_GetTWString(args[2]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWPublicKey* result =
       TWHDWalletGetPublicKeyFromExtended(arg0.get(), arg1, arg2.get());

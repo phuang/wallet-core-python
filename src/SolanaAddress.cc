@@ -108,6 +108,9 @@ static PyObject* PySolanaAddressDefaultTokenAddress(PySolanaAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWStringPtr result =
       TWSolanaAddressDefaultTokenAddress(self->value, arg0.get());
@@ -131,6 +134,9 @@ static PyObject* PySolanaAddressCreateWithString(PySolanaAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWSolanaAddress* result = TWSolanaAddressCreateWithString(arg0.get());
   return PySolanaAddress_FromTWSolanaAddress(result);

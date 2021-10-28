@@ -110,6 +110,9 @@ static PyObject* PyPrivateKeyGetPublicKeySecp256k1(PyPrivateKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBool_IsTrue(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWPublicKey* result = TWPrivateKeyGetPublicKeySecp256k1(self->value, arg0);
   return PyPublicKey_FromTWPublicKey(result);
@@ -220,12 +223,18 @@ static PyObject* PyPrivateKeyGetSharedKey(PyPrivateKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyCurve_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Curve");
     return nullptr;
   }
   auto arg1 = PyCurve_GetTWCurve(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWPrivateKeyGetSharedKey(self->value, arg0, arg1);
   return PyBytes_FromTWData(result);
@@ -249,12 +258,18 @@ static PyObject* PyPrivateKeySign(PyPrivateKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyCurve_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Curve");
     return nullptr;
   }
   auto arg1 = PyCurve_GetTWCurve(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWPrivateKeySign(self->value, arg0.get(), arg1);
   return PyBytes_FromTWData(result);
@@ -278,12 +293,18 @@ static PyObject* PyPrivateKeySignAsDER(PyPrivateKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyCurve_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Curve");
     return nullptr;
   }
   auto arg1 = PyCurve_GetTWCurve(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWPrivateKeySignAsDER(self->value, arg0.get(), arg1);
   return PyBytes_FromTWData(result);
@@ -307,12 +328,18 @@ static PyObject* PyPrivateKeySignSchnorr(PyPrivateKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyCurve_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Curve");
     return nullptr;
   }
   auto arg1 = PyCurve_GetTWCurve(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result = TWPrivateKeySignSchnorr(self->value, arg0.get(), arg1);
   return PyBytes_FromTWData(result);
@@ -351,6 +378,9 @@ static PyObject* PyPrivateKeyCreateWithData(PyPrivateKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWPrivateKey* result = TWPrivateKeyCreateWithData(arg0.get());
   return PyPrivateKey_FromTWPrivateKey(result);
@@ -373,6 +403,9 @@ static PyObject* PyPrivateKeyCreateCopy(PyPrivateKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyPrivateKey_GetTWPrivateKey(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWPrivateKey* result = TWPrivateKeyCreateCopy(arg0);
   return PyPrivateKey_FromTWPrivateKey(result);
@@ -395,12 +428,18 @@ static PyObject* PyPrivateKeyIsValid(PyPrivateKeyObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyCurve_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Curve");
     return nullptr;
   }
   auto arg1 = PyCurve_GetTWCurve(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   bool result = TWPrivateKeyIsValid(arg0.get(), arg1);
   return PyBool_FromLong(result);

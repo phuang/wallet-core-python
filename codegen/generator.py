@@ -123,46 +123,71 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
     return nullptr;
   }
   auto arg${i} = ${get_ctype}(args[${i}]);
+  if (PyErr_Occurred()) {
+      return nullptr;
+  }
+''')
+        template_with_checked_cast = T('''
+  if (!Py${arg_type}_Check(args[${i}])) {
+    PyErr_SetString(PyExc_TypeError, "The arg ${i} is not in type ${arg_type}");
+    return nullptr;
+  }
+  auto unchecked_arg${i} = ${get_ctype}(args[${i}]);
+  if (PyErr_Occurred()) {
+      return nullptr;
+  }
+
+  auto checked_arg${i} = NumericCast<${arg_ctype}>(unchecked_arg${i});
+  if (!checked_arg${i}) {
+      PyErr_Format(PyExc_ValueError, "The value %lld of arg ${i} doesn't fit in a ${arg_ctype}.", unchecked_arg${i});
+      return nullptr;
+  }
+
+  const auto& arg${i} = checked_arg${i}.value();
 ''')
         call_args = []
         used_types = set()
+        int_types = set(['int8_t', 'uint8_t', 'int16_t', 'uint16_t', 'int', 'int32_t', 'uint32_t', 'size_t', 'int64_t', 'uint64_t'])
         for i, arg in enumerate(args):
+            need_checked_cast = False
             if arg._type._name == 'bool':
                 arg_type  = 'Bool'
+                arg_ctype = 'bool'
                 get_ctype = 'PyBool_IsTrue'
                 call_args.append('arg{}'.format(i))
                 used_types.add('Bool')
-            elif arg._type._name in ('int8_t', 'uint8_t', 'int16_t', 'uint16_t', 'int', 'int32_t', 'uint32_t', 'size_t'):
-                # Check overflow
+            elif arg._type._name in int_types:
                 arg_type  = 'Long'
-                get_ctype = 'PyLong_AsLong'
-                call_args.append('arg{}'.format(i))
-            elif arg._type._name in ('int64_t', 'uint64_t'):
-                # Check overflow
-                arg_type  = 'Long'
+                arg_ctype = arg._type._name
                 get_ctype = 'PyLong_AsLongLong'
                 call_args.append('arg{}'.format(i))
+                used_types.add('NumericCast')
+                need_checked_cast = True
             elif arg._type._name == 'TWString':
                 assert arg._type._is_ptr
                 arg_type  = 'Unicode'
+                arg_ctype = 'TWStringPtr'
                 get_ctype = 'PyUnicode_GetTWString'
                 call_args.append('arg{}.get()'.format(i))
                 used_types.add('String')
             elif arg._type._name == 'TWData':
                 assert arg._type._is_ptr
                 arg_type  = 'Bytes'
+                arg_ctype = 'TWDataPtr'
                 get_ctype = 'PyBytes_GetTWData'
                 call_args.append('arg{}.get()'.format(i))
                 used_types.add('Data')
             elif arg._type._type == 'enum':
                 assert not arg._type._is_ptr
                 arg_type  = arg._type._name[2:]
+                arg_ctype = arg._type._name
                 get_ctype = 'Py{0}_GetTW{0}'.format(arg_type)
                 call_args.append('arg{}'.format(i))
                 used_types.add(arg_type)
             elif arg._type._type == 'struct':
                 assert arg._type._is_ptr
                 arg_type  = arg._type._name[2:]
+                arg_ctype = arg._type._name + '*'
                 get_ctype = 'Py{0}_GetTW{0}'.format(arg_type)
                 call_args.append('arg{}'.format(i))
                 used_types.add(arg_type)
@@ -170,10 +195,12 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 raise Exception('Not support argument type:' + str(arg._type))
             values = {
                 'arg_type' : arg_type,
+                'arg_ctype' : arg_ctype,
                 'i' : i,
                 'get_ctype' : get_ctype,
             }
-            prepare_args.append(template.substitute(values))
+            t = template_with_checked_cast if need_checked_cast else template
+            prepare_args.append(t.substitute(values))
 
         prepare_args = '\n'.join(prepare_args)
         call_args = ', '.join(call_args)

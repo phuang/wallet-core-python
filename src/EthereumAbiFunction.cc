@@ -20,6 +20,7 @@
 
 #include "Bool.h"
 #include "Data.h"
+#include "NumericCast.h"
 #include "String.h"
 
 struct PyEthereumAbiFunctionObject {
@@ -120,13 +121,29 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt8(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<uint8_t>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a uint8_t.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddParamUInt8(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -150,13 +167,29 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt16(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<uint16_t>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a uint16_t.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddParamUInt16(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -180,13 +213,29 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt32(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<uint32_t>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a uint32_t.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddParamUInt32(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -210,13 +259,29 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt64(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLongLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<uint64_t>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a uint64_t.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddParamUInt64(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -241,12 +306,18 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt256(
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result =
       TWEthereumAbiFunctionAddParamUInt256(self->value, arg0.get(), arg1);
@@ -271,19 +342,38 @@ static PyObject* PyEthereumAbiFunctionAddParamUIntN(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBytes_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBool_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bool");
     return nullptr;
   }
   auto arg2 = PyBool_IsTrue(args[2]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result =
       TWEthereumAbiFunctionAddParamUIntN(self->value, arg0, arg1.get(), arg2);
@@ -308,13 +398,29 @@ static PyObject* PyEthereumAbiFunctionAddParamInt8(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int8_t>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int8_t.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddParamInt8(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -338,13 +444,29 @@ static PyObject* PyEthereumAbiFunctionAddParamInt16(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int16_t>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int16_t.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddParamInt16(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -368,13 +490,29 @@ static PyObject* PyEthereumAbiFunctionAddParamInt32(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int32_t>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int32_t.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddParamInt32(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -398,13 +536,29 @@ static PyObject* PyEthereumAbiFunctionAddParamInt64(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLongLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int64_t>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int64_t.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddParamInt64(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -429,12 +583,18 @@ static PyObject* PyEthereumAbiFunctionAddParamInt256(
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result =
       TWEthereumAbiFunctionAddParamInt256(self->value, arg0.get(), arg1);
@@ -459,19 +619,38 @@ static PyObject* PyEthereumAbiFunctionAddParamIntN(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBytes_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBool_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bool");
     return nullptr;
   }
   auto arg2 = PyBool_IsTrue(args[2]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result =
       TWEthereumAbiFunctionAddParamIntN(self->value, arg0, arg1.get(), arg2);
@@ -497,12 +676,18 @@ static PyObject* PyEthereumAbiFunctionAddParamBool(
     return nullptr;
   }
   auto arg0 = PyBool_IsTrue(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddParamBool(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -527,12 +712,18 @@ static PyObject* PyEthereumAbiFunctionAddParamString(
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result =
       TWEthereumAbiFunctionAddParamString(self->value, arg0.get(), arg1);
@@ -558,12 +749,18 @@ static PyObject* PyEthereumAbiFunctionAddParamAddress(
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result =
       TWEthereumAbiFunctionAddParamAddress(self->value, arg0.get(), arg1);
@@ -589,12 +786,18 @@ static PyObject* PyEthereumAbiFunctionAddParamBytes(
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result =
       TWEthereumAbiFunctionAddParamBytes(self->value, arg0.get(), arg1);
@@ -619,19 +822,38 @@ static PyObject* PyEthereumAbiFunctionAddParamBytesFix(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<size_t>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a size_t.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBytes_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBool_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bool");
     return nullptr;
   }
   auto arg2 = PyBool_IsTrue(args[2]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddParamBytesFix(self->value, arg0,
                                                      arg1.get(), arg2);
@@ -657,6 +879,9 @@ static PyObject* PyEthereumAbiFunctionAddParamArray(
     return nullptr;
   }
   auto arg0 = PyBool_IsTrue(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddParamArray(self->value, arg0);
   return PyLong_FromLong(result);
@@ -680,13 +905,29 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt8(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   uint8_t result = TWEthereumAbiFunctionGetParamUInt8(self->value, arg0, arg1);
   return PyLong_FromLong(result);
@@ -710,13 +951,29 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt64(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   uint64_t result =
       TWEthereumAbiFunctionGetParamUInt64(self->value, arg0, arg1);
@@ -741,13 +998,29 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt256(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result =
       TWEthereumAbiFunctionGetParamUInt256(self->value, arg0, arg1);
@@ -772,13 +1045,29 @@ static PyObject* PyEthereumAbiFunctionGetParamBool(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   bool result = TWEthereumAbiFunctionGetParamBool(self->value, arg0, arg1);
   return PyBool_FromLong(result);
@@ -802,13 +1091,29 @@ static PyObject* PyEthereumAbiFunctionGetParamString(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWStringPtr result =
       TWEthereumAbiFunctionGetParamString(self->value, arg0, arg1);
@@ -833,13 +1138,29 @@ static PyObject* PyEthereumAbiFunctionGetParamAddress(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWDataPtr result =
       TWEthereumAbiFunctionGetParamAddress(self->value, arg0, arg1);
@@ -864,13 +1185,39 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt8(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<uint8_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a uint8_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamUInt8(self->value, arg0, arg1);
@@ -895,13 +1242,39 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt16(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<uint16_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a uint16_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamUInt16(self->value, arg0, arg1);
@@ -926,13 +1299,39 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt32(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<uint32_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a uint32_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamUInt32(self->value, arg0, arg1);
@@ -957,13 +1356,39 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt64(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLongLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<uint64_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a uint64_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamUInt64(self->value, arg0, arg1);
@@ -988,13 +1413,29 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt256(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBytes_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddInArrayParamUInt256(self->value, arg0,
                                                            arg1.get());
@@ -1019,19 +1460,48 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUIntN(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<int>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a int.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   if (!PyBytes_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
   auto arg2 = PyBytes_GetTWData(args[2]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddInArrayParamUIntN(self->value, arg0,
                                                          arg1, arg2.get());
@@ -1056,13 +1526,39 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt8(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<int8_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a int8_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamInt8(self->value, arg0, arg1);
@@ -1087,13 +1583,39 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt16(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<int16_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a int16_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamInt16(self->value, arg0, arg1);
@@ -1118,13 +1640,39 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt32(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<int32_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a int32_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamInt32(self->value, arg0, arg1);
@@ -1149,13 +1697,39 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt64(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLongLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<int64_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a int64_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamInt64(self->value, arg0, arg1);
@@ -1180,13 +1754,29 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt256(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBytes_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamInt256(self->value, arg0, arg1.get());
@@ -1211,19 +1801,48 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamIntN(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<int>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a int.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   if (!PyBytes_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
   auto arg2 = PyBytes_GetTWData(args[2]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddInArrayParamIntN(self->value, arg0, arg1,
                                                         arg2.get());
@@ -1248,13 +1867,29 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBool(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBool_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bool");
     return nullptr;
   }
   auto arg1 = PyBool_IsTrue(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamBool(self->value, arg0, arg1);
@@ -1279,13 +1914,29 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamString(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyUnicode_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
     return nullptr;
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamString(self->value, arg0, arg1.get());
@@ -1310,13 +1961,29 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamAddress(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBytes_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddInArrayParamAddress(self->value, arg0,
                                                            arg1.get());
@@ -1341,13 +2008,29 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytes(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyBytes_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
     return nullptr;
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result =
       TWEthereumAbiFunctionAddInArrayParamBytes(self->value, arg0, arg1.get());
@@ -1372,19 +2055,48 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytesFix(
     PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
     return nullptr;
   }
-  auto arg0 = PyLong_AsLong(args[0]);
+  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
+  if (!checked_arg0) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 0 doesn't fit in a int.",
+                 unchecked_arg0);
+    return nullptr;
+  }
+
+  const auto& arg0 = checked_arg0.value();
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<size_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a size_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   if (!PyBytes_Check(args[2])) {
     PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
     return nullptr;
   }
   auto arg2 = PyBytes_GetTWData(args[2]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   int result = TWEthereumAbiFunctionAddInArrayParamBytesFix(self->value, arg0,
                                                             arg1, arg2.get());
@@ -1410,6 +2122,9 @@ static PyObject* PyEthereumAbiFunctionCreateWithString(
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWEthereumAbiFunction* result =
       TWEthereumAbiFunctionCreateWithString(arg0.get());

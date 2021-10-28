@@ -18,6 +18,7 @@
 
 #include "RippleXAddress.h"
 
+#include "NumericCast.h"
 #include "PublicKey.h"
 #include "String.h"
 
@@ -116,12 +117,18 @@ static PyObject* PyRippleXAddressEqual(PyRippleXAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyRippleXAddress_GetTWRippleXAddress(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyRippleXAddress_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type RippleXAddress");
     return nullptr;
   }
   auto arg1 = PyRippleXAddress_GetTWRippleXAddress(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   bool result = TWRippleXAddressEqual(arg0, arg1);
   return PyBool_FromLong(result);
@@ -144,6 +151,9 @@ static PyObject* PyRippleXAddressIsValidString(PyRippleXAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   bool result = TWRippleXAddressIsValidString(arg0.get());
   return PyBool_FromLong(result);
@@ -167,6 +177,9 @@ static PyObject* PyRippleXAddressCreateWithString(PyRippleXAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWRippleXAddress* result = TWRippleXAddressCreateWithString(arg0.get());
   return PyRippleXAddress_FromTWRippleXAddress(result);
@@ -191,12 +204,28 @@ static PyObject* PyRippleXAddressCreateWithPublicKey(
     return nullptr;
   }
   auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<uint32_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a uint32_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   TWRippleXAddress* result = TWRippleXAddressCreateWithPublicKey(arg0, arg1);
   return PyRippleXAddress_FromTWRippleXAddress(result);

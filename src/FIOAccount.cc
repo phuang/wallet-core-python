@@ -106,6 +106,9 @@ static PyObject* PyFIOAccountCreateWithString(PyFIOAccountObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWFIOAccount* result = TWFIOAccountCreateWithString(arg0.get());
   return PyFIOAccount_FromTWFIOAccount(result);

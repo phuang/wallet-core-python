@@ -19,6 +19,7 @@
 #include "BitcoinAddress.h"
 
 #include "Data.h"
+#include "NumericCast.h"
 #include "PublicKey.h"
 #include "String.h"
 
@@ -124,12 +125,18 @@ static PyObject* PyBitcoinAddressEqual(PyBitcoinAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyBitcoinAddress_GetTWBitcoinAddress(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyBitcoinAddress_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type BitcoinAddress");
     return nullptr;
   }
   auto arg1 = PyBitcoinAddress_GetTWBitcoinAddress(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   bool result = TWBitcoinAddressEqual(arg0, arg1);
   return PyBool_FromLong(result);
@@ -152,6 +159,9 @@ static PyObject* PyBitcoinAddressIsValid(PyBitcoinAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   bool result = TWBitcoinAddressIsValid(arg0.get());
   return PyBool_FromLong(result);
@@ -174,6 +184,9 @@ static PyObject* PyBitcoinAddressIsValidString(PyBitcoinAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   bool result = TWBitcoinAddressIsValidString(arg0.get());
   return PyBool_FromLong(result);
@@ -197,6 +210,9 @@ static PyObject* PyBitcoinAddressCreateWithString(PyBitcoinAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWBitcoinAddress* result = TWBitcoinAddressCreateWithString(arg0.get());
   return PyBitcoinAddress_FromTWBitcoinAddress(result);
@@ -219,6 +235,9 @@ static PyObject* PyBitcoinAddressCreateWithData(PyBitcoinAddressObject* self,
     return nullptr;
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   TWBitcoinAddress* result = TWBitcoinAddressCreateWithData(arg0.get());
   return PyBitcoinAddress_FromTWBitcoinAddress(result);
@@ -243,12 +262,28 @@ static PyObject* PyBitcoinAddressCreateWithPublicKey(
     return nullptr;
   }
   auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
 
   if (!PyLong_Check(args[1])) {
     PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
     return nullptr;
   }
-  auto arg1 = PyLong_AsLong(args[1]);
+  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+
+  auto checked_arg1 = NumericCast<uint8_t>(unchecked_arg1);
+  if (!checked_arg1) {
+    PyErr_Format(PyExc_ValueError,
+                 "The value %lld of arg 1 doesn't fit in a uint8_t.",
+                 unchecked_arg1);
+    return nullptr;
+  }
+
+  const auto& arg1 = checked_arg1.value();
 
   TWBitcoinAddress* result = TWBitcoinAddressCreateWithPublicKey(arg0, arg1);
   return PyBitcoinAddress_FromTWBitcoinAddress(result);
