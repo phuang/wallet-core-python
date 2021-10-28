@@ -136,7 +136,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
 
   auto checked_arg${i} = NumericCast<${arg_ctype}>(unchecked_arg${i});
   if (!checked_arg${i}) {
-      PyErr_Format(PyExc_ValueError, "The value %lld of arg ${i} doesn't fit in a ${arg_ctype}.", unchecked_arg${i});
+      PyErr_Format(PyExc_ValueError, "The value '%lld' of arg ${i} doesn't fit in a c type ${arg_ctype}.", unchecked_arg${i});
       return nullptr;
   }
 

@@ -208,7 +208,7 @@ static PyObject* PyGroestlcoinAddressCreateWithPublicKey(
   auto checked_arg1 = NumericCast<uint8_t>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a uint8_t.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type uint8_t.",
                  unchecked_arg1);
     return nullptr;
   }

@@ -241,7 +241,7 @@ static PyObject* PyHDWalletGetDerivedKey(PyHDWalletObject* self,
   auto checked_arg1 = NumericCast<uint32_t>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a uint32_t.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type uint32_t.",
                  unchecked_arg1);
     return nullptr;
   }
@@ -260,7 +260,7 @@ static PyObject* PyHDWalletGetDerivedKey(PyHDWalletObject* self,
   auto checked_arg2 = NumericCast<uint32_t>(unchecked_arg2);
   if (!checked_arg2) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 2 doesn't fit in a uint32_t.",
+                 "The value '%lld' of arg 2 doesn't fit in a c type uint32_t.",
                  unchecked_arg2);
     return nullptr;
   }
@@ -279,7 +279,7 @@ static PyObject* PyHDWalletGetDerivedKey(PyHDWalletObject* self,
   auto checked_arg3 = NumericCast<uint32_t>(unchecked_arg3);
   if (!checked_arg3) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 3 doesn't fit in a uint32_t.",
+                 "The value '%lld' of arg 3 doesn't fit in a c type uint32_t.",
                  unchecked_arg3);
     return nullptr;
   }
@@ -387,7 +387,7 @@ static PyObject* PyHDWalletCreate(PyHDWalletObject* self,
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }

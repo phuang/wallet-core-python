@@ -140,7 +140,7 @@ static PyObject* PyStoredKeyAccount(PyStoredKeyObject* self,
   auto checked_arg0 = NumericCast<size_t>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a size_t.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type size_t.",
                  unchecked_arg0);
     return nullptr;
   }

@@ -99,7 +99,7 @@ static PyObject* PyEthereumAbiValueEncodeInt32(PyEthereumAbiValueObject* self,
   auto checked_arg0 = NumericCast<int32_t>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int32_t.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int32_t.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -134,7 +134,7 @@ static PyObject* PyEthereumAbiValueEncodeUInt32(PyEthereumAbiValueObject* self,
   auto checked_arg0 = NumericCast<uint32_t>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a uint32_t.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type uint32_t.",
                  unchecked_arg0);
     return nullptr;
   }

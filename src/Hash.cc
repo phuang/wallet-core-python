@@ -294,7 +294,7 @@ static PyObject* PyHashBlake2b(PyHashObject* self,
   auto checked_arg1 = NumericCast<size_t>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a size_t.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type size_t.",
                  unchecked_arg1);
     return nullptr;
   }
@@ -357,7 +357,7 @@ static PyObject* PyHashXXHash64(PyHashObject* self,
   auto checked_arg1 = NumericCast<uint64_t>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a uint64_t.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type uint64_t.",
                  unchecked_arg1);
     return nullptr;
   }

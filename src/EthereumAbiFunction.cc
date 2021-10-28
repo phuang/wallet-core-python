@@ -129,7 +129,7 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt8(
   auto checked_arg0 = NumericCast<uint8_t>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a uint8_t.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type uint8_t.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -172,7 +172,7 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt16(
   auto checked_arg0 = NumericCast<uint16_t>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a uint16_t.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type uint16_t.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -215,7 +215,7 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt32(
   auto checked_arg0 = NumericCast<uint32_t>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a uint32_t.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type uint32_t.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -258,7 +258,7 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt64(
   auto checked_arg0 = NumericCast<uint64_t>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a uint64_t.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type uint64_t.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -332,7 +332,7 @@ static PyObject* PyEthereumAbiFunctionAddParamUIntN(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -382,7 +382,7 @@ static PyObject* PyEthereumAbiFunctionAddParamInt8(
   auto checked_arg0 = NumericCast<int8_t>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int8_t.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int8_t.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -425,7 +425,7 @@ static PyObject* PyEthereumAbiFunctionAddParamInt16(
   auto checked_arg0 = NumericCast<int16_t>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int16_t.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int16_t.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -468,7 +468,7 @@ static PyObject* PyEthereumAbiFunctionAddParamInt32(
   auto checked_arg0 = NumericCast<int32_t>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int32_t.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int32_t.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -511,7 +511,7 @@ static PyObject* PyEthereumAbiFunctionAddParamInt64(
   auto checked_arg0 = NumericCast<int64_t>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int64_t.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int64_t.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -585,7 +585,7 @@ static PyObject* PyEthereumAbiFunctionAddParamIntN(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -758,7 +758,7 @@ static PyObject* PyEthereumAbiFunctionAddParamBytesFix(
   auto checked_arg0 = NumericCast<size_t>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a size_t.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type size_t.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -832,7 +832,7 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt8(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -875,7 +875,7 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt64(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -919,7 +919,7 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt256(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -963,7 +963,7 @@ static PyObject* PyEthereumAbiFunctionGetParamBool(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1006,7 +1006,7 @@ static PyObject* PyEthereumAbiFunctionGetParamString(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1050,7 +1050,7 @@ static PyObject* PyEthereumAbiFunctionGetParamAddress(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1094,7 +1094,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt8(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1113,7 +1113,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt8(
   auto checked_arg1 = NumericCast<uint8_t>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a uint8_t.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type uint8_t.",
                  unchecked_arg1);
     return nullptr;
   }
@@ -1151,7 +1151,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt16(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1170,7 +1170,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt16(
   auto checked_arg1 = NumericCast<uint16_t>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a uint16_t.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type uint16_t.",
                  unchecked_arg1);
     return nullptr;
   }
@@ -1208,7 +1208,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt32(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1227,7 +1227,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt32(
   auto checked_arg1 = NumericCast<uint32_t>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a uint32_t.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type uint32_t.",
                  unchecked_arg1);
     return nullptr;
   }
@@ -1265,7 +1265,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt64(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1284,7 +1284,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt64(
   auto checked_arg1 = NumericCast<uint64_t>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a uint64_t.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type uint64_t.",
                  unchecked_arg1);
     return nullptr;
   }
@@ -1322,7 +1322,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt256(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1366,7 +1366,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUIntN(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1385,7 +1385,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUIntN(
   auto checked_arg1 = NumericCast<int>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a int.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type int.",
                  unchecked_arg1);
     return nullptr;
   }
@@ -1429,7 +1429,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt8(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1448,7 +1448,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt8(
   auto checked_arg1 = NumericCast<int8_t>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a int8_t.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type int8_t.",
                  unchecked_arg1);
     return nullptr;
   }
@@ -1486,7 +1486,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt16(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1505,7 +1505,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt16(
   auto checked_arg1 = NumericCast<int16_t>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a int16_t.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type int16_t.",
                  unchecked_arg1);
     return nullptr;
   }
@@ -1543,7 +1543,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt32(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1562,7 +1562,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt32(
   auto checked_arg1 = NumericCast<int32_t>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a int32_t.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type int32_t.",
                  unchecked_arg1);
     return nullptr;
   }
@@ -1600,7 +1600,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt64(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1619,7 +1619,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt64(
   auto checked_arg1 = NumericCast<int64_t>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a int64_t.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type int64_t.",
                  unchecked_arg1);
     return nullptr;
   }
@@ -1657,7 +1657,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt256(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1701,7 +1701,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamIntN(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1720,7 +1720,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamIntN(
   auto checked_arg1 = NumericCast<int>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a int.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type int.",
                  unchecked_arg1);
     return nullptr;
   }
@@ -1764,7 +1764,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBool(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1808,7 +1808,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamString(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1852,7 +1852,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamAddress(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1896,7 +1896,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytes(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1940,7 +1940,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytesFix(
   auto checked_arg0 = NumericCast<int>(unchecked_arg0);
   if (!checked_arg0) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 0 doesn't fit in a int.",
+                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
                  unchecked_arg0);
     return nullptr;
   }
@@ -1959,7 +1959,7 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytesFix(
   auto checked_arg1 = NumericCast<size_t>(unchecked_arg1);
   if (!checked_arg1) {
     PyErr_Format(PyExc_ValueError,
-                 "The value %lld of arg 1 doesn't fit in a size_t.",
+                 "The value '%lld' of arg 1 doesn't fit in a c type size_t.",
                  unchecked_arg1);
     return nullptr;
   }
