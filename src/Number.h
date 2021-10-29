@@ -19,6 +19,9 @@
 #include <limits>
 #include <optional>
 
+#define PY_SSIZE_T_CLEAN
+#include <Python.h>
+
 template <typename Dst, typename Src>
 inline std::optional<Dst> NumericCast(Src value) {
   typedef std::numeric_limits<Dst> DstLim;
@@ -60,4 +63,26 @@ inline std::optional<Dst> NumericCast(Src value) {
 
   // limits have been checked, therefore safe to cast
   return std::make_optional(static_cast<Dst>(value));
+}
+
+template <typename T>
+inline std::optional<T> PyLongArg_ToNumber(PyObject* arg, int i, const char* type) {
+  if (!PyLong_Check(arg)) {
+    PyErr_Format(PyExc_TypeError, "The arg %d is not in a number", i);
+    return std::nullopt;
+  }
+
+  auto longlong = PyLong_AsLongLong(arg);
+  if (PyErr_Occurred()) {
+    return std::nullopt;
+  }
+
+  auto result = NumericCast<T>(longlong);
+  if (!result) {
+    PyErr_Format(PyExc_ValueError, "The arg %d value %lld doesn't fit in %s", i,
+                 longlong, type);
+    return std::nullopt;
+  }
+
+  return result;
 }

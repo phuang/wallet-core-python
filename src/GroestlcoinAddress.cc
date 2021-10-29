@@ -18,7 +18,7 @@
 
 #include "GroestlcoinAddress.h"
 
-#include "NumericCast.h"
+#include "Number.h"
 #include "PublicKey.h"
 #include "String.h"
 
@@ -196,23 +196,9 @@ static PyObject* PyGroestlcoinAddressCreateWithPublicKey(
   }
   auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
 
-  if (!PyLong_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
+  auto checked_arg1 = PyLongArg_ToNumber<uint8_t>(args[1], 1, "uint8_t");
+  if (!checked_arg1)
     return nullptr;
-  }
-  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
-
-  auto checked_arg1 = NumericCast<uint8_t>(unchecked_arg1);
-  if (!checked_arg1) {
-    PyErr_Format(PyExc_ValueError,
-                 "The value '%lld' of arg 1 doesn't fit in a c type uint8_t.",
-                 unchecked_arg1);
-    return nullptr;
-  }
-
   const auto& arg1 = checked_arg1.value();
 
   TWGroestlcoinAddress* result =

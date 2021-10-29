@@ -19,7 +19,7 @@
 #include "Hash.h"
 
 #include "Data.h"
-#include "NumericCast.h"
+#include "Number.h"
 
 struct PyHashObject {
   PyObject_HEAD;
@@ -282,23 +282,9 @@ static PyObject* PyHashBlake2b(PyHashObject* self,
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  if (!PyLong_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
+  auto checked_arg1 = PyLongArg_ToNumber<size_t>(args[1], 1, "size_t");
+  if (!checked_arg1)
     return nullptr;
-  }
-  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
-
-  auto checked_arg1 = NumericCast<size_t>(unchecked_arg1);
-  if (!checked_arg1) {
-    PyErr_Format(PyExc_ValueError,
-                 "The value '%lld' of arg 1 doesn't fit in a c type size_t.",
-                 unchecked_arg1);
-    return nullptr;
-  }
-
   const auto& arg1 = checked_arg1.value();
 
   TWDataPtr result = TWHashBlake2b(arg0.get(), arg1);
@@ -345,23 +331,9 @@ static PyObject* PyHashXXHash64(PyHashObject* self,
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  if (!PyLong_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
+  auto checked_arg1 = PyLongArg_ToNumber<uint64_t>(args[1], 1, "uint64_t");
+  if (!checked_arg1)
     return nullptr;
-  }
-  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
-
-  auto checked_arg1 = NumericCast<uint64_t>(unchecked_arg1);
-  if (!checked_arg1) {
-    PyErr_Format(PyExc_ValueError,
-                 "The value '%lld' of arg 1 doesn't fit in a c type uint64_t.",
-                 unchecked_arg1);
-    return nullptr;
-  }
-
   const auto& arg1 = checked_arg1.value();
 
   TWDataPtr result = TWHashXXHash64(arg0.get(), arg1);

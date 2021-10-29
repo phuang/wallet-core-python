@@ -76,7 +76,7 @@ static PyObject* PyCoinTypeConfigurationGetSymbol(
 
 // static method function for GetDecimals
 static const char PyCoinTypeConfigurationGetDecimals_doc[] =
-    "int TWCoinTypeConfigurationGetDecimals(enum TWCoinType type)";
+    "int32_t TWCoinTypeConfigurationGetDecimals(enum TWCoinType type)";
 static PyObject* PyCoinTypeConfigurationGetDecimals(
     PyCoinTypeConfigurationObject* self,
     PyObject* const* args,
@@ -93,7 +93,7 @@ static PyObject* PyCoinTypeConfigurationGetDecimals(
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
 
-  int result = TWCoinTypeConfigurationGetDecimals(arg0);
+  int32_t result = TWCoinTypeConfigurationGetDecimals(arg0);
   return PyLong_FromLong(result);
 }
 

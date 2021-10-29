@@ -23,7 +23,7 @@
 #include "Curve.h"
 #include "Data.h"
 #include "HDVersion.h"
-#include "NumericCast.h"
+#include "Number.h"
 #include "PrivateKey.h"
 #include "PublicKey.h"
 #include "Purpose.h"
@@ -229,61 +229,19 @@ static PyObject* PyHDWalletGetDerivedKey(PyHDWalletObject* self,
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
 
-  if (!PyLong_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Long");
+  auto checked_arg1 = PyLongArg_ToNumber<uint32_t>(args[1], 1, "uint32_t");
+  if (!checked_arg1)
     return nullptr;
-  }
-  auto unchecked_arg1 = PyLong_AsLongLong(args[1]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
-
-  auto checked_arg1 = NumericCast<uint32_t>(unchecked_arg1);
-  if (!checked_arg1) {
-    PyErr_Format(PyExc_ValueError,
-                 "The value '%lld' of arg 1 doesn't fit in a c type uint32_t.",
-                 unchecked_arg1);
-    return nullptr;
-  }
-
   const auto& arg1 = checked_arg1.value();
 
-  if (!PyLong_Check(args[2])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Long");
+  auto checked_arg2 = PyLongArg_ToNumber<uint32_t>(args[2], 2, "uint32_t");
+  if (!checked_arg2)
     return nullptr;
-  }
-  auto unchecked_arg2 = PyLong_AsLongLong(args[2]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
-
-  auto checked_arg2 = NumericCast<uint32_t>(unchecked_arg2);
-  if (!checked_arg2) {
-    PyErr_Format(PyExc_ValueError,
-                 "The value '%lld' of arg 2 doesn't fit in a c type uint32_t.",
-                 unchecked_arg2);
-    return nullptr;
-  }
-
   const auto& arg2 = checked_arg2.value();
 
-  if (!PyLong_Check(args[3])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type Long");
+  auto checked_arg3 = PyLongArg_ToNumber<uint32_t>(args[3], 3, "uint32_t");
+  if (!checked_arg3)
     return nullptr;
-  }
-  auto unchecked_arg3 = PyLong_AsLongLong(args[3]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
-
-  auto checked_arg3 = NumericCast<uint32_t>(unchecked_arg3);
-  if (!checked_arg3) {
-    PyErr_Format(PyExc_ValueError,
-                 "The value '%lld' of arg 3 doesn't fit in a c type uint32_t.",
-                 unchecked_arg3);
-    return nullptr;
-  }
-
   const auto& arg3 = checked_arg3.value();
 
   TWPrivateKey* result =
@@ -365,7 +323,8 @@ static PyObject* PyHDWalletGetExtendedPublicKey(PyHDWalletObject* self,
 
 // static method function for Create
 static const char PyHDWalletCreate_doc[] =
-    "struct TWHDWallet* TWHDWalletCreate(int strength, TWString* passphrase)";
+    "struct TWHDWallet* TWHDWalletCreate(int32_t strength, TWString* "
+    "passphrase)";
 static PyObject* PyHDWalletCreate(PyHDWalletObject* self,
                                   PyObject* const* args,
                                   Py_ssize_t nargs) {
@@ -375,23 +334,9 @@ static PyObject* PyHDWalletCreate(PyHDWalletObject* self,
     return nullptr;
   }
 
-  if (!PyLong_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
+  auto checked_arg0 = PyLongArg_ToNumber<int32_t>(args[0], 0, "int32_t");
+  if (!checked_arg0)
     return nullptr;
-  }
-  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
-
-  auto checked_arg0 = NumericCast<int>(unchecked_arg0);
-  if (!checked_arg0) {
-    PyErr_Format(PyExc_ValueError,
-                 "The value '%lld' of arg 0 doesn't fit in a c type int.",
-                 unchecked_arg0);
-    return nullptr;
-  }
-
   const auto& arg0 = checked_arg0.value();
 
   if (!PyUnicode_Check(args[1])) {

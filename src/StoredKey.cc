@@ -22,7 +22,7 @@
 #include "CoinType.h"
 #include "Data.h"
 #include "HDWallet.h"
-#include "NumericCast.h"
+#include "Number.h"
 #include "PrivateKey.h"
 #include "String.h"
 
@@ -128,23 +128,9 @@ static PyObject* PyStoredKeyAccount(PyStoredKeyObject* self,
     return nullptr;
   }
 
-  if (!PyLong_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
+  auto checked_arg0 = PyLongArg_ToNumber<size_t>(args[0], 0, "size_t");
+  if (!checked_arg0)
     return nullptr;
-  }
-  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
-
-  auto checked_arg0 = NumericCast<size_t>(unchecked_arg0);
-  if (!checked_arg0) {
-    PyErr_Format(PyExc_ValueError,
-                 "The value '%lld' of arg 0 doesn't fit in a c type size_t.",
-                 unchecked_arg0);
-    return nullptr;
-  }
-
   const auto& arg0 = checked_arg0.value();
 
   TWAccount* result = TWStoredKeyAccount(self->value, arg0);

@@ -20,7 +20,7 @@
 
 #include "Bool.h"
 #include "Data.h"
-#include "NumericCast.h"
+#include "Number.h"
 #include "String.h"
 
 struct PyEthereumAbiValueObject {
@@ -87,23 +87,9 @@ static PyObject* PyEthereumAbiValueEncodeInt32(PyEthereumAbiValueObject* self,
     return nullptr;
   }
 
-  if (!PyLong_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
+  auto checked_arg0 = PyLongArg_ToNumber<int32_t>(args[0], 0, "int32_t");
+  if (!checked_arg0)
     return nullptr;
-  }
-  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
-
-  auto checked_arg0 = NumericCast<int32_t>(unchecked_arg0);
-  if (!checked_arg0) {
-    PyErr_Format(PyExc_ValueError,
-                 "The value '%lld' of arg 0 doesn't fit in a c type int32_t.",
-                 unchecked_arg0);
-    return nullptr;
-  }
-
   const auto& arg0 = checked_arg0.value();
 
   TWDataPtr result = TWEthereumAbiValueEncodeInt32(arg0);
@@ -122,23 +108,9 @@ static PyObject* PyEthereumAbiValueEncodeUInt32(PyEthereumAbiValueObject* self,
     return nullptr;
   }
 
-  if (!PyLong_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Long");
+  auto checked_arg0 = PyLongArg_ToNumber<uint32_t>(args[0], 0, "uint32_t");
+  if (!checked_arg0)
     return nullptr;
-  }
-  auto unchecked_arg0 = PyLong_AsLongLong(args[0]);
-  if (PyErr_Occurred()) {
-    return nullptr;
-  }
-
-  auto checked_arg0 = NumericCast<uint32_t>(unchecked_arg0);
-  if (!checked_arg0) {
-    PyErr_Format(PyExc_ValueError,
-                 "The value '%lld' of arg 0 doesn't fit in a c type uint32_t.",
-                 unchecked_arg0);
-    return nullptr;
-  }
-
   const auto& arg0 = checked_arg0.value();
 
   TWDataPtr result = TWEthereumAbiValueEncodeUInt32(arg0);

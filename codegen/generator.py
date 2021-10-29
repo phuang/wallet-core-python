@@ -124,24 +124,10 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
   }
   auto arg${i} = ${get_ctype}(args[${i}]);
 ''')
-        template_with_checked_cast = T('''
-  if (!Py${arg_type}_Check(args[${i}])) {
-    PyErr_SetString(PyExc_TypeError, "The arg ${i} is not in type ${arg_type}");
-    return nullptr;
-  }
-  auto unchecked_arg${i} = ${get_ctype}(args[${i}]);
-  if (PyErr_Occurred()) {
+        template_for_number = T('''
+  auto checked_arg${i} = PyLongArg_ToNumber<${arg_ctype}>(args[${i}], ${i}, "${arg_ctype}");
+  if (!checked_arg${i})
       return nullptr;
-  }
-
-  auto checked_arg${i} = NumericCast<${arg_ctype}>(unchecked_arg${i});
-  if (!checked_arg${i}) {
-      PyErr_Format(PyExc_ValueError,
-                   "The value '%lld' of arg ${i} doesn't fit in a c type ${arg_ctype}.",
-                   unchecked_arg${i});
-      return nullptr;
-  }
-
   const auto& arg${i} = checked_arg${i}.value();
 ''')
         call_args = []
@@ -151,7 +137,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
         }
         used_types = set()
         for i, arg in enumerate(args):
-            need_checked_cast = False
+            is_number = False
             if arg._type._name == 'bool':
                 arg_type  = 'Bool'
                 arg_ctype = 'bool'
@@ -163,8 +149,8 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 arg_ctype = arg._type._name
                 get_ctype = 'PyLong_AsLongLong'
                 call_args.append('arg{}'.format(i))
-                used_types.add('NumericCast')
-                need_checked_cast = True
+                used_types.add('Number')
+                is_number = True
             elif arg._type._name == 'TWString':
                 assert arg._type._is_ptr
                 arg_type  = 'Unicode'
@@ -201,7 +187,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 'i' : i,
                 'get_ctype' : get_ctype,
             }
-            t = template_with_checked_cast if need_checked_cast else template
+            t = template_for_number if is_number else template
             prepare_args.append(t.substitute(values))
 
         prepare_args = '\n'.join(prepare_args)
@@ -234,12 +220,16 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         used_types = set()
         methoddefs = []
         functions = []
+        int_types = {
+            'int8_t', 'int16_t', 'int32_t', 'int64_t',
+            'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t',
+        }
         for method in methods:
             method_name = method._name[len(name) + 2:]
             if method_name == 'Delete':
                 assert not is_static
                 continue
-            if method._type._name in ('uint8_t', 'uint16_t', 'uint32_t', 'int'):
+            if method._type._name in int_types:
                 return_type = method._type._name
                 return_ = 'PyLong_FromLong'
             elif method._type._name in ('uint64_t'):

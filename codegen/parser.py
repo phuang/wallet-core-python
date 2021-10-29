@@ -36,6 +36,8 @@ class Type:
 
         words = words[0].split()
         self._name = words.pop()
+        if self._name == 'int':
+            self._name = 'int32_t'
 
         self._type = ''
         self._is_const = False
