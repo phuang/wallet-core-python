@@ -26,7 +26,7 @@ from tempfile import mkdtemp
 from string import Template as T
 
 DIR = dirname(__file__)
-OUTPUT_DIR = os.path.join(DIR, '..', 'src')
+OUTPUT_DIR = os.path.join(DIR, '..', 'src', 'generated')
 
 class Generator:
     def __init__(self):
@@ -55,6 +55,14 @@ class Generator:
         # format generated c/c++ source code
         os.system('/usr/bin/clang-format -style=Chromium -i \
             {0}/*.cc {0}/*.h'.format(path))
+
+    def get_includes(self, used_types):
+        non_generated = {  'AnySigner', 'Bool', 'Data', 'Number',  'String' }
+        includes = [ name if name in non_generated else 'generated/' + name
+            for name in used_types ]
+        includes.sort()
+        includes = [ '#include "{}.h"'.format(n) for n in includes]
+        return includes
 
     def process_properties(self, name, props):
         template = T('''
@@ -98,10 +106,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
             functions.append(function)
             getsetdefs.append(prop_name)
 
-        includes = list(used_types)
-        includes.sort()
-        includes = [ '#include "{}.h"'.format(n) for n in includes]
-
+        includes = self.get_includes(used_types)
         getsetdefs_format = '{{ "{2}", (getter)Py{0}{1}, nullptr, Py{0}{1}_doc }},'
         getsetdefs = [
             getsetdefs_format.format(name, p, self.py_name(p)) \
@@ -282,9 +287,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
             methoddefs.append(method_name)
 
         used_types.discard(name)
-        includes = list(used_types)
-        includes.sort()
-        includes = [ '#include "{}.h"'.format(n) for n in includes]
+        includes = self.get_includes(used_types)
 
         flags = 'METH_FASTCALL | METH_STATIC' if is_static else 'METH_FASTCALL'
         methoddef_fomat = '{{ "{0}", (PyCFunction)Py{1}{2}, {3}, Py{1}{2}_doc }},'
@@ -404,22 +407,24 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
             out.write(template.substitute(values))
 
     def generate(self):
-        names = []
+        used_types = set()
         for enum in self._parser._enums:
             self.generate_enum(enum)
-            names.append(enum._name[2:])
+            used_types.add(enum._name[2:])
 
         for class_ in self._parser._classes:
             self.generate_class(class_)
-            names.append(class_._name[2:])
+            used_types.add(class_._name[2:])
 
         for struct in self._parser._structs:
             self.generate_struct(struct)
-            names.append(struct._name[2:])
+            used_types.add(struct._name[2:])
 
-        names.append('AnySigner')
+        used_types.add('AnySigner')
+        includes = self.get_includes(used_types)
+        includes = '\n'.join(includes)
+        names = list(used_types)
         names.sort()
-        includes = '\n'.join(['#include "{}.h"'.format(f) for f in names])
         functions = '\n'.join(['  PyInit_{},'.format(f) for f in names])
 
         values = { 'functions' : functions, 'includes' : includes }

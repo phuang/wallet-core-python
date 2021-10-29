@@ -16,8 +16,8 @@
 
 #include "AnySigner.h"
 
-#include "CoinType.h"
 #include "Data.h"
+#include "generated/CoinType.h"
 #include "String.h"
 
 struct PyAnySignerObject {

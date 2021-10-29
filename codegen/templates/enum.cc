@@ -16,7 +16,7 @@
 //
 // NOTE: this is a GENERATED FILE, changes made here WILL BE LOST.
 
-#include "${name}.h"
+#include "generated/${name}.h"
 
 #include <algorithm>
 #include <iterator>

@@ -66,7 +66,9 @@ inline std::optional<Dst> NumericCast(Src value) {
 }
 
 template <typename T>
-inline std::optional<T> PyLongArg_ToNumber(PyObject* arg, int i, const char* type) {
+inline std::optional<T> PyLongArg_ToNumber(PyObject* arg,
+                                           int i,
+                                           const char* type) {
   if (!PyLong_Check(arg)) {
     PyErr_Format(PyExc_TypeError, "The arg %d is not in a number", i);
     return std::nullopt;

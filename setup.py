@@ -40,12 +40,12 @@ for line in open(os.path.join(WALLET_CORE_BUILD, 'CMakeCache.txt')):
 compile_args = [ '-std=c++17' ]
 
 module = Extension('walletcore',
-                    include_dirs = [ WALLET_CORE_INCLUDE ],
+                    include_dirs = [ WALLET_CORE_INCLUDE, 'src' ],
                     library_dirs = [ WALLET_CORE_BUILD, TREZOR_CRYPTO ],
                     libraries = [ 'TrustWalletCore', 'protobuf' , 'TrezorCrypto'],
                     extra_compile_args = compile_args,
                     extra_link_args = link_args,
-                    sources = glob('src/*.cc'))
+                    sources = glob('src/*.cc') + glob('src/generated/*.cc'))
 
 setup(name = 'walletcore',
       version = '0.1.0',
