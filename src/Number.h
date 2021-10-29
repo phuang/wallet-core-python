@@ -27,36 +27,36 @@ inline std::optional<Dst> NumericCast(Src value) {
   typedef std::numeric_limits<Dst> DstLim;
   typedef std::numeric_limits<Src> SrcLim;
 
-  const bool positive_overflow_possible = DstLim::max() < SrcLim::max();
-  const bool negative_overflow_possible =
-      SrcLim::is_signed or (DstLim::lowest() > SrcLim::lowest());
+  constexpr bool positive_overflow_possible = DstLim::max() < SrcLim::max();
+  constexpr bool negative_overflow_possible =
+      SrcLim::is_signed || (DstLim::lowest() > SrcLim::lowest());
 
   // unsigned <-- unsigned
-  if ((not DstLim::is_signed) and (not SrcLim::is_signed)) {
-    if (positive_overflow_possible and (value > DstLim::max())) {
+  if ((!DstLim::is_signed) && (!SrcLim::is_signed)) {
+    if (positive_overflow_possible && (value > DstLim::max())) {
       return std::nullopt;
     }
   }
   // unsigned <-- signed
-  else if ((not DstLim::is_signed) and SrcLim::is_signed) {
-    if (positive_overflow_possible and (value > DstLim::max())) {
+  else if ((!DstLim::is_signed) && SrcLim::is_signed) {
+    if (positive_overflow_possible && (value > DstLim::max())) {
       return std::nullopt;
-    } else if (negative_overflow_possible and (value < 0)) {
+    } else if (negative_overflow_possible && (value < 0)) {
       return std::nullopt;
     }
 
   }
   // signed <-- unsigned
-  else if (DstLim::is_signed and (not SrcLim::is_signed)) {
-    if (positive_overflow_possible and (value > DstLim::max())) {
+  else if (DstLim::is_signed && (!SrcLim::is_signed)) {
+    if (positive_overflow_possible && (value > DstLim::max())) {
       return std::nullopt;
     }
   }
   // signed <-- signed
-  else if (DstLim::is_signed and SrcLim::is_signed) {
-    if (positive_overflow_possible and (value > DstLim::max())) {
+  else if (DstLim::is_signed && SrcLim::is_signed) {
+    if (positive_overflow_possible && (value > DstLim::max())) {
       return std::nullopt;
-    } else if (negative_overflow_possible and (value < DstLim::lowest())) {
+    } else if (negative_overflow_possible && (value < DstLim::lowest())) {
       return std::nullopt;
     }
   }
