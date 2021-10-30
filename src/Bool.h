@@ -20,4 +20,4 @@
 #include <Python.h>
 #include <TrustWalletCore/TWData.h>
 
-#define PyBool_IsTrue(o) (o == Py_True)
+#define PyBool_IsTrue(o) ((o) == Py_True)
