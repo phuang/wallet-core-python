@@ -30,6 +30,7 @@ struct TWDataDeleter {
 
 // std::unique_ptr for holding TWData*
 using TWDataPtr = std::unique_ptr<TWData, TWDataDeleter>;
+
 // Create PyBytes object from TWData.
 PyObject* PyBytes_FromTWData(const TWDataPtr& data);
 

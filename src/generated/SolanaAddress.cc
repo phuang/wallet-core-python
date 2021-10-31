@@ -133,7 +133,7 @@ static PyObject* PySolanaAddressCreateWithString(PySolanaAddressObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWSolanaAddress* result(TWSolanaAddressCreateWithString(arg0.get()));
+  TWSolanaAddress* result = TWSolanaAddressCreateWithString(arg0.get());
   return PySolanaAddress_FromTWSolanaAddress(result);
 }
 

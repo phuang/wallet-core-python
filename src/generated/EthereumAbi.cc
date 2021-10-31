@@ -101,7 +101,7 @@ static PyObject* PyEthereumAbiDecodeOutput(PyEthereumAbiObject* self,
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  bool result(TWEthereumAbiDecodeOutput(arg0, arg1.get()));
+  bool result = TWEthereumAbiDecodeOutput(arg0, arg1.get());
   return PyBool_FromLong(result);
 }
 

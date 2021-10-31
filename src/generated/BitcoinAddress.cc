@@ -98,7 +98,7 @@ static PyObject* PyBitcoinAddressDescription(PyBitcoinAddressObject* self,
 static const char PyBitcoinAddressPrefix_doc[] =
     "uint8_t TWBitcoinAddressPrefix(struct TWBitcoinAddress* address)";
 static PyObject* PyBitcoinAddressPrefix(PyBitcoinAddressObject* self, void*) {
-  uint8_t prop(TWBitcoinAddressPrefix(self->value));
+  uint8_t prop = TWBitcoinAddressPrefix(self->value);
   return PyLong_FromLong(prop);
 }
 
@@ -135,7 +135,7 @@ static PyObject* PyBitcoinAddressEqual(PyBitcoinAddressObject* self,
   }
   auto arg1 = PyBitcoinAddress_GetTWBitcoinAddress(args[1]);
 
-  bool result(TWBitcoinAddressEqual(arg0, arg1));
+  bool result = TWBitcoinAddressEqual(arg0, arg1);
   return PyBool_FromLong(result);
 }
 
@@ -157,7 +157,7 @@ static PyObject* PyBitcoinAddressIsValid(PyBitcoinAddressObject* self,
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  bool result(TWBitcoinAddressIsValid(arg0.get()));
+  bool result = TWBitcoinAddressIsValid(arg0.get());
   return PyBool_FromLong(result);
 }
 
@@ -179,7 +179,7 @@ static PyObject* PyBitcoinAddressIsValidString(PyBitcoinAddressObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  bool result(TWBitcoinAddressIsValidString(arg0.get()));
+  bool result = TWBitcoinAddressIsValidString(arg0.get());
   return PyBool_FromLong(result);
 }
 
@@ -202,7 +202,7 @@ static PyObject* PyBitcoinAddressCreateWithString(PyBitcoinAddressObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWBitcoinAddress* result(TWBitcoinAddressCreateWithString(arg0.get()));
+  TWBitcoinAddress* result = TWBitcoinAddressCreateWithString(arg0.get());
   return PyBitcoinAddress_FromTWBitcoinAddress(result);
 }
 
@@ -224,7 +224,7 @@ static PyObject* PyBitcoinAddressCreateWithData(PyBitcoinAddressObject* self,
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  TWBitcoinAddress* result(TWBitcoinAddressCreateWithData(arg0.get()));
+  TWBitcoinAddress* result = TWBitcoinAddressCreateWithData(arg0.get());
   return PyBitcoinAddress_FromTWBitcoinAddress(result);
 }
 
@@ -253,7 +253,7 @@ static PyObject* PyBitcoinAddressCreateWithPublicKey(
     return nullptr;
   const auto& arg1 = checked_arg1.value();
 
-  TWBitcoinAddress* result(TWBitcoinAddressCreateWithPublicKey(arg0, arg1));
+  TWBitcoinAddress* result = TWBitcoinAddressCreateWithPublicKey(arg0, arg1);
   return PyBitcoinAddress_FromTWBitcoinAddress(result);
 }
 

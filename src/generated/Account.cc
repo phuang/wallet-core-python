@@ -110,7 +110,7 @@ static PyObject* PyAccountExtendedPublicKey(PyAccountObject* self, void*) {
 static const char PyAccountCoin_doc[] =
     "enum TWCoinType TWAccountCoin(struct TWAccount* account)";
 static PyObject* PyAccountCoin(PyAccountObject* self, void*) {
-  TWCoinType prop(TWAccountCoin(self->value));
+  TWCoinType prop = TWAccountCoin(self->value);
   return PyCoinType_FromTWCoinType(prop);
 }
 
@@ -151,7 +151,7 @@ static PyObject* PyAccountCreate(PyAccountObject* self,
   }
   auto arg3 = PyUnicode_GetTWString(args[3]);
 
-  TWAccount* result(TWAccountCreate(arg0.get(), arg1, arg2.get(), arg3.get()));
+  TWAccount* result = TWAccountCreate(arg0.get(), arg1, arg2.get(), arg3.get());
   return PyAccount_FromTWAccount(result);
 }
 

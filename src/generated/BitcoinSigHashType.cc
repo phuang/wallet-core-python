@@ -141,7 +141,7 @@ static PyObject* PyBitcoinSigHashTypeIsSingle(PyBitcoinSigHashTypeObject* self,
     return nullptr;
   }
 
-  bool result(TWBitcoinSigHashTypeIsSingle(self->value));
+  bool result = TWBitcoinSigHashTypeIsSingle(self->value);
   return PyBool_FromLong(result);
 }
 
@@ -157,7 +157,7 @@ static PyObject* PyBitcoinSigHashTypeIsNone(PyBitcoinSigHashTypeObject* self,
     return nullptr;
   }
 
-  bool result(TWBitcoinSigHashTypeIsNone(self->value));
+  bool result = TWBitcoinSigHashTypeIsNone(self->value);
   return PyBool_FromLong(result);
 }
 

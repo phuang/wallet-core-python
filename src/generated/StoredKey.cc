@@ -107,7 +107,7 @@ static PyObject* PyStoredKeyName(PyStoredKeyObject* self, void*) {
 static const char PyStoredKeyIsMnemonic_doc[] =
     "bool TWStoredKeyIsMnemonic(struct TWStoredKey* key)";
 static PyObject* PyStoredKeyIsMnemonic(PyStoredKeyObject* self, void*) {
-  bool prop(TWStoredKeyIsMnemonic(self->value));
+  bool prop = TWStoredKeyIsMnemonic(self->value);
   return PyBool_FromLong(prop);
 }
 
@@ -115,7 +115,7 @@ static PyObject* PyStoredKeyIsMnemonic(PyStoredKeyObject* self, void*) {
 static const char PyStoredKeyAccountCount_doc[] =
     "size_t TWStoredKeyAccountCount(struct TWStoredKey* key)";
 static PyObject* PyStoredKeyAccountCount(PyStoredKeyObject* self, void*) {
-  size_t prop(TWStoredKeyAccountCount(self->value));
+  size_t prop = TWStoredKeyAccountCount(self->value);
   return PyLong_FromLong(prop);
 }
 
@@ -137,7 +137,7 @@ static PyObject* PyStoredKeyAccount(PyStoredKeyObject* self,
     return nullptr;
   const auto& arg0 = checked_arg0.value();
 
-  TWAccount* result(TWStoredKeyAccount(self->value, arg0));
+  TWAccount* result = TWStoredKeyAccount(self->value, arg0);
   return PyAccount_FromTWAccount(result);
 }
 
@@ -166,7 +166,7 @@ static PyObject* PyStoredKeyAccountForCoin(PyStoredKeyObject* self,
   }
   auto arg1 = PyHDWallet_GetTWHDWallet(args[1]);
 
-  TWAccount* result(TWStoredKeyAccountForCoin(self->value, arg0, arg1));
+  TWAccount* result = TWStoredKeyAccountForCoin(self->value, arg0, arg1);
   return PyAccount_FromTWAccount(result);
 }
 
@@ -253,7 +253,7 @@ static PyObject* PyStoredKeyStore(PyStoredKeyObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  bool result(TWStoredKeyStore(self->value, arg0.get()));
+  bool result = TWStoredKeyStore(self->value, arg0.get());
   return PyBool_FromLong(result);
 }
 
@@ -328,7 +328,7 @@ static PyObject* PyStoredKeyPrivateKey(PyStoredKeyObject* self,
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  TWPrivateKey* result(TWStoredKeyPrivateKey(self->value, arg0, arg1.get()));
+  TWPrivateKey* result = TWStoredKeyPrivateKey(self->value, arg0, arg1.get());
   return PyPrivateKey_FromTWPrivateKey(result);
 }
 
@@ -351,7 +351,7 @@ static PyObject* PyStoredKeyWallet(PyStoredKeyObject* self,
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  TWHDWallet* result(TWStoredKeyWallet(self->value, arg0.get()));
+  TWHDWallet* result = TWStoredKeyWallet(self->value, arg0.get());
   return PyHDWallet_FromTWHDWallet(result);
 }
 
@@ -389,7 +389,7 @@ static PyObject* PyStoredKeyFixAddresses(PyStoredKeyObject* self,
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  bool result(TWStoredKeyFixAddresses(self->value, arg0.get()));
+  bool result = TWStoredKeyFixAddresses(self->value, arg0.get());
   return PyBool_FromLong(result);
 }
 
@@ -411,7 +411,7 @@ static PyObject* PyStoredKeyLoad(PyStoredKeyObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWStoredKey* result(TWStoredKeyLoad(arg0.get()));
+  TWStoredKey* result = TWStoredKeyLoad(arg0.get());
   return PyStoredKey_FromTWStoredKey(result);
 }
 
@@ -452,8 +452,8 @@ static PyObject* PyStoredKeyImportPrivateKey(PyStoredKeyObject* self,
   }
   auto arg3 = PyCoinType_GetTWCoinType(args[3]);
 
-  TWStoredKey* result(
-      TWStoredKeyImportPrivateKey(arg0.get(), arg1.get(), arg2.get(), arg3));
+  TWStoredKey* result =
+      TWStoredKeyImportPrivateKey(arg0.get(), arg1.get(), arg2.get(), arg3);
   return PyStoredKey_FromTWStoredKey(result);
 }
 
@@ -494,8 +494,8 @@ static PyObject* PyStoredKeyImportHDWallet(PyStoredKeyObject* self,
   }
   auto arg3 = PyCoinType_GetTWCoinType(args[3]);
 
-  TWStoredKey* result(
-      TWStoredKeyImportHDWallet(arg0.get(), arg1.get(), arg2.get(), arg3));
+  TWStoredKey* result =
+      TWStoredKeyImportHDWallet(arg0.get(), arg1.get(), arg2.get(), arg3);
   return PyStoredKey_FromTWStoredKey(result);
 }
 
@@ -517,7 +517,7 @@ static PyObject* PyStoredKeyImportJSON(PyStoredKeyObject* self,
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  TWStoredKey* result(TWStoredKeyImportJSON(arg0.get()));
+  TWStoredKey* result = TWStoredKeyImportJSON(arg0.get());
   return PyStoredKey_FromTWStoredKey(result);
 }
 
@@ -545,7 +545,7 @@ static PyObject* PyStoredKeyCreate(PyStoredKeyObject* self,
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  TWStoredKey* result(TWStoredKeyCreate(arg0.get(), arg1.get()));
+  TWStoredKey* result = TWStoredKeyCreate(arg0.get(), arg1.get());
   return PyStoredKey_FromTWStoredKey(result);
 }
 

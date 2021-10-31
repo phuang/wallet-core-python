@@ -133,7 +133,7 @@ static PyObject* PyHDWalletGetMasterKey(PyHDWalletObject* self,
   }
   auto arg0 = PyCurve_GetTWCurve(args[0]);
 
-  TWPrivateKey* result(TWHDWalletGetMasterKey(self->value, arg0));
+  TWPrivateKey* result = TWHDWalletGetMasterKey(self->value, arg0);
   return PyPrivateKey_FromTWPrivateKey(result);
 }
 
@@ -156,7 +156,7 @@ static PyObject* PyHDWalletGetKeyForCoin(PyHDWalletObject* self,
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
 
-  TWPrivateKey* result(TWHDWalletGetKeyForCoin(self->value, arg0));
+  TWPrivateKey* result = TWHDWalletGetKeyForCoin(self->value, arg0);
   return PyPrivateKey_FromTWPrivateKey(result);
 }
 
@@ -208,7 +208,7 @@ static PyObject* PyHDWalletGetKey(PyHDWalletObject* self,
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
 
-  TWPrivateKey* result(TWHDWalletGetKey(self->value, arg0, arg1.get()));
+  TWPrivateKey* result = TWHDWalletGetKey(self->value, arg0, arg1.get());
   return PyPrivateKey_FromTWPrivateKey(result);
 }
 
@@ -247,8 +247,8 @@ static PyObject* PyHDWalletGetDerivedKey(PyHDWalletObject* self,
     return nullptr;
   const auto& arg3 = checked_arg3.value();
 
-  TWPrivateKey* result(
-      TWHDWalletGetDerivedKey(self->value, arg0, arg1, arg2, arg3));
+  TWPrivateKey* result =
+      TWHDWalletGetDerivedKey(self->value, arg0, arg1, arg2, arg3);
   return PyPrivateKey_FromTWPrivateKey(result);
 }
 
@@ -348,7 +348,7 @@ static PyObject* PyHDWalletCreate(PyHDWalletObject* self,
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
 
-  TWHDWallet* result(TWHDWalletCreate(arg0, arg1.get()));
+  TWHDWallet* result = TWHDWalletCreate(arg0, arg1.get());
   return PyHDWallet_FromTWHDWallet(result);
 }
 
@@ -377,7 +377,7 @@ static PyObject* PyHDWalletCreateWithMnemonic(PyHDWalletObject* self,
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
 
-  TWHDWallet* result(TWHDWalletCreateWithMnemonic(arg0.get(), arg1.get()));
+  TWHDWallet* result = TWHDWalletCreateWithMnemonic(arg0.get(), arg1.get());
   return PyHDWallet_FromTWHDWallet(result);
 }
 
@@ -412,8 +412,8 @@ static PyObject* PyHDWalletCreateWithMnemonicCheck(PyHDWalletObject* self,
   }
   auto arg2 = PyBool_IsTrue(args[2]);
 
-  TWHDWallet* result(
-      TWHDWalletCreateWithMnemonicCheck(arg0.get(), arg1.get(), arg2));
+  TWHDWallet* result =
+      TWHDWalletCreateWithMnemonicCheck(arg0.get(), arg1.get(), arg2);
   return PyHDWallet_FromTWHDWallet(result);
 }
 
@@ -442,7 +442,7 @@ static PyObject* PyHDWalletCreateWithEntropy(PyHDWalletObject* self,
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
 
-  TWHDWallet* result(TWHDWalletCreateWithEntropy(arg0.get(), arg1.get()));
+  TWHDWallet* result = TWHDWalletCreateWithEntropy(arg0.get(), arg1.get());
   return PyHDWallet_FromTWHDWallet(result);
 }
 
@@ -477,8 +477,8 @@ static PyObject* PyHDWalletGetPublicKeyFromExtended(PyHDWalletObject* self,
   }
   auto arg2 = PyUnicode_GetTWString(args[2]);
 
-  TWPublicKey* result(
-      TWHDWalletGetPublicKeyFromExtended(arg0.get(), arg1, arg2.get()));
+  TWPublicKey* result =
+      TWHDWalletGetPublicKeyFromExtended(arg0.get(), arg1, arg2.get());
   return PyPublicKey_FromTWPublicKey(result);
 }
 

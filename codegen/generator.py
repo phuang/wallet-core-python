@@ -70,6 +70,14 @@ class Generator:
 static const char Py${name}${prop_name}_doc[] =
     "${c_property}";
 static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
+  ${ctype} prop = TW${name}${prop_name}(self->value);
+  return ${return}(prop);
+}\n''')
+        template_with_unique_ptr = T('''
+// getter function for ${prop_name}
+static const char Py${name}${prop_name}_doc[] =
+    "${c_property}";
+static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
   ${ctype} prop(TW${name}${prop_name}(self->value));
   return ${return}(prop);
 }\n''')
@@ -117,7 +125,8 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 'ctype' : ctype,
                 'return' : return_,
             }
-            function = template.substitute(values)
+            t = template_with_unique_ptr if is_unique_ptr else template
+            function = t.substitute(values)
             functions.append(function)
             getsetdefs.append(prop_name)
 
@@ -223,6 +232,17 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
                                          PyObject *const *args,
                                          Py_ssize_t nargs) {
   ${prepare_args}
+  ${return_type} result = TW${name}${method_name}(${call_args});
+  return ${return}(result);
+}\n''')
+        unique_template = T('''
+// ${static}method function for ${method_name}
+static const char Py${name}${method_name}_doc[] =
+    "${c_function}";
+static PyObject* Py${name}${method_name}(Py${name}Object *self,
+                                         PyObject *const *args,
+                                         Py_ssize_t nargs) {
+  ${prepare_args}
   ${return_type} result(TW${name}${method_name}(${call_args}));
   return ${return}(result);
 }\n''')
@@ -297,7 +317,13 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
                 'return_type' : return_type,
                 'return' : return_,
             }
-            function = template.substitute(values) if return_type != 'void' else void_template.substitute(values)
+            if return_type == 'void':
+                t = void_template
+            elif return_type in { 'TWStringPtr', 'TWDataPtr' }:
+                t = unique_template
+            else:
+                t = template
+            function = t.substitute(values)
             functions.append(function)
             methoddefs.append(method_name)
 

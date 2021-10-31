@@ -98,7 +98,7 @@ static PyObject* PySegwitAddressDescription(PySegwitAddressObject* self,
 static const char PySegwitAddressHRP_doc[] =
     "enum TWHRP TWSegwitAddressHRP(struct TWSegwitAddress* address)";
 static PyObject* PySegwitAddressHRP(PySegwitAddressObject* self, void*) {
-  TWHRP prop(TWSegwitAddressHRP(self->value));
+  TWHRP prop = TWSegwitAddressHRP(self->value);
   return PyHRP_FromTWHRP(prop);
 }
 
@@ -136,7 +136,7 @@ static PyObject* PySegwitAddressEqual(PySegwitAddressObject* self,
   }
   auto arg1 = PySegwitAddress_GetTWSegwitAddress(args[1]);
 
-  bool result(TWSegwitAddressEqual(arg0, arg1));
+  bool result = TWSegwitAddressEqual(arg0, arg1);
   return PyBool_FromLong(result);
 }
 
@@ -158,7 +158,7 @@ static PyObject* PySegwitAddressIsValidString(PySegwitAddressObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  bool result(TWSegwitAddressIsValidString(arg0.get()));
+  bool result = TWSegwitAddressIsValidString(arg0.get());
   return PyBool_FromLong(result);
 }
 
@@ -180,7 +180,7 @@ static PyObject* PySegwitAddressCreateWithString(PySegwitAddressObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWSegwitAddress* result(TWSegwitAddressCreateWithString(arg0.get()));
+  TWSegwitAddress* result = TWSegwitAddressCreateWithString(arg0.get());
   return PySegwitAddress_FromTWSegwitAddress(result);
 }
 
@@ -209,7 +209,7 @@ static PyObject* PySegwitAddressCreateWithPublicKey(PySegwitAddressObject* self,
   }
   auto arg1 = PyPublicKey_GetTWPublicKey(args[1]);
 
-  TWSegwitAddress* result(TWSegwitAddressCreateWithPublicKey(arg0, arg1));
+  TWSegwitAddress* result = TWSegwitAddressCreateWithPublicKey(arg0, arg1);
   return PySegwitAddress_FromTWSegwitAddress(result);
 }
 

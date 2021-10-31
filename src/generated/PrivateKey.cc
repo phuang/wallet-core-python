@@ -112,7 +112,7 @@ static PyObject* PyPrivateKeyGetPublicKeySecp256k1(PyPrivateKeyObject* self,
   }
   auto arg0 = PyBool_IsTrue(args[0]);
 
-  TWPublicKey* result(TWPrivateKeyGetPublicKeySecp256k1(self->value, arg0));
+  TWPublicKey* result = TWPrivateKeyGetPublicKeySecp256k1(self->value, arg0);
   return PyPublicKey_FromTWPublicKey(result);
 }
 
@@ -129,7 +129,7 @@ static PyObject* PyPrivateKeyGetPublicKeyNist256p1(PyPrivateKeyObject* self,
     return nullptr;
   }
 
-  TWPublicKey* result(TWPrivateKeyGetPublicKeyNist256p1(self->value));
+  TWPublicKey* result = TWPrivateKeyGetPublicKeyNist256p1(self->value);
   return PyPublicKey_FromTWPublicKey(result);
 }
 
@@ -146,7 +146,7 @@ static PyObject* PyPrivateKeyGetPublicKeyEd25519(PyPrivateKeyObject* self,
     return nullptr;
   }
 
-  TWPublicKey* result(TWPrivateKeyGetPublicKeyEd25519(self->value));
+  TWPublicKey* result = TWPrivateKeyGetPublicKeyEd25519(self->value);
   return PyPublicKey_FromTWPublicKey(result);
 }
 
@@ -164,7 +164,7 @@ static PyObject* PyPrivateKeyGetPublicKeyEd25519Blake2b(
     return nullptr;
   }
 
-  TWPublicKey* result(TWPrivateKeyGetPublicKeyEd25519Blake2b(self->value));
+  TWPublicKey* result = TWPrivateKeyGetPublicKeyEd25519Blake2b(self->value);
   return PyPublicKey_FromTWPublicKey(result);
 }
 
@@ -182,7 +182,7 @@ static PyObject* PyPrivateKeyGetPublicKeyEd25519Extended(
     return nullptr;
   }
 
-  TWPublicKey* result(TWPrivateKeyGetPublicKeyEd25519Extended(self->value));
+  TWPublicKey* result = TWPrivateKeyGetPublicKeyEd25519Extended(self->value);
   return PyPublicKey_FromTWPublicKey(result);
 }
 
@@ -199,7 +199,7 @@ static PyObject* PyPrivateKeyGetPublicKeyCurve25519(PyPrivateKeyObject* self,
     return nullptr;
   }
 
-  TWPublicKey* result(TWPrivateKeyGetPublicKeyCurve25519(self->value));
+  TWPublicKey* result = TWPrivateKeyGetPublicKeyCurve25519(self->value);
   return PyPublicKey_FromTWPublicKey(result);
 }
 
@@ -331,7 +331,7 @@ static PyObject* PyPrivateKeyCreate(PyPrivateKeyObject* self,
     return nullptr;
   }
 
-  TWPrivateKey* result(TWPrivateKeyCreate());
+  TWPrivateKey* result = TWPrivateKeyCreate();
   return PyPrivateKey_FromTWPrivateKey(result);
 }
 
@@ -353,7 +353,7 @@ static PyObject* PyPrivateKeyCreateWithData(PyPrivateKeyObject* self,
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  TWPrivateKey* result(TWPrivateKeyCreateWithData(arg0.get()));
+  TWPrivateKey* result = TWPrivateKeyCreateWithData(arg0.get());
   return PyPrivateKey_FromTWPrivateKey(result);
 }
 
@@ -375,7 +375,7 @@ static PyObject* PyPrivateKeyCreateCopy(PyPrivateKeyObject* self,
   }
   auto arg0 = PyPrivateKey_GetTWPrivateKey(args[0]);
 
-  TWPrivateKey* result(TWPrivateKeyCreateCopy(arg0));
+  TWPrivateKey* result = TWPrivateKeyCreateCopy(arg0);
   return PyPrivateKey_FromTWPrivateKey(result);
 }
 
@@ -403,7 +403,7 @@ static PyObject* PyPrivateKeyIsValid(PyPrivateKeyObject* self,
   }
   auto arg1 = PyCurve_GetTWCurve(args[1]);
 
-  bool result(TWPrivateKeyIsValid(arg0.get(), arg1));
+  bool result = TWPrivateKeyIsValid(arg0.get(), arg1);
   return PyBool_FromLong(result);
 }
 

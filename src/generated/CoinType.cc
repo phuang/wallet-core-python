@@ -204,7 +204,7 @@ static PyObject* PyCoinType_str(PyCoinTypeObject* self) {
 static const char PyCoinTypeBlockchain_doc[] =
     "enum TWBlockchain TWCoinTypeBlockchain(enum TWCoinType coin)";
 static PyObject* PyCoinTypeBlockchain(PyCoinTypeObject* self, void*) {
-  TWBlockchain prop(TWCoinTypeBlockchain(self->value));
+  TWBlockchain prop = TWCoinTypeBlockchain(self->value);
   return PyBlockchain_FromTWBlockchain(prop);
 }
 
@@ -212,7 +212,7 @@ static PyObject* PyCoinTypeBlockchain(PyCoinTypeObject* self, void*) {
 static const char PyCoinTypePurpose_doc[] =
     "enum TWPurpose TWCoinTypePurpose(enum TWCoinType coin)";
 static PyObject* PyCoinTypePurpose(PyCoinTypeObject* self, void*) {
-  TWPurpose prop(TWCoinTypePurpose(self->value));
+  TWPurpose prop = TWCoinTypePurpose(self->value);
   return PyPurpose_FromTWPurpose(prop);
 }
 
@@ -220,7 +220,7 @@ static PyObject* PyCoinTypePurpose(PyCoinTypeObject* self, void*) {
 static const char PyCoinTypeCurve_doc[] =
     "enum TWCurve TWCoinTypeCurve(enum TWCoinType coin)";
 static PyObject* PyCoinTypeCurve(PyCoinTypeObject* self, void*) {
-  TWCurve prop(TWCoinTypeCurve(self->value));
+  TWCurve prop = TWCoinTypeCurve(self->value);
   return PyCurve_FromTWCurve(prop);
 }
 
@@ -228,7 +228,7 @@ static PyObject* PyCoinTypeCurve(PyCoinTypeObject* self, void*) {
 static const char PyCoinTypeXpubVersion_doc[] =
     "enum TWHDVersion TWCoinTypeXpubVersion(enum TWCoinType coin)";
 static PyObject* PyCoinTypeXpubVersion(PyCoinTypeObject* self, void*) {
-  TWHDVersion prop(TWCoinTypeXpubVersion(self->value));
+  TWHDVersion prop = TWCoinTypeXpubVersion(self->value);
   return PyHDVersion_FromTWHDVersion(prop);
 }
 
@@ -236,7 +236,7 @@ static PyObject* PyCoinTypeXpubVersion(PyCoinTypeObject* self, void*) {
 static const char PyCoinTypeXprvVersion_doc[] =
     "enum TWHDVersion TWCoinTypeXprvVersion(enum TWCoinType coin)";
 static PyObject* PyCoinTypeXprvVersion(PyCoinTypeObject* self, void*) {
-  TWHDVersion prop(TWCoinTypeXprvVersion(self->value));
+  TWHDVersion prop = TWCoinTypeXprvVersion(self->value);
   return PyHDVersion_FromTWHDVersion(prop);
 }
 
@@ -244,7 +244,7 @@ static PyObject* PyCoinTypeXprvVersion(PyCoinTypeObject* self, void*) {
 static const char PyCoinTypeHRP_doc[] =
     "enum TWHRP TWCoinTypeHRP(enum TWCoinType coin)";
 static PyObject* PyCoinTypeHRP(PyCoinTypeObject* self, void*) {
-  TWHRP prop(TWCoinTypeHRP(self->value));
+  TWHRP prop = TWCoinTypeHRP(self->value);
   return PyHRP_FromTWHRP(prop);
 }
 
@@ -252,7 +252,7 @@ static PyObject* PyCoinTypeHRP(PyCoinTypeObject* self, void*) {
 static const char PyCoinTypeP2pkhPrefix_doc[] =
     "uint8_t TWCoinTypeP2pkhPrefix(enum TWCoinType coin)";
 static PyObject* PyCoinTypeP2pkhPrefix(PyCoinTypeObject* self, void*) {
-  uint8_t prop(TWCoinTypeP2pkhPrefix(self->value));
+  uint8_t prop = TWCoinTypeP2pkhPrefix(self->value);
   return PyLong_FromLong(prop);
 }
 
@@ -260,7 +260,7 @@ static PyObject* PyCoinTypeP2pkhPrefix(PyCoinTypeObject* self, void*) {
 static const char PyCoinTypeP2shPrefix_doc[] =
     "uint8_t TWCoinTypeP2shPrefix(enum TWCoinType coin)";
 static PyObject* PyCoinTypeP2shPrefix(PyCoinTypeObject* self, void*) {
-  uint8_t prop(TWCoinTypeP2shPrefix(self->value));
+  uint8_t prop = TWCoinTypeP2shPrefix(self->value);
   return PyLong_FromLong(prop);
 }
 
@@ -268,7 +268,7 @@ static PyObject* PyCoinTypeP2shPrefix(PyCoinTypeObject* self, void*) {
 static const char PyCoinTypeStaticPrefix_doc[] =
     "uint8_t TWCoinTypeStaticPrefix(enum TWCoinType coin)";
 static PyObject* PyCoinTypeStaticPrefix(PyCoinTypeObject* self, void*) {
-  uint8_t prop(TWCoinTypeStaticPrefix(self->value));
+  uint8_t prop = TWCoinTypeStaticPrefix(self->value);
   return PyLong_FromLong(prop);
 }
 
@@ -276,7 +276,7 @@ static PyObject* PyCoinTypeStaticPrefix(PyCoinTypeObject* self, void*) {
 static const char PyCoinTypeSlip44Id_doc[] =
     "uint32_t TWCoinTypeSlip44Id(enum TWCoinType coin)";
 static PyObject* PyCoinTypeSlip44Id(PyCoinTypeObject* self, void*) {
-  uint32_t prop(TWCoinTypeSlip44Id(self->value));
+  uint32_t prop = TWCoinTypeSlip44Id(self->value);
   return PyLong_FromLong(prop);
 }
 
@@ -298,7 +298,7 @@ static PyObject* PyCoinTypeValidate(PyCoinTypeObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  bool result(TWCoinTypeValidate(self->value, arg0.get()));
+  bool result = TWCoinTypeValidate(self->value, arg0.get());
   return PyBool_FromLong(result);
 }
 

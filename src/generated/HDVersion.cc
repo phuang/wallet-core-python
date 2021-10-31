@@ -136,7 +136,7 @@ static PyObject* PyHDVersion_str(PyHDVersionObject* self) {
 static const char PyHDVersionIsPublic_doc[] =
     "bool TWHDVersionIsPublic(enum TWHDVersion version)";
 static PyObject* PyHDVersionIsPublic(PyHDVersionObject* self, void*) {
-  bool prop(TWHDVersionIsPublic(self->value));
+  bool prop = TWHDVersionIsPublic(self->value);
   return PyBool_FromLong(prop);
 }
 
@@ -144,7 +144,7 @@ static PyObject* PyHDVersionIsPublic(PyHDVersionObject* self, void*) {
 static const char PyHDVersionIsPrivate_doc[] =
     "bool TWHDVersionIsPrivate(enum TWHDVersion version)";
 static PyObject* PyHDVersionIsPrivate(PyHDVersionObject* self, void*) {
-  bool prop(TWHDVersionIsPrivate(self->value));
+  bool prop = TWHDVersionIsPrivate(self->value);
   return PyBool_FromLong(prop);
 }
 

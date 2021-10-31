@@ -88,7 +88,7 @@ static void PyPublicKey_dealloc(PyPublicKeyObject* self) {
 static const char PyPublicKeyIsCompressed_doc[] =
     "bool TWPublicKeyIsCompressed(struct TWPublicKey* pk)";
 static PyObject* PyPublicKeyIsCompressed(PyPublicKeyObject* self, void*) {
-  bool prop(TWPublicKeyIsCompressed(self->value));
+  bool prop = TWPublicKeyIsCompressed(self->value);
   return PyBool_FromLong(prop);
 }
 
@@ -96,7 +96,7 @@ static PyObject* PyPublicKeyIsCompressed(PyPublicKeyObject* self, void*) {
 static const char PyPublicKeyCompressed_doc[] =
     "struct TWPublicKey* TWPublicKeyCompressed(struct TWPublicKey* from)";
 static PyObject* PyPublicKeyCompressed(PyPublicKeyObject* self, void*) {
-  TWPublicKey* prop(TWPublicKeyCompressed(self->value));
+  TWPublicKey* prop = TWPublicKeyCompressed(self->value);
   return PyPublicKey_FromTWPublicKey(prop);
 }
 
@@ -104,7 +104,7 @@ static PyObject* PyPublicKeyCompressed(PyPublicKeyObject* self, void*) {
 static const char PyPublicKeyUncompressed_doc[] =
     "struct TWPublicKey* TWPublicKeyUncompressed(struct TWPublicKey* from)";
 static PyObject* PyPublicKeyUncompressed(PyPublicKeyObject* self, void*) {
-  TWPublicKey* prop(TWPublicKeyUncompressed(self->value));
+  TWPublicKey* prop = TWPublicKeyUncompressed(self->value);
   return PyPublicKey_FromTWPublicKey(prop);
 }
 
@@ -120,7 +120,7 @@ static PyObject* PyPublicKeyData(PyPublicKeyObject* self, void*) {
 static const char PyPublicKeyKeyType_doc[] =
     "enum TWPublicKeyType TWPublicKeyKeyType(struct TWPublicKey* publicKey)";
 static PyObject* PyPublicKeyKeyType(PyPublicKeyObject* self, void*) {
-  TWPublicKeyType prop(TWPublicKeyKeyType(self->value));
+  TWPublicKeyType prop = TWPublicKeyKeyType(self->value);
   return PyPublicKeyType_FromTWPublicKeyType(prop);
 }
 
@@ -157,7 +157,7 @@ static PyObject* PyPublicKeyVerify(PyPublicKeyObject* self,
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  bool result(TWPublicKeyVerify(self->value, arg0.get(), arg1.get()));
+  bool result = TWPublicKeyVerify(self->value, arg0.get(), arg1.get());
   return PyBool_FromLong(result);
 }
 
@@ -186,7 +186,7 @@ static PyObject* PyPublicKeyVerifySchnorr(PyPublicKeyObject* self,
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  bool result(TWPublicKeyVerifySchnorr(self->value, arg0.get(), arg1.get()));
+  bool result = TWPublicKeyVerifySchnorr(self->value, arg0.get(), arg1.get());
   return PyBool_FromLong(result);
 }
 
@@ -215,7 +215,7 @@ static PyObject* PyPublicKeyCreateWithData(PyPublicKeyObject* self,
   }
   auto arg1 = PyPublicKeyType_GetTWPublicKeyType(args[1]);
 
-  TWPublicKey* result(TWPublicKeyCreateWithData(arg0.get(), arg1));
+  TWPublicKey* result = TWPublicKeyCreateWithData(arg0.get(), arg1);
   return PyPublicKey_FromTWPublicKey(result);
 }
 
@@ -243,7 +243,7 @@ static PyObject* PyPublicKeyIsValid(PyPublicKeyObject* self,
   }
   auto arg1 = PyPublicKeyType_GetTWPublicKeyType(args[1]);
 
-  bool result(TWPublicKeyIsValid(arg0.get(), arg1));
+  bool result = TWPublicKeyIsValid(arg0.get(), arg1);
   return PyBool_FromLong(result);
 }
 
@@ -272,7 +272,7 @@ static PyObject* PyPublicKeyRecover(PyPublicKeyObject* self,
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  TWPublicKey* result(TWPublicKeyRecover(arg0.get(), arg1.get()));
+  TWPublicKey* result = TWPublicKeyRecover(arg0.get(), arg1.get());
   return PyPublicKey_FromTWPublicKey(result);
 }
 

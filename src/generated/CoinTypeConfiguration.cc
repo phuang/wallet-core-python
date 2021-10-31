@@ -93,7 +93,7 @@ static PyObject* PyCoinTypeConfigurationGetDecimals(
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
 
-  int32_t result(TWCoinTypeConfigurationGetDecimals(arg0));
+  int32_t result = TWCoinTypeConfigurationGetDecimals(arg0);
   return PyLong_FromLong(result);
 }
 

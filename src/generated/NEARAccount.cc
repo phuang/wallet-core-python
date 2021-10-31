@@ -108,7 +108,7 @@ static PyObject* PyNEARAccountCreateWithString(PyNEARAccountObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWNEARAccount* result(TWNEARAccountCreateWithString(arg0.get()));
+  TWNEARAccount* result = TWNEARAccountCreateWithString(arg0.get());
   return PyNEARAccount_FromTWNEARAccount(result);
 }
 

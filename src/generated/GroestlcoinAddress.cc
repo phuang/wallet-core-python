@@ -124,7 +124,7 @@ static PyObject* PyGroestlcoinAddressEqual(PyGroestlcoinAddressObject* self,
   }
   auto arg1 = PyGroestlcoinAddress_GetTWGroestlcoinAddress(args[1]);
 
-  bool result(TWGroestlcoinAddressEqual(arg0, arg1));
+  bool result = TWGroestlcoinAddressEqual(arg0, arg1);
   return PyBool_FromLong(result);
 }
 
@@ -147,7 +147,7 @@ static PyObject* PyGroestlcoinAddressIsValidString(
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  bool result(TWGroestlcoinAddressIsValidString(arg0.get()));
+  bool result = TWGroestlcoinAddressIsValidString(arg0.get());
   return PyBool_FromLong(result);
 }
 
@@ -171,8 +171,8 @@ static PyObject* PyGroestlcoinAddressCreateWithString(
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWGroestlcoinAddress* result(
-      TWGroestlcoinAddressCreateWithString(arg0.get()));
+  TWGroestlcoinAddress* result =
+      TWGroestlcoinAddressCreateWithString(arg0.get());
   return PyGroestlcoinAddress_FromTWGroestlcoinAddress(result);
 }
 
@@ -202,8 +202,8 @@ static PyObject* PyGroestlcoinAddressCreateWithPublicKey(
     return nullptr;
   const auto& arg1 = checked_arg1.value();
 
-  TWGroestlcoinAddress* result(
-      TWGroestlcoinAddressCreateWithPublicKey(arg0, arg1));
+  TWGroestlcoinAddress* result =
+      TWGroestlcoinAddressCreateWithPublicKey(arg0, arg1);
   return PyGroestlcoinAddress_FromTWGroestlcoinAddress(result);
 }
 
