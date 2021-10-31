@@ -70,7 +70,7 @@ static PyObject* PyCoinTypeConfigurationGetSymbol(
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
 
-  TWStringPtr result = TWCoinTypeConfigurationGetSymbol(arg0);
+  TWStringPtr result(TWCoinTypeConfigurationGetSymbol(arg0));
   return PyUnicode_FromTWString(result);
 }
 
@@ -93,7 +93,7 @@ static PyObject* PyCoinTypeConfigurationGetDecimals(
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
 
-  int32_t result = TWCoinTypeConfigurationGetDecimals(arg0);
+  int32_t result(TWCoinTypeConfigurationGetDecimals(arg0));
   return PyLong_FromLong(result);
 }
 
@@ -123,8 +123,8 @@ static PyObject* PyCoinTypeConfigurationGetTransactionURL(
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
 
-  TWStringPtr result =
-      TWCoinTypeConfigurationGetTransactionURL(arg0, arg1.get());
+  TWStringPtr result(
+      TWCoinTypeConfigurationGetTransactionURL(arg0, arg1.get()));
   return PyUnicode_FromTWString(result);
 }
 
@@ -154,7 +154,7 @@ static PyObject* PyCoinTypeConfigurationGetAccountURL(
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
 
-  TWStringPtr result = TWCoinTypeConfigurationGetAccountURL(arg0, arg1.get());
+  TWStringPtr result(TWCoinTypeConfigurationGetAccountURL(arg0, arg1.get()));
   return PyUnicode_FromTWString(result);
 }
 
@@ -177,7 +177,7 @@ static PyObject* PyCoinTypeConfigurationGetID(
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
 
-  TWStringPtr result = TWCoinTypeConfigurationGetID(arg0);
+  TWStringPtr result(TWCoinTypeConfigurationGetID(arg0));
   return PyUnicode_FromTWString(result);
 }
 
@@ -200,7 +200,7 @@ static PyObject* PyCoinTypeConfigurationGetName(
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
 
-  TWStringPtr result = TWCoinTypeConfigurationGetName(arg0);
+  TWStringPtr result(TWCoinTypeConfigurationGetName(arg0));
   return PyUnicode_FromTWString(result);
 }
 

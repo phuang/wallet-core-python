@@ -70,26 +70,40 @@ class Generator:
 static const char Py${name}${prop_name}_doc[] =
     "${c_property}";
 static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
-  return ${return}(TW${name}${prop_name}(self->value));
+  ${ctype} prop(TW${name}${prop_name}(self->value));
+  return ${return}(prop);
 }\n''')
         used_types = set()
         getsetdefs = []
         functions = []
         for prop in props:
             prop_name = prop._name[len(name) + 2:]
+            is_unique_ptr = False
             if prop._type._name in ('uint8_t', 'uint16_t', 'uint32_t', 'size_t'):
+                ctype = prop._type._name
                 return_ = 'PyLong_FromLong'
             elif prop._type._name == 'bool':
+                ctype = prop._type._name
                 return_ = 'PyBool_FromLong'
-            elif prop._type._type in ('struct', 'enum'):
+            elif prop._type._type == 'enum':
+                ctype = prop._type._name
+                prop_type = prop._type._name[2:]
+                used_types.add(prop_type)
+                return_ = 'Py{0}_FromTW{0}'.format(prop_type)
+            elif prop._type._type == 'struct':
+                ctype = prop._type._name + '*'
                 prop_type = prop._type._name[2:]
                 used_types.add(prop_type)
                 return_ = 'Py{0}_FromTW{0}'.format(prop_type)
             elif prop._type._name == 'TWString':
+                is_unique_ptr = True
+                ctype = 'TWStringPtr'
                 prop_type = prop._type._name[2:]
                 used_types.add('String')
                 return_ = 'PyUnicode_FromTWString'
             elif prop._type._name == 'TWData':
+                is_unique_ptr = True
+                ctype = 'TWDataPtr'
                 prop_type = prop._type._name[2:]
                 used_types.add('Data')
                 return_ = 'PyBytes_FromTWData'
@@ -100,6 +114,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 'c_property' : str(prop),
                 'name' : name,
                 'prop_name' : prop_name,
+                'ctype' : ctype,
                 'return' : return_,
             }
             function = template.substitute(values)
@@ -208,7 +223,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
                                          PyObject *const *args,
                                          Py_ssize_t nargs) {
   ${prepare_args}
-  ${return_type} result = TW${name}${method_name}(${call_args});
+  ${return_type} result(TW${name}${method_name}(${call_args}));
   return ${return}(result);
 }\n''')
         void_template = T('''

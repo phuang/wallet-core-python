@@ -68,7 +68,7 @@ static PyObject* PyEthereumFeeSuggest(PyEthereumFeeObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWStringPtr result = TWEthereumFeeSuggest(arg0.get());
+  TWStringPtr result(TWEthereumFeeSuggest(arg0.get()));
   return PyUnicode_FromTWString(result);
 }
 

@@ -86,7 +86,8 @@ static void PyNEARAccount_dealloc(PyNEARAccountObject* self) {
 static const char PyNEARAccountDescription_doc[] =
     "TWString* TWNEARAccountDescription(struct TWNEARAccount* account)";
 static PyObject* PyNEARAccountDescription(PyNEARAccountObject* self, void*) {
-  return PyUnicode_FromTWString(TWNEARAccountDescription(self->value));
+  TWStringPtr prop(TWNEARAccountDescription(self->value));
+  return PyUnicode_FromTWString(prop);
 }
 
 // static method function for CreateWithString
@@ -107,7 +108,7 @@ static PyObject* PyNEARAccountCreateWithString(PyNEARAccountObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWNEARAccount* result = TWNEARAccountCreateWithString(arg0.get());
+  TWNEARAccount* result(TWNEARAccountCreateWithString(arg0.get()));
   return PyNEARAccount_FromTWNEARAccount(result);
 }
 

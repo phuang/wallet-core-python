@@ -136,14 +136,16 @@ static PyObject* PyHDVersion_str(PyHDVersionObject* self) {
 static const char PyHDVersionIsPublic_doc[] =
     "bool TWHDVersionIsPublic(enum TWHDVersion version)";
 static PyObject* PyHDVersionIsPublic(PyHDVersionObject* self, void*) {
-  return PyBool_FromLong(TWHDVersionIsPublic(self->value));
+  bool prop(TWHDVersionIsPublic(self->value));
+  return PyBool_FromLong(prop);
 }
 
 // getter function for IsPrivate
 static const char PyHDVersionIsPrivate_doc[] =
     "bool TWHDVersionIsPrivate(enum TWHDVersion version)";
 static PyObject* PyHDVersionIsPrivate(PyHDVersionObject* self, void*) {
-  return PyBool_FromLong(TWHDVersionIsPrivate(self->value));
+  bool prop(TWHDVersionIsPrivate(self->value));
+  return PyBool_FromLong(prop);
 }
 
 static const PyGetSetDef get_set_defs[] = {

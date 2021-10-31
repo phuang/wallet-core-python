@@ -99,7 +99,7 @@ static PyObject* PyEthereumAbiFunctionGetType(PyEthereumAbiFunctionObject* self,
     return nullptr;
   }
 
-  TWStringPtr result = TWEthereumAbiFunctionGetType(self->value);
+  TWStringPtr result(TWEthereumAbiFunctionGetType(self->value));
   return PyUnicode_FromTWString(result);
 }
 
@@ -128,7 +128,7 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt8(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result = TWEthereumAbiFunctionAddParamUInt8(self->value, arg0, arg1);
+  int32_t result(TWEthereumAbiFunctionAddParamUInt8(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -157,7 +157,7 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt16(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result = TWEthereumAbiFunctionAddParamUInt16(self->value, arg0, arg1);
+  int32_t result(TWEthereumAbiFunctionAddParamUInt16(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -186,7 +186,7 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt32(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result = TWEthereumAbiFunctionAddParamUInt32(self->value, arg0, arg1);
+  int32_t result(TWEthereumAbiFunctionAddParamUInt32(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -215,7 +215,7 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt64(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result = TWEthereumAbiFunctionAddParamUInt64(self->value, arg0, arg1);
+  int32_t result(TWEthereumAbiFunctionAddParamUInt64(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -245,8 +245,8 @@ static PyObject* PyEthereumAbiFunctionAddParamUInt256(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result =
-      TWEthereumAbiFunctionAddParamUInt256(self->value, arg0.get(), arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddParamUInt256(self->value, arg0.get(), arg1));
   return PyLong_FromLong(result);
 }
 
@@ -281,8 +281,8 @@ static PyObject* PyEthereumAbiFunctionAddParamUIntN(
   }
   auto arg2 = PyBool_IsTrue(args[2]);
 
-  int32_t result =
-      TWEthereumAbiFunctionAddParamUIntN(self->value, arg0, arg1.get(), arg2);
+  int32_t result(
+      TWEthereumAbiFunctionAddParamUIntN(self->value, arg0, arg1.get(), arg2));
   return PyLong_FromLong(result);
 }
 
@@ -311,7 +311,7 @@ static PyObject* PyEthereumAbiFunctionAddParamInt8(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result = TWEthereumAbiFunctionAddParamInt8(self->value, arg0, arg1);
+  int32_t result(TWEthereumAbiFunctionAddParamInt8(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -340,7 +340,7 @@ static PyObject* PyEthereumAbiFunctionAddParamInt16(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result = TWEthereumAbiFunctionAddParamInt16(self->value, arg0, arg1);
+  int32_t result(TWEthereumAbiFunctionAddParamInt16(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -369,7 +369,7 @@ static PyObject* PyEthereumAbiFunctionAddParamInt32(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result = TWEthereumAbiFunctionAddParamInt32(self->value, arg0, arg1);
+  int32_t result(TWEthereumAbiFunctionAddParamInt32(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -398,7 +398,7 @@ static PyObject* PyEthereumAbiFunctionAddParamInt64(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result = TWEthereumAbiFunctionAddParamInt64(self->value, arg0, arg1);
+  int32_t result(TWEthereumAbiFunctionAddParamInt64(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -428,8 +428,8 @@ static PyObject* PyEthereumAbiFunctionAddParamInt256(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result =
-      TWEthereumAbiFunctionAddParamInt256(self->value, arg0.get(), arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddParamInt256(self->value, arg0.get(), arg1));
   return PyLong_FromLong(result);
 }
 
@@ -464,8 +464,8 @@ static PyObject* PyEthereumAbiFunctionAddParamIntN(
   }
   auto arg2 = PyBool_IsTrue(args[2]);
 
-  int32_t result =
-      TWEthereumAbiFunctionAddParamIntN(self->value, arg0, arg1.get(), arg2);
+  int32_t result(
+      TWEthereumAbiFunctionAddParamIntN(self->value, arg0, arg1.get(), arg2));
   return PyLong_FromLong(result);
 }
 
@@ -495,7 +495,7 @@ static PyObject* PyEthereumAbiFunctionAddParamBool(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result = TWEthereumAbiFunctionAddParamBool(self->value, arg0, arg1);
+  int32_t result(TWEthereumAbiFunctionAddParamBool(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -525,8 +525,8 @@ static PyObject* PyEthereumAbiFunctionAddParamString(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result =
-      TWEthereumAbiFunctionAddParamString(self->value, arg0.get(), arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddParamString(self->value, arg0.get(), arg1));
   return PyLong_FromLong(result);
 }
 
@@ -556,8 +556,8 @@ static PyObject* PyEthereumAbiFunctionAddParamAddress(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result =
-      TWEthereumAbiFunctionAddParamAddress(self->value, arg0.get(), arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddParamAddress(self->value, arg0.get(), arg1));
   return PyLong_FromLong(result);
 }
 
@@ -587,8 +587,8 @@ static PyObject* PyEthereumAbiFunctionAddParamBytes(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result =
-      TWEthereumAbiFunctionAddParamBytes(self->value, arg0.get(), arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddParamBytes(self->value, arg0.get(), arg1));
   return PyLong_FromLong(result);
 }
 
@@ -623,8 +623,8 @@ static PyObject* PyEthereumAbiFunctionAddParamBytesFix(
   }
   auto arg2 = PyBool_IsTrue(args[2]);
 
-  int32_t result = TWEthereumAbiFunctionAddParamBytesFix(self->value, arg0,
-                                                         arg1.get(), arg2);
+  int32_t result(TWEthereumAbiFunctionAddParamBytesFix(self->value, arg0,
+                                                       arg1.get(), arg2));
   return PyLong_FromLong(result);
 }
 
@@ -648,7 +648,7 @@ static PyObject* PyEthereumAbiFunctionAddParamArray(
   }
   auto arg0 = PyBool_IsTrue(args[0]);
 
-  int32_t result = TWEthereumAbiFunctionAddParamArray(self->value, arg0);
+  int32_t result(TWEthereumAbiFunctionAddParamArray(self->value, arg0));
   return PyLong_FromLong(result);
 }
 
@@ -677,7 +677,7 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt8(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  uint8_t result = TWEthereumAbiFunctionGetParamUInt8(self->value, arg0, arg1);
+  uint8_t result(TWEthereumAbiFunctionGetParamUInt8(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -706,8 +706,7 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt64(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  uint64_t result =
-      TWEthereumAbiFunctionGetParamUInt64(self->value, arg0, arg1);
+  uint64_t result(TWEthereumAbiFunctionGetParamUInt64(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -736,8 +735,8 @@ static PyObject* PyEthereumAbiFunctionGetParamUInt256(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  TWDataPtr result =
-      TWEthereumAbiFunctionGetParamUInt256(self->value, arg0, arg1);
+  TWDataPtr result(
+      TWEthereumAbiFunctionGetParamUInt256(self->value, arg0, arg1));
   return PyBytes_FromTWData(result);
 }
 
@@ -766,7 +765,7 @@ static PyObject* PyEthereumAbiFunctionGetParamBool(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  bool result = TWEthereumAbiFunctionGetParamBool(self->value, arg0, arg1);
+  bool result(TWEthereumAbiFunctionGetParamBool(self->value, arg0, arg1));
   return PyBool_FromLong(result);
 }
 
@@ -795,8 +794,8 @@ static PyObject* PyEthereumAbiFunctionGetParamString(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  TWStringPtr result =
-      TWEthereumAbiFunctionGetParamString(self->value, arg0, arg1);
+  TWStringPtr result(
+      TWEthereumAbiFunctionGetParamString(self->value, arg0, arg1));
   return PyUnicode_FromTWString(result);
 }
 
@@ -825,8 +824,8 @@ static PyObject* PyEthereumAbiFunctionGetParamAddress(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  TWDataPtr result =
-      TWEthereumAbiFunctionGetParamAddress(self->value, arg0, arg1);
+  TWDataPtr result(
+      TWEthereumAbiFunctionGetParamAddress(self->value, arg0, arg1));
   return PyBytes_FromTWData(result);
 }
 
@@ -854,8 +853,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt8(
     return nullptr;
   const auto& arg1 = checked_arg1.value();
 
-  int32_t result =
-      TWEthereumAbiFunctionAddInArrayParamUInt8(self->value, arg0, arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddInArrayParamUInt8(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -883,8 +882,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt16(
     return nullptr;
   const auto& arg1 = checked_arg1.value();
 
-  int32_t result =
-      TWEthereumAbiFunctionAddInArrayParamUInt16(self->value, arg0, arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddInArrayParamUInt16(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -912,8 +911,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt32(
     return nullptr;
   const auto& arg1 = checked_arg1.value();
 
-  int32_t result =
-      TWEthereumAbiFunctionAddInArrayParamUInt32(self->value, arg0, arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddInArrayParamUInt32(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -941,8 +940,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt64(
     return nullptr;
   const auto& arg1 = checked_arg1.value();
 
-  int32_t result =
-      TWEthereumAbiFunctionAddInArrayParamUInt64(self->value, arg0, arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddInArrayParamUInt64(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -971,8 +970,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUInt256(
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  int32_t result = TWEthereumAbiFunctionAddInArrayParamUInt256(
-      self->value, arg0, arg1.get());
+  int32_t result(TWEthereumAbiFunctionAddInArrayParamUInt256(self->value, arg0,
+                                                             arg1.get()));
   return PyLong_FromLong(result);
 }
 
@@ -1006,8 +1005,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamUIntN(
   }
   auto arg2 = PyBytes_GetTWData(args[2]);
 
-  int32_t result = TWEthereumAbiFunctionAddInArrayParamUIntN(self->value, arg0,
-                                                             arg1, arg2.get());
+  int32_t result(TWEthereumAbiFunctionAddInArrayParamUIntN(self->value, arg0,
+                                                           arg1, arg2.get()));
   return PyLong_FromLong(result);
 }
 
@@ -1035,8 +1034,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt8(
     return nullptr;
   const auto& arg1 = checked_arg1.value();
 
-  int32_t result =
-      TWEthereumAbiFunctionAddInArrayParamInt8(self->value, arg0, arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddInArrayParamInt8(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -1064,8 +1063,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt16(
     return nullptr;
   const auto& arg1 = checked_arg1.value();
 
-  int32_t result =
-      TWEthereumAbiFunctionAddInArrayParamInt16(self->value, arg0, arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddInArrayParamInt16(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -1093,8 +1092,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt32(
     return nullptr;
   const auto& arg1 = checked_arg1.value();
 
-  int32_t result =
-      TWEthereumAbiFunctionAddInArrayParamInt32(self->value, arg0, arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddInArrayParamInt32(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -1122,8 +1121,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt64(
     return nullptr;
   const auto& arg1 = checked_arg1.value();
 
-  int32_t result =
-      TWEthereumAbiFunctionAddInArrayParamInt64(self->value, arg0, arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddInArrayParamInt64(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -1152,8 +1151,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamInt256(
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  int32_t result =
-      TWEthereumAbiFunctionAddInArrayParamInt256(self->value, arg0, arg1.get());
+  int32_t result(TWEthereumAbiFunctionAddInArrayParamInt256(self->value, arg0,
+                                                            arg1.get()));
   return PyLong_FromLong(result);
 }
 
@@ -1187,8 +1186,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamIntN(
   }
   auto arg2 = PyBytes_GetTWData(args[2]);
 
-  int32_t result = TWEthereumAbiFunctionAddInArrayParamIntN(self->value, arg0,
-                                                            arg1, arg2.get());
+  int32_t result(TWEthereumAbiFunctionAddInArrayParamIntN(self->value, arg0,
+                                                          arg1, arg2.get()));
   return PyLong_FromLong(result);
 }
 
@@ -1217,8 +1216,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBool(
   }
   auto arg1 = PyBool_IsTrue(args[1]);
 
-  int32_t result =
-      TWEthereumAbiFunctionAddInArrayParamBool(self->value, arg0, arg1);
+  int32_t result(
+      TWEthereumAbiFunctionAddInArrayParamBool(self->value, arg0, arg1));
   return PyLong_FromLong(result);
 }
 
@@ -1247,8 +1246,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamString(
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
 
-  int32_t result =
-      TWEthereumAbiFunctionAddInArrayParamString(self->value, arg0, arg1.get());
+  int32_t result(TWEthereumAbiFunctionAddInArrayParamString(self->value, arg0,
+                                                            arg1.get()));
   return PyLong_FromLong(result);
 }
 
@@ -1277,8 +1276,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamAddress(
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  int32_t result = TWEthereumAbiFunctionAddInArrayParamAddress(
-      self->value, arg0, arg1.get());
+  int32_t result(TWEthereumAbiFunctionAddInArrayParamAddress(self->value, arg0,
+                                                             arg1.get()));
   return PyLong_FromLong(result);
 }
 
@@ -1307,8 +1306,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytes(
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  int32_t result =
-      TWEthereumAbiFunctionAddInArrayParamBytes(self->value, arg0, arg1.get());
+  int32_t result(
+      TWEthereumAbiFunctionAddInArrayParamBytes(self->value, arg0, arg1.get()));
   return PyLong_FromLong(result);
 }
 
@@ -1342,8 +1341,8 @@ static PyObject* PyEthereumAbiFunctionAddInArrayParamBytesFix(
   }
   auto arg2 = PyBytes_GetTWData(args[2]);
 
-  int32_t result = TWEthereumAbiFunctionAddInArrayParamBytesFix(
-      self->value, arg0, arg1, arg2.get());
+  int32_t result(TWEthereumAbiFunctionAddInArrayParamBytesFix(
+      self->value, arg0, arg1, arg2.get()));
   return PyLong_FromLong(result);
 }
 
@@ -1367,8 +1366,8 @@ static PyObject* PyEthereumAbiFunctionCreateWithString(
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWEthereumAbiFunction* result =
-      TWEthereumAbiFunctionCreateWithString(arg0.get());
+  TWEthereumAbiFunction* result(
+      TWEthereumAbiFunctionCreateWithString(arg0.get()));
   return PyEthereumAbiFunction_FromTWEthereumAbiFunction(result);
 }
 

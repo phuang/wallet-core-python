@@ -89,21 +89,24 @@ static void PyAnyAddress_dealloc(PyAnyAddressObject* self) {
 static const char PyAnyAddressDescription_doc[] =
     "TWString* TWAnyAddressDescription(struct TWAnyAddress* address)";
 static PyObject* PyAnyAddressDescription(PyAnyAddressObject* self, void*) {
-  return PyUnicode_FromTWString(TWAnyAddressDescription(self->value));
+  TWStringPtr prop(TWAnyAddressDescription(self->value));
+  return PyUnicode_FromTWString(prop);
 }
 
 // getter function for Coin
 static const char PyAnyAddressCoin_doc[] =
     "enum TWCoinType TWAnyAddressCoin(struct TWAnyAddress* address)";
 static PyObject* PyAnyAddressCoin(PyAnyAddressObject* self, void*) {
-  return PyCoinType_FromTWCoinType(TWAnyAddressCoin(self->value));
+  TWCoinType prop(TWAnyAddressCoin(self->value));
+  return PyCoinType_FromTWCoinType(prop);
 }
 
 // getter function for Data
 static const char PyAnyAddressData_doc[] =
     "TWData* TWAnyAddressData(struct TWAnyAddress* address)";
 static PyObject* PyAnyAddressData(PyAnyAddressObject* self, void*) {
-  return PyBytes_FromTWData(TWAnyAddressData(self->value));
+  TWDataPtr prop(TWAnyAddressData(self->value));
+  return PyBytes_FromTWData(prop);
 }
 
 // static method function for Equal
@@ -131,7 +134,7 @@ static PyObject* PyAnyAddressEqual(PyAnyAddressObject* self,
   }
   auto arg1 = PyAnyAddress_GetTWAnyAddress(args[1]);
 
-  bool result = TWAnyAddressEqual(arg0, arg1);
+  bool result(TWAnyAddressEqual(arg0, arg1));
   return PyBool_FromLong(result);
 }
 
@@ -159,7 +162,7 @@ static PyObject* PyAnyAddressIsValid(PyAnyAddressObject* self,
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
 
-  bool result = TWAnyAddressIsValid(arg0.get(), arg1);
+  bool result(TWAnyAddressIsValid(arg0.get(), arg1));
   return PyBool_FromLong(result);
 }
 
@@ -188,7 +191,7 @@ static PyObject* PyAnyAddressCreateWithString(PyAnyAddressObject* self,
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
 
-  TWAnyAddress* result = TWAnyAddressCreateWithString(arg0.get(), arg1);
+  TWAnyAddress* result(TWAnyAddressCreateWithString(arg0.get(), arg1));
   return PyAnyAddress_FromTWAnyAddress(result);
 }
 
@@ -217,7 +220,7 @@ static PyObject* PyAnyAddressCreateWithPublicKey(PyAnyAddressObject* self,
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
 
-  TWAnyAddress* result = TWAnyAddressCreateWithPublicKey(arg0, arg1);
+  TWAnyAddress* result(TWAnyAddressCreateWithPublicKey(arg0, arg1));
   return PyAnyAddress_FromTWAnyAddress(result);
 }
 

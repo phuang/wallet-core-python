@@ -89,14 +89,16 @@ static const char PyRippleXAddressDescription_doc[] =
     "TWString* TWRippleXAddressDescription(struct TWRippleXAddress* address)";
 static PyObject* PyRippleXAddressDescription(PyRippleXAddressObject* self,
                                              void*) {
-  return PyUnicode_FromTWString(TWRippleXAddressDescription(self->value));
+  TWStringPtr prop(TWRippleXAddressDescription(self->value));
+  return PyUnicode_FromTWString(prop);
 }
 
 // getter function for Tag
 static const char PyRippleXAddressTag_doc[] =
     "uint32_t TWRippleXAddressTag(struct TWRippleXAddress* address)";
 static PyObject* PyRippleXAddressTag(PyRippleXAddressObject* self, void*) {
-  return PyLong_FromLong(TWRippleXAddressTag(self->value));
+  uint32_t prop(TWRippleXAddressTag(self->value));
+  return PyLong_FromLong(prop);
 }
 
 // static method function for Equal
@@ -124,7 +126,7 @@ static PyObject* PyRippleXAddressEqual(PyRippleXAddressObject* self,
   }
   auto arg1 = PyRippleXAddress_GetTWRippleXAddress(args[1]);
 
-  bool result = TWRippleXAddressEqual(arg0, arg1);
+  bool result(TWRippleXAddressEqual(arg0, arg1));
   return PyBool_FromLong(result);
 }
 
@@ -146,7 +148,7 @@ static PyObject* PyRippleXAddressIsValidString(PyRippleXAddressObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  bool result = TWRippleXAddressIsValidString(arg0.get());
+  bool result(TWRippleXAddressIsValidString(arg0.get()));
   return PyBool_FromLong(result);
 }
 
@@ -169,7 +171,7 @@ static PyObject* PyRippleXAddressCreateWithString(PyRippleXAddressObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWRippleXAddress* result = TWRippleXAddressCreateWithString(arg0.get());
+  TWRippleXAddress* result(TWRippleXAddressCreateWithString(arg0.get()));
   return PyRippleXAddress_FromTWRippleXAddress(result);
 }
 
@@ -198,7 +200,7 @@ static PyObject* PyRippleXAddressCreateWithPublicKey(
     return nullptr;
   const auto& arg1 = checked_arg1.value();
 
-  TWRippleXAddress* result = TWRippleXAddressCreateWithPublicKey(arg0, arg1);
+  TWRippleXAddress* result(TWRippleXAddressCreateWithPublicKey(arg0, arg1));
   return PyRippleXAddress_FromTWRippleXAddress(result);
 }
 

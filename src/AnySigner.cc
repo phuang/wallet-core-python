@@ -74,7 +74,7 @@ static PyObject* PyAnySignerSign(PyAnySignerObject* self,
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
 
-  TWDataPtr result = TWAnySignerSign(arg0.get(), arg1);
+  TWDataPtr result(TWAnySignerSign(arg0.get(), arg1));
   return PyBytes_FromTWData(result);
 }
 
@@ -109,7 +109,7 @@ static PyObject* PyAnySignerSignJSON(PyAnySignerObject* self,
   }
   auto arg2 = PyCoinType_GetTWCoinType(args[2]);
 
-  TWStringPtr result = TWAnySignerSignJSON(arg0.get(), arg1.get(), arg2);
+  TWStringPtr result(TWAnySignerSignJSON(arg0.get(), arg1.get(), arg2));
   return PyUnicode_FromTWString(result);
 }
 
@@ -159,7 +159,7 @@ static PyObject* PyAnySignerPlan(PyAnySignerObject* self,
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
 
-  TWDataPtr result = TWAnySignerPlan(arg0.get(), arg1);
+  TWDataPtr result(TWAnySignerPlan(arg0.get(), arg1));
   return PyBytes_FromTWData(result);
 }
 

@@ -22,14 +22,14 @@
 #include <Python.h>
 #include <TrustWalletCore/TWData.h>
 
-// std::unique_ptr for holding TWData*
-class TWDataPtr : public std::unique_ptr<TWData, decltype(&TWDataDelete)> {
- public:
-  TWDataPtr() : TWDataPtr(nullptr) {}
-  TWDataPtr(TWData* p)
-      : std::unique_ptr<TWData, decltype(&TWDataDelete)>(p, &TWDataDelete) {}
+struct TWDataDeleter {
+  void operator()(TWData* data) {
+    TWDataDelete(data);
+  }
 };
 
+// std::unique_ptr for holding TWData*
+using TWDataPtr = std::unique_ptr<TWData, TWDataDeleter>;
 // Create PyBytes object from TWData.
 PyObject* PyBytes_FromTWData(const TWDataPtr& data);
 

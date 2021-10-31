@@ -87,7 +87,8 @@ static const char PySolanaAddressDescription_doc[] =
     "TWString* TWSolanaAddressDescription(struct TWSolanaAddress* address)";
 static PyObject* PySolanaAddressDescription(PySolanaAddressObject* self,
                                             void*) {
-  return PyUnicode_FromTWString(TWSolanaAddressDescription(self->value));
+  TWStringPtr prop(TWSolanaAddressDescription(self->value));
+  return PyUnicode_FromTWString(prop);
 }
 
 // method function for DefaultTokenAddress
@@ -109,8 +110,8 @@ static PyObject* PySolanaAddressDefaultTokenAddress(PySolanaAddressObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWStringPtr result =
-      TWSolanaAddressDefaultTokenAddress(self->value, arg0.get());
+  TWStringPtr result(
+      TWSolanaAddressDefaultTokenAddress(self->value, arg0.get()));
   return PyUnicode_FromTWString(result);
 }
 
@@ -132,7 +133,7 @@ static PyObject* PySolanaAddressCreateWithString(PySolanaAddressObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWSolanaAddress* result = TWSolanaAddressCreateWithString(arg0.get());
+  TWSolanaAddress* result(TWSolanaAddressCreateWithString(arg0.get()));
   return PySolanaAddress_FromTWSolanaAddress(result);
 }
 

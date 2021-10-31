@@ -88,7 +88,7 @@ static PyObject* PyAESEncryptCBC(PyAESObject* self,
   }
   auto arg3 = PyAESPaddingMode_GetTWAESPaddingMode(args[3]);
 
-  TWDataPtr result = TWAESEncryptCBC(arg0.get(), arg1.get(), arg2.get(), arg3);
+  TWDataPtr result(TWAESEncryptCBC(arg0.get(), arg1.get(), arg2.get(), arg3));
   return PyBytes_FromTWData(result);
 }
 
@@ -129,7 +129,7 @@ static PyObject* PyAESDecryptCBC(PyAESObject* self,
   }
   auto arg3 = PyAESPaddingMode_GetTWAESPaddingMode(args[3]);
 
-  TWDataPtr result = TWAESDecryptCBC(arg0.get(), arg1.get(), arg2.get(), arg3);
+  TWDataPtr result(TWAESDecryptCBC(arg0.get(), arg1.get(), arg2.get(), arg3));
   return PyBytes_FromTWData(result);
 }
 
@@ -163,7 +163,7 @@ static PyObject* PyAESEncryptCTR(PyAESObject* self,
   }
   auto arg2 = PyBytes_GetTWData(args[2]);
 
-  TWDataPtr result = TWAESEncryptCTR(arg0.get(), arg1.get(), arg2.get());
+  TWDataPtr result(TWAESEncryptCTR(arg0.get(), arg1.get(), arg2.get()));
   return PyBytes_FromTWData(result);
 }
 
@@ -197,7 +197,7 @@ static PyObject* PyAESDecryptCTR(PyAESObject* self,
   }
   auto arg2 = PyBytes_GetTWData(args[2]);
 
-  TWDataPtr result = TWAESDecryptCTR(arg0.get(), arg1.get(), arg2.get());
+  TWDataPtr result(TWAESDecryptCTR(arg0.get(), arg1.get(), arg2.get()));
   return PyBytes_FromTWData(result);
 }
 

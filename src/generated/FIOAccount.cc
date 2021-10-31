@@ -86,7 +86,8 @@ static void PyFIOAccount_dealloc(PyFIOAccountObject* self) {
 static const char PyFIOAccountDescription_doc[] =
     "TWString* TWFIOAccountDescription(struct TWFIOAccount* account)";
 static PyObject* PyFIOAccountDescription(PyFIOAccountObject* self, void*) {
-  return PyUnicode_FromTWString(TWFIOAccountDescription(self->value));
+  TWStringPtr prop(TWFIOAccountDescription(self->value));
+  return PyUnicode_FromTWString(prop);
 }
 
 // static method function for CreateWithString
@@ -107,7 +108,7 @@ static PyObject* PyFIOAccountCreateWithString(PyFIOAccountObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWFIOAccount* result = TWFIOAccountCreateWithString(arg0.get());
+  TWFIOAccount* result(TWFIOAccountCreateWithString(arg0.get()));
   return PyFIOAccount_FromTWFIOAccount(result);
 }
 

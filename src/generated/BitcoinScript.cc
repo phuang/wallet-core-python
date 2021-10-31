@@ -88,21 +88,24 @@ static void PyBitcoinScript_dealloc(PyBitcoinScriptObject* self) {
 static const char PyBitcoinScriptSize_doc[] =
     "size_t TWBitcoinScriptSize(const struct TWBitcoinScript* script)";
 static PyObject* PyBitcoinScriptSize(PyBitcoinScriptObject* self, void*) {
-  return PyLong_FromLong(TWBitcoinScriptSize(self->value));
+  size_t prop(TWBitcoinScriptSize(self->value));
+  return PyLong_FromLong(prop);
 }
 
 // getter function for Data
 static const char PyBitcoinScriptData_doc[] =
     "TWData* TWBitcoinScriptData(const struct TWBitcoinScript* script)";
 static PyObject* PyBitcoinScriptData(PyBitcoinScriptObject* self, void*) {
-  return PyBytes_FromTWData(TWBitcoinScriptData(self->value));
+  TWDataPtr prop(TWBitcoinScriptData(self->value));
+  return PyBytes_FromTWData(prop);
 }
 
 // getter function for ScriptHash
 static const char PyBitcoinScriptScriptHash_doc[] =
     "TWData* TWBitcoinScriptScriptHash(const struct TWBitcoinScript* script)";
 static PyObject* PyBitcoinScriptScriptHash(PyBitcoinScriptObject* self, void*) {
-  return PyBytes_FromTWData(TWBitcoinScriptScriptHash(self->value));
+  TWDataPtr prop(TWBitcoinScriptScriptHash(self->value));
+  return PyBytes_FromTWData(prop);
 }
 
 // getter function for IsPayToScriptHash
@@ -111,7 +114,8 @@ static const char PyBitcoinScriptIsPayToScriptHash_doc[] =
     "script)";
 static PyObject* PyBitcoinScriptIsPayToScriptHash(PyBitcoinScriptObject* self,
                                                   void*) {
-  return PyBool_FromLong(TWBitcoinScriptIsPayToScriptHash(self->value));
+  bool prop(TWBitcoinScriptIsPayToScriptHash(self->value));
+  return PyBool_FromLong(prop);
 }
 
 // getter function for IsPayToWitnessScriptHash
@@ -121,7 +125,8 @@ static const char PyBitcoinScriptIsPayToWitnessScriptHash_doc[] =
 static PyObject* PyBitcoinScriptIsPayToWitnessScriptHash(
     PyBitcoinScriptObject* self,
     void*) {
-  return PyBool_FromLong(TWBitcoinScriptIsPayToWitnessScriptHash(self->value));
+  bool prop(TWBitcoinScriptIsPayToWitnessScriptHash(self->value));
+  return PyBool_FromLong(prop);
 }
 
 // getter function for IsPayToWitnessPublicKeyHash
@@ -131,8 +136,8 @@ static const char PyBitcoinScriptIsPayToWitnessPublicKeyHash_doc[] =
 static PyObject* PyBitcoinScriptIsPayToWitnessPublicKeyHash(
     PyBitcoinScriptObject* self,
     void*) {
-  return PyBool_FromLong(
-      TWBitcoinScriptIsPayToWitnessPublicKeyHash(self->value));
+  bool prop(TWBitcoinScriptIsPayToWitnessPublicKeyHash(self->value));
+  return PyBool_FromLong(prop);
 }
 
 // getter function for IsWitnessProgram
@@ -141,7 +146,8 @@ static const char PyBitcoinScriptIsWitnessProgram_doc[] =
     "script)";
 static PyObject* PyBitcoinScriptIsWitnessProgram(PyBitcoinScriptObject* self,
                                                  void*) {
-  return PyBool_FromLong(TWBitcoinScriptIsWitnessProgram(self->value));
+  bool prop(TWBitcoinScriptIsWitnessProgram(self->value));
+  return PyBool_FromLong(prop);
 }
 
 // method function for MatchPayToPubkey
@@ -157,7 +163,7 @@ static PyObject* PyBitcoinScriptMatchPayToPubkey(PyBitcoinScriptObject* self,
     return nullptr;
   }
 
-  TWDataPtr result = TWBitcoinScriptMatchPayToPubkey(self->value);
+  TWDataPtr result(TWBitcoinScriptMatchPayToPubkey(self->value));
   return PyBytes_FromTWData(result);
 }
 
@@ -175,7 +181,7 @@ static PyObject* PyBitcoinScriptMatchPayToPubkeyHash(
     return nullptr;
   }
 
-  TWDataPtr result = TWBitcoinScriptMatchPayToPubkeyHash(self->value);
+  TWDataPtr result(TWBitcoinScriptMatchPayToPubkeyHash(self->value));
   return PyBytes_FromTWData(result);
 }
 
@@ -193,7 +199,7 @@ static PyObject* PyBitcoinScriptMatchPayToScriptHash(
     return nullptr;
   }
 
-  TWDataPtr result = TWBitcoinScriptMatchPayToScriptHash(self->value);
+  TWDataPtr result(TWBitcoinScriptMatchPayToScriptHash(self->value));
   return PyBytes_FromTWData(result);
 }
 
@@ -211,7 +217,7 @@ static PyObject* PyBitcoinScriptMatchPayToWitnessPublicKeyHash(
     return nullptr;
   }
 
-  TWDataPtr result = TWBitcoinScriptMatchPayToWitnessPublicKeyHash(self->value);
+  TWDataPtr result(TWBitcoinScriptMatchPayToWitnessPublicKeyHash(self->value));
   return PyBytes_FromTWData(result);
 }
 
@@ -229,7 +235,7 @@ static PyObject* PyBitcoinScriptMatchPayToWitnessScriptHash(
     return nullptr;
   }
 
-  TWDataPtr result = TWBitcoinScriptMatchPayToWitnessScriptHash(self->value);
+  TWDataPtr result(TWBitcoinScriptMatchPayToWitnessScriptHash(self->value));
   return PyBytes_FromTWData(result);
 }
 
@@ -245,7 +251,7 @@ static PyObject* PyBitcoinScriptEncode(PyBitcoinScriptObject* self,
     return nullptr;
   }
 
-  TWDataPtr result = TWBitcoinScriptEncode(self->value);
+  TWDataPtr result(TWBitcoinScriptEncode(self->value));
   return PyBytes_FromTWData(result);
 }
 
@@ -261,7 +267,7 @@ static PyObject* PyBitcoinScriptCreate(PyBitcoinScriptObject* self,
     return nullptr;
   }
 
-  TWBitcoinScript* result = TWBitcoinScriptCreate();
+  TWBitcoinScript* result(TWBitcoinScriptCreate());
   return PyBitcoinScript_FromTWBitcoinScript(result);
 }
 
@@ -283,7 +289,7 @@ static PyObject* PyBitcoinScriptCreateWithData(PyBitcoinScriptObject* self,
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  TWBitcoinScript* result = TWBitcoinScriptCreateWithData(arg0.get());
+  TWBitcoinScript* result(TWBitcoinScriptCreateWithData(arg0.get()));
   return PyBitcoinScript_FromTWBitcoinScript(result);
 }
 
@@ -306,7 +312,7 @@ static PyObject* PyBitcoinScriptCreateCopy(PyBitcoinScriptObject* self,
   }
   auto arg0 = PyBitcoinScript_GetTWBitcoinScript(args[0]);
 
-  TWBitcoinScript* result = TWBitcoinScriptCreateCopy(arg0);
+  TWBitcoinScript* result(TWBitcoinScriptCreateCopy(arg0));
   return PyBitcoinScript_FromTWBitcoinScript(result);
 }
 
@@ -335,7 +341,7 @@ static PyObject* PyBitcoinScriptEqual(PyBitcoinScriptObject* self,
   }
   auto arg1 = PyBitcoinScript_GetTWBitcoinScript(args[1]);
 
-  bool result = TWBitcoinScriptEqual(arg0, arg1);
+  bool result(TWBitcoinScriptEqual(arg0, arg1));
   return PyBool_FromLong(result);
 }
 
@@ -358,7 +364,7 @@ static PyObject* PyBitcoinScriptBuildPayToPublicKey(PyBitcoinScriptObject* self,
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  TWBitcoinScript* result = TWBitcoinScriptBuildPayToPublicKey(arg0.get());
+  TWBitcoinScript* result(TWBitcoinScriptBuildPayToPublicKey(arg0.get()));
   return PyBitcoinScript_FromTWBitcoinScript(result);
 }
 
@@ -382,7 +388,7 @@ static PyObject* PyBitcoinScriptBuildPayToPublicKeyHash(
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  TWBitcoinScript* result = TWBitcoinScriptBuildPayToPublicKeyHash(arg0.get());
+  TWBitcoinScript* result(TWBitcoinScriptBuildPayToPublicKeyHash(arg0.get()));
   return PyBitcoinScript_FromTWBitcoinScript(result);
 }
 
@@ -406,7 +412,7 @@ static PyObject* PyBitcoinScriptBuildPayToScriptHash(
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  TWBitcoinScript* result = TWBitcoinScriptBuildPayToScriptHash(arg0.get());
+  TWBitcoinScript* result(TWBitcoinScriptBuildPayToScriptHash(arg0.get()));
   return PyBitcoinScript_FromTWBitcoinScript(result);
 }
 
@@ -430,8 +436,8 @@ static PyObject* PyBitcoinScriptBuildPayToWitnessPubkeyHash(
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  TWBitcoinScript* result =
-      TWBitcoinScriptBuildPayToWitnessPubkeyHash(arg0.get());
+  TWBitcoinScript* result(
+      TWBitcoinScriptBuildPayToWitnessPubkeyHash(arg0.get()));
   return PyBitcoinScript_FromTWBitcoinScript(result);
 }
 
@@ -455,8 +461,8 @@ static PyObject* PyBitcoinScriptBuildPayToWitnessScriptHash(
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  TWBitcoinScript* result =
-      TWBitcoinScriptBuildPayToWitnessScriptHash(arg0.get());
+  TWBitcoinScript* result(
+      TWBitcoinScriptBuildPayToWitnessScriptHash(arg0.get()));
   return PyBitcoinScript_FromTWBitcoinScript(result);
 }
 
@@ -486,8 +492,8 @@ static PyObject* PyBitcoinScriptLockScriptForAddress(
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
 
-  TWBitcoinScript* result =
-      TWBitcoinScriptLockScriptForAddress(arg0.get(), arg1);
+  TWBitcoinScript* result(
+      TWBitcoinScriptLockScriptForAddress(arg0.get(), arg1));
   return PyBitcoinScript_FromTWBitcoinScript(result);
 }
 
@@ -509,7 +515,7 @@ static PyObject* PyBitcoinScriptHashTypeForCoin(PyBitcoinScriptObject* self,
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
 
-  uint32_t result = TWBitcoinScriptHashTypeForCoin(arg0);
+  uint32_t result(TWBitcoinScriptHashTypeForCoin(arg0));
   return PyLong_FromLong(result);
 }
 

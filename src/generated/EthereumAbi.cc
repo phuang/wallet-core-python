@@ -71,7 +71,7 @@ static PyObject* PyEthereumAbiEncode(PyEthereumAbiObject* self,
   }
   auto arg0 = PyEthereumAbiFunction_GetTWEthereumAbiFunction(args[0]);
 
-  TWDataPtr result = TWEthereumAbiEncode(arg0);
+  TWDataPtr result(TWEthereumAbiEncode(arg0));
   return PyBytes_FromTWData(result);
 }
 
@@ -101,7 +101,7 @@ static PyObject* PyEthereumAbiDecodeOutput(PyEthereumAbiObject* self,
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  bool result = TWEthereumAbiDecodeOutput(arg0, arg1.get());
+  bool result(TWEthereumAbiDecodeOutput(arg0, arg1.get()));
   return PyBool_FromLong(result);
 }
 
@@ -129,7 +129,7 @@ static PyObject* PyEthereumAbiDecodeCall(PyEthereumAbiObject* self,
   }
   auto arg1 = PyUnicode_GetTWString(args[1]);
 
-  TWStringPtr result = TWEthereumAbiDecodeCall(arg0.get(), arg1.get());
+  TWStringPtr result(TWEthereumAbiDecodeCall(arg0.get(), arg1.get()));
   return PyUnicode_FromTWString(result);
 }
 
@@ -151,7 +151,7 @@ static PyObject* PyEthereumAbiEncodeTyped(PyEthereumAbiObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWDataPtr result = TWEthereumAbiEncodeTyped(arg0.get());
+  TWDataPtr result(TWEthereumAbiEncodeTyped(arg0.get()));
   return PyBytes_FromTWData(result);
 }
 

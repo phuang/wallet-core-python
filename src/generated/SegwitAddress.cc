@@ -90,14 +90,16 @@ static const char PySegwitAddressDescription_doc[] =
     "TWString* TWSegwitAddressDescription(struct TWSegwitAddress* address)";
 static PyObject* PySegwitAddressDescription(PySegwitAddressObject* self,
                                             void*) {
-  return PyUnicode_FromTWString(TWSegwitAddressDescription(self->value));
+  TWStringPtr prop(TWSegwitAddressDescription(self->value));
+  return PyUnicode_FromTWString(prop);
 }
 
 // getter function for HRP
 static const char PySegwitAddressHRP_doc[] =
     "enum TWHRP TWSegwitAddressHRP(struct TWSegwitAddress* address)";
 static PyObject* PySegwitAddressHRP(PySegwitAddressObject* self, void*) {
-  return PyHRP_FromTWHRP(TWSegwitAddressHRP(self->value));
+  TWHRP prop(TWSegwitAddressHRP(self->value));
+  return PyHRP_FromTWHRP(prop);
 }
 
 // getter function for WitnessProgram
@@ -105,7 +107,8 @@ static const char PySegwitAddressWitnessProgram_doc[] =
     "TWData* TWSegwitAddressWitnessProgram(struct TWSegwitAddress* address)";
 static PyObject* PySegwitAddressWitnessProgram(PySegwitAddressObject* self,
                                                void*) {
-  return PyBytes_FromTWData(TWSegwitAddressWitnessProgram(self->value));
+  TWDataPtr prop(TWSegwitAddressWitnessProgram(self->value));
+  return PyBytes_FromTWData(prop);
 }
 
 // static method function for Equal
@@ -133,7 +136,7 @@ static PyObject* PySegwitAddressEqual(PySegwitAddressObject* self,
   }
   auto arg1 = PySegwitAddress_GetTWSegwitAddress(args[1]);
 
-  bool result = TWSegwitAddressEqual(arg0, arg1);
+  bool result(TWSegwitAddressEqual(arg0, arg1));
   return PyBool_FromLong(result);
 }
 
@@ -155,7 +158,7 @@ static PyObject* PySegwitAddressIsValidString(PySegwitAddressObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  bool result = TWSegwitAddressIsValidString(arg0.get());
+  bool result(TWSegwitAddressIsValidString(arg0.get()));
   return PyBool_FromLong(result);
 }
 
@@ -177,7 +180,7 @@ static PyObject* PySegwitAddressCreateWithString(PySegwitAddressObject* self,
   }
   auto arg0 = PyUnicode_GetTWString(args[0]);
 
-  TWSegwitAddress* result = TWSegwitAddressCreateWithString(arg0.get());
+  TWSegwitAddress* result(TWSegwitAddressCreateWithString(arg0.get()));
   return PySegwitAddress_FromTWSegwitAddress(result);
 }
 
@@ -206,7 +209,7 @@ static PyObject* PySegwitAddressCreateWithPublicKey(PySegwitAddressObject* self,
   }
   auto arg1 = PyPublicKey_GetTWPublicKey(args[1]);
 
-  TWSegwitAddress* result = TWSegwitAddressCreateWithPublicKey(arg0, arg1);
+  TWSegwitAddress* result(TWSegwitAddressCreateWithPublicKey(arg0, arg1));
   return PySegwitAddress_FromTWSegwitAddress(result);
 }
 

@@ -86,28 +86,32 @@ static void PyAccount_dealloc(PyAccountObject* self) {
 static const char PyAccountAddress_doc[] =
     "TWString* TWAccountAddress(struct TWAccount* account)";
 static PyObject* PyAccountAddress(PyAccountObject* self, void*) {
-  return PyUnicode_FromTWString(TWAccountAddress(self->value));
+  TWStringPtr prop(TWAccountAddress(self->value));
+  return PyUnicode_FromTWString(prop);
 }
 
 // getter function for DerivationPath
 static const char PyAccountDerivationPath_doc[] =
     "TWString* TWAccountDerivationPath(struct TWAccount* account)";
 static PyObject* PyAccountDerivationPath(PyAccountObject* self, void*) {
-  return PyUnicode_FromTWString(TWAccountDerivationPath(self->value));
+  TWStringPtr prop(TWAccountDerivationPath(self->value));
+  return PyUnicode_FromTWString(prop);
 }
 
 // getter function for ExtendedPublicKey
 static const char PyAccountExtendedPublicKey_doc[] =
     "TWString* TWAccountExtendedPublicKey(struct TWAccount* account)";
 static PyObject* PyAccountExtendedPublicKey(PyAccountObject* self, void*) {
-  return PyUnicode_FromTWString(TWAccountExtendedPublicKey(self->value));
+  TWStringPtr prop(TWAccountExtendedPublicKey(self->value));
+  return PyUnicode_FromTWString(prop);
 }
 
 // getter function for Coin
 static const char PyAccountCoin_doc[] =
     "enum TWCoinType TWAccountCoin(struct TWAccount* account)";
 static PyObject* PyAccountCoin(PyAccountObject* self, void*) {
-  return PyCoinType_FromTWCoinType(TWAccountCoin(self->value));
+  TWCoinType prop(TWAccountCoin(self->value));
+  return PyCoinType_FromTWCoinType(prop);
 }
 
 // static method function for Create
@@ -147,7 +151,7 @@ static PyObject* PyAccountCreate(PyAccountObject* self,
   }
   auto arg3 = PyUnicode_GetTWString(args[3]);
 
-  TWAccount* result = TWAccountCreate(arg0.get(), arg1, arg2.get(), arg3.get());
+  TWAccount* result(TWAccountCreate(arg0.get(), arg1, arg2.get(), arg3.get()));
   return PyAccount_FromTWAccount(result);
 }
 
