@@ -70,15 +70,15 @@ class Generator:
 static const char Py${name}${prop_name}_doc[] =
     "${c_property}";
 static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
-  ${ctype} prop = TW${name}${prop_name}(self->value);
+  ${return_type} prop = TW${name}${prop_name}(self->value);
   return ${return}(prop);
 }\n''')
-        template_with_unique_ptr = T('''
+        template_with_unique = T('''
 // getter function for ${prop_name}
 static const char Py${name}${prop_name}_doc[] =
     "${c_property}";
 static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
-  ${ctype} prop(TW${name}${prop_name}(self->value));
+  ${return_type} prop(TW${name}${prop_name}(self->value));
   return ${return}(prop);
 }\n''')
         used_types = set()
@@ -86,32 +86,29 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
         functions = []
         for prop in props:
             prop_name = prop._name[len(name) + 2:]
-            is_unique_ptr = False
             if prop._type._name in ('uint8_t', 'uint16_t', 'uint32_t', 'size_t'):
-                ctype = prop._type._name
+                return_type = prop._type._name
                 return_ = 'PyLong_FromLong'
             elif prop._type._name == 'bool':
-                ctype = prop._type._name
+                return_type = prop._type._name
                 return_ = 'PyBool_FromLong'
             elif prop._type._type == 'enum':
-                ctype = prop._type._name
+                return_type = prop._type._name
                 prop_type = prop._type._name[2:]
                 used_types.add(prop_type)
                 return_ = 'Py{0}_FromTW{0}'.format(prop_type)
             elif prop._type._type == 'struct':
-                ctype = prop._type._name + '*'
+                return_type = prop._type._name + '*'
                 prop_type = prop._type._name[2:]
                 used_types.add(prop_type)
                 return_ = 'Py{0}_FromTW{0}'.format(prop_type)
             elif prop._type._name == 'TWString':
-                is_unique_ptr = True
-                ctype = 'TWStringPtr'
+                return_type = 'TWStringPtr'
                 prop_type = prop._type._name[2:]
                 used_types.add('String')
                 return_ = 'PyUnicode_FromTWString'
             elif prop._type._name == 'TWData':
-                is_unique_ptr = True
-                ctype = 'TWDataPtr'
+                return_type = 'TWDataPtr'
                 prop_type = prop._type._name[2:]
                 used_types.add('Data')
                 return_ = 'PyBytes_FromTWData'
@@ -122,10 +119,13 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 'c_property' : str(prop),
                 'name' : name,
                 'prop_name' : prop_name,
-                'ctype' : ctype,
+                'return_type' : return_type,
                 'return' : return_,
             }
-            t = template_with_unique_ptr if is_unique_ptr else template
+            if return_type in { 'TWStringPtr', 'TWDataPtr' }:
+                t = template_with_unique
+            else:
+                t = template
             function = t.substitute(values)
             functions.append(function)
             getsetdefs.append(prop_name)
