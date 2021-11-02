@@ -15,35 +15,22 @@
 # You should have received a copy of the GNU General Public License
 # along with Wallet-core-python.  If not, see <https://www.gnu.org/licenses/>.
 
-import django
 import os
 import os.path
 import shutil
 
 from filecmp import dircmp
+from jinja2 import Environment, FileSystemLoader
 from os.path import dirname
 from parser import Parser
-from tempfile import mkdtemp
 from string import Template as T
-from django.conf import settings
-from django.template import loader, Context
+from tempfile import mkdtemp
 
 DIR = os.path.abspath(os.path.dirname(__file__))
 OUTPUT_DIR = os.path.join(DIR, '..', 'src', 'generated')
 TEMPLATES_DIR = os.path.join(DIR, 'templates')
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': (TEMPLATES_DIR,),
-        'APP_DIRS': False,
-        'OPTIONS': {
-            'autoescape': False
-        }
-    },
-]
-settings.configure(TEMPLATES=TEMPLATES)
-django.setup()
+loader = Environment(loader=FileSystemLoader(TEMPLATES_DIR), autoescape=False)
 
 class Generator:
     def __init__(self):
