@@ -30,12 +30,12 @@ DIR = os.path.abspath(os.path.dirname(__file__))
 OUTPUT_DIR = os.path.join(DIR, '..', 'src', 'generated')
 TEMPLATES_DIR = os.path.join(DIR, 'templates')
 
-loader = Environment(loader=FileSystemLoader(TEMPLATES_DIR), autoescape=False)
-
 class Generator:
     def __init__(self):
         self._parser = Parser()
         self._tmp_dir = mkdtemp()
+        self._loader = Environment(loader=FileSystemLoader(TEMPLATES_DIR), autoescape=False)
+
 
     def py_name(self, name):
         py_name = [name[0].lower()]
@@ -51,9 +51,8 @@ class Generator:
                 py_name.append(c.lower())
         return ''.join(py_name)
 
-    def template(self, filename):
-        filepath = os.path.join(DIR, 'templates', filename)
-        return T(open(filepath).read())
+    def get_template(self, name):
+        return self._loader.get_template(name)
 
     def clang_format(self, path):
         # format generated c/c++ source code
@@ -376,12 +375,12 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         }
 
         with open(os.path.join(self._tmp_dir, name) + '.cc', 'w') as out:
-            template = loader.get_template('enum.cc')
+            template = self.get_template('enum.cc')
             output = template.render(values)
             out.write(output)
 
         with open(os.path.join(self._tmp_dir, name) + '.h', 'w') as out:
-            template = loader.get_template('enum.h')
+            template = self.get_template('enum.h')
             output = template.render(values)
             out.write(output)
 
@@ -412,11 +411,11 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         }
 
         with open(os.path.join(self._tmp_dir, name) + '.cc', 'w') as out:
-            template = loader.get_template('class.cc')
+            template = self.get_template('class.cc')
             out.write(template.render(values))
 
         with open(os.path.join(self._tmp_dir, name) + '.h', 'w') as out:
-            template = loader.get_template('class.h')
+            template = self.get_template('class.h')
             out.write(template.render(values))
 
     def generate_struct(self, struct):
@@ -446,11 +445,11 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         }
 
         with open(os.path.join(self._tmp_dir, name) + '.cc', 'w') as out:
-            template = loader.get_template('struct.cc')
+            template = self.get_template('struct.cc')
             out.write(template.render(values))
 
         with open(os.path.join(self._tmp_dir, name) + '.h', 'w') as out:
-            template = loader.get_template('struct.h')
+            template = self.get_template('struct.h')
             out.write(template.render(values))
 
     def generate(self):
@@ -476,7 +475,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
 
         values = { 'functions' : functions, 'includes' : includes }
         with open(os.path.join(self._tmp_dir, 'module.cc'), 'w') as out:
-            template = loader.get_template('module.cc')
+            template = self.get_template('module.cc')
             out.write(template.render(values))
 
         self.clang_format(self._tmp_dir)
