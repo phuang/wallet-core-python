@@ -21,16 +21,16 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-#include <TrustWalletCore/TW${name}.h>
+#include <TrustWalletCore/TW{{ name }}.h>
 
-// Returns true if the object is a Py${name}.
-bool Py${name}_Check(PyObject* object);
+// Returns true if the object is a Py{{ name }}.
+bool Py{{ name }}_Check(PyObject* object);
 
-// Create Py${name} from an TW${name}.
-PyObject* Py${name}_FromTW${name}(TW${name}* value);
+// Create Py{{ name }} from an TW{{ name }}.
+PyObject* Py{{ name }}_FromTW{{ name }}(TW{{ name }}* value);
 
-// Get enum TW${name} value from a Py${name} object.
-TW${name}* Py${name}_GetTW${name}(PyObject* object);
+// Get enum TW{{ name }} value from a Py{{ name }} object.
+TW{{ name }}* Py{{ name }}_GetTW{{ name }}(PyObject* object);
 
-// Initialize for Py${name}. It is called by python module init function.
-bool PyInit_${name}(PyObject *module);
+// Initialize for Py{{ name }}. It is called by python module init function.
+bool PyInit_{{ name }}(PyObject *module);

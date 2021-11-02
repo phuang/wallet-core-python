@@ -21,7 +21,7 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-#include <TrustWalletCore/TW${name}.h>
+#include <TrustWalletCore/TW{{ name }}.h>
 
-// Initialize for Py${name}. It is called by python module init function.
-bool PyInit_${name}(PyObject *module);
+// Initialize for Py{{ name }}. It is called by python module init function.
+bool PyInit_{{ name }}(PyObject *module);

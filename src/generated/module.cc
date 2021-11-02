@@ -60,6 +60,7 @@
 
 typedef bool (*InitProc)(PyObject* module);
 const InitProc init_functions[] = {
+    // clang-format off
     PyInit_AES,
     PyInit_AESPaddingMode,
     PyInit_Account,
@@ -98,6 +99,7 @@ const InitProc init_functions[] = {
     PyInit_StellarPassphrase,
     PyInit_StellarVersionByte,
     PyInit_StoredKey,
+    // clang-format on
 };
 
 PyMODINIT_FUNC PyInit_walletcore(void) {

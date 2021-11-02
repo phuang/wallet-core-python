@@ -21,15 +21,6 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I)    \
-  I(SECP256k1)          \
-  I(ED25519)            \
-  I(ED25519Blake2bNano) \
-  I(Curve25519)         \
-  I(NIST256p1)          \
-  I(ED25519Extended)    \
-  I(None)
-
 static PyTypeObject PyCurveType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -60,34 +51,44 @@ bool PyCurve_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyCurveType) != 0;
 }
 
+struct Constant {
+  const TWCurve value;
+  const char* name;
+  PyObject* pyvalue;
+};
+
+static Constant constants[] = {
+    // clang-format off
+    { TWCurveSECP256k1, "SECP256k1", nullptr },
+    { TWCurveED25519, "ED25519", nullptr },
+    { TWCurveED25519Blake2bNano, "ED25519Blake2bNano", nullptr },
+    { TWCurveCurve25519, "Curve25519", nullptr },
+    { TWCurveNIST256p1, "NIST256p1", nullptr },
+    { TWCurveED25519Extended, "ED25519Extended", nullptr },
+    { TWCurveNone, "None", nullptr },
+    // clang-format on
+};
+
 // Create PyCurve from enum TWCurve. It returns the same PyCurve instance
 // for the same enum TWCurve value.
 PyObject* PyCurve_FromTWCurve(TWCurve value) {
-  struct ValuePair {
-    const TWCurve value;
-    PyObject* pyvalue;
-  };
-#define I(name) {TWCurve##name, nullptr},
-  static ValuePair constants[] = {CONSTANTS(I)};
-#undef I
-
-  ValuePair* value_pair =
+  Constant* constant =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair& v) { return v.value == value; });
+                   [value](const Constant& v) { return v.value == value; });
 
-  if (!value_pair) {
+  if (!constant) {
     PyErr_Format(PyExc_ValueError, "Invalid Curve value: %d", value);
     return nullptr;
   }
 
-  if (!value_pair->pyvalue) {
+  if (!constant->pyvalue) {
     auto* pyvalue = PyObject_New(PyCurveObject, &PyCurveType);
     *const_cast<TWCurve*>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject*)pyvalue;
+    constant->pyvalue = (PyObject*)pyvalue;
   }
 
-  Py_INCREF(value_pair->pyvalue);
-  return value_pair->pyvalue;
+  Py_INCREF(constant->pyvalue);
+  return constant->pyvalue;
 }
 
 TWCurve PyCurve_GetTWCurve(PyObject* object) {
@@ -110,16 +111,11 @@ static PyObject* PyCurve_new(PyTypeObject* subtype,
 }
 
 static PyObject* PyCurve_str(PyCurveObject* self) {
-  const char* str = "Unknown";
-  switch (self->value) {
-#define I(name)       \
-  case TWCurve##name: \
-    str = #name;      \
-    break;
-    CONSTANTS(I)
-#undef I
-  }
-  return PyUnicode_FromString(str);
+  Constant* constant = std::find_if(
+      std::begin(constants), std::end(constants),
+      [self](const Constant& v) { return v.value == self->value; });
+
+  return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};
@@ -145,10 +141,10 @@ bool PyInit_Curve(PyObject* module) {
   PyObject* dict = PyCurveType.tp_dict;
   (void)dict;
 
-#define I(name) \
-  PyDict_SetItemString(dict, #name, PyCurve_FromTWCurve(TWCurve##name));
-  CONSTANTS(I)
-#undef I
+  for (const Constant& constant : constants) {
+    PyDict_SetItemString(dict, constant.name,
+                         PyCurve_FromTWCurve(constant.value));
+  }
 
   return true;
 }

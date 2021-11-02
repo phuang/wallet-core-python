@@ -21,10 +21,6 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I) \
-  I(Zero)            \
-  I(PKCS7)
-
 static PyTypeObject PyAESPaddingModeType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -55,34 +51,39 @@ bool PyAESPaddingMode_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyAESPaddingModeType) != 0;
 }
 
+struct Constant {
+  const TWAESPaddingMode value;
+  const char* name;
+  PyObject* pyvalue;
+};
+
+static Constant constants[] = {
+    // clang-format off
+    { TWAESPaddingModeZero, "Zero", nullptr },
+    { TWAESPaddingModePKCS7, "PKCS7", nullptr },
+    // clang-format on
+};
+
 // Create PyAESPaddingMode from enum TWAESPaddingMode. It returns the same
 // PyAESPaddingMode instance for the same enum TWAESPaddingMode value.
 PyObject* PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode value) {
-  struct ValuePair {
-    const TWAESPaddingMode value;
-    PyObject* pyvalue;
-  };
-#define I(name) {TWAESPaddingMode##name, nullptr},
-  static ValuePair constants[] = {CONSTANTS(I)};
-#undef I
-
-  ValuePair* value_pair =
+  Constant* constant =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair& v) { return v.value == value; });
+                   [value](const Constant& v) { return v.value == value; });
 
-  if (!value_pair) {
+  if (!constant) {
     PyErr_Format(PyExc_ValueError, "Invalid AESPaddingMode value: %d", value);
     return nullptr;
   }
 
-  if (!value_pair->pyvalue) {
+  if (!constant->pyvalue) {
     auto* pyvalue = PyObject_New(PyAESPaddingModeObject, &PyAESPaddingModeType);
     *const_cast<TWAESPaddingMode*>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject*)pyvalue;
+    constant->pyvalue = (PyObject*)pyvalue;
   }
 
-  Py_INCREF(value_pair->pyvalue);
-  return value_pair->pyvalue;
+  Py_INCREF(constant->pyvalue);
+  return constant->pyvalue;
 }
 
 TWAESPaddingMode PyAESPaddingMode_GetTWAESPaddingMode(PyObject* object) {
@@ -107,16 +108,11 @@ static PyObject* PyAESPaddingMode_new(PyTypeObject* subtype,
 }
 
 static PyObject* PyAESPaddingMode_str(PyAESPaddingModeObject* self) {
-  const char* str = "Unknown";
-  switch (self->value) {
-#define I(name)                \
-  case TWAESPaddingMode##name: \
-    str = #name;               \
-    break;
-    CONSTANTS(I)
-#undef I
-  }
-  return PyUnicode_FromString(str);
+  Constant* constant = std::find_if(
+      std::begin(constants), std::end(constants),
+      [self](const Constant& v) { return v.value == self->value; });
+
+  return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};
@@ -143,12 +139,10 @@ bool PyInit_AESPaddingMode(PyObject* module) {
   PyObject* dict = PyAESPaddingModeType.tp_dict;
   (void)dict;
 
-#define I(name)         \
-  PyDict_SetItemString( \
-      dict, #name,      \
-      PyAESPaddingMode_FromTWAESPaddingMode(TWAESPaddingMode##name));
-  CONSTANTS(I)
-#undef I
+  for (const Constant& constant : constants) {
+    PyDict_SetItemString(dict, constant.name,
+                         PyAESPaddingMode_FromTWAESPaddingMode(constant.value));
+  }
 
   return true;
 }

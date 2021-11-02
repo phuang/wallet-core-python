@@ -21,23 +21,6 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I) \
-  I(None)            \
-  I(XPUB)            \
-  I(XPRV)            \
-  I(YPUB)            \
-  I(YPRV)            \
-  I(ZPUB)            \
-  I(ZPRV)            \
-  I(LTUB)            \
-  I(LTPV)            \
-  I(MTUB)            \
-  I(MTPV)            \
-  I(DPUB)            \
-  I(DPRV)            \
-  I(DGUB)            \
-  I(DGPV)
-
 static PyTypeObject PyHDVersionType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -68,34 +51,52 @@ bool PyHDVersion_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyHDVersionType) != 0;
 }
 
+struct Constant {
+  const TWHDVersion value;
+  const char* name;
+  PyObject* pyvalue;
+};
+
+static Constant constants[] = {
+    // clang-format off
+    { TWHDVersionNone, "None", nullptr },
+    { TWHDVersionXPUB, "XPUB", nullptr },
+    { TWHDVersionXPRV, "XPRV", nullptr },
+    { TWHDVersionYPUB, "YPUB", nullptr },
+    { TWHDVersionYPRV, "YPRV", nullptr },
+    { TWHDVersionZPUB, "ZPUB", nullptr },
+    { TWHDVersionZPRV, "ZPRV", nullptr },
+    { TWHDVersionLTUB, "LTUB", nullptr },
+    { TWHDVersionLTPV, "LTPV", nullptr },
+    { TWHDVersionMTUB, "MTUB", nullptr },
+    { TWHDVersionMTPV, "MTPV", nullptr },
+    { TWHDVersionDPUB, "DPUB", nullptr },
+    { TWHDVersionDPRV, "DPRV", nullptr },
+    { TWHDVersionDGUB, "DGUB", nullptr },
+    { TWHDVersionDGPV, "DGPV", nullptr },
+    // clang-format on
+};
+
 // Create PyHDVersion from enum TWHDVersion. It returns the same PyHDVersion
 // instance for the same enum TWHDVersion value.
 PyObject* PyHDVersion_FromTWHDVersion(TWHDVersion value) {
-  struct ValuePair {
-    const TWHDVersion value;
-    PyObject* pyvalue;
-  };
-#define I(name) {TWHDVersion##name, nullptr},
-  static ValuePair constants[] = {CONSTANTS(I)};
-#undef I
-
-  ValuePair* value_pair =
+  Constant* constant =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair& v) { return v.value == value; });
+                   [value](const Constant& v) { return v.value == value; });
 
-  if (!value_pair) {
+  if (!constant) {
     PyErr_Format(PyExc_ValueError, "Invalid HDVersion value: %d", value);
     return nullptr;
   }
 
-  if (!value_pair->pyvalue) {
+  if (!constant->pyvalue) {
     auto* pyvalue = PyObject_New(PyHDVersionObject, &PyHDVersionType);
     *const_cast<TWHDVersion*>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject*)pyvalue;
+    constant->pyvalue = (PyObject*)pyvalue;
   }
 
-  Py_INCREF(value_pair->pyvalue);
-  return value_pair->pyvalue;
+  Py_INCREF(constant->pyvalue);
+  return constant->pyvalue;
 }
 
 TWHDVersion PyHDVersion_GetTWHDVersion(PyObject* object) {
@@ -120,16 +121,11 @@ static PyObject* PyHDVersion_new(PyTypeObject* subtype,
 }
 
 static PyObject* PyHDVersion_str(PyHDVersionObject* self) {
-  const char* str = "Unknown";
-  switch (self->value) {
-#define I(name)           \
-  case TWHDVersion##name: \
-    str = #name;          \
-    break;
-    CONSTANTS(I)
-#undef I
-  }
-  return PyUnicode_FromString(str);
+  Constant* constant = std::find_if(
+      std::begin(constants), std::end(constants),
+      [self](const Constant& v) { return v.value == self->value; });
+
+  return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
 // getter function for IsPublic
@@ -177,11 +173,10 @@ bool PyInit_HDVersion(PyObject* module) {
   PyObject* dict = PyHDVersionType.tp_dict;
   (void)dict;
 
-#define I(name)                     \
-  PyDict_SetItemString(dict, #name, \
-                       PyHDVersion_FromTWHDVersion(TWHDVersion##name));
-  CONSTANTS(I)
-#undef I
+  for (const Constant& constant : constants) {
+    PyDict_SetItemString(dict, constant.name,
+                         PyHDVersion_FromTWHDVersion(constant.value));
+  }
 
   return true;
 }

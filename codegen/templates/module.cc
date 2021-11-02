@@ -19,11 +19,17 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-${includes}
+{% for include in includes -%}
+{{ include }}
+{% endfor %}
 
 typedef bool (*InitProc)(PyObject* module);
 const InitProc init_functions[]= {
-${functions}
+    // clang-format off
+{%- for function in functions %}
+    {{ function }},
+{%- endfor %}
+    // clang-format on
 };
 
 PyMODINIT_FUNC

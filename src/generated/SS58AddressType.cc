@@ -21,10 +21,6 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I) \
-  I(Polkadot)        \
-  I(Kusama)
-
 static PyTypeObject PySS58AddressTypeType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -55,35 +51,40 @@ bool PySS58AddressType_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PySS58AddressTypeType) != 0;
 }
 
+struct Constant {
+  const TWSS58AddressType value;
+  const char* name;
+  PyObject* pyvalue;
+};
+
+static Constant constants[] = {
+    // clang-format off
+    { TWSS58AddressTypePolkadot, "Polkadot", nullptr },
+    { TWSS58AddressTypeKusama, "Kusama", nullptr },
+    // clang-format on
+};
+
 // Create PySS58AddressType from enum TWSS58AddressType. It returns the same
 // PySS58AddressType instance for the same enum TWSS58AddressType value.
 PyObject* PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType value) {
-  struct ValuePair {
-    const TWSS58AddressType value;
-    PyObject* pyvalue;
-  };
-#define I(name) {TWSS58AddressType##name, nullptr},
-  static ValuePair constants[] = {CONSTANTS(I)};
-#undef I
-
-  ValuePair* value_pair =
+  Constant* constant =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair& v) { return v.value == value; });
+                   [value](const Constant& v) { return v.value == value; });
 
-  if (!value_pair) {
+  if (!constant) {
     PyErr_Format(PyExc_ValueError, "Invalid SS58AddressType value: %d", value);
     return nullptr;
   }
 
-  if (!value_pair->pyvalue) {
+  if (!constant->pyvalue) {
     auto* pyvalue =
         PyObject_New(PySS58AddressTypeObject, &PySS58AddressTypeType);
     *const_cast<TWSS58AddressType*>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject*)pyvalue;
+    constant->pyvalue = (PyObject*)pyvalue;
   }
 
-  Py_INCREF(value_pair->pyvalue);
-  return value_pair->pyvalue;
+  Py_INCREF(constant->pyvalue);
+  return constant->pyvalue;
 }
 
 TWSS58AddressType PySS58AddressType_GetTWSS58AddressType(PyObject* object) {
@@ -108,16 +109,11 @@ static PyObject* PySS58AddressType_new(PyTypeObject* subtype,
 }
 
 static PyObject* PySS58AddressType_str(PySS58AddressTypeObject* self) {
-  const char* str = "Unknown";
-  switch (self->value) {
-#define I(name)                 \
-  case TWSS58AddressType##name: \
-    str = #name;                \
-    break;
-    CONSTANTS(I)
-#undef I
-  }
-  return PyUnicode_FromString(str);
+  Constant* constant = std::find_if(
+      std::begin(constants), std::end(constants),
+      [self](const Constant& v) { return v.value == self->value; });
+
+  return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};
@@ -144,12 +140,11 @@ bool PyInit_SS58AddressType(PyObject* module) {
   PyObject* dict = PySS58AddressTypeType.tp_dict;
   (void)dict;
 
-#define I(name)         \
-  PyDict_SetItemString( \
-      dict, #name,      \
-      PySS58AddressType_FromTWSS58AddressType(TWSS58AddressType##name));
-  CONSTANTS(I)
-#undef I
+  for (const Constant& constant : constants) {
+    PyDict_SetItemString(
+        dict, constant.name,
+        PySS58AddressType_FromTWSS58AddressType(constant.value));
+  }
 
   return true;
 }

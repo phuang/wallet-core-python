@@ -21,32 +21,6 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I) \
-  I(Unknown)         \
-  I(Bitcoin)         \
-  I(Litecoin)        \
-  I(Viacoin)         \
-  I(Groestlcoin)     \
-  I(DigiByte)        \
-  I(Monacoin)        \
-  I(Cosmos)          \
-  I(BitcoinCash)     \
-  I(BitcoinGold)     \
-  I(IoTeX)           \
-  I(Zilliqa)         \
-  I(Terra)           \
-  I(CryptoOrg)       \
-  I(Kava)            \
-  I(Oasis)           \
-  I(Bluzelle)        \
-  I(BandChain)       \
-  I(Elrond)          \
-  I(Binance)         \
-  I(THORChain)       \
-  I(Harmony)         \
-  I(Cardano)         \
-  I(Qtum)
-
 static PyTypeObject PyHRPType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -77,34 +51,61 @@ bool PyHRP_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyHRPType) != 0;
 }
 
+struct Constant {
+  const TWHRP value;
+  const char* name;
+  PyObject* pyvalue;
+};
+
+static Constant constants[] = {
+    // clang-format off
+    { TWHRPUnknown, "Unknown", nullptr },
+    { TWHRPBitcoin, "Bitcoin", nullptr },
+    { TWHRPLitecoin, "Litecoin", nullptr },
+    { TWHRPViacoin, "Viacoin", nullptr },
+    { TWHRPGroestlcoin, "Groestlcoin", nullptr },
+    { TWHRPDigiByte, "DigiByte", nullptr },
+    { TWHRPMonacoin, "Monacoin", nullptr },
+    { TWHRPCosmos, "Cosmos", nullptr },
+    { TWHRPBitcoinCash, "BitcoinCash", nullptr },
+    { TWHRPBitcoinGold, "BitcoinGold", nullptr },
+    { TWHRPIoTeX, "IoTeX", nullptr },
+    { TWHRPZilliqa, "Zilliqa", nullptr },
+    { TWHRPTerra, "Terra", nullptr },
+    { TWHRPCryptoOrg, "CryptoOrg", nullptr },
+    { TWHRPKava, "Kava", nullptr },
+    { TWHRPOasis, "Oasis", nullptr },
+    { TWHRPBluzelle, "Bluzelle", nullptr },
+    { TWHRPBandChain, "BandChain", nullptr },
+    { TWHRPElrond, "Elrond", nullptr },
+    { TWHRPBinance, "Binance", nullptr },
+    { TWHRPTHORChain, "THORChain", nullptr },
+    { TWHRPHarmony, "Harmony", nullptr },
+    { TWHRPCardano, "Cardano", nullptr },
+    { TWHRPQtum, "Qtum", nullptr },
+    // clang-format on
+};
+
 // Create PyHRP from enum TWHRP. It returns the same PyHRP instance
 // for the same enum TWHRP value.
 PyObject* PyHRP_FromTWHRP(TWHRP value) {
-  struct ValuePair {
-    const TWHRP value;
-    PyObject* pyvalue;
-  };
-#define I(name) {TWHRP##name, nullptr},
-  static ValuePair constants[] = {CONSTANTS(I)};
-#undef I
-
-  ValuePair* value_pair =
+  Constant* constant =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair& v) { return v.value == value; });
+                   [value](const Constant& v) { return v.value == value; });
 
-  if (!value_pair) {
+  if (!constant) {
     PyErr_Format(PyExc_ValueError, "Invalid HRP value: %d", value);
     return nullptr;
   }
 
-  if (!value_pair->pyvalue) {
+  if (!constant->pyvalue) {
     auto* pyvalue = PyObject_New(PyHRPObject, &PyHRPType);
     *const_cast<TWHRP*>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject*)pyvalue;
+    constant->pyvalue = (PyObject*)pyvalue;
   }
 
-  Py_INCREF(value_pair->pyvalue);
-  return value_pair->pyvalue;
+  Py_INCREF(constant->pyvalue);
+  return constant->pyvalue;
 }
 
 TWHRP PyHRP_GetTWHRP(PyObject* object) {
@@ -127,16 +128,11 @@ static PyObject* PyHRP_new(PyTypeObject* subtype,
 }
 
 static PyObject* PyHRP_str(PyHRPObject* self) {
-  const char* str = "Unknown";
-  switch (self->value) {
-#define I(name)     \
-  case TWHRP##name: \
-    str = #name;    \
-    break;
-    CONSTANTS(I)
-#undef I
-  }
-  return PyUnicode_FromString(str);
+  Constant* constant = std::find_if(
+      std::begin(constants), std::end(constants),
+      [self](const Constant& v) { return v.value == self->value; });
+
+  return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};
@@ -162,9 +158,9 @@ bool PyInit_HRP(PyObject* module) {
   PyObject* dict = PyHRPType.tp_dict;
   (void)dict;
 
-#define I(name) PyDict_SetItemString(dict, #name, PyHRP_FromTWHRP(TWHRP##name));
-  CONSTANTS(I)
-#undef I
+  for (const Constant& constant : constants) {
+    PyDict_SetItemString(dict, constant.name, PyHRP_FromTWHRP(constant.value));
+  }
 
   return true;
 }

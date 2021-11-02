@@ -21,16 +21,6 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I)   \
-  I(SECP256k1)         \
-  I(SECP256k1Extended) \
-  I(NIST256p1)         \
-  I(NIST256p1Extended) \
-  I(ED25519)           \
-  I(ED25519Blake2b)    \
-  I(CURVE25519)        \
-  I(ED25519Extended)
-
 static PyTypeObject PyPublicKeyTypeType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -61,34 +51,45 @@ bool PyPublicKeyType_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyPublicKeyTypeType) != 0;
 }
 
+struct Constant {
+  const TWPublicKeyType value;
+  const char* name;
+  PyObject* pyvalue;
+};
+
+static Constant constants[] = {
+    // clang-format off
+    { TWPublicKeyTypeSECP256k1, "SECP256k1", nullptr },
+    { TWPublicKeyTypeSECP256k1Extended, "SECP256k1Extended", nullptr },
+    { TWPublicKeyTypeNIST256p1, "NIST256p1", nullptr },
+    { TWPublicKeyTypeNIST256p1Extended, "NIST256p1Extended", nullptr },
+    { TWPublicKeyTypeED25519, "ED25519", nullptr },
+    { TWPublicKeyTypeED25519Blake2b, "ED25519Blake2b", nullptr },
+    { TWPublicKeyTypeCURVE25519, "CURVE25519", nullptr },
+    { TWPublicKeyTypeED25519Extended, "ED25519Extended", nullptr },
+    // clang-format on
+};
+
 // Create PyPublicKeyType from enum TWPublicKeyType. It returns the same
 // PyPublicKeyType instance for the same enum TWPublicKeyType value.
 PyObject* PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType value) {
-  struct ValuePair {
-    const TWPublicKeyType value;
-    PyObject* pyvalue;
-  };
-#define I(name) {TWPublicKeyType##name, nullptr},
-  static ValuePair constants[] = {CONSTANTS(I)};
-#undef I
-
-  ValuePair* value_pair =
+  Constant* constant =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair& v) { return v.value == value; });
+                   [value](const Constant& v) { return v.value == value; });
 
-  if (!value_pair) {
+  if (!constant) {
     PyErr_Format(PyExc_ValueError, "Invalid PublicKeyType value: %d", value);
     return nullptr;
   }
 
-  if (!value_pair->pyvalue) {
+  if (!constant->pyvalue) {
     auto* pyvalue = PyObject_New(PyPublicKeyTypeObject, &PyPublicKeyTypeType);
     *const_cast<TWPublicKeyType*>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject*)pyvalue;
+    constant->pyvalue = (PyObject*)pyvalue;
   }
 
-  Py_INCREF(value_pair->pyvalue);
-  return value_pair->pyvalue;
+  Py_INCREF(constant->pyvalue);
+  return constant->pyvalue;
 }
 
 TWPublicKeyType PyPublicKeyType_GetTWPublicKeyType(PyObject* object) {
@@ -113,16 +114,11 @@ static PyObject* PyPublicKeyType_new(PyTypeObject* subtype,
 }
 
 static PyObject* PyPublicKeyType_str(PyPublicKeyTypeObject* self) {
-  const char* str = "Unknown";
-  switch (self->value) {
-#define I(name)               \
-  case TWPublicKeyType##name: \
-    str = #name;              \
-    break;
-    CONSTANTS(I)
-#undef I
-  }
-  return PyUnicode_FromString(str);
+  Constant* constant = std::find_if(
+      std::begin(constants), std::end(constants),
+      [self](const Constant& v) { return v.value == self->value; });
+
+  return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};
@@ -149,12 +145,10 @@ bool PyInit_PublicKeyType(PyObject* module) {
   PyObject* dict = PyPublicKeyTypeType.tp_dict;
   (void)dict;
 
-#define I(name)         \
-  PyDict_SetItemString( \
-      dict, #name,      \
-      PyPublicKeyType_FromTWPublicKeyType(TWPublicKeyType##name));
-  CONSTANTS(I)
-#undef I
+  for (const Constant& constant : constants) {
+    PyDict_SetItemString(dict, constant.name,
+                         PyPublicKeyType_FromTWPublicKeyType(constant.value));
+  }
 
   return true;
 }

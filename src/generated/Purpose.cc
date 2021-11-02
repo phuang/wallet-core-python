@@ -21,12 +21,6 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I) \
-  I(BIP44)           \
-  I(BIP49)           \
-  I(BIP84)           \
-  I(BIP1852)
-
 static PyTypeObject PyPurposeType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -57,34 +51,41 @@ bool PyPurpose_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyPurposeType) != 0;
 }
 
+struct Constant {
+  const TWPurpose value;
+  const char* name;
+  PyObject* pyvalue;
+};
+
+static Constant constants[] = {
+    // clang-format off
+    { TWPurposeBIP44, "BIP44", nullptr },
+    { TWPurposeBIP49, "BIP49", nullptr },
+    { TWPurposeBIP84, "BIP84", nullptr },
+    { TWPurposeBIP1852, "BIP1852", nullptr },
+    // clang-format on
+};
+
 // Create PyPurpose from enum TWPurpose. It returns the same PyPurpose instance
 // for the same enum TWPurpose value.
 PyObject* PyPurpose_FromTWPurpose(TWPurpose value) {
-  struct ValuePair {
-    const TWPurpose value;
-    PyObject* pyvalue;
-  };
-#define I(name) {TWPurpose##name, nullptr},
-  static ValuePair constants[] = {CONSTANTS(I)};
-#undef I
-
-  ValuePair* value_pair =
+  Constant* constant =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair& v) { return v.value == value; });
+                   [value](const Constant& v) { return v.value == value; });
 
-  if (!value_pair) {
+  if (!constant) {
     PyErr_Format(PyExc_ValueError, "Invalid Purpose value: %d", value);
     return nullptr;
   }
 
-  if (!value_pair->pyvalue) {
+  if (!constant->pyvalue) {
     auto* pyvalue = PyObject_New(PyPurposeObject, &PyPurposeType);
     *const_cast<TWPurpose*>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject*)pyvalue;
+    constant->pyvalue = (PyObject*)pyvalue;
   }
 
-  Py_INCREF(value_pair->pyvalue);
-  return value_pair->pyvalue;
+  Py_INCREF(constant->pyvalue);
+  return constant->pyvalue;
 }
 
 TWPurpose PyPurpose_GetTWPurpose(PyObject* object) {
@@ -109,16 +110,11 @@ static PyObject* PyPurpose_new(PyTypeObject* subtype,
 }
 
 static PyObject* PyPurpose_str(PyPurposeObject* self) {
-  const char* str = "Unknown";
-  switch (self->value) {
-#define I(name)         \
-  case TWPurpose##name: \
-    str = #name;        \
-    break;
-    CONSTANTS(I)
-#undef I
-  }
-  return PyUnicode_FromString(str);
+  Constant* constant = std::find_if(
+      std::begin(constants), std::end(constants),
+      [self](const Constant& v) { return v.value == self->value; });
+
+  return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};
@@ -144,10 +140,10 @@ bool PyInit_Purpose(PyObject* module) {
   PyObject* dict = PyPurposeType.tp_dict;
   (void)dict;
 
-#define I(name) \
-  PyDict_SetItemString(dict, #name, PyPurpose_FromTWPurpose(TWPurpose##name));
-  CONSTANTS(I)
-#undef I
+  for (const Constant& constant : constants) {
+    PyDict_SetItemString(dict, constant.name,
+                         PyPurpose_FromTWPurpose(constant.value));
+  }
 
   return true;
 }

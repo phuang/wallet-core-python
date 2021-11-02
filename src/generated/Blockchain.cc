@@ -21,41 +21,6 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I) \
-  I(Bitcoin)         \
-  I(Ethereum)        \
-  I(Vechain)         \
-  I(Tron)            \
-  I(Icon)            \
-  I(Binance)         \
-  I(Ripple)          \
-  I(Tezos)           \
-  I(Nimiq)           \
-  I(Stellar)         \
-  I(Aion)            \
-  I(Cosmos)          \
-  I(Theta)           \
-  I(Ontology)        \
-  I(Zilliqa)         \
-  I(IoTeX)           \
-  I(EOS)             \
-  I(Nano)            \
-  I(NULS)            \
-  I(Waves)           \
-  I(Aeternity)       \
-  I(Nebulas)         \
-  I(FIO)             \
-  I(Solana)          \
-  I(Harmony)         \
-  I(NEAR)            \
-  I(Algorand)        \
-  I(Polkadot)        \
-  I(Cardano)         \
-  I(NEO)             \
-  I(Filecoin)        \
-  I(ElrondNetwork)   \
-  I(OasisNetwork)
-
 static PyTypeObject PyBlockchainType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -86,34 +51,70 @@ bool PyBlockchain_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyBlockchainType) != 0;
 }
 
+struct Constant {
+  const TWBlockchain value;
+  const char* name;
+  PyObject* pyvalue;
+};
+
+static Constant constants[] = {
+    // clang-format off
+    { TWBlockchainBitcoin, "Bitcoin", nullptr },
+    { TWBlockchainEthereum, "Ethereum", nullptr },
+    { TWBlockchainVechain, "Vechain", nullptr },
+    { TWBlockchainTron, "Tron", nullptr },
+    { TWBlockchainIcon, "Icon", nullptr },
+    { TWBlockchainBinance, "Binance", nullptr },
+    { TWBlockchainRipple, "Ripple", nullptr },
+    { TWBlockchainTezos, "Tezos", nullptr },
+    { TWBlockchainNimiq, "Nimiq", nullptr },
+    { TWBlockchainStellar, "Stellar", nullptr },
+    { TWBlockchainAion, "Aion", nullptr },
+    { TWBlockchainCosmos, "Cosmos", nullptr },
+    { TWBlockchainTheta, "Theta", nullptr },
+    { TWBlockchainOntology, "Ontology", nullptr },
+    { TWBlockchainZilliqa, "Zilliqa", nullptr },
+    { TWBlockchainIoTeX, "IoTeX", nullptr },
+    { TWBlockchainEOS, "EOS", nullptr },
+    { TWBlockchainNano, "Nano", nullptr },
+    { TWBlockchainNULS, "NULS", nullptr },
+    { TWBlockchainWaves, "Waves", nullptr },
+    { TWBlockchainAeternity, "Aeternity", nullptr },
+    { TWBlockchainNebulas, "Nebulas", nullptr },
+    { TWBlockchainFIO, "FIO", nullptr },
+    { TWBlockchainSolana, "Solana", nullptr },
+    { TWBlockchainHarmony, "Harmony", nullptr },
+    { TWBlockchainNEAR, "NEAR", nullptr },
+    { TWBlockchainAlgorand, "Algorand", nullptr },
+    { TWBlockchainPolkadot, "Polkadot", nullptr },
+    { TWBlockchainCardano, "Cardano", nullptr },
+    { TWBlockchainNEO, "NEO", nullptr },
+    { TWBlockchainFilecoin, "Filecoin", nullptr },
+    { TWBlockchainElrondNetwork, "ElrondNetwork", nullptr },
+    { TWBlockchainOasisNetwork, "OasisNetwork", nullptr },
+    // clang-format on
+};
+
 // Create PyBlockchain from enum TWBlockchain. It returns the same PyBlockchain
 // instance for the same enum TWBlockchain value.
 PyObject* PyBlockchain_FromTWBlockchain(TWBlockchain value) {
-  struct ValuePair {
-    const TWBlockchain value;
-    PyObject* pyvalue;
-  };
-#define I(name) {TWBlockchain##name, nullptr},
-  static ValuePair constants[] = {CONSTANTS(I)};
-#undef I
-
-  ValuePair* value_pair =
+  Constant* constant =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair& v) { return v.value == value; });
+                   [value](const Constant& v) { return v.value == value; });
 
-  if (!value_pair) {
+  if (!constant) {
     PyErr_Format(PyExc_ValueError, "Invalid Blockchain value: %d", value);
     return nullptr;
   }
 
-  if (!value_pair->pyvalue) {
+  if (!constant->pyvalue) {
     auto* pyvalue = PyObject_New(PyBlockchainObject, &PyBlockchainType);
     *const_cast<TWBlockchain*>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject*)pyvalue;
+    constant->pyvalue = (PyObject*)pyvalue;
   }
 
-  Py_INCREF(value_pair->pyvalue);
-  return value_pair->pyvalue;
+  Py_INCREF(constant->pyvalue);
+  return constant->pyvalue;
 }
 
 TWBlockchain PyBlockchain_GetTWBlockchain(PyObject* object) {
@@ -138,16 +139,11 @@ static PyObject* PyBlockchain_new(PyTypeObject* subtype,
 }
 
 static PyObject* PyBlockchain_str(PyBlockchainObject* self) {
-  const char* str = "Unknown";
-  switch (self->value) {
-#define I(name)            \
-  case TWBlockchain##name: \
-    str = #name;           \
-    break;
-    CONSTANTS(I)
-#undef I
-  }
-  return PyUnicode_FromString(str);
+  Constant* constant = std::find_if(
+      std::begin(constants), std::end(constants),
+      [self](const Constant& v) { return v.value == self->value; });
+
+  return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};
@@ -174,11 +170,10 @@ bool PyInit_Blockchain(PyObject* module) {
   PyObject* dict = PyBlockchainType.tp_dict;
   (void)dict;
 
-#define I(name)                     \
-  PyDict_SetItemString(dict, #name, \
-                       PyBlockchain_FromTWBlockchain(TWBlockchain##name));
-  CONSTANTS(I)
-#undef I
+  for (const Constant& constant : constants) {
+    PyDict_SetItemString(dict, constant.name,
+                         PyBlockchain_FromTWBlockchain(constant.value));
+  }
 
   return true;
 }

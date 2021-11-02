@@ -15,18 +15,35 @@
 # You should have received a copy of the GNU General Public License
 # along with Wallet-core-python.  If not, see <https://www.gnu.org/licenses/>.
 
+import django
 import os
+import os.path
 import shutil
 
 from filecmp import dircmp
-from os.path import basename
 from os.path import dirname
 from parser import Parser
 from tempfile import mkdtemp
 from string import Template as T
+from django.conf import settings
+from django.template import loader, Context
 
-DIR = dirname(__file__)
+DIR = os.path.abspath(os.path.dirname(__file__))
 OUTPUT_DIR = os.path.join(DIR, '..', 'src', 'generated')
+TEMPLATES_DIR = os.path.join(DIR, 'templates')
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': (TEMPLATES_DIR,),
+        'APP_DIRS': False,
+        'OPTIONS': {
+            'autoescape': False
+        }
+    },
+]
+settings.configure(TEMPLATES=TEMPLATES)
+django.setup()
 
 class Generator:
     def __init__(self):
@@ -347,15 +364,15 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         for fullname in enum._constants:
             assert fullname.startswith('TW' + name)
             shortname = fullname[2 + len(name):]
-            constants.append('    I({}) \\'.format(shortname))
-        constants = '\n'.join(constants)
+            constants.append(shortname)
 
         prop_includes, prop_functions, getsetdefs = self.process_properties(name, enum._properties)
         method_includes, method_functions, methoddefs = self.process_methods(name, enum._methods, False)
         static_method_includes, static_method_functions, static_methoddefs = self.process_methods(name, enum._static_methods, True)
 
         includes = prop_includes + method_includes + static_method_includes
-        includes = '\n'.join(includes)
+        includes.sort()
+        # includes = '\n'.join(includes)
         functions = prop_functions + method_functions + static_method_functions
         functions = '\n'.join(functions)
         getsetdefs = '\n  '.join(getsetdefs)
@@ -372,12 +389,14 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         }
 
         with open(os.path.join(self._tmp_dir, name) + '.cc', 'w') as out:
-            template = self.template('enum.cc')
-            out.write(template.substitute(values))
+            template = loader.get_template('enum.cc')
+            output = template.render(values)
+            out.write(output)
 
         with open(os.path.join(self._tmp_dir, name) + '.h', 'w') as out:
-            template = self.template('enum.h')
-            out.write(template.substitute(values))
+            template = loader.get_template('enum.h')
+            output = template.render(values)
+            out.write(output)
 
     def generate_class(self, class_):
         name = class_._name
@@ -390,7 +409,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         static_method_includes, static_method_functions, static_methoddefs = self.process_methods(name, class_._static_methods, True)
 
         includes = prop_includes + method_includes + static_method_includes
-        includes = '\n'.join(includes)
+        includes.sort()
         functions = prop_functions + method_functions + static_method_functions
         functions = '\n'.join(functions)
         getsetdefs = '\n  '.join(getsetdefs)
@@ -406,12 +425,12 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         }
 
         with open(os.path.join(self._tmp_dir, name) + '.cc', 'w') as out:
-            template = self.template('class.cc')
-            out.write(template.substitute(values))
+            template = loader.get_template('class.cc')
+            out.write(template.render(values))
 
         with open(os.path.join(self._tmp_dir, name) + '.h', 'w') as out:
-            template = self.template('class.h')
-            out.write(template.substitute(values))
+            template = loader.get_template('class.h')
+            out.write(template.render(values))
 
     def generate_struct(self, struct):
         name = struct._name
@@ -424,7 +443,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         static_method_includes, static_method_functions, static_methoddefs = self.process_methods(name, struct._static_methods, True)
 
         includes = prop_includes + method_includes + static_method_includes
-        includes = '\n'.join(includes)
+        includes.sort()
         functions = prop_functions + method_functions + static_method_functions
         functions = '\n'.join(functions)
         getsetdefs = '\n  '.join(getsetdefs)
@@ -440,12 +459,12 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         }
 
         with open(os.path.join(self._tmp_dir, name) + '.cc', 'w') as out:
-            template = self.template('struct.cc')
-            out.write(template.substitute(values))
+            template = loader.get_template('struct.cc')
+            out.write(template.render(values))
 
         with open(os.path.join(self._tmp_dir, name) + '.h', 'w') as out:
-            template = self.template('struct.h')
-            out.write(template.substitute(values))
+            template = loader.get_template('struct.h')
+            out.write(template.render(values))
 
     def generate(self):
         used_types = set()
@@ -463,15 +482,15 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
 
         used_types.add('AnySigner')
         includes = self.get_includes(used_types)
-        includes = '\n'.join(includes)
+
         names = list(used_types)
         names.sort()
-        functions = '\n'.join(['  PyInit_{},'.format(f) for f in names])
+        functions = ['PyInit_' + f for f in names]
 
         values = { 'functions' : functions, 'includes' : includes }
         with open(os.path.join(self._tmp_dir, 'module.cc'), 'w') as out:
-            template = self.template('module.cc')
-            out.write(template.substitute(values))
+            template = loader.get_template('module.cc')
+            out.write(template.render(values))
 
         self.clang_format(self._tmp_dir)
         result = dircmp(self._tmp_dir, OUTPUT_DIR)

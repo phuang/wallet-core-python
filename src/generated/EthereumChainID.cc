@@ -21,27 +21,6 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I)   \
-  I(Ethereum)          \
-  I(Go)                \
-  I(POA)               \
-  I(Callisto)          \
-  I(EthereumClassic)   \
-  I(VeChain)           \
-  I(ThunderToken)      \
-  I(TomoChain)         \
-  I(BinanceSmartChain) \
-  I(Polygon)           \
-  I(Wanchain)          \
-  I(Optimism)          \
-  I(Arbitrum)          \
-  I(Heco)              \
-  I(Avalanche)         \
-  I(XDai)              \
-  I(Fantom)            \
-  I(Celo)              \
-  I(Ronin)
-
 static PyTypeObject PyEthereumChainIDType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -72,35 +51,57 @@ bool PyEthereumChainID_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyEthereumChainIDType) != 0;
 }
 
+struct Constant {
+  const TWEthereumChainID value;
+  const char* name;
+  PyObject* pyvalue;
+};
+
+static Constant constants[] = {
+    // clang-format off
+    { TWEthereumChainIDEthereum, "Ethereum", nullptr },
+    { TWEthereumChainIDGo, "Go", nullptr },
+    { TWEthereumChainIDPOA, "POA", nullptr },
+    { TWEthereumChainIDCallisto, "Callisto", nullptr },
+    { TWEthereumChainIDEthereumClassic, "EthereumClassic", nullptr },
+    { TWEthereumChainIDVeChain, "VeChain", nullptr },
+    { TWEthereumChainIDThunderToken, "ThunderToken", nullptr },
+    { TWEthereumChainIDTomoChain, "TomoChain", nullptr },
+    { TWEthereumChainIDBinanceSmartChain, "BinanceSmartChain", nullptr },
+    { TWEthereumChainIDPolygon, "Polygon", nullptr },
+    { TWEthereumChainIDWanchain, "Wanchain", nullptr },
+    { TWEthereumChainIDOptimism, "Optimism", nullptr },
+    { TWEthereumChainIDArbitrum, "Arbitrum", nullptr },
+    { TWEthereumChainIDHeco, "Heco", nullptr },
+    { TWEthereumChainIDAvalanche, "Avalanche", nullptr },
+    { TWEthereumChainIDXDai, "XDai", nullptr },
+    { TWEthereumChainIDFantom, "Fantom", nullptr },
+    { TWEthereumChainIDCelo, "Celo", nullptr },
+    { TWEthereumChainIDRonin, "Ronin", nullptr },
+    // clang-format on
+};
+
 // Create PyEthereumChainID from enum TWEthereumChainID. It returns the same
 // PyEthereumChainID instance for the same enum TWEthereumChainID value.
 PyObject* PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value) {
-  struct ValuePair {
-    const TWEthereumChainID value;
-    PyObject* pyvalue;
-  };
-#define I(name) {TWEthereumChainID##name, nullptr},
-  static ValuePair constants[] = {CONSTANTS(I)};
-#undef I
-
-  ValuePair* value_pair =
+  Constant* constant =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair& v) { return v.value == value; });
+                   [value](const Constant& v) { return v.value == value; });
 
-  if (!value_pair) {
+  if (!constant) {
     PyErr_Format(PyExc_ValueError, "Invalid EthereumChainID value: %d", value);
     return nullptr;
   }
 
-  if (!value_pair->pyvalue) {
+  if (!constant->pyvalue) {
     auto* pyvalue =
         PyObject_New(PyEthereumChainIDObject, &PyEthereumChainIDType);
     *const_cast<TWEthereumChainID*>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject*)pyvalue;
+    constant->pyvalue = (PyObject*)pyvalue;
   }
 
-  Py_INCREF(value_pair->pyvalue);
-  return value_pair->pyvalue;
+  Py_INCREF(constant->pyvalue);
+  return constant->pyvalue;
 }
 
 TWEthereumChainID PyEthereumChainID_GetTWEthereumChainID(PyObject* object) {
@@ -125,16 +126,11 @@ static PyObject* PyEthereumChainID_new(PyTypeObject* subtype,
 }
 
 static PyObject* PyEthereumChainID_str(PyEthereumChainIDObject* self) {
-  const char* str = "Unknown";
-  switch (self->value) {
-#define I(name)                 \
-  case TWEthereumChainID##name: \
-    str = #name;                \
-    break;
-    CONSTANTS(I)
-#undef I
-  }
-  return PyUnicode_FromString(str);
+  Constant* constant = std::find_if(
+      std::begin(constants), std::end(constants),
+      [self](const Constant& v) { return v.value == self->value; });
+
+  return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};
@@ -161,12 +157,11 @@ bool PyInit_EthereumChainID(PyObject* module) {
   PyObject* dict = PyEthereumChainIDType.tp_dict;
   (void)dict;
 
-#define I(name)         \
-  PyDict_SetItemString( \
-      dict, #name,      \
-      PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID##name));
-  CONSTANTS(I)
-#undef I
+  for (const Constant& constant : constants) {
+    PyDict_SetItemString(
+        dict, constant.name,
+        PyEthereumChainID_FromTWEthereumChainID(constant.value));
+  }
 
   return true;
 }

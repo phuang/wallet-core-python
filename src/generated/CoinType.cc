@@ -30,82 +30,6 @@
 #include "generated/PublicKey.h"
 #include "generated/Purpose.h"
 
-#define CONSTANTS(I)  \
-  I(Aeternity)        \
-  I(Aion)             \
-  I(Binance)          \
-  I(Bitcoin)          \
-  I(BitcoinCash)      \
-  I(BitcoinGold)      \
-  I(Callisto)         \
-  I(Cardano)          \
-  I(Cosmos)           \
-  I(Dash)             \
-  I(Decred)           \
-  I(DigiByte)         \
-  I(Dogecoin)         \
-  I(EOS)              \
-  I(Ethereum)         \
-  I(EthereumClassic)  \
-  I(FIO)              \
-  I(GoChain)          \
-  I(Groestlcoin)      \
-  I(ICON)             \
-  I(IoTeX)            \
-  I(Kava)             \
-  I(Kin)              \
-  I(Litecoin)         \
-  I(Monacoin)         \
-  I(Nebulas)          \
-  I(NULS)             \
-  I(Nano)             \
-  I(NEAR)             \
-  I(Nimiq)            \
-  I(Ontology)         \
-  I(POANetwork)       \
-  I(Qtum)             \
-  I(XRP)              \
-  I(Solana)           \
-  I(Stellar)          \
-  I(Tezos)            \
-  I(Theta)            \
-  I(ThunderToken)     \
-  I(NEO)              \
-  I(TomoChain)        \
-  I(Tron)             \
-  I(VeChain)          \
-  I(Viacoin)          \
-  I(Wanchain)         \
-  I(Zcash)            \
-  I(Zcoin)            \
-  I(Zilliqa)          \
-  I(Zelcash)          \
-  I(Ravencoin)        \
-  I(Waves)            \
-  I(Terra)            \
-  I(Harmony)          \
-  I(Algorand)         \
-  I(Kusama)           \
-  I(Polkadot)         \
-  I(Filecoin)         \
-  I(Elrond)           \
-  I(BandChain)        \
-  I(SmartChainLegacy) \
-  I(SmartChain)       \
-  I(Oasis)            \
-  I(Polygon)          \
-  I(THORChain)        \
-  I(Bluzelle)         \
-  I(Optimism)         \
-  I(Arbitrum)         \
-  I(ECOChain)         \
-  I(AvalancheCChain)  \
-  I(XDai)             \
-  I(Fantom)           \
-  I(CryptoOrg)        \
-  I(Celo)             \
-  I(Ronin)
-
 static PyTypeObject PyCoinTypeType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -136,34 +60,111 @@ bool PyCoinType_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyCoinTypeType) != 0;
 }
 
+struct Constant {
+  const TWCoinType value;
+  const char* name;
+  PyObject* pyvalue;
+};
+
+static Constant constants[] = {
+    // clang-format off
+    { TWCoinTypeAeternity, "Aeternity", nullptr },
+    { TWCoinTypeAion, "Aion", nullptr },
+    { TWCoinTypeBinance, "Binance", nullptr },
+    { TWCoinTypeBitcoin, "Bitcoin", nullptr },
+    { TWCoinTypeBitcoinCash, "BitcoinCash", nullptr },
+    { TWCoinTypeBitcoinGold, "BitcoinGold", nullptr },
+    { TWCoinTypeCallisto, "Callisto", nullptr },
+    { TWCoinTypeCardano, "Cardano", nullptr },
+    { TWCoinTypeCosmos, "Cosmos", nullptr },
+    { TWCoinTypeDash, "Dash", nullptr },
+    { TWCoinTypeDecred, "Decred", nullptr },
+    { TWCoinTypeDigiByte, "DigiByte", nullptr },
+    { TWCoinTypeDogecoin, "Dogecoin", nullptr },
+    { TWCoinTypeEOS, "EOS", nullptr },
+    { TWCoinTypeEthereum, "Ethereum", nullptr },
+    { TWCoinTypeEthereumClassic, "EthereumClassic", nullptr },
+    { TWCoinTypeFIO, "FIO", nullptr },
+    { TWCoinTypeGoChain, "GoChain", nullptr },
+    { TWCoinTypeGroestlcoin, "Groestlcoin", nullptr },
+    { TWCoinTypeICON, "ICON", nullptr },
+    { TWCoinTypeIoTeX, "IoTeX", nullptr },
+    { TWCoinTypeKava, "Kava", nullptr },
+    { TWCoinTypeKin, "Kin", nullptr },
+    { TWCoinTypeLitecoin, "Litecoin", nullptr },
+    { TWCoinTypeMonacoin, "Monacoin", nullptr },
+    { TWCoinTypeNebulas, "Nebulas", nullptr },
+    { TWCoinTypeNULS, "NULS", nullptr },
+    { TWCoinTypeNano, "Nano", nullptr },
+    { TWCoinTypeNEAR, "NEAR", nullptr },
+    { TWCoinTypeNimiq, "Nimiq", nullptr },
+    { TWCoinTypeOntology, "Ontology", nullptr },
+    { TWCoinTypePOANetwork, "POANetwork", nullptr },
+    { TWCoinTypeQtum, "Qtum", nullptr },
+    { TWCoinTypeXRP, "XRP", nullptr },
+    { TWCoinTypeSolana, "Solana", nullptr },
+    { TWCoinTypeStellar, "Stellar", nullptr },
+    { TWCoinTypeTezos, "Tezos", nullptr },
+    { TWCoinTypeTheta, "Theta", nullptr },
+    { TWCoinTypeThunderToken, "ThunderToken", nullptr },
+    { TWCoinTypeNEO, "NEO", nullptr },
+    { TWCoinTypeTomoChain, "TomoChain", nullptr },
+    { TWCoinTypeTron, "Tron", nullptr },
+    { TWCoinTypeVeChain, "VeChain", nullptr },
+    { TWCoinTypeViacoin, "Viacoin", nullptr },
+    { TWCoinTypeWanchain, "Wanchain", nullptr },
+    { TWCoinTypeZcash, "Zcash", nullptr },
+    { TWCoinTypeZcoin, "Zcoin", nullptr },
+    { TWCoinTypeZilliqa, "Zilliqa", nullptr },
+    { TWCoinTypeZelcash, "Zelcash", nullptr },
+    { TWCoinTypeRavencoin, "Ravencoin", nullptr },
+    { TWCoinTypeWaves, "Waves", nullptr },
+    { TWCoinTypeTerra, "Terra", nullptr },
+    { TWCoinTypeHarmony, "Harmony", nullptr },
+    { TWCoinTypeAlgorand, "Algorand", nullptr },
+    { TWCoinTypeKusama, "Kusama", nullptr },
+    { TWCoinTypePolkadot, "Polkadot", nullptr },
+    { TWCoinTypeFilecoin, "Filecoin", nullptr },
+    { TWCoinTypeElrond, "Elrond", nullptr },
+    { TWCoinTypeBandChain, "BandChain", nullptr },
+    { TWCoinTypeSmartChainLegacy, "SmartChainLegacy", nullptr },
+    { TWCoinTypeSmartChain, "SmartChain", nullptr },
+    { TWCoinTypeOasis, "Oasis", nullptr },
+    { TWCoinTypePolygon, "Polygon", nullptr },
+    { TWCoinTypeTHORChain, "THORChain", nullptr },
+    { TWCoinTypeBluzelle, "Bluzelle", nullptr },
+    { TWCoinTypeOptimism, "Optimism", nullptr },
+    { TWCoinTypeArbitrum, "Arbitrum", nullptr },
+    { TWCoinTypeECOChain, "ECOChain", nullptr },
+    { TWCoinTypeAvalancheCChain, "AvalancheCChain", nullptr },
+    { TWCoinTypeXDai, "XDai", nullptr },
+    { TWCoinTypeFantom, "Fantom", nullptr },
+    { TWCoinTypeCryptoOrg, "CryptoOrg", nullptr },
+    { TWCoinTypeCelo, "Celo", nullptr },
+    { TWCoinTypeRonin, "Ronin", nullptr },
+    // clang-format on
+};
+
 // Create PyCoinType from enum TWCoinType. It returns the same PyCoinType
 // instance for the same enum TWCoinType value.
 PyObject* PyCoinType_FromTWCoinType(TWCoinType value) {
-  struct ValuePair {
-    const TWCoinType value;
-    PyObject* pyvalue;
-  };
-#define I(name) {TWCoinType##name, nullptr},
-  static ValuePair constants[] = {CONSTANTS(I)};
-#undef I
-
-  ValuePair* value_pair =
+  Constant* constant =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair& v) { return v.value == value; });
+                   [value](const Constant& v) { return v.value == value; });
 
-  if (!value_pair) {
+  if (!constant) {
     PyErr_Format(PyExc_ValueError, "Invalid CoinType value: %d", value);
     return nullptr;
   }
 
-  if (!value_pair->pyvalue) {
+  if (!constant->pyvalue) {
     auto* pyvalue = PyObject_New(PyCoinTypeObject, &PyCoinTypeType);
     *const_cast<TWCoinType*>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject*)pyvalue;
+    constant->pyvalue = (PyObject*)pyvalue;
   }
 
-  Py_INCREF(value_pair->pyvalue);
-  return value_pair->pyvalue;
+  Py_INCREF(constant->pyvalue);
+  return constant->pyvalue;
 }
 
 TWCoinType PyCoinType_GetTWCoinType(PyObject* object) {
@@ -188,16 +189,11 @@ static PyObject* PyCoinType_new(PyTypeObject* subtype,
 }
 
 static PyObject* PyCoinType_str(PyCoinTypeObject* self) {
-  const char* str = "Unknown";
-  switch (self->value) {
-#define I(name)          \
-  case TWCoinType##name: \
-    str = #name;         \
-    break;
-    CONSTANTS(I)
-#undef I
-  }
-  return PyUnicode_FromString(str);
+  Constant* constant = std::find_if(
+      std::begin(constants), std::end(constants),
+      [self](const Constant& v) { return v.value == self->value; });
+
+  return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
 // getter function for Blockchain
@@ -414,11 +410,10 @@ bool PyInit_CoinType(PyObject* module) {
   PyObject* dict = PyCoinTypeType.tp_dict;
   (void)dict;
 
-#define I(name)                     \
-  PyDict_SetItemString(dict, #name, \
-                       PyCoinType_FromTWCoinType(TWCoinType##name));
-  CONSTANTS(I)
-#undef I
+  for (const Constant& constant : constants) {
+    PyDict_SetItemString(dict, constant.name,
+                         PyCoinType_FromTWCoinType(constant.value));
+  }
 
   return true;
 }

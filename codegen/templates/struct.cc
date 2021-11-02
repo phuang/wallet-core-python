@@ -16,20 +16,22 @@
 //
 // NOTE: this is a GENERATED FILE, changes made here WILL BE LOST.
 
-#include "generated/${name}.h"
+#include "generated/{{ name }}.h"
 
-${includes}
+{% for include in includes %}
+{{ include }}
+{%- endfor %}
 
-struct Py${name}Object {
+struct Py{{ name }}Object {
   PyObject_HEAD;
 };
 
-static PyTypeObject Py${name}Type = {
+static PyTypeObject Py{{ name }}Type = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
     // clang-format on
-    "walletcore.${name}",      /* tp_name */
-    sizeof(Py${name}Object),   /* tp_basicsize */
+    "walletcore.{{ name }}",      /* tp_name */
+    sizeof(Py{{ name }}Object),   /* tp_basicsize */
     0,                         /* tp_itemsize */
     0,                         /* tp_dealloc */
     0,                         /* tp_print */
@@ -50,26 +52,26 @@ static PyTypeObject Py${name}Type = {
     nullptr,                   /* tp_doc */
 };
 
-${functions}
+{{ functions }}
 
 static const PyGetSetDef get_set_defs[] = {
-${getsetdefs}
+{{ getsetdefs }}
 };
 
 static const PyMethodDef method_defs[] = {
-${methoddefs}
+{{ methoddefs }}
 };
 
-bool PyInit_${name}(PyObject *module) {
-  Py${name}Type.tp_getset = (PyGetSetDef*)get_set_defs;
-  Py${name}Type.tp_methods = (PyMethodDef*)method_defs;
+bool PyInit_{{ name }}(PyObject *module) {
+  Py{{ name }}Type.tp_getset = (PyGetSetDef*)get_set_defs;
+  Py{{ name }}Type.tp_methods = (PyMethodDef*)method_defs;
 
-  if (PyType_Ready(&Py${name}Type) < 0)
+  if (PyType_Ready(&Py{{ name }}Type) < 0)
     return false;
 
-  Py_INCREF(&Py${name}Type);
-  if (PyModule_AddObject(module, "${name}", (PyObject *) &Py${name}Type) < 0) {
-    Py_DECREF(&Py${name}Type);
+  Py_INCREF(&Py{{ name }}Type);
+  if (PyModule_AddObject(module, "{{ name }}", (PyObject *) &Py{{ name }}Type) < 0) {
+    Py_DECREF(&Py{{ name }}Type);
     return false;
   }
 

@@ -21,23 +21,23 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-#include <TrustWalletCore/TW${name}.h>
+#include <TrustWalletCore/TW{{ name }}.h>
 
-struct Py${name}Object {
+struct Py{{ name }}Object {
   PyObject_HEAD;
-  const TW${name} value;
+  const TW{{ name }} value;
 };
 
-// Returns true if the object is a Py${name}.
-bool Py${name}_Check(PyObject* object);
+// Returns true if the object is a Py{{ name }}.
+bool Py{{ name }}_Check(PyObject* object);
 
-// Create Py${name} from an enum TW${name} value.
-// Note: it returns the same Py${name} instance for the same enum TW${name} value.
+// Create Py{{ name }} from an enum TW{{ name }} value.
+// Note: it returns the same Py{{ name }} instance for the same enum TW{{ name }} value.
 // the caller should release the reference after using.
-PyObject* Py${name}_FromTW${name}(TW${name} value);
+PyObject* Py{{ name }}_FromTW{{ name }}(TW{{ name }} value);
 
-// Get enum TW${name} value from a Py${name} object.
-TW${name} Py${name}_GetTW${name}(PyObject* object);
+// Get enum TW{{ name }} value from a Py{{ name }} object.
+TW{{ name }} Py{{ name }}_GetTW{{ name }}(PyObject* object);
 
-// Initialize for Py${name}. It is called by python module init function.
-bool PyInit_${name}(PyObject *module);
+// Initialize for Py{{ name }}. It is called by python module init function.
+bool PyInit_{{ name }}(PyObject *module);

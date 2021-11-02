@@ -21,14 +21,6 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I) \
-  I(All)             \
-  I(None)            \
-  I(Single)          \
-  I(Fork)            \
-  I(ForkBTG)         \
-  I(AnyoneCanPay)
-
 static PyTypeObject PyBitcoinSigHashTypeType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -59,38 +51,47 @@ bool PyBitcoinSigHashType_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyBitcoinSigHashTypeType) != 0;
 }
 
+struct Constant {
+  const TWBitcoinSigHashType value;
+  const char* name;
+  PyObject* pyvalue;
+};
+
+static Constant constants[] = {
+    // clang-format off
+    { TWBitcoinSigHashTypeAll, "All", nullptr },
+    { TWBitcoinSigHashTypeNone, "None", nullptr },
+    { TWBitcoinSigHashTypeSingle, "Single", nullptr },
+    { TWBitcoinSigHashTypeFork, "Fork", nullptr },
+    { TWBitcoinSigHashTypeForkBTG, "ForkBTG", nullptr },
+    { TWBitcoinSigHashTypeAnyoneCanPay, "AnyoneCanPay", nullptr },
+    // clang-format on
+};
+
 // Create PyBitcoinSigHashType from enum TWBitcoinSigHashType. It returns the
 // same PyBitcoinSigHashType instance for the same enum TWBitcoinSigHashType
 // value.
 PyObject* PyBitcoinSigHashType_FromTWBitcoinSigHashType(
     TWBitcoinSigHashType value) {
-  struct ValuePair {
-    const TWBitcoinSigHashType value;
-    PyObject* pyvalue;
-  };
-#define I(name) {TWBitcoinSigHashType##name, nullptr},
-  static ValuePair constants[] = {CONSTANTS(I)};
-#undef I
-
-  ValuePair* value_pair =
+  Constant* constant =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair& v) { return v.value == value; });
+                   [value](const Constant& v) { return v.value == value; });
 
-  if (!value_pair) {
+  if (!constant) {
     PyErr_Format(PyExc_ValueError, "Invalid BitcoinSigHashType value: %d",
                  value);
     return nullptr;
   }
 
-  if (!value_pair->pyvalue) {
+  if (!constant->pyvalue) {
     auto* pyvalue =
         PyObject_New(PyBitcoinSigHashTypeObject, &PyBitcoinSigHashTypeType);
     *const_cast<TWBitcoinSigHashType*>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject*)pyvalue;
+    constant->pyvalue = (PyObject*)pyvalue;
   }
 
-  Py_INCREF(value_pair->pyvalue);
-  return value_pair->pyvalue;
+  Py_INCREF(constant->pyvalue);
+  return constant->pyvalue;
 }
 
 TWBitcoinSigHashType PyBitcoinSigHashType_GetTWBitcoinSigHashType(
@@ -117,16 +118,11 @@ static PyObject* PyBitcoinSigHashType_new(PyTypeObject* subtype,
 }
 
 static PyObject* PyBitcoinSigHashType_str(PyBitcoinSigHashTypeObject* self) {
-  const char* str = "Unknown";
-  switch (self->value) {
-#define I(name)                    \
-  case TWBitcoinSigHashType##name: \
-    str = #name;                   \
-    break;
-    CONSTANTS(I)
-#undef I
-  }
-  return PyUnicode_FromString(str);
+  Constant* constant = std::find_if(
+      std::begin(constants), std::end(constants),
+      [self](const Constant& v) { return v.value == self->value; });
+
+  return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
 // method function for IsSingle
@@ -190,12 +186,11 @@ bool PyInit_BitcoinSigHashType(PyObject* module) {
   PyObject* dict = PyBitcoinSigHashTypeType.tp_dict;
   (void)dict;
 
-#define I(name)                                                       \
-  PyDict_SetItemString(dict, #name,                                   \
-                       PyBitcoinSigHashType_FromTWBitcoinSigHashType( \
-                           TWBitcoinSigHashType##name));
-  CONSTANTS(I)
-#undef I
+  for (const Constant& constant : constants) {
+    PyDict_SetItemString(
+        dict, constant.name,
+        PyBitcoinSigHashType_FromTWBitcoinSigHashType(constant.value));
+  }
 
   return true;
 }

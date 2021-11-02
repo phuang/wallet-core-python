@@ -21,12 +21,6 @@
 #include <algorithm>
 #include <iterator>
 
-#define CONSTANTS(I) \
-  I(AccountID)       \
-  I(Seed)            \
-  I(PreAuthTX)       \
-  I(SHA256Hash)
-
 static PyTypeObject PyStellarVersionByteType = {
     // clang-format off
     PyVarObject_HEAD_INIT(NULL, 0)
@@ -57,38 +51,45 @@ bool PyStellarVersionByte_Check(PyObject* object) {
   return PyObject_TypeCheck(object, &PyStellarVersionByteType) != 0;
 }
 
+struct Constant {
+  const TWStellarVersionByte value;
+  const char* name;
+  PyObject* pyvalue;
+};
+
+static Constant constants[] = {
+    // clang-format off
+    { TWStellarVersionByteAccountID, "AccountID", nullptr },
+    { TWStellarVersionByteSeed, "Seed", nullptr },
+    { TWStellarVersionBytePreAuthTX, "PreAuthTX", nullptr },
+    { TWStellarVersionByteSHA256Hash, "SHA256Hash", nullptr },
+    // clang-format on
+};
+
 // Create PyStellarVersionByte from enum TWStellarVersionByte. It returns the
 // same PyStellarVersionByte instance for the same enum TWStellarVersionByte
 // value.
 PyObject* PyStellarVersionByte_FromTWStellarVersionByte(
     TWStellarVersionByte value) {
-  struct ValuePair {
-    const TWStellarVersionByte value;
-    PyObject* pyvalue;
-  };
-#define I(name) {TWStellarVersionByte##name, nullptr},
-  static ValuePair constants[] = {CONSTANTS(I)};
-#undef I
-
-  ValuePair* value_pair =
+  Constant* constant =
       std::find_if(std::begin(constants), std::end(constants),
-                   [&value](const ValuePair& v) { return v.value == value; });
+                   [value](const Constant& v) { return v.value == value; });
 
-  if (!value_pair) {
+  if (!constant) {
     PyErr_Format(PyExc_ValueError, "Invalid StellarVersionByte value: %d",
                  value);
     return nullptr;
   }
 
-  if (!value_pair->pyvalue) {
+  if (!constant->pyvalue) {
     auto* pyvalue =
         PyObject_New(PyStellarVersionByteObject, &PyStellarVersionByteType);
     *const_cast<TWStellarVersionByte*>(&pyvalue->value) = value;
-    value_pair->pyvalue = (PyObject*)pyvalue;
+    constant->pyvalue = (PyObject*)pyvalue;
   }
 
-  Py_INCREF(value_pair->pyvalue);
-  return value_pair->pyvalue;
+  Py_INCREF(constant->pyvalue);
+  return constant->pyvalue;
 }
 
 TWStellarVersionByte PyStellarVersionByte_GetTWStellarVersionByte(
@@ -115,16 +116,11 @@ static PyObject* PyStellarVersionByte_new(PyTypeObject* subtype,
 }
 
 static PyObject* PyStellarVersionByte_str(PyStellarVersionByteObject* self) {
-  const char* str = "Unknown";
-  switch (self->value) {
-#define I(name)                    \
-  case TWStellarVersionByte##name: \
-    str = #name;                   \
-    break;
-    CONSTANTS(I)
-#undef I
-  }
-  return PyUnicode_FromString(str);
+  Constant* constant = std::find_if(
+      std::begin(constants), std::end(constants),
+      [self](const Constant& v) { return v.value == self->value; });
+
+  return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
 static const PyGetSetDef get_set_defs[] = {{}};
@@ -151,12 +147,11 @@ bool PyInit_StellarVersionByte(PyObject* module) {
   PyObject* dict = PyStellarVersionByteType.tp_dict;
   (void)dict;
 
-#define I(name)                                                       \
-  PyDict_SetItemString(dict, #name,                                   \
-                       PyStellarVersionByte_FromTWStellarVersionByte( \
-                           TWStellarVersionByte##name));
-  CONSTANTS(I)
-#undef I
+  for (const Constant& constant : constants) {
+    PyDict_SetItemString(
+        dict, constant.name,
+        PyStellarVersionByte_FromTWStellarVersionByte(constant.value));
+  }
 
   return true;
 }
