@@ -1,0 +1,3 @@
+{% for include in includes %}
+{{ include }}
+{%- endfor %}
