@@ -21,9 +21,7 @@
 #include <algorithm>
 #include <iterator>
 
-{% for include in includes %}
-{{ include }}
-{%- endfor %}
+{% include "includes.template" %}
 
 
 static PyTypeObject Py{{ name }}Type = {
@@ -131,7 +129,10 @@ static const PyGetSetDef get_set_defs[] = {
 };
 
 static const PyMethodDef method_defs[] = {
-{{methoddefs}}
+{%- for def in methoddefs -%}
+  {{ def }},
+{%- endfor -%}
+  {}
 };
 
 bool PyInit_{{ name }}(PyObject *module) {

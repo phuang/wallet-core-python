@@ -18,9 +18,8 @@
 
 #include "generated/{{ name }}.h"
 
-{% for include in includes %}
-{{ include }}
-{%- endfor %}
+{% include "includes.template" %}
+
 
 struct Py{{ name }}Object {
   PyObject_HEAD;
@@ -64,7 +63,10 @@ static const PyGetSetDef get_set_defs[] = {
 };
 
 static const PyMethodDef method_defs[] = {
-{{ methoddefs }}
+{%- for def in methoddefs -%}
+  {{ def }},
+{%- endfor -%}
+  {}
 };
 
 bool PyInit_{{ name }}(PyObject *module) {

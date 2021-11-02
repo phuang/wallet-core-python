@@ -334,7 +334,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         includes = self.get_includes(used_types)
 
         flags = 'METH_FASTCALL | METH_STATIC' if is_static else 'METH_FASTCALL'
-        methoddef_fomat = '{{ "{0}", (PyCFunction)Py{1}{2}, {3}, Py{1}{2}_doc }},'
+        methoddef_fomat = '{{ "{0}", (PyCFunction)Py{1}{2}, {3}, Py{1}{2}_doc }}'
         methoddefs = [
             methoddef_fomat.format(self.py_name(m), name, m, flags) \
             for m in methoddefs ]
@@ -360,8 +360,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         includes.sort()
 
         functions = prop_functions + method_functions + static_method_functions
-        methoddefs = methoddefs + static_methoddefs + [ '{}' ]
-        methoddefs = '\n  '.join(methoddefs)
+        methoddefs = methoddefs + static_methoddefs
 
         values = {
             'name' : name,
@@ -395,8 +394,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         includes = prop_includes + method_includes + static_method_includes
         includes.sort()
         functions = prop_functions + method_functions + static_method_functions
-        methoddefs = methoddefs + static_methoddefs + [ '{}' ]
-        methoddefs = '\n  '.join(methoddefs)
+        methoddefs = methoddefs + static_methoddefs
 
         values = {
             'name' : name,
@@ -427,8 +425,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         includes = prop_includes + method_includes + static_method_includes
         includes.sort()
         functions = prop_functions + method_functions + static_method_functions
-        methoddefs = methoddefs + static_methoddefs + [ '{}' ]
-        methoddefs = '\n  '.join(methoddefs)
+        methoddefs = methoddefs + static_methoddefs
 
         values = {
             'name' : name,
