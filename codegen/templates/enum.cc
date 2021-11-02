@@ -16,12 +16,10 @@
 //
 // NOTE: this is a GENERATED FILE, changes made here WILL BE LOST.
 
-#include "generated/{{ name }}.h"
+{% include "includes.template" %}
 
 #include <algorithm>
 #include <iterator>
-
-{% include "includes.template" %}
 
 
 static PyTypeObject Py{{ name }}Type = {

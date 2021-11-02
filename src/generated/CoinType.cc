@@ -18,9 +18,6 @@
 
 #include "generated/CoinType.h"
 
-#include <algorithm>
-#include <iterator>
-
 #include "String.h"
 #include "generated/Blockchain.h"
 #include "generated/Curve.h"
@@ -29,6 +26,9 @@
 #include "generated/PrivateKey.h"
 #include "generated/PublicKey.h"
 #include "generated/Purpose.h"
+
+#include <algorithm>
+#include <iterator>
 
 static PyTypeObject PyCoinTypeType = {
     // clang-format off

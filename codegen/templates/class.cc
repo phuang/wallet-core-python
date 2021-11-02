@@ -16,8 +16,6 @@
 //
 // NOTE: this is a GENERATED FILE, changes made here WILL BE LOST.
 
-#include "generated/{{ name }}.h"
-
 {% include "includes.template" %}
 
 
