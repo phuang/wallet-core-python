@@ -52,10 +52,15 @@ static PyTypeObject Py{{ name }}Type = {
     nullptr,                   /* tp_doc */
 };
 
-{{ functions }}
+{% for function in functions %}
+{{ function }}
+{%- endfor %}
 
 static const PyGetSetDef get_set_defs[] = {
-{{ getsetdefs }}
+{%- for def in getsetdefs -%}
+  {{ def }},
+{%- endfor -%}
+  {}
 };
 
 static const PyMethodDef method_defs[] = {

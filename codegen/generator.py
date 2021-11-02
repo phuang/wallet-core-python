@@ -134,10 +134,10 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
             getsetdefs.append(prop_name)
 
         includes = self.get_includes(used_types)
-        getsetdefs_format = '{{ "{2}", (getter)Py{0}{1}, nullptr, Py{0}{1}_doc }},'
+        getsetdefs_format = '{{ "{2}", (getter)Py{0}{1}, nullptr, Py{0}{1}_doc }}'
         getsetdefs = [
             getsetdefs_format.format(name, p, self.py_name(p)) \
-            for p in getsetdefs ] + [ '{}' ]
+            for p in getsetdefs ]
         return includes, functions, getsetdefs
 
     def process_arguments(self, args):
@@ -358,10 +358,8 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
 
         includes = prop_includes + method_includes + static_method_includes
         includes.sort()
-        # includes = '\n'.join(includes)
+
         functions = prop_functions + method_functions + static_method_functions
-        functions = '\n'.join(functions)
-        getsetdefs = '\n  '.join(getsetdefs)
         methoddefs = methoddefs + static_methoddefs + [ '{}' ]
         methoddefs = '\n  '.join(methoddefs)
 
@@ -397,8 +395,6 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         includes = prop_includes + method_includes + static_method_includes
         includes.sort()
         functions = prop_functions + method_functions + static_method_functions
-        functions = '\n'.join(functions)
-        getsetdefs = '\n  '.join(getsetdefs)
         methoddefs = methoddefs + static_methoddefs + [ '{}' ]
         methoddefs = '\n  '.join(methoddefs)
 
@@ -431,8 +427,6 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         includes = prop_includes + method_includes + static_method_includes
         includes.sort()
         functions = prop_functions + method_functions + static_method_functions
-        functions = '\n'.join(functions)
-        getsetdefs = '\n  '.join(getsetdefs)
         methoddefs = methoddefs + static_methoddefs + [ '{}' ]
         methoddefs = '\n  '.join(methoddefs)
 

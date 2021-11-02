@@ -119,10 +119,15 @@ static PyObject* Py{{ name }}_str(Py{{ name }}Object *self) {
   return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
-{{functions}}
+{% for function in functions %}
+{{ function }}
+{%- endfor %}
 
 static const PyGetSetDef get_set_defs[] = {
-{{getsetdefs}}
+{%- for def in getsetdefs -%}
+  {{ def }},
+{%- endfor -%}
+  {}
 };
 
 static const PyMethodDef method_defs[] = {
