@@ -25,6 +25,7 @@ from os.path import dirname
 DIR = dirname(__file__)
 WALLET_CORE_INCLUDE = os.path.join(DIR, '..', 'wallet-core', 'include')
 
+
 class Type:
     def __init__(self, text):
         self._text = text
@@ -66,6 +67,7 @@ class Type:
             return ' '.join(words) + '*'
         else:
             return ' '.join(words)
+
 
 class Argument:
     def __init__(self, text):

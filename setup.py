@@ -37,32 +37,31 @@ for line in open(os.path.join(WALLET_CORE_BUILD, 'CMakeCache.txt')):
         link_args.append('--coverage')
         break
 
-compile_args = [ '-std=c++17' ]
+compile_args = ['-std=c++17']
 
 module = Extension('walletcore',
-                    include_dirs = [ WALLET_CORE_INCLUDE, 'src' ],
-                    library_dirs = [ WALLET_CORE_BUILD, TREZOR_CRYPTO ],
-                    libraries = [ 'TrustWalletCore', 'protobuf' , 'TrezorCrypto'],
-                    extra_compile_args = compile_args,
-                    extra_link_args = link_args,
-                    sources = glob('src/*.cc') + glob('src/generated/*.cc'))
+                   include_dirs=[WALLET_CORE_INCLUDE, 'src'],
+                   library_dirs=[WALLET_CORE_BUILD, TREZOR_CRYPTO],
+                   libraries=['TrustWalletCore', 'protobuf', 'TrezorCrypto'],
+                   extra_compile_args=compile_args,
+                   extra_link_args=link_args,
+                   sources=glob('src/*.cc') + glob('src/generated/*.cc'))
 
-setup(name = 'walletcore',
-      version = '0.1.0',
-      description = 'Trust wallet core',
-      author = 'Peng Huang',
-      author_email = 'shawn.p.huang@gmail.com',
-      url = 'https://github.com/phuang/wallet-core-python',
-      download_url = '',
-      keywords = [ 'cryptocurrency', 'wallet' ],
-      ext_modules = [module],
+setup(name='walletcore',
+      version='0.1.0',
+      description='Trust wallet core',
+      author='Peng Huang',
+      author_email='shawn.p.huang@gmail.com',
+      url='https://github.com/phuang/wallet-core-python',
+      download_url='',
+      keywords=['cryptocurrency', 'wallet'],
+      ext_modules=[module],
       classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',
-        'Operating System :: POSIX :: Linux',
-        'Topic :: Software Development :: Libraries :: Python Modules',
-        'License :: OSI Approved :: GPL3',
-        'Programming Language :: C++',
-        '',
-      ],
-  )
+          'Development Status :: 3 - Alpha',
+          'Intended Audience :: Developers',
+          'Operating System :: POSIX :: Linux',
+          'Topic :: Software Development :: Libraries :: Python Modules',
+          'License :: OSI Approved :: GPL3',
+          'Programming Language :: C++',
+          '',
+      ])

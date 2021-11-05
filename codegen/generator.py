@@ -30,12 +30,13 @@ DIR = os.path.abspath(os.path.dirname(__file__))
 OUTPUT_DIR = os.path.join(DIR, '..', 'src', 'generated')
 TEMPLATES_DIR = os.path.join(DIR, 'templates')
 
+
 class Generator:
     def __init__(self):
         self._parser = Parser()
         self._tmp_dir = mkdtemp()
-        self._loader = Environment(loader=FileSystemLoader(TEMPLATES_DIR), autoescape=False)
-
+        self._loader = Environment(
+            loader=FileSystemLoader(TEMPLATES_DIR), autoescape=False)
 
     def py_name(self, name):
         py_name = [name[0].lower()]
@@ -60,11 +61,11 @@ class Generator:
             {0}/*.cc {0}/*.h'.format(path))
 
     def get_includes(self, used_types):
-        non_generated = {  'AnySigner', 'Bool', 'Data', 'Number',  'String' }
-        includes = [ name if name in non_generated else 'generated/' + name
-            for name in used_types ]
+        non_generated = {'AnySigner', 'Bool', 'Data', 'Number',  'String'}
+        includes = [name if name in non_generated else 'generated/' + name
+                    for name in used_types]
         includes.sort()
-        includes = [ '#include "{}.h"'.format(n) for n in includes]
+        includes = ['#include "{}.h"'.format(n) for n in includes]
         return includes
 
     def process_properties(self, name, props):
@@ -116,16 +117,17 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 used_types.add('Data')
                 return_ = 'PyBytes_FromTWData'
             else:
-                raise Exception('Not support property type: ' + str(prop._type))
+                raise Exception(
+                    'Not support property type: ' + str(prop._type))
 
             values = {
-                'c_property' : str(prop),
-                'name' : name,
-                'prop_name' : prop_name,
-                'return_type' : return_type,
-                'return' : return_,
+                'c_property': str(prop),
+                'name': name,
+                'prop_name': prop_name,
+                'return_type': return_type,
+                'return': return_,
             }
-            if return_type in { 'TWStringPtr', 'TWDataPtr' }:
+            if return_type in {'TWStringPtr', 'TWDataPtr'}:
                 t = template_with_unique
             else:
                 t = template
@@ -136,8 +138,8 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
         includes = self.get_includes(used_types)
         getsetdefs_format = '{{ "{2}", (getter)Py{0}{1}, nullptr, Py{0}{1}_doc }}'
         getsetdefs = [
-            getsetdefs_format.format(name, p, self.py_name(p)) \
-            for p in getsetdefs ]
+            getsetdefs_format.format(name, p, self.py_name(p))
+            for p in getsetdefs]
         return includes, functions, getsetdefs
 
     def process_arguments(self, args):
@@ -147,7 +149,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
     PyErr_Format(PyExc_TypeError, "Expect ${nargs} args, but %d args are passed in.", nargs);
     return nullptr;
   }
-''').substitute(nargs = len(args)))
+''').substitute(nargs=len(args)))
 
         template = T('''
   if (!Py${arg_type}_Check(args[${i}])) {
@@ -171,13 +173,13 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
         for i, arg in enumerate(args):
             is_number = False
             if arg._type._name == 'bool':
-                arg_type  = 'Bool'
+                arg_type = 'Bool'
                 arg_ctype = 'bool'
                 get_ctype = 'PyBool_IsTrue'
                 call_args.append('arg{}'.format(i))
                 used_types.add('Bool')
             elif arg._type._name in int_types:
-                arg_type  = 'Long'
+                arg_type = 'Long'
                 arg_ctype = arg._type._name
                 get_ctype = 'PyLong_AsLongLong'
                 call_args.append('arg{}'.format(i))
@@ -185,28 +187,28 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
                 is_number = True
             elif arg._type._name == 'TWString':
                 assert arg._type._is_ptr
-                arg_type  = 'Unicode'
+                arg_type = 'Unicode'
                 arg_ctype = 'TWStringPtr'
                 get_ctype = 'PyUnicode_GetTWString'
                 call_args.append('arg{}.get()'.format(i))
                 used_types.add('String')
             elif arg._type._name == 'TWData':
                 assert arg._type._is_ptr
-                arg_type  = 'Bytes'
+                arg_type = 'Bytes'
                 arg_ctype = 'TWDataPtr'
                 get_ctype = 'PyBytes_GetTWData'
                 call_args.append('arg{}.get()'.format(i))
                 used_types.add('Data')
             elif arg._type._type == 'enum':
                 assert not arg._type._is_ptr
-                arg_type  = arg._type._name[2:]
+                arg_type = arg._type._name[2:]
                 arg_ctype = arg._type._name
                 get_ctype = 'Py{0}_GetTW{0}'.format(arg_type)
                 call_args.append('arg{}'.format(i))
                 used_types.add(arg_type)
             elif arg._type._type == 'struct':
                 assert arg._type._is_ptr
-                arg_type  = arg._type._name[2:]
+                arg_type = arg._type._name[2:]
                 arg_ctype = arg._type._name + '*'
                 get_ctype = 'Py{0}_GetTW{0}'.format(arg_type)
                 call_args.append('arg{}'.format(i))
@@ -214,10 +216,10 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
             else:
                 raise Exception('Not support argument type:' + str(arg._type))
             values = {
-                'arg_type' : arg_type,
-                'arg_ctype' : arg_ctype,
-                'i' : i,
-                'get_ctype' : get_ctype,
+                'arg_type': arg_type,
+                'arg_ctype': arg_ctype,
+                'i': i,
+                'get_ctype': get_ctype,
             }
             t = template_for_number if is_number else template
             prepare_args.append(t.substitute(values))
@@ -303,26 +305,29 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
                 return_type = 'void'
                 return_ = ''
             else:
-                raise Exception('Not support method return type:' + str(method._type))
+                raise Exception(
+                    'Not support method return type:' + str(method._type))
             if not is_static:
-                prepare_args, call_args, types = self.process_arguments(method._args[1:])
-                call_args = 'self->value, '  + call_args if call_args else 'self->value'
+                prepare_args, call_args, types = self.process_arguments(
+                    method._args[1:])
+                call_args = 'self->value, ' + call_args if call_args else 'self->value'
             else:
-                prepare_args, call_args, types = self.process_arguments(method._args)
+                prepare_args, call_args, types = self.process_arguments(
+                    method._args)
             used_types |= types
             values = {
-                'static' : 'static ' if is_static else '',
-                'c_function' : str(method),
-                'name' : name,
-                'method_name' : method_name,
-                'prepare_args' : prepare_args,
-                'call_args' : call_args,
-                'return_type' : return_type,
-                'return' : return_,
+                'static': 'static ' if is_static else '',
+                'c_function': str(method),
+                'name': name,
+                'method_name': method_name,
+                'prepare_args': prepare_args,
+                'call_args': call_args,
+                'return_type': return_type,
+                'return': return_,
             }
             if return_type == 'void':
                 t = void_template
-            elif return_type in { 'TWStringPtr', 'TWDataPtr' }:
+            elif return_type in {'TWStringPtr', 'TWDataPtr'}:
                 t = unique_template
             else:
                 t = template
@@ -336,8 +341,8 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         flags = 'METH_FASTCALL | METH_STATIC' if is_static else 'METH_FASTCALL'
         methoddef_fomat = '{{ "{0}", (PyCFunction)Py{1}{2}, {3}, Py{1}{2}_doc }}'
         methoddefs = [
-            methoddef_fomat.format(self.py_name(m), name, m, flags) \
-            for m in methoddefs ]
+            methoddef_fomat.format(self.py_name(m), name, m, flags)
+            for m in methoddefs]
         return includes, functions, methoddefs
 
     def generate_enum(self, enum):
@@ -352,9 +357,12 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
             shortname = fullname[2 + len(name):]
             constants.append(shortname)
 
-        prop_includes, prop_functions, getsetdefs = self.process_properties(name, enum._properties)
-        method_includes, method_functions, methoddefs = self.process_methods(name, enum._methods, False)
-        static_method_includes, static_method_functions, static_methoddefs = self.process_methods(name, enum._static_methods, True)
+        prop_includes, prop_functions, getsetdefs = self.process_properties(
+            name, enum._properties)
+        method_includes, method_functions, methoddefs = self.process_methods(
+            name, enum._methods, False)
+        static_method_includes, static_method_functions, static_methoddefs = self.process_methods(
+            name, enum._static_methods, True)
 
         includes = prop_includes + method_includes + static_method_includes
         includes.sort()
@@ -363,13 +371,13 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         methoddefs = methoddefs + static_methoddefs
 
         values = {
-            'name' : name,
-            'includes' : includes,
-            'constants' : constants,
-            'getsetdefs' : getsetdefs,
-            'methoddefs' : methoddefs,
-            'functions' : functions,
-            'properties' : enum._properties,
+            'name': name,
+            'includes': includes,
+            'constants': constants,
+            'getsetdefs': getsetdefs,
+            'methoddefs': methoddefs,
+            'functions': functions,
+            'properties': enum._properties,
         }
 
         with open(os.path.join(self._tmp_dir, name) + '.cc', 'w') as out:
@@ -388,9 +396,12 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         name = name[2:]
         used_types = set()
 
-        prop_includes, prop_functions, getsetdefs = self.process_properties(name, class_._properties)
-        method_includes, method_functions, methoddefs = self.process_methods(name, class_._methods, False)
-        static_method_includes, static_method_functions, static_methoddefs = self.process_methods(name, class_._static_methods, True)
+        prop_includes, prop_functions, getsetdefs = self.process_properties(
+            name, class_._properties)
+        method_includes, method_functions, methoddefs = self.process_methods(
+            name, class_._methods, False)
+        static_method_includes, static_method_functions, static_methoddefs = self.process_methods(
+            name, class_._static_methods, True)
 
         includes = prop_includes + method_includes + static_method_includes
         includes.sort()
@@ -398,11 +409,11 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         methoddefs = methoddefs + static_methoddefs
 
         values = {
-            'name' : name,
-            'includes' : includes,
-            'getsetdefs' : getsetdefs,
-            'methoddefs' : methoddefs,
-            'functions' : functions
+            'name': name,
+            'includes': includes,
+            'getsetdefs': getsetdefs,
+            'methoddefs': methoddefs,
+            'functions': functions
         }
 
         with open(os.path.join(self._tmp_dir, name) + '.cc', 'w') as out:
@@ -419,9 +430,12 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         name = name[2:]
         used_types = set()
 
-        prop_includes, prop_functions, getsetdefs = self.process_properties(name, struct._properties)
-        method_includes, method_functions, methoddefs = self.process_methods(name, struct._methods, False)
-        static_method_includes, static_method_functions, static_methoddefs = self.process_methods(name, struct._static_methods, True)
+        prop_includes, prop_functions, getsetdefs = self.process_properties(
+            name, struct._properties)
+        method_includes, method_functions, methoddefs = self.process_methods(
+            name, struct._methods, False)
+        static_method_includes, static_method_functions, static_methoddefs = self.process_methods(
+            name, struct._static_methods, True)
 
         includes = prop_includes + method_includes + static_method_includes
         includes.sort()
@@ -429,11 +443,11 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         methoddefs = methoddefs + static_methoddefs
 
         values = {
-            'name' : name,
-            'includes' : includes,
-            'getsetdefs' : getsetdefs,
-            'methoddefs' : methoddefs,
-            'functions' : functions
+            'name': name,
+            'includes': includes,
+            'getsetdefs': getsetdefs,
+            'methoddefs': methoddefs,
+            'functions': functions
         }
 
         with open(os.path.join(self._tmp_dir, name) + '.cc', 'w') as out:
@@ -465,7 +479,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
         names.sort()
         functions = ['PyInit_' + f for f in names]
 
-        values = { 'functions' : functions, 'includes' : includes }
+        values = {'functions': functions, 'includes': includes}
         with open(os.path.join(self._tmp_dir, 'module.cc'), 'w') as out:
             template = self.get_template('module.cc')
             out.write(template.render(values))
@@ -479,6 +493,7 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
             print('diff file: ' + file)
             shutil.copy(os.path.join(self._tmp_dir, file), OUTPUT_DIR)
         shutil.rmtree(self._tmp_dir)
+
 
 if __name__ == '__main__':
     Generator().generate()
