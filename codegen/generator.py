@@ -368,7 +368,8 @@ static PyObject* Py${name}${method_name}(Py${name}Object *self,
             'constants' : constants,
             'getsetdefs' : getsetdefs,
             'methoddefs' : methoddefs,
-            'functions' : functions
+            'functions' : functions,
+            'properties' : enum._properties,
         }
 
         with open(os.path.join(self._tmp_dir, name) + '.cc', 'w') as out:

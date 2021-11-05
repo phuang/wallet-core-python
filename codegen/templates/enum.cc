@@ -103,6 +103,8 @@ static PyObject* Py{{ name }}_str(Py{{ name }}Object *self) {
 {{ function }}
 {%- endfor %}
 
+{% include "properties.template" %}
+
 static const PyGetSetDef get_set_defs[] = {
 {%- for def in getsetdefs -%}
   {{ def }},
