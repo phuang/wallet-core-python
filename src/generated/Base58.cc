@@ -139,6 +139,8 @@ static PyObject* PyBase58DecodeNoCheck(PyBase58Object* self,
   return PyBytes_FromTWData(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {

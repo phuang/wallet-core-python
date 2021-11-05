@@ -116,6 +116,8 @@ static PyObject* PySS58AddressType_str(PySS58AddressTypeObject* self) {
   return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {{}};

@@ -99,8 +99,9 @@ class Function:
 
 
 class Entity:
-    def __init__(self, file):
+    def __init__(self, file, includes):
         self._file = file
+        self._includes = includes
         self._methods = []
         self._properties = []
         self._static_methods = []
@@ -152,8 +153,8 @@ class Entity:
 
 
 class Enum(Entity):
-    def __init__(self, file, line):
-        Entity.__init__(self, file)
+    def __init__(self, file, line, includes):
+        Entity.__init__(self, file, includes)
         self._name = None
         if line == 'TW_EXPORT_ENUM(uint32_t)' or line == 'TW_EXPORT_ENUM()':
             self._type = 'enum'
@@ -206,8 +207,8 @@ class Enum(Entity):
 
 
 class Class(Entity):
-    def __init__(self, file, line):
-        Entity.__init__(self, file)
+    def __init__(self, file, line, includes):
+        Entity.__init__(self, file, includes)
         self._name = None
         if line == 'TW_EXPORT_STRUCT':
             self._type = 'struct'
@@ -246,14 +247,20 @@ class Parser:
             self.parse(file)
 
     def parse(self, file):
+        includes = []
         for line in file:
             line = line.strip()
+            m = re.findall(r'^#include \"TW(\w+).h\"', line)
+            if m:
+                includes.append(m[0])
+                continue
+
             if line == 'TW_EXPORT_CLASS':
-                self._classes.append(Class(file, line))
+                self._classes.append(Class(file, line, includes))
             elif line == 'TW_EXPORT_STRUCT':
-                self._structs.append(Class(file, line))
+                self._structs.append(Class(file, line, includes))
             elif line.startswith('TW_EXPORT_ENUM'):
-                self._enums.append(Enum(file, line))
+                self._enums.append(Enum(file, line, includes))
             elif line == 'TW_EXPORT_FUNC':
                 raise Exception('Not implemented ' + line)
             else:

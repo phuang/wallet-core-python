@@ -224,6 +224,8 @@ static PyObject* PyAnyAddressCreateWithPublicKey(PyAnyAddressObject* self,
   return PyAnyAddress_FromTWAnyAddress(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"description", (getter)PyAnyAddressDescription, nullptr,
      PyAnyAddressDescription_doc},

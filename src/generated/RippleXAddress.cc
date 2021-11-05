@@ -204,6 +204,8 @@ static PyObject* PyRippleXAddressCreateWithPublicKey(
   return PyRippleXAddress_FromTWRippleXAddress(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"description", (getter)PyRippleXAddressDescription, nullptr,
      PyRippleXAddressDescription_doc},

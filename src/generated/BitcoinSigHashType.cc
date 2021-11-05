@@ -157,6 +157,8 @@ static PyObject* PyBitcoinSigHashTypeIsNone(PyBitcoinSigHashTypeObject* self,
   return PyBool_FromLong(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {

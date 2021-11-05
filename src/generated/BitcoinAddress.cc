@@ -257,6 +257,8 @@ static PyObject* PyBitcoinAddressCreateWithPublicKey(
   return PyBitcoinAddress_FromTWBitcoinAddress(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"description", (getter)PyBitcoinAddressDescription, nullptr,
      PyBitcoinAddressDescription_doc},

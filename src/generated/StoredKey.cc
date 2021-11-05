@@ -549,6 +549,8 @@ static PyObject* PyStoredKeyCreate(PyStoredKeyObject* self,
   return PyStoredKey_FromTWStoredKey(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"identifier", (getter)PyStoredKeyIdentifier, nullptr,
      PyStoredKeyIdentifier_doc},

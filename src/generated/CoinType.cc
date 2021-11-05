@@ -360,6 +360,8 @@ static PyObject* PyCoinTypeDeriveAddressFromPublicKey(PyCoinTypeObject* self,
   return PyUnicode_FromTWString(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"blockchain", (getter)PyCoinTypeBlockchain, nullptr,
      PyCoinTypeBlockchain_doc},

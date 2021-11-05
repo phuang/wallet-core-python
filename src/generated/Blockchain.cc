@@ -146,6 +146,8 @@ static PyObject* PyBlockchain_str(PyBlockchainObject* self) {
   return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {{}};

@@ -213,6 +213,8 @@ static PyObject* PySegwitAddressCreateWithPublicKey(PySegwitAddressObject* self,
   return PySegwitAddress_FromTWSegwitAddress(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"description", (getter)PySegwitAddressDescription, nullptr,
      PySegwitAddressDescription_doc},

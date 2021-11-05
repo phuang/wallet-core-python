@@ -72,6 +72,8 @@ static PyObject* PyEthereumFeeSuggest(PyEthereumFeeObject* self,
   return PyUnicode_FromTWString(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {

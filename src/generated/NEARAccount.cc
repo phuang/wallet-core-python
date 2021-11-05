@@ -112,6 +112,8 @@ static PyObject* PyNEARAccountCreateWithString(PyNEARAccountObject* self,
   return PyNEARAccount_FromTWNEARAccount(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"description", (getter)PyNEARAccountDescription, nullptr,
      PyNEARAccountDescription_doc},

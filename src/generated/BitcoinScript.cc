@@ -519,6 +519,8 @@ static PyObject* PyBitcoinScriptHashTypeForCoin(PyBitcoinScriptObject* self,
   return PyLong_FromLong(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"size", (getter)PyBitcoinScriptSize, nullptr, PyBitcoinScriptSize_doc},
     {"data", (getter)PyBitcoinScriptData, nullptr, PyBitcoinScriptData_doc},

@@ -1,3 +1,4 @@
+// properties
 {% for prop in properties %}
 {# {{ prop }}; #}
 {%- endfor %}

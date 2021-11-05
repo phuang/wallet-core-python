@@ -276,6 +276,8 @@ static PyObject* PyPublicKeyRecover(PyPublicKeyObject* self,
   return PyPublicKey_FromTWPublicKey(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"is_compressed", (getter)PyPublicKeyIsCompressed, nullptr,
      PyPublicKeyIsCompressed_doc},

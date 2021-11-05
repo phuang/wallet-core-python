@@ -482,6 +482,8 @@ static PyObject* PyHDWalletGetPublicKeyFromExtended(PyHDWalletObject* self,
   return PyPublicKey_FromTWPublicKey(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"seed", (getter)PyHDWalletSeed, nullptr, PyHDWalletSeed_doc},
     {"mnemonic", (getter)PyHDWalletMnemonic, nullptr, PyHDWalletMnemonic_doc},

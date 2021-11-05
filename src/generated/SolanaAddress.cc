@@ -137,6 +137,8 @@ static PyObject* PySolanaAddressCreateWithString(PySolanaAddressObject* self,
   return PySolanaAddress_FromTWSolanaAddress(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"description", (getter)PySolanaAddressDescription, nullptr,
      PySolanaAddressDescription_doc},

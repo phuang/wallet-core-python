@@ -494,6 +494,8 @@ static PyObject* PyHashGroestl512Groestl512(PyHashObject* self,
   return PyBytes_FromTWData(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {

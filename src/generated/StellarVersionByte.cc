@@ -123,6 +123,8 @@ static PyObject* PyStellarVersionByte_str(PyStellarVersionByteObject* self) {
   return PyUnicode_FromString(constant ? constant->name : "Unknown");
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {{}};

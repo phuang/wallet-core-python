@@ -155,6 +155,8 @@ static PyObject* PyAccountCreate(PyAccountObject* self,
   return PyAccount_FromTWAccount(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"address", (getter)PyAccountAddress, nullptr, PyAccountAddress_doc},
     {"derivation_path", (getter)PyAccountDerivationPath, nullptr,

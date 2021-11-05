@@ -1372,6 +1372,8 @@ static PyObject* PyEthereumAbiFunctionCreateWithString(
   return PyEthereumAbiFunction_FromTWEthereumAbiFunction(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {

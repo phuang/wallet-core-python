@@ -144,6 +144,8 @@ static PyObject* PyHDVersionIsPrivate(PyHDVersionObject* self, void*) {
   return PyBool_FromLong(prop);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"is_public", (getter)PyHDVersionIsPublic, nullptr,
      PyHDVersionIsPublic_doc},

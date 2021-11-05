@@ -207,6 +207,8 @@ static PyObject* PyGroestlcoinAddressCreateWithPublicKey(
   return PyGroestlcoinAddress_FromTWGroestlcoinAddress(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"description", (getter)PyGroestlcoinAddressDescription, nullptr,
      PyGroestlcoinAddressDescription_doc},

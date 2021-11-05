@@ -112,6 +112,8 @@ static PyObject* PyFIOAccountCreateWithString(PyFIOAccountObject* self,
   return PyFIOAccount_FromTWFIOAccount(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"description", (getter)PyFIOAccountDescription, nullptr,
      PyFIOAccountDescription_doc},

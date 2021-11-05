@@ -407,6 +407,8 @@ static PyObject* PyPrivateKeyIsValid(PyPrivateKeyObject* self,
   return PyBool_FromLong(result);
 }
 
+// properties
+
 static const PyGetSetDef get_set_defs[] = {
     {"data", (getter)PyPrivateKeyData, nullptr, PyPrivateKeyData_doc},
     {}};
