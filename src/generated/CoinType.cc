@@ -142,6 +142,7 @@ static Constant constants[] = {
     { TWCoinTypeCryptoOrg, "CryptoOrg", nullptr },
     { TWCoinTypeCelo, "Celo", nullptr },
     { TWCoinTypeRonin, "Ronin", nullptr },
+    { TWCoinTypeOsmosis, "Osmosis", nullptr },
     // clang-format on
 };
 

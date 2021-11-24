@@ -25,6 +25,7 @@
 #include "generated/CoinType.h"
 #include "generated/HDWallet.h"
 #include "generated/PrivateKey.h"
+#include "generated/StoredKeyEncryptionLevel.h"
 
 struct PyStoredKeyObject {
   PyObject_HEAD;
@@ -117,6 +118,15 @@ static const char PyStoredKeyAccountCount_doc[] =
 static PyObject* PyStoredKeyAccountCount(PyStoredKeyObject* self, void*) {
   size_t prop = TWStoredKeyAccountCount(self->value);
   return PyLong_FromLong(prop);
+}
+
+// getter function for EncryptionParameters
+static const char PyStoredKeyEncryptionParameters_doc[] =
+    "TWString* TWStoredKeyEncryptionParameters(struct TWStoredKey* key)";
+static PyObject* PyStoredKeyEncryptionParameters(PyStoredKeyObject* self,
+                                                 void*) {
+  TWStringPtr prop(TWStoredKeyEncryptionParameters(self->value));
+  return PyUnicode_FromTWString(prop);
 }
 
 // method function for Account
@@ -521,6 +531,42 @@ static PyObject* PyStoredKeyImportJSON(PyStoredKeyObject* self,
   return PyStoredKey_FromTWStoredKey(result);
 }
 
+// static method function for CreateLevel
+static const char PyStoredKeyCreateLevel_doc[] =
+    "struct TWStoredKey* TWStoredKeyCreateLevel(TWString* name, TWData* "
+    "password, enum TWStoredKeyEncryptionLevel encryptionLevel)";
+static PyObject* PyStoredKeyCreateLevel(PyStoredKeyObject* self,
+                                        PyObject* const* args,
+                                        Py_ssize_t nargs) {
+  if (nargs != 3) {
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
+    return nullptr;
+  }
+  auto arg1 = PyBytes_GetTWData(args[1]);
+
+  if (!PyStoredKeyEncryptionLevel_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError,
+                    "The arg 2 is not in type StoredKeyEncryptionLevel");
+    return nullptr;
+  }
+  auto arg2 = PyStoredKeyEncryptionLevel_GetTWStoredKeyEncryptionLevel(args[2]);
+
+  TWStoredKey* result = TWStoredKeyCreateLevel(arg0.get(), arg1.get(), arg2);
+  return PyStoredKey_FromTWStoredKey(result);
+}
+
 // static method function for Create
 static const char PyStoredKeyCreate_doc[] =
     "struct TWStoredKey* TWStoredKeyCreate(TWString* name, TWData* password)";
@@ -559,6 +605,8 @@ static const PyGetSetDef get_set_defs[] = {
      PyStoredKeyIsMnemonic_doc},
     {"account_count", (getter)PyStoredKeyAccountCount, nullptr,
      PyStoredKeyAccountCount_doc},
+    {"encryption_parameters", (getter)PyStoredKeyEncryptionParameters, nullptr,
+     PyStoredKeyEncryptionParameters_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
@@ -592,6 +640,8 @@ static const PyMethodDef method_defs[] = {
      METH_FASTCALL | METH_STATIC, PyStoredKeyImportHDWallet_doc},
     {"import_json", (PyCFunction)PyStoredKeyImportJSON,
      METH_FASTCALL | METH_STATIC, PyStoredKeyImportJSON_doc},
+    {"create_level", (PyCFunction)PyStoredKeyCreateLevel,
+     METH_FASTCALL | METH_STATIC, PyStoredKeyCreateLevel_doc},
     {"create", (PyCFunction)PyStoredKeyCreate, METH_FASTCALL | METH_STATIC,
      PyStoredKeyCreate_doc},
     {}};

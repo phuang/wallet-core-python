@@ -57,6 +57,7 @@
 #include "generated/StellarPassphrase.h"
 #include "generated/StellarVersionByte.h"
 #include "generated/StoredKey.h"
+#include "generated/StoredKeyEncryptionLevel.h"
 
 typedef bool (*InitProc)(PyObject* module);
 const InitProc init_functions[] = {
@@ -99,6 +100,7 @@ const InitProc init_functions[] = {
     PyInit_StellarPassphrase,
     PyInit_StellarVersionByte,
     PyInit_StoredKey,
+    PyInit_StoredKeyEncryptionLevel,
     // clang-format on
 };
 
