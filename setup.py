@@ -1,4 +1,4 @@
-# Copyright 2021 Peng Huang <shawn.p.huang@gmail.com>
+# Copyright 2021 guanlong huang <jace833@pm.me>
 # This file is part of Wallet-core-python.
 #
 # Wallet-core-python is free software: you can redistribute it and/or modify
