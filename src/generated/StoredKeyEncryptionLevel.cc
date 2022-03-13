@@ -60,6 +60,7 @@ struct Constant {
 static Constant constants[] = {
     // clang-format off
     { TWStoredKeyEncryptionLevelDefault, "Default", nullptr },
+    { TWStoredKeyEncryptionLevelMinimal, "Minimal", nullptr },
     { TWStoredKeyEncryptionLevelWeak, "Weak", nullptr },
     { TWStoredKeyEncryptionLevelStandard, "Standard", nullptr },
     // clang-format on

@@ -161,6 +161,35 @@ static PyObject* PyPublicKeyVerify(PyPublicKeyObject* self,
   return PyBool_FromLong(result);
 }
 
+// method function for VerifyAsDER
+static const char PyPublicKeyVerifyAsDER_doc[] =
+    "bool TWPublicKeyVerifyAsDER(struct TWPublicKey* pk, TWData* signature, "
+    "TWData* message)";
+static PyObject* PyPublicKeyVerifyAsDER(PyPublicKeyObject* self,
+                                        PyObject* const* args,
+                                        Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
+    return nullptr;
+  }
+  auto arg0 = PyBytes_GetTWData(args[0]);
+
+  if (!PyBytes_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Bytes");
+    return nullptr;
+  }
+  auto arg1 = PyBytes_GetTWData(args[1]);
+
+  bool result = TWPublicKeyVerifyAsDER(self->value, arg0.get(), arg1.get());
+  return PyBool_FromLong(result);
+}
+
 // method function for VerifySchnorr
 static const char PyPublicKeyVerifySchnorr_doc[] =
     "bool TWPublicKeyVerifySchnorr(struct TWPublicKey* pk, TWData* signature, "
@@ -294,6 +323,8 @@ static const PyGetSetDef get_set_defs[] = {
 static const PyMethodDef method_defs[] = {
     {"verify", (PyCFunction)PyPublicKeyVerify, METH_FASTCALL,
      PyPublicKeyVerify_doc},
+    {"verify_as_der", (PyCFunction)PyPublicKeyVerifyAsDER, METH_FASTCALL,
+     PyPublicKeyVerifyAsDER_doc},
     {"verify_schnorr", (PyCFunction)PyPublicKeyVerifySchnorr, METH_FASTCALL,
      PyPublicKeyVerifySchnorr_doc},
     {"create_with_data", (PyCFunction)PyPublicKeyCreateWithData,

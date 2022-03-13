@@ -32,11 +32,11 @@
 #include "generated/CoinType.h"
 #include "generated/CoinTypeConfiguration.h"
 #include "generated/Curve.h"
+#include "generated/DataVector.h"
 #include "generated/EthereumAbi.h"
 #include "generated/EthereumAbiFunction.h"
 #include "generated/EthereumAbiValue.h"
 #include "generated/EthereumChainID.h"
-#include "generated/EthereumFee.h"
 #include "generated/FIOAccount.h"
 #include "generated/GroestlcoinAddress.h"
 #include "generated/HDVersion.h"
@@ -45,6 +45,7 @@
 #include "generated/Hash.h"
 #include "generated/Mnemonic.h"
 #include "generated/NEARAccount.h"
+#include "generated/PBKDF2.h"
 #include "generated/PrivateKey.h"
 #include "generated/PublicKey.h"
 #include "generated/PublicKeyType.h"
@@ -58,6 +59,8 @@
 #include "generated/StellarVersionByte.h"
 #include "generated/StoredKey.h"
 #include "generated/StoredKeyEncryptionLevel.h"
+#include "generated/THORChainSwap.h"
+#include "generated/TransactionCompiler.h"
 
 typedef bool (*InitProc)(PyObject* module);
 const InitProc init_functions[] = {
@@ -75,11 +78,11 @@ const InitProc init_functions[] = {
     PyInit_CoinType,
     PyInit_CoinTypeConfiguration,
     PyInit_Curve,
+    PyInit_DataVector,
     PyInit_EthereumAbi,
     PyInit_EthereumAbiFunction,
     PyInit_EthereumAbiValue,
     PyInit_EthereumChainID,
-    PyInit_EthereumFee,
     PyInit_FIOAccount,
     PyInit_GroestlcoinAddress,
     PyInit_HDVersion,
@@ -88,6 +91,7 @@ const InitProc init_functions[] = {
     PyInit_Hash,
     PyInit_Mnemonic,
     PyInit_NEARAccount,
+    PyInit_PBKDF2,
     PyInit_PrivateKey,
     PyInit_PublicKey,
     PyInit_PublicKeyType,
@@ -101,6 +105,8 @@ const InitProc init_functions[] = {
     PyInit_StellarVersionByte,
     PyInit_StoredKey,
     PyInit_StoredKeyEncryptionLevel,
+    PyInit_THORChainSwap,
+    PyInit_TransactionCompiler,
     // clang-format on
 };
 

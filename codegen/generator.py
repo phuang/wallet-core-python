@@ -90,7 +90,7 @@ static PyObject* Py${name}${prop_name}(Py${name}Object *self, void *) {
         functions = []
         for prop in props:
             prop_name = prop._name[len(name) + 2:]
-            if prop._type._name in ('uint8_t', 'uint16_t', 'uint32_t', 'size_t'):
+            if prop._type._name in ('int32_t', 'uint8_t', 'uint16_t', 'uint32_t', 'size_t'):
                 return_type = prop._type._name
                 return_ = 'PyLong_FromLong'
             elif prop._type._name == 'bool':

@@ -21,7 +21,7 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-#include <TrustWalletCore/TWEthereumFee.h>
+#include <TrustWalletCore/TWPBKDF2.h>
 
-// Initialize for PyEthereumFee. It is called by python module init function.
-bool PyInit_EthereumFee(PyObject* module);
+// Initialize for PyPBKDF2. It is called by python module init function.
+bool PyInit_PBKDF2(PyObject* module);

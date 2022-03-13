@@ -79,10 +79,12 @@ static Constant constants[] = {
     { TWHRPBandChain, "BandChain", nullptr },
     { TWHRPElrond, "Elrond", nullptr },
     { TWHRPBinance, "Binance", nullptr },
+    { TWHRPECash, "ECash", nullptr },
     { TWHRPTHORChain, "THORChain", nullptr },
     { TWHRPHarmony, "Harmony", nullptr },
     { TWHRPCardano, "Cardano", nullptr },
     { TWHRPQtum, "Qtum", nullptr },
+    { TWHRPOsmosis, "Osmosis", nullptr },
     // clang-format on
 };
 

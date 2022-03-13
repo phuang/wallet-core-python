@@ -102,6 +102,15 @@ static PyObject* PySegwitAddressHRP(PySegwitAddressObject* self, void*) {
   return PyHRP_FromTWHRP(prop);
 }
 
+// getter function for WitnessVersion
+static const char PySegwitAddressWitnessVersion_doc[] =
+    "int32_t TWSegwitAddressWitnessVersion(struct TWSegwitAddress* address)";
+static PyObject* PySegwitAddressWitnessVersion(PySegwitAddressObject* self,
+                                               void*) {
+  int32_t prop = TWSegwitAddressWitnessVersion(self->value);
+  return PyLong_FromLong(prop);
+}
+
 // getter function for WitnessProgram
 static const char PySegwitAddressWitnessProgram_doc[] =
     "TWData* TWSegwitAddressWitnessProgram(struct TWSegwitAddress* address)";
@@ -219,6 +228,8 @@ static const PyGetSetDef get_set_defs[] = {
     {"description", (getter)PySegwitAddressDescription, nullptr,
      PySegwitAddressDescription_doc},
     {"hrp", (getter)PySegwitAddressHRP, nullptr, PySegwitAddressHRP_doc},
+    {"witness_version", (getter)PySegwitAddressWitnessVersion, nullptr,
+     PySegwitAddressWitnessVersion_doc},
     {"witness_program", (getter)PySegwitAddressWitnessProgram, nullptr,
      PySegwitAddressWitnessProgram_doc},
     {}};

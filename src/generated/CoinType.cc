@@ -114,7 +114,7 @@ static Constant constants[] = {
     { TWCoinTypeViacoin, "Viacoin", nullptr },
     { TWCoinTypeWanchain, "Wanchain", nullptr },
     { TWCoinTypeZcash, "Zcash", nullptr },
-    { TWCoinTypeZcoin, "Zcoin", nullptr },
+    { TWCoinTypeFiro, "Firo", nullptr },
     { TWCoinTypeZilliqa, "Zilliqa", nullptr },
     { TWCoinTypeZelcash, "Zelcash", nullptr },
     { TWCoinTypeRavencoin, "Ravencoin", nullptr },
@@ -143,6 +143,9 @@ static Constant constants[] = {
     { TWCoinTypeCelo, "Celo", nullptr },
     { TWCoinTypeRonin, "Ronin", nullptr },
     { TWCoinTypeOsmosis, "Osmosis", nullptr },
+    { TWCoinTypeECash, "ECash", nullptr },
+    { TWCoinTypeCronosChain, "CronosChain", nullptr },
+    { TWCoinTypeSmartBitcoinCash, "SmartBitcoinCash", nullptr },
     // clang-format on
 };
 
