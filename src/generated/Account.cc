@@ -98,6 +98,14 @@ static PyObject* PyAccountDerivationPath(PyAccountObject* self, void*) {
   return PyUnicode_FromTWString(prop);
 }
 
+// getter function for PublicKey
+static const char PyAccountPublicKey_doc[] =
+    "TWString* TWAccountPublicKey(struct TWAccount* account)";
+static PyObject* PyAccountPublicKey(PyAccountObject* self, void*) {
+  TWStringPtr prop(TWAccountPublicKey(self->value));
+  return PyUnicode_FromTWString(prop);
+}
+
 // getter function for ExtendedPublicKey
 static const char PyAccountExtendedPublicKey_doc[] =
     "TWString* TWAccountExtendedPublicKey(struct TWAccount* account)";
@@ -117,12 +125,13 @@ static PyObject* PyAccountCoin(PyAccountObject* self, void*) {
 // static method function for Create
 static const char PyAccountCreate_doc[] =
     "struct TWAccount* TWAccountCreate(TWString* address, enum TWCoinType "
-    "coin, TWString* derivationPath, TWString* extendedPublicKey)";
+    "coin, TWString* derivationPath, TWString* publicKey, TWString* "
+    "extendedPublicKey)";
 static PyObject* PyAccountCreate(PyAccountObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
-  if (nargs != 4) {
-    PyErr_Format(PyExc_TypeError, "Expect 4 args, but %d args are passed in.",
+  if (nargs != 5) {
+    PyErr_Format(PyExc_TypeError, "Expect 5 args, but %d args are passed in.",
                  nargs);
     return nullptr;
   }
@@ -151,7 +160,14 @@ static PyObject* PyAccountCreate(PyAccountObject* self,
   }
   auto arg3 = PyUnicode_GetTWString(args[3]);
 
-  TWAccount* result = TWAccountCreate(arg0.get(), arg1, arg2.get(), arg3.get());
+  if (!PyUnicode_Check(args[4])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 4 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg4 = PyUnicode_GetTWString(args[4]);
+
+  TWAccount* result =
+      TWAccountCreate(arg0.get(), arg1, arg2.get(), arg3.get(), arg4.get());
   return PyAccount_FromTWAccount(result);
 }
 
@@ -161,6 +177,7 @@ static const PyGetSetDef get_set_defs[] = {
     {"address", (getter)PyAccountAddress, nullptr, PyAccountAddress_doc},
     {"derivation_path", (getter)PyAccountDerivationPath, nullptr,
      PyAccountDerivationPath_doc},
+    {"public_key", (getter)PyAccountPublicKey, nullptr, PyAccountPublicKey_doc},
     {"extended_public_key", (getter)PyAccountExtendedPublicKey, nullptr,
      PyAccountExtendedPublicKey_doc},
     {"coin", (getter)PyAccountCoin, nullptr, PyAccountCoin_doc},

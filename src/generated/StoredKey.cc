@@ -206,13 +206,13 @@ static PyObject* PyStoredKeyRemoveAccountForCoin(PyStoredKeyObject* self,
 // method function for AddAccount
 static const char PyStoredKeyAddAccount_doc[] =
     "void TWStoredKeyAddAccount(struct TWStoredKey* key, TWString* address, "
-    "enum TWCoinType coin, TWString* derivationPath, TWString* "
-    "extetndedPublicKey)";
+    "enum TWCoinType coin, TWString* derivationPath, TWString* publicKey, "
+    "TWString* extendedPublicKey)";
 static PyObject* PyStoredKeyAddAccount(PyStoredKeyObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
-  if (nargs != 4) {
-    PyErr_Format(PyExc_TypeError, "Expect 4 args, but %d args are passed in.",
+  if (nargs != 5) {
+    PyErr_Format(PyExc_TypeError, "Expect 5 args, but %d args are passed in.",
                  nargs);
     return nullptr;
   }
@@ -241,7 +241,14 @@ static PyObject* PyStoredKeyAddAccount(PyStoredKeyObject* self,
   }
   auto arg3 = PyUnicode_GetTWString(args[3]);
 
-  TWStoredKeyAddAccount(self->value, arg0.get(), arg1, arg2.get(), arg3.get());
+  if (!PyUnicode_Check(args[4])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 4 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg4 = PyUnicode_GetTWString(args[4]);
+
+  TWStoredKeyAddAccount(self->value, arg0.get(), arg1, arg2.get(), arg3.get(),
+                        arg4.get());
   return nullptr;
 }
 
