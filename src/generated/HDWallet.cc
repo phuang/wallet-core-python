@@ -324,6 +324,90 @@ static PyObject* PyHDWalletGetExtendedPublicKey(PyHDWalletObject* self,
   return PyUnicode_FromTWString(result);
 }
 
+// method function for GetExtendedPrivateKeyAccount
+static const char PyHDWalletGetExtendedPrivateKeyAccount_doc[] =
+    "TWString* TWHDWalletGetExtendedPrivateKeyAccount(struct TWHDWallet* "
+    "wallet, enum TWPurpose purpose, enum TWCoinType coin, enum TWHDVersion "
+    "version, uint32_t account)";
+static PyObject* PyHDWalletGetExtendedPrivateKeyAccount(PyHDWalletObject* self,
+                                                        PyObject* const* args,
+                                                        Py_ssize_t nargs) {
+  if (nargs != 4) {
+    PyErr_Format(PyExc_TypeError, "Expect 4 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyPurpose_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Purpose");
+    return nullptr;
+  }
+  auto arg0 = PyPurpose_GetTWPurpose(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  if (!PyHDVersion_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type HDVersion");
+    return nullptr;
+  }
+  auto arg2 = PyHDVersion_GetTWHDVersion(args[2]);
+
+  auto checked_arg3 = PyLongArg_ToNumber<uint32_t>(args[3], 3, "uint32_t");
+  if (!checked_arg3)
+    return nullptr;
+  const auto& arg3 = checked_arg3.value();
+
+  TWStringPtr result(TWHDWalletGetExtendedPrivateKeyAccount(self->value, arg0,
+                                                            arg1, arg2, arg3));
+  return PyUnicode_FromTWString(result);
+}
+
+// method function for GetExtendedPublicKeyAccount
+static const char PyHDWalletGetExtendedPublicKeyAccount_doc[] =
+    "TWString* TWHDWalletGetExtendedPublicKeyAccount(struct TWHDWallet* "
+    "wallet, enum TWPurpose purpose, enum TWCoinType coin, enum TWHDVersion "
+    "version, uint32_t account)";
+static PyObject* PyHDWalletGetExtendedPublicKeyAccount(PyHDWalletObject* self,
+                                                       PyObject* const* args,
+                                                       Py_ssize_t nargs) {
+  if (nargs != 4) {
+    PyErr_Format(PyExc_TypeError, "Expect 4 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyPurpose_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Purpose");
+    return nullptr;
+  }
+  auto arg0 = PyPurpose_GetTWPurpose(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  if (!PyHDVersion_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type HDVersion");
+    return nullptr;
+  }
+  auto arg2 = PyHDVersion_GetTWHDVersion(args[2]);
+
+  auto checked_arg3 = PyLongArg_ToNumber<uint32_t>(args[3], 3, "uint32_t");
+  if (!checked_arg3)
+    return nullptr;
+  const auto& arg3 = checked_arg3.value();
+
+  TWStringPtr result(TWHDWalletGetExtendedPublicKeyAccount(self->value, arg0,
+                                                           arg1, arg2, arg3));
+  return PyUnicode_FromTWString(result);
+}
+
 // static method function for Create
 static const char PyHDWalletCreate_doc[] =
     "struct TWHDWallet* TWHDWalletCreate(int32_t strength, TWString* "
@@ -505,6 +589,12 @@ static const PyMethodDef method_defs[] = {
      METH_FASTCALL, PyHDWalletGetExtendedPrivateKey_doc},
     {"get_extended_public_key", (PyCFunction)PyHDWalletGetExtendedPublicKey,
      METH_FASTCALL, PyHDWalletGetExtendedPublicKey_doc},
+    {"get_extended_private_key_account",
+     (PyCFunction)PyHDWalletGetExtendedPrivateKeyAccount, METH_FASTCALL,
+     PyHDWalletGetExtendedPrivateKeyAccount_doc},
+    {"get_extended_public_key_account",
+     (PyCFunction)PyHDWalletGetExtendedPublicKeyAccount, METH_FASTCALL,
+     PyHDWalletGetExtendedPublicKeyAccount_doc},
     {"create", (PyCFunction)PyHDWalletCreate, METH_FASTCALL | METH_STATIC,
      PyHDWalletCreate_doc},
     {"create_with_mnemonic", (PyCFunction)PyHDWalletCreateWithMnemonic,
