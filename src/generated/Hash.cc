@@ -313,55 +313,6 @@ static PyObject* PyHashGroestl512(PyHashObject* self,
   return PyBytes_FromTWData(result);
 }
 
-// static method function for XXHash64
-static const char PyHashXXHash64_doc[] =
-    "TWData* TWHashXXHash64(TWData* data, uint64_t seed)";
-static PyObject* PyHashXXHash64(PyHashObject* self,
-                                PyObject* const* args,
-                                Py_ssize_t nargs) {
-  if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  if (!PyBytes_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
-    return nullptr;
-  }
-  auto arg0 = PyBytes_GetTWData(args[0]);
-
-  auto checked_arg1 = PyLongArg_ToNumber<uint64_t>(args[1], 1, "uint64_t");
-  if (!checked_arg1)
-    return nullptr;
-  const auto& arg1 = checked_arg1.value();
-
-  TWDataPtr result(TWHashXXHash64(arg0.get(), arg1));
-  return PyBytes_FromTWData(result);
-}
-
-// static method function for TwoXXHash64Concat
-static const char PyHashTwoXXHash64Concat_doc[] =
-    "TWData* TWHashTwoXXHash64Concat(TWData* data)";
-static PyObject* PyHashTwoXXHash64Concat(PyHashObject* self,
-                                         PyObject* const* args,
-                                         Py_ssize_t nargs) {
-  if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
-                 nargs);
-    return nullptr;
-  }
-
-  if (!PyBytes_Check(args[0])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
-    return nullptr;
-  }
-  auto arg0 = PyBytes_GetTWData(args[0]);
-
-  TWDataPtr result(TWHashTwoXXHash64Concat(arg0.get()));
-  return PyBytes_FromTWData(result);
-}
-
 // static method function for SHA256SHA256
 static const char PyHashSHA256SHA256_doc[] =
     "TWData* TWHashSHA256SHA256(TWData* data)";
@@ -523,10 +474,6 @@ static const PyMethodDef method_defs[] = {
      PyHashBlake2b_doc},
     {"groestl512", (PyCFunction)PyHashGroestl512, METH_FASTCALL | METH_STATIC,
      PyHashGroestl512_doc},
-    {"xxhash64", (PyCFunction)PyHashXXHash64, METH_FASTCALL | METH_STATIC,
-     PyHashXXHash64_doc},
-    {"two_xxhash64_concat", (PyCFunction)PyHashTwoXXHash64Concat,
-     METH_FASTCALL | METH_STATIC, PyHashTwoXXHash64Concat_doc},
     {"sha256_sha256", (PyCFunction)PyHashSHA256SHA256,
      METH_FASTCALL | METH_STATIC, PyHashSHA256SHA256_doc},
     {"sha256_ripemd", (PyCFunction)PyHashSHA256RIPEMD,

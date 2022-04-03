@@ -80,6 +80,7 @@ static Constant constants[] = {
     { TWEthereumChainIDRonin, "Ronin", nullptr },
     { TWEthereumChainIDCronos, "Cronos", nullptr },
     { TWEthereumChainIDSmartBitcoinCash, "SmartBitcoinCash", nullptr },
+    { TWEthereumChainIDKuCoinCommunityChain, "KuCoinCommunityChain", nullptr },
     // clang-format on
 };
 
