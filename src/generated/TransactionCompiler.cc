@@ -118,8 +118,8 @@ static PyObject* PyTransactionCompilerBuildInput(
 
 // static method function for PreImageHashes
 static const char PyTransactionCompilerPreImageHashes_doc[] =
-    "struct TWDataVector* TWTransactionCompilerPreImageHashes(enum TWCoinType "
-    "coinType, TWData* txInputData)";
+    "TWData* TWTransactionCompilerPreImageHashes(enum TWCoinType coinType, "
+    "TWData* txInputData)";
 static PyObject* PyTransactionCompilerPreImageHashes(
     PyTransactionCompilerObject* self,
     PyObject* const* args,
@@ -142,8 +142,8 @@ static PyObject* PyTransactionCompilerPreImageHashes(
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  TWDataVector* result = TWTransactionCompilerPreImageHashes(arg0, arg1.get());
-  return PyDataVector_FromTWDataVector(result);
+  TWDataPtr result(TWTransactionCompilerPreImageHashes(arg0, arg1.get()));
+  return PyBytes_FromTWData(result);
 }
 
 // static method function for CompileWithSignatures

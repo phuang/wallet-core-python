@@ -25,6 +25,7 @@
 #include "generated/HRP.h"
 #include "generated/PrivateKey.h"
 #include "generated/PublicKey.h"
+#include "generated/PublicKeyType.h"
 #include "generated/Purpose.h"
 
 #include <algorithm>
@@ -281,6 +282,14 @@ static PyObject* PyCoinTypeSlip44Id(PyCoinTypeObject* self, void*) {
   return PyLong_FromLong(prop);
 }
 
+// getter function for PublicKeyType
+static const char PyCoinTypePublicKeyType_doc[] =
+    "enum TWPublicKeyType TWCoinTypePublicKeyType(enum TWCoinType coin)";
+static PyObject* PyCoinTypePublicKeyType(PyCoinTypeObject* self, void*) {
+  TWPublicKeyType prop = TWCoinTypePublicKeyType(self->value);
+  return PyPublicKeyType_FromTWPublicKeyType(prop);
+}
+
 // method function for Validate
 static const char PyCoinTypeValidate_doc[] =
     "bool TWCoinTypeValidate(enum TWCoinType coin, TWString* address)";
@@ -384,6 +393,8 @@ static const PyGetSetDef get_set_defs[] = {
     {"static_prefix", (getter)PyCoinTypeStaticPrefix, nullptr,
      PyCoinTypeStaticPrefix_doc},
     {"slip44_id", (getter)PyCoinTypeSlip44Id, nullptr, PyCoinTypeSlip44Id_doc},
+    {"public_key_type", (getter)PyCoinTypePublicKeyType, nullptr,
+     PyCoinTypePublicKeyType_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
