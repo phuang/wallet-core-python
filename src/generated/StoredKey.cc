@@ -23,6 +23,7 @@
 #include "String.h"
 #include "generated/Account.h"
 #include "generated/CoinType.h"
+#include "generated/Derivation.h"
 #include "generated/HDWallet.h"
 #include "generated/PrivateKey.h"
 #include "generated/StoredKeyEncryptionLevel.h"
@@ -180,15 +181,16 @@ static PyObject* PyStoredKeyAccountForCoin(PyStoredKeyObject* self,
   return PyAccount_FromTWAccount(result);
 }
 
-// method function for RemoveAccountForCoin
-static const char PyStoredKeyRemoveAccountForCoin_doc[] =
-    "void TWStoredKeyRemoveAccountForCoin(struct TWStoredKey* key, enum "
-    "TWCoinType coin)";
-static PyObject* PyStoredKeyRemoveAccountForCoin(PyStoredKeyObject* self,
-                                                 PyObject* const* args,
-                                                 Py_ssize_t nargs) {
-  if (nargs != 1) {
-    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+// method function for AccountForCoinDerivation
+static const char PyStoredKeyAccountForCoinDerivation_doc[] =
+    "struct TWAccount* TWStoredKeyAccountForCoinDerivation(struct TWStoredKey* "
+    "key, enum TWCoinType coin, enum TWDerivation derivation, struct "
+    "TWHDWallet* wallet)";
+static PyObject* PyStoredKeyAccountForCoinDerivation(PyStoredKeyObject* self,
+                                                     PyObject* const* args,
+                                                     Py_ssize_t nargs) {
+  if (nargs != 3) {
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
                  nargs);
     return nullptr;
   }
@@ -199,7 +201,75 @@ static PyObject* PyStoredKeyRemoveAccountForCoin(PyStoredKeyObject* self,
   }
   auto arg0 = PyCoinType_GetTWCoinType(args[0]);
 
-  TWStoredKeyRemoveAccountForCoin(self->value, arg0);
+  if (!PyDerivation_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Derivation");
+    return nullptr;
+  }
+  auto arg1 = PyDerivation_GetTWDerivation(args[1]);
+
+  if (!PyHDWallet_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type HDWallet");
+    return nullptr;
+  }
+  auto arg2 = PyHDWallet_GetTWHDWallet(args[2]);
+
+  TWAccount* result =
+      TWStoredKeyAccountForCoinDerivation(self->value, arg0, arg1, arg2);
+  return PyAccount_FromTWAccount(result);
+}
+
+// method function for AddAccountDerivation
+static const char PyStoredKeyAddAccountDerivation_doc[] =
+    "void TWStoredKeyAddAccountDerivation(struct TWStoredKey* key, TWString* "
+    "address, enum TWCoinType coin, enum TWDerivation derivation, TWString* "
+    "derivationPath, TWString* publicKey, TWString* extendedPublicKey)";
+static PyObject* PyStoredKeyAddAccountDerivation(PyStoredKeyObject* self,
+                                                 PyObject* const* args,
+                                                 Py_ssize_t nargs) {
+  if (nargs != 6) {
+    PyErr_Format(PyExc_TypeError, "Expect 6 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  if (!PyDerivation_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Derivation");
+    return nullptr;
+  }
+  auto arg2 = PyDerivation_GetTWDerivation(args[2]);
+
+  if (!PyUnicode_Check(args[3])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg3 = PyUnicode_GetTWString(args[3]);
+
+  if (!PyUnicode_Check(args[4])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 4 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg4 = PyUnicode_GetTWString(args[4]);
+
+  if (!PyUnicode_Check(args[5])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 5 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg5 = PyUnicode_GetTWString(args[5]);
+
+  TWStoredKeyAddAccountDerivation(self->value, arg0.get(), arg1, arg2,
+                                  arg3.get(), arg4.get(), arg5.get());
   return nullptr;
 }
 
@@ -249,6 +319,89 @@ static PyObject* PyStoredKeyAddAccount(PyStoredKeyObject* self,
 
   TWStoredKeyAddAccount(self->value, arg0.get(), arg1, arg2.get(), arg3.get(),
                         arg4.get());
+  return nullptr;
+}
+
+// method function for RemoveAccountForCoin
+static const char PyStoredKeyRemoveAccountForCoin_doc[] =
+    "void TWStoredKeyRemoveAccountForCoin(struct TWStoredKey* key, enum "
+    "TWCoinType coin)";
+static PyObject* PyStoredKeyRemoveAccountForCoin(PyStoredKeyObject* self,
+                                                 PyObject* const* args,
+                                                 Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyCoinType_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+
+  TWStoredKeyRemoveAccountForCoin(self->value, arg0);
+  return nullptr;
+}
+
+// method function for RemoveAccountForCoinDerivation
+static const char PyStoredKeyRemoveAccountForCoinDerivation_doc[] =
+    "void TWStoredKeyRemoveAccountForCoinDerivation(struct TWStoredKey* key, "
+    "enum TWCoinType coin, enum TWDerivation derivation)";
+static PyObject* PyStoredKeyRemoveAccountForCoinDerivation(
+    PyStoredKeyObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyCoinType_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+
+  if (!PyDerivation_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Derivation");
+    return nullptr;
+  }
+  auto arg1 = PyDerivation_GetTWDerivation(args[1]);
+
+  TWStoredKeyRemoveAccountForCoinDerivation(self->value, arg0, arg1);
+  return nullptr;
+}
+
+// method function for RemoveAccountForCoinDerivationPath
+static const char PyStoredKeyRemoveAccountForCoinDerivationPath_doc[] =
+    "void TWStoredKeyRemoveAccountForCoinDerivationPath(struct TWStoredKey* "
+    "key, enum TWCoinType coin, TWString* derivationPath)";
+static PyObject* PyStoredKeyRemoveAccountForCoinDerivationPath(
+    PyStoredKeyObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyCoinType_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+
+  if (!PyUnicode_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg1 = PyUnicode_GetTWString(args[1]);
+
+  TWStoredKeyRemoveAccountForCoinDerivationPath(self->value, arg0, arg1.get());
   return nullptr;
 }
 
@@ -621,10 +774,21 @@ static const PyMethodDef method_defs[] = {
      PyStoredKeyAccount_doc},
     {"account_for_coin", (PyCFunction)PyStoredKeyAccountForCoin, METH_FASTCALL,
      PyStoredKeyAccountForCoin_doc},
-    {"remove_account_for_coin", (PyCFunction)PyStoredKeyRemoveAccountForCoin,
-     METH_FASTCALL, PyStoredKeyRemoveAccountForCoin_doc},
+    {"account_for_coin_derivation",
+     (PyCFunction)PyStoredKeyAccountForCoinDerivation, METH_FASTCALL,
+     PyStoredKeyAccountForCoinDerivation_doc},
+    {"add_account_derivation", (PyCFunction)PyStoredKeyAddAccountDerivation,
+     METH_FASTCALL, PyStoredKeyAddAccountDerivation_doc},
     {"add_account", (PyCFunction)PyStoredKeyAddAccount, METH_FASTCALL,
      PyStoredKeyAddAccount_doc},
+    {"remove_account_for_coin", (PyCFunction)PyStoredKeyRemoveAccountForCoin,
+     METH_FASTCALL, PyStoredKeyRemoveAccountForCoin_doc},
+    {"remove_account_for_coin_derivation",
+     (PyCFunction)PyStoredKeyRemoveAccountForCoinDerivation, METH_FASTCALL,
+     PyStoredKeyRemoveAccountForCoinDerivation_doc},
+    {"remove_account_for_coin_derivation_path",
+     (PyCFunction)PyStoredKeyRemoveAccountForCoinDerivationPath, METH_FASTCALL,
+     PyStoredKeyRemoveAccountForCoinDerivationPath_doc},
     {"store", (PyCFunction)PyStoredKeyStore, METH_FASTCALL,
      PyStoredKeyStore_doc},
     {"decrypt_private_key", (PyCFunction)PyStoredKeyDecryptPrivateKey,

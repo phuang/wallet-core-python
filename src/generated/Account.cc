@@ -20,6 +20,7 @@
 
 #include "String.h"
 #include "generated/CoinType.h"
+#include "generated/Derivation.h"
 
 struct PyAccountObject {
   PyObject_HEAD;
@@ -90,6 +91,14 @@ static PyObject* PyAccountAddress(PyAccountObject* self, void*) {
   return PyUnicode_FromTWString(prop);
 }
 
+// getter function for Derivation
+static const char PyAccountDerivation_doc[] =
+    "enum TWDerivation TWAccountDerivation(struct TWAccount* account)";
+static PyObject* PyAccountDerivation(PyAccountObject* self, void*) {
+  TWDerivation prop = TWAccountDerivation(self->value);
+  return PyDerivation_FromTWDerivation(prop);
+}
+
 // getter function for DerivationPath
 static const char PyAccountDerivationPath_doc[] =
     "TWString* TWAccountDerivationPath(struct TWAccount* account)";
@@ -125,13 +134,13 @@ static PyObject* PyAccountCoin(PyAccountObject* self, void*) {
 // static method function for Create
 static const char PyAccountCreate_doc[] =
     "struct TWAccount* TWAccountCreate(TWString* address, enum TWCoinType "
-    "coin, TWString* derivationPath, TWString* publicKey, TWString* "
-    "extendedPublicKey)";
+    "coin, enum TWDerivation derivation, TWString* derivationPath, TWString* "
+    "publicKey, TWString* extendedPublicKey)";
 static PyObject* PyAccountCreate(PyAccountObject* self,
                                  PyObject* const* args,
                                  Py_ssize_t nargs) {
-  if (nargs != 5) {
-    PyErr_Format(PyExc_TypeError, "Expect 5 args, but %d args are passed in.",
+  if (nargs != 6) {
+    PyErr_Format(PyExc_TypeError, "Expect 6 args, but %d args are passed in.",
                  nargs);
     return nullptr;
   }
@@ -148,11 +157,11 @@ static PyObject* PyAccountCreate(PyAccountObject* self,
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
 
-  if (!PyUnicode_Check(args[2])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Unicode");
+  if (!PyDerivation_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Derivation");
     return nullptr;
   }
-  auto arg2 = PyUnicode_GetTWString(args[2]);
+  auto arg2 = PyDerivation_GetTWDerivation(args[2]);
 
   if (!PyUnicode_Check(args[3])) {
     PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type Unicode");
@@ -166,8 +175,14 @@ static PyObject* PyAccountCreate(PyAccountObject* self,
   }
   auto arg4 = PyUnicode_GetTWString(args[4]);
 
-  TWAccount* result =
-      TWAccountCreate(arg0.get(), arg1, arg2.get(), arg3.get(), arg4.get());
+  if (!PyUnicode_Check(args[5])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 5 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg5 = PyUnicode_GetTWString(args[5]);
+
+  TWAccount* result = TWAccountCreate(arg0.get(), arg1, arg2, arg3.get(),
+                                      arg4.get(), arg5.get());
   return PyAccount_FromTWAccount(result);
 }
 
@@ -175,6 +190,8 @@ static PyObject* PyAccountCreate(PyAccountObject* self,
 
 static const PyGetSetDef get_set_defs[] = {
     {"address", (getter)PyAccountAddress, nullptr, PyAccountAddress_doc},
+    {"derivation", (getter)PyAccountDerivation, nullptr,
+     PyAccountDerivation_doc},
     {"derivation_path", (getter)PyAccountDerivationPath, nullptr,
      PyAccountDerivationPath_doc},
     {"public_key", (getter)PyAccountPublicKey, nullptr, PyAccountPublicKey_doc},

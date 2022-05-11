@@ -33,6 +33,7 @@
 #include "generated/CoinTypeConfiguration.h"
 #include "generated/Curve.h"
 #include "generated/DataVector.h"
+#include "generated/Derivation.h"
 #include "generated/EthereumAbi.h"
 #include "generated/EthereumAbiFunction.h"
 #include "generated/EthereumAbiValue.h"
@@ -79,6 +80,7 @@ const InitProc init_functions[] = {
     PyInit_CoinTypeConfiguration,
     PyInit_Curve,
     PyInit_DataVector,
+    PyInit_Derivation,
     PyInit_EthereumAbi,
     PyInit_EthereumAbiFunction,
     PyInit_EthereumAbiValue,

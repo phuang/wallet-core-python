@@ -148,6 +148,9 @@ static Constant constants[] = {
     { TWCoinTypeCronosChain, "CronosChain", nullptr },
     { TWCoinTypeSmartBitcoinCash, "SmartBitcoinCash", nullptr },
     { TWCoinTypeKuCoinCommunityChain, "KuCoinCommunityChain", nullptr },
+    { TWCoinTypeBoba, "Boba", nullptr },
+    { TWCoinTypeMetis, "Metis", nullptr },
+    { TWCoinTypeAurora, "Aurora", nullptr },
     // clang-format on
 };
 
