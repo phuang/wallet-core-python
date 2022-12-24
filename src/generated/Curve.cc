@@ -64,7 +64,8 @@ static Constant constants[] = {
     { TWCurveED25519Blake2bNano, "ED25519Blake2bNano", nullptr },
     { TWCurveCurve25519, "Curve25519", nullptr },
     { TWCurveNIST256p1, "NIST256p1", nullptr },
-    { TWCurveED25519Extended, "ED25519Extended", nullptr },
+    { TWCurveED25519ExtendedCardano, "ED25519ExtendedCardano", nullptr },
+    { TWCurveStarkex, "Starkex", nullptr },
     { TWCurveNone, "None", nullptr },
     // clang-format on
 };

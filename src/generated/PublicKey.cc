@@ -190,13 +190,13 @@ static PyObject* PyPublicKeyVerifyAsDER(PyPublicKeyObject* self,
   return PyBool_FromLong(result);
 }
 
-// method function for VerifySchnorr
-static const char PyPublicKeyVerifySchnorr_doc[] =
-    "bool TWPublicKeyVerifySchnorr(struct TWPublicKey* pk, TWData* signature, "
-    "TWData* message)";
-static PyObject* PyPublicKeyVerifySchnorr(PyPublicKeyObject* self,
-                                          PyObject* const* args,
-                                          Py_ssize_t nargs) {
+// method function for VerifyZilliqaSchnorr
+static const char PyPublicKeyVerifyZilliqaSchnorr_doc[] =
+    "bool TWPublicKeyVerifyZilliqaSchnorr(struct TWPublicKey* pk, TWData* "
+    "signature, TWData* message)";
+static PyObject* PyPublicKeyVerifyZilliqaSchnorr(PyPublicKeyObject* self,
+                                                 PyObject* const* args,
+                                                 Py_ssize_t nargs) {
   if (nargs != 2) {
     PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
                  nargs);
@@ -215,7 +215,8 @@ static PyObject* PyPublicKeyVerifySchnorr(PyPublicKeyObject* self,
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  bool result = TWPublicKeyVerifySchnorr(self->value, arg0.get(), arg1.get());
+  bool result =
+      TWPublicKeyVerifyZilliqaSchnorr(self->value, arg0.get(), arg1.get());
   return PyBool_FromLong(result);
 }
 
@@ -325,8 +326,8 @@ static const PyMethodDef method_defs[] = {
      PyPublicKeyVerify_doc},
     {"verify_as_der", (PyCFunction)PyPublicKeyVerifyAsDER, METH_FASTCALL,
      PyPublicKeyVerifyAsDER_doc},
-    {"verify_schnorr", (PyCFunction)PyPublicKeyVerifySchnorr, METH_FASTCALL,
-     PyPublicKeyVerifySchnorr_doc},
+    {"verify_zilliqa_schnorr", (PyCFunction)PyPublicKeyVerifyZilliqaSchnorr,
+     METH_FASTCALL, PyPublicKeyVerifyZilliqaSchnorr_doc},
     {"create_with_data", (PyCFunction)PyPublicKeyCreateWithData,
      METH_FASTCALL | METH_STATIC, PyPublicKeyCreateWithData_doc},
     {"is_valid", (PyCFunction)PyPublicKeyIsValid, METH_FASTCALL | METH_STATIC,

@@ -24,6 +24,7 @@
 #include "String.h"
 #include "generated/CoinType.h"
 #include "generated/Curve.h"
+#include "generated/Derivation.h"
 #include "generated/HDVersion.h"
 #include "generated/PrivateKey.h"
 #include "generated/PublicKey.h"
@@ -183,6 +184,35 @@ static PyObject* PyHDWalletGetAddressForCoin(PyHDWalletObject* self,
   return PyUnicode_FromTWString(result);
 }
 
+// method function for GetAddressDerivation
+static const char PyHDWalletGetAddressDerivation_doc[] =
+    "TWString* TWHDWalletGetAddressDerivation(struct TWHDWallet* wallet, enum "
+    "TWCoinType coin, enum TWDerivation derivation)";
+static PyObject* PyHDWalletGetAddressDerivation(PyHDWalletObject* self,
+                                                PyObject* const* args,
+                                                Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyCoinType_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+
+  if (!PyDerivation_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Derivation");
+    return nullptr;
+  }
+  auto arg1 = PyDerivation_GetTWDerivation(args[1]);
+
+  TWStringPtr result(TWHDWalletGetAddressDerivation(self->value, arg0, arg1));
+  return PyUnicode_FromTWString(result);
+}
+
 // method function for GetKey
 static const char PyHDWalletGetKey_doc[] =
     "struct TWPrivateKey* TWHDWalletGetKey(struct TWHDWallet* wallet, enum "
@@ -209,6 +239,64 @@ static PyObject* PyHDWalletGetKey(PyHDWalletObject* self,
   auto arg1 = PyUnicode_GetTWString(args[1]);
 
   TWPrivateKey* result = TWHDWalletGetKey(self->value, arg0, arg1.get());
+  return PyPrivateKey_FromTWPrivateKey(result);
+}
+
+// method function for GetKeyDerivation
+static const char PyHDWalletGetKeyDerivation_doc[] =
+    "struct TWPrivateKey* TWHDWalletGetKeyDerivation(struct TWHDWallet* "
+    "wallet, enum TWCoinType coin, enum TWDerivation derivation)";
+static PyObject* PyHDWalletGetKeyDerivation(PyHDWalletObject* self,
+                                            PyObject* const* args,
+                                            Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyCoinType_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+
+  if (!PyDerivation_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Derivation");
+    return nullptr;
+  }
+  auto arg1 = PyDerivation_GetTWDerivation(args[1]);
+
+  TWPrivateKey* result = TWHDWalletGetKeyDerivation(self->value, arg0, arg1);
+  return PyPrivateKey_FromTWPrivateKey(result);
+}
+
+// method function for GetKeyByCurve
+static const char PyHDWalletGetKeyByCurve_doc[] =
+    "struct TWPrivateKey* TWHDWalletGetKeyByCurve(struct TWHDWallet* wallet, "
+    "enum TWCurve curve, TWString* derivationPath)";
+static PyObject* PyHDWalletGetKeyByCurve(PyHDWalletObject* self,
+                                         PyObject* const* args,
+                                         Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyCurve_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Curve");
+    return nullptr;
+  }
+  auto arg0 = PyCurve_GetTWCurve(args[0]);
+
+  if (!PyUnicode_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg1 = PyUnicode_GetTWString(args[1]);
+
+  TWPrivateKey* result = TWHDWalletGetKeyByCurve(self->value, arg0, arg1.get());
   return PyPrivateKey_FromTWPrivateKey(result);
 }
 
@@ -327,13 +415,13 @@ static PyObject* PyHDWalletGetExtendedPublicKey(PyHDWalletObject* self,
 // method function for GetExtendedPrivateKeyAccount
 static const char PyHDWalletGetExtendedPrivateKeyAccount_doc[] =
     "TWString* TWHDWalletGetExtendedPrivateKeyAccount(struct TWHDWallet* "
-    "wallet, enum TWPurpose purpose, enum TWCoinType coin, enum TWHDVersion "
-    "version, uint32_t account)";
+    "wallet, enum TWPurpose purpose, enum TWCoinType coin, enum TWDerivation "
+    "derivation, enum TWHDVersion version, uint32_t account)";
 static PyObject* PyHDWalletGetExtendedPrivateKeyAccount(PyHDWalletObject* self,
                                                         PyObject* const* args,
                                                         Py_ssize_t nargs) {
-  if (nargs != 4) {
-    PyErr_Format(PyExc_TypeError, "Expect 4 args, but %d args are passed in.",
+  if (nargs != 5) {
+    PyErr_Format(PyExc_TypeError, "Expect 5 args, but %d args are passed in.",
                  nargs);
     return nullptr;
   }
@@ -350,30 +438,85 @@ static PyObject* PyHDWalletGetExtendedPrivateKeyAccount(PyHDWalletObject* self,
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
 
-  if (!PyHDVersion_Check(args[2])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type HDVersion");
+  if (!PyDerivation_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Derivation");
     return nullptr;
   }
-  auto arg2 = PyHDVersion_GetTWHDVersion(args[2]);
+  auto arg2 = PyDerivation_GetTWDerivation(args[2]);
 
-  auto checked_arg3 = PyLongArg_ToNumber<uint32_t>(args[3], 3, "uint32_t");
-  if (!checked_arg3)
+  if (!PyHDVersion_Check(args[3])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type HDVersion");
     return nullptr;
-  const auto& arg3 = checked_arg3.value();
+  }
+  auto arg3 = PyHDVersion_GetTWHDVersion(args[3]);
 
-  TWStringPtr result(TWHDWalletGetExtendedPrivateKeyAccount(self->value, arg0,
-                                                            arg1, arg2, arg3));
+  auto checked_arg4 = PyLongArg_ToNumber<uint32_t>(args[4], 4, "uint32_t");
+  if (!checked_arg4)
+    return nullptr;
+  const auto& arg4 = checked_arg4.value();
+
+  TWStringPtr result(TWHDWalletGetExtendedPrivateKeyAccount(
+      self->value, arg0, arg1, arg2, arg3, arg4));
   return PyUnicode_FromTWString(result);
 }
 
 // method function for GetExtendedPublicKeyAccount
 static const char PyHDWalletGetExtendedPublicKeyAccount_doc[] =
     "TWString* TWHDWalletGetExtendedPublicKeyAccount(struct TWHDWallet* "
-    "wallet, enum TWPurpose purpose, enum TWCoinType coin, enum TWHDVersion "
-    "version, uint32_t account)";
+    "wallet, enum TWPurpose purpose, enum TWCoinType coin, enum TWDerivation "
+    "derivation, enum TWHDVersion version, uint32_t account)";
 static PyObject* PyHDWalletGetExtendedPublicKeyAccount(PyHDWalletObject* self,
                                                        PyObject* const* args,
                                                        Py_ssize_t nargs) {
+  if (nargs != 5) {
+    PyErr_Format(PyExc_TypeError, "Expect 5 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyPurpose_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Purpose");
+    return nullptr;
+  }
+  auto arg0 = PyPurpose_GetTWPurpose(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  if (!PyDerivation_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Derivation");
+    return nullptr;
+  }
+  auto arg2 = PyDerivation_GetTWDerivation(args[2]);
+
+  if (!PyHDVersion_Check(args[3])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type HDVersion");
+    return nullptr;
+  }
+  auto arg3 = PyHDVersion_GetTWHDVersion(args[3]);
+
+  auto checked_arg4 = PyLongArg_ToNumber<uint32_t>(args[4], 4, "uint32_t");
+  if (!checked_arg4)
+    return nullptr;
+  const auto& arg4 = checked_arg4.value();
+
+  TWStringPtr result(TWHDWalletGetExtendedPublicKeyAccount(
+      self->value, arg0, arg1, arg2, arg3, arg4));
+  return PyUnicode_FromTWString(result);
+}
+
+// method function for GetExtendedPrivateKeyDerivation
+static const char PyHDWalletGetExtendedPrivateKeyDerivation_doc[] =
+    "TWString* TWHDWalletGetExtendedPrivateKeyDerivation(struct TWHDWallet* "
+    "wallet, enum TWPurpose purpose, enum TWCoinType coin, enum TWDerivation "
+    "derivation, enum TWHDVersion version)";
+static PyObject* PyHDWalletGetExtendedPrivateKeyDerivation(
+    PyHDWalletObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
   if (nargs != 4) {
     PyErr_Format(PyExc_TypeError, "Expect 4 args, but %d args are passed in.",
                  nargs);
@@ -392,19 +535,64 @@ static PyObject* PyHDWalletGetExtendedPublicKeyAccount(PyHDWalletObject* self,
   }
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
 
-  if (!PyHDVersion_Check(args[2])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type HDVersion");
+  if (!PyDerivation_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Derivation");
     return nullptr;
   }
-  auto arg2 = PyHDVersion_GetTWHDVersion(args[2]);
+  auto arg2 = PyDerivation_GetTWDerivation(args[2]);
 
-  auto checked_arg3 = PyLongArg_ToNumber<uint32_t>(args[3], 3, "uint32_t");
-  if (!checked_arg3)
+  if (!PyHDVersion_Check(args[3])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type HDVersion");
     return nullptr;
-  const auto& arg3 = checked_arg3.value();
+  }
+  auto arg3 = PyHDVersion_GetTWHDVersion(args[3]);
 
-  TWStringPtr result(TWHDWalletGetExtendedPublicKeyAccount(self->value, arg0,
-                                                           arg1, arg2, arg3));
+  TWStringPtr result(TWHDWalletGetExtendedPrivateKeyDerivation(
+      self->value, arg0, arg1, arg2, arg3));
+  return PyUnicode_FromTWString(result);
+}
+
+// method function for GetExtendedPublicKeyDerivation
+static const char PyHDWalletGetExtendedPublicKeyDerivation_doc[] =
+    "TWString* TWHDWalletGetExtendedPublicKeyDerivation(struct TWHDWallet* "
+    "wallet, enum TWPurpose purpose, enum TWCoinType coin, enum TWDerivation "
+    "derivation, enum TWHDVersion version)";
+static PyObject* PyHDWalletGetExtendedPublicKeyDerivation(
+    PyHDWalletObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 4) {
+    PyErr_Format(PyExc_TypeError, "Expect 4 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyPurpose_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Purpose");
+    return nullptr;
+  }
+  auto arg0 = PyPurpose_GetTWPurpose(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  if (!PyDerivation_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Derivation");
+    return nullptr;
+  }
+  auto arg2 = PyDerivation_GetTWDerivation(args[2]);
+
+  if (!PyHDVersion_Check(args[3])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type HDVersion");
+    return nullptr;
+  }
+  auto arg3 = PyHDVersion_GetTWHDVersion(args[3]);
+
+  TWStringPtr result(TWHDWalletGetExtendedPublicKeyDerivation(
+      self->value, arg0, arg1, arg2, arg3));
   return PyUnicode_FromTWString(result);
 }
 
@@ -581,8 +769,14 @@ static const PyMethodDef method_defs[] = {
      PyHDWalletGetKeyForCoin_doc},
     {"get_address_for_coin", (PyCFunction)PyHDWalletGetAddressForCoin,
      METH_FASTCALL, PyHDWalletGetAddressForCoin_doc},
+    {"get_address_derivation", (PyCFunction)PyHDWalletGetAddressDerivation,
+     METH_FASTCALL, PyHDWalletGetAddressDerivation_doc},
     {"get_key", (PyCFunction)PyHDWalletGetKey, METH_FASTCALL,
      PyHDWalletGetKey_doc},
+    {"get_key_derivation", (PyCFunction)PyHDWalletGetKeyDerivation,
+     METH_FASTCALL, PyHDWalletGetKeyDerivation_doc},
+    {"get_key_by_curve", (PyCFunction)PyHDWalletGetKeyByCurve, METH_FASTCALL,
+     PyHDWalletGetKeyByCurve_doc},
     {"get_derived_key", (PyCFunction)PyHDWalletGetDerivedKey, METH_FASTCALL,
      PyHDWalletGetDerivedKey_doc},
     {"get_extended_private_key", (PyCFunction)PyHDWalletGetExtendedPrivateKey,
@@ -595,6 +789,12 @@ static const PyMethodDef method_defs[] = {
     {"get_extended_public_key_account",
      (PyCFunction)PyHDWalletGetExtendedPublicKeyAccount, METH_FASTCALL,
      PyHDWalletGetExtendedPublicKeyAccount_doc},
+    {"get_extended_private_key_derivation",
+     (PyCFunction)PyHDWalletGetExtendedPrivateKeyDerivation, METH_FASTCALL,
+     PyHDWalletGetExtendedPrivateKeyDerivation_doc},
+    {"get_extended_public_key_derivation",
+     (PyCFunction)PyHDWalletGetExtendedPublicKeyDerivation, METH_FASTCALL,
+     PyHDWalletGetExtendedPublicKeyDerivation_doc},
     {"create", (PyCFunction)PyHDWalletCreate, METH_FASTCALL | METH_STATIC,
      PyHDWalletCreate_doc},
     {"create_with_mnemonic", (PyCFunction)PyHDWalletCreateWithMnemonic,

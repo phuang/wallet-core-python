@@ -66,7 +66,8 @@ static Constant constants[] = {
     { TWPublicKeyTypeED25519, "ED25519", nullptr },
     { TWPublicKeyTypeED25519Blake2b, "ED25519Blake2b", nullptr },
     { TWPublicKeyTypeCURVE25519, "CURVE25519", nullptr },
-    { TWPublicKeyTypeED25519Extended, "ED25519Extended", nullptr },
+    { TWPublicKeyTypeED25519Cardano, "ED25519Cardano", nullptr },
+    { TWPublicKeyTypeStarkex, "Starkex", nullptr },
     // clang-format on
 };
 

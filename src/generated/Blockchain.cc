@@ -92,6 +92,16 @@ static Constant constants[] = {
     { TWBlockchainFilecoin, "Filecoin", nullptr },
     { TWBlockchainElrondNetwork, "ElrondNetwork", nullptr },
     { TWBlockchainOasisNetwork, "OasisNetwork", nullptr },
+    { TWBlockchainDecred, "Decred", nullptr },
+    { TWBlockchainZcash, "Zcash", nullptr },
+    { TWBlockchainGroestlcoin, "Groestlcoin", nullptr },
+    { TWBlockchainThorchain, "Thorchain", nullptr },
+    { TWBlockchainRonin, "Ronin", nullptr },
+    { TWBlockchainKusama, "Kusama", nullptr },
+    { TWBlockchainNervos, "Nervos", nullptr },
+    { TWBlockchainEverscale, "Everscale", nullptr },
+    { TWBlockchainAptos, "Aptos", nullptr },
+    { TWBlockchainHedera, "Hedera", nullptr },
     // clang-format on
 };
 

@@ -24,20 +24,27 @@
 #include "generated/AESPaddingMode.h"
 #include "generated/Account.h"
 #include "generated/AnyAddress.h"
+#include "generated/Base32.h"
 #include "generated/Base58.h"
+#include "generated/Base64.h"
 #include "generated/BitcoinAddress.h"
+#include "generated/BitcoinMessageSigner.h"
 #include "generated/BitcoinScript.h"
 #include "generated/BitcoinSigHashType.h"
 #include "generated/Blockchain.h"
+#include "generated/Cardano.h"
 #include "generated/CoinType.h"
 #include "generated/CoinTypeConfiguration.h"
 #include "generated/Curve.h"
 #include "generated/DataVector.h"
 #include "generated/Derivation.h"
+#include "generated/DerivationPath.h"
+#include "generated/DerivationPathIndex.h"
 #include "generated/EthereumAbi.h"
 #include "generated/EthereumAbiFunction.h"
 #include "generated/EthereumAbiValue.h"
-#include "generated/EthereumChainID.h"
+#include "generated/EthereumEip2645.h"
+#include "generated/EthereumMessageSigner.h"
 #include "generated/FIOAccount.h"
 #include "generated/GroestlcoinAddress.h"
 #include "generated/HDVersion.h"
@@ -46,8 +53,10 @@
 #include "generated/Hash.h"
 #include "generated/Mnemonic.h"
 #include "generated/NEARAccount.h"
+#include "generated/NervosAddress.h"
 #include "generated/PBKDF2.h"
 #include "generated/PrivateKey.h"
+#include "generated/PrivateKeyType.h"
 #include "generated/PublicKey.h"
 #include "generated/PublicKeyType.h"
 #include "generated/Purpose.h"
@@ -55,10 +64,13 @@
 #include "generated/SS58AddressType.h"
 #include "generated/SegwitAddress.h"
 #include "generated/SolanaAddress.h"
+#include "generated/StarkExMessageSigner.h"
+#include "generated/StarkWare.h"
 #include "generated/StellarMemoType.h"
 #include "generated/StellarPassphrase.h"
 #include "generated/StellarVersionByte.h"
 #include "generated/StoredKey.h"
+#include "generated/StoredKeyEncryption.h"
 #include "generated/StoredKeyEncryptionLevel.h"
 #include "generated/THORChainSwap.h"
 #include "generated/TransactionCompiler.h"
@@ -71,20 +83,27 @@ const InitProc init_functions[] = {
     PyInit_Account,
     PyInit_AnyAddress,
     PyInit_AnySigner,
+    PyInit_Base32,
     PyInit_Base58,
+    PyInit_Base64,
     PyInit_BitcoinAddress,
+    PyInit_BitcoinMessageSigner,
     PyInit_BitcoinScript,
     PyInit_BitcoinSigHashType,
     PyInit_Blockchain,
+    PyInit_Cardano,
     PyInit_CoinType,
     PyInit_CoinTypeConfiguration,
     PyInit_Curve,
     PyInit_DataVector,
     PyInit_Derivation,
+    PyInit_DerivationPath,
+    PyInit_DerivationPathIndex,
     PyInit_EthereumAbi,
     PyInit_EthereumAbiFunction,
     PyInit_EthereumAbiValue,
-    PyInit_EthereumChainID,
+    PyInit_EthereumEip2645,
+    PyInit_EthereumMessageSigner,
     PyInit_FIOAccount,
     PyInit_GroestlcoinAddress,
     PyInit_HDVersion,
@@ -93,8 +112,10 @@ const InitProc init_functions[] = {
     PyInit_Hash,
     PyInit_Mnemonic,
     PyInit_NEARAccount,
+    PyInit_NervosAddress,
     PyInit_PBKDF2,
     PyInit_PrivateKey,
+    PyInit_PrivateKeyType,
     PyInit_PublicKey,
     PyInit_PublicKeyType,
     PyInit_Purpose,
@@ -102,10 +123,13 @@ const InitProc init_functions[] = {
     PyInit_SS58AddressType,
     PyInit_SegwitAddress,
     PyInit_SolanaAddress,
+    PyInit_StarkExMessageSigner,
+    PyInit_StarkWare,
     PyInit_StellarMemoType,
     PyInit_StellarPassphrase,
     PyInit_StellarVersionByte,
     PyInit_StoredKey,
+    PyInit_StoredKeyEncryption,
     PyInit_StoredKeyEncryptionLevel,
     PyInit_THORChainSwap,
     PyInit_TransactionCompiler,

@@ -83,6 +83,8 @@ class Function:
     def __init__(self, text):
         result = re.findall(r'(.*) (\w+)\((.*)\);', text)
         if not result:
+            result = re.findall(r'(.*) (\w+)\((.*)\) TW_VISIBILITY_DEFAULT;', text)
+        if not result:
             raise Exception('failed to parse property: "{}"'.format(text))
         return_type, name, args = result[0]
 

@@ -26,6 +26,7 @@
 #include "generated/Derivation.h"
 #include "generated/HDWallet.h"
 #include "generated/PrivateKey.h"
+#include "generated/StoredKeyEncryption.h"
 #include "generated/StoredKeyEncryptionLevel.h"
 
 struct PyStoredKeyObject {
@@ -627,6 +628,57 @@ static PyObject* PyStoredKeyImportPrivateKey(PyStoredKeyObject* self,
   return PyStoredKey_FromTWStoredKey(result);
 }
 
+// static method function for ImportPrivateKeyWithEncryption
+static const char PyStoredKeyImportPrivateKeyWithEncryption_doc[] =
+    "struct TWStoredKey* TWStoredKeyImportPrivateKeyWithEncryption(TWData* "
+    "privateKey, TWString* name, TWData* password, enum TWCoinType coin, enum "
+    "TWStoredKeyEncryption encryption)";
+static PyObject* PyStoredKeyImportPrivateKeyWithEncryption(
+    PyStoredKeyObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 5) {
+    PyErr_Format(PyExc_TypeError, "Expect 5 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyBytes_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Bytes");
+    return nullptr;
+  }
+  auto arg0 = PyBytes_GetTWData(args[0]);
+
+  if (!PyUnicode_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg1 = PyUnicode_GetTWString(args[1]);
+
+  if (!PyBytes_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
+    return nullptr;
+  }
+  auto arg2 = PyBytes_GetTWData(args[2]);
+
+  if (!PyCoinType_Check(args[3])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg3 = PyCoinType_GetTWCoinType(args[3]);
+
+  if (!PyStoredKeyEncryption_Check(args[4])) {
+    PyErr_SetString(PyExc_TypeError,
+                    "The arg 4 is not in type StoredKeyEncryption");
+    return nullptr;
+  }
+  auto arg4 = PyStoredKeyEncryption_GetTWStoredKeyEncryption(args[4]);
+
+  TWStoredKey* result = TWStoredKeyImportPrivateKeyWithEncryption(
+      arg0.get(), arg1.get(), arg2.get(), arg3, arg4);
+  return PyStoredKey_FromTWStoredKey(result);
+}
+
 // static method function for ImportHDWallet
 static const char PyStoredKeyImportHDWallet_doc[] =
     "struct TWStoredKey* TWStoredKeyImportHDWallet(TWString* mnemonic, "
@@ -666,6 +718,57 @@ static PyObject* PyStoredKeyImportHDWallet(PyStoredKeyObject* self,
 
   TWStoredKey* result =
       TWStoredKeyImportHDWallet(arg0.get(), arg1.get(), arg2.get(), arg3);
+  return PyStoredKey_FromTWStoredKey(result);
+}
+
+// static method function for ImportHDWalletWithEncryption
+static const char PyStoredKeyImportHDWalletWithEncryption_doc[] =
+    "struct TWStoredKey* TWStoredKeyImportHDWalletWithEncryption(TWString* "
+    "mnemonic, TWString* name, TWData* password, enum TWCoinType coin, enum "
+    "TWStoredKeyEncryption encryption)";
+static PyObject* PyStoredKeyImportHDWalletWithEncryption(
+    PyStoredKeyObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 5) {
+    PyErr_Format(PyExc_TypeError, "Expect 5 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  if (!PyUnicode_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg1 = PyUnicode_GetTWString(args[1]);
+
+  if (!PyBytes_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Bytes");
+    return nullptr;
+  }
+  auto arg2 = PyBytes_GetTWData(args[2]);
+
+  if (!PyCoinType_Check(args[3])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 3 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg3 = PyCoinType_GetTWCoinType(args[3]);
+
+  if (!PyStoredKeyEncryption_Check(args[4])) {
+    PyErr_SetString(PyExc_TypeError,
+                    "The arg 4 is not in type StoredKeyEncryption");
+    return nullptr;
+  }
+  auto arg4 = PyStoredKeyEncryption_GetTWStoredKeyEncryption(args[4]);
+
+  TWStoredKey* result = TWStoredKeyImportHDWalletWithEncryption(
+      arg0.get(), arg1.get(), arg2.get(), arg3, arg4);
   return PyStoredKey_FromTWStoredKey(result);
 }
 
@@ -727,14 +830,16 @@ static PyObject* PyStoredKeyCreateLevel(PyStoredKeyObject* self,
   return PyStoredKey_FromTWStoredKey(result);
 }
 
-// static method function for Create
-static const char PyStoredKeyCreate_doc[] =
-    "struct TWStoredKey* TWStoredKeyCreate(TWString* name, TWData* password)";
-static PyObject* PyStoredKeyCreate(PyStoredKeyObject* self,
-                                   PyObject* const* args,
-                                   Py_ssize_t nargs) {
-  if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+// static method function for CreateLevelAndEncryption
+static const char PyStoredKeyCreateLevelAndEncryption_doc[] =
+    "struct TWStoredKey* TWStoredKeyCreateLevelAndEncryption(TWString* name, "
+    "TWData* password, enum TWStoredKeyEncryptionLevel encryptionLevel, enum "
+    "TWStoredKeyEncryption encryption)";
+static PyObject* PyStoredKeyCreateLevelAndEncryption(PyStoredKeyObject* self,
+                                                     PyObject* const* args,
+                                                     Py_ssize_t nargs) {
+  if (nargs != 4) {
+    PyErr_Format(PyExc_TypeError, "Expect 4 args, but %d args are passed in.",
                  nargs);
     return nullptr;
   }
@@ -751,7 +856,22 @@ static PyObject* PyStoredKeyCreate(PyStoredKeyObject* self,
   }
   auto arg1 = PyBytes_GetTWData(args[1]);
 
-  TWStoredKey* result = TWStoredKeyCreate(arg0.get(), arg1.get());
+  if (!PyStoredKeyEncryptionLevel_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError,
+                    "The arg 2 is not in type StoredKeyEncryptionLevel");
+    return nullptr;
+  }
+  auto arg2 = PyStoredKeyEncryptionLevel_GetTWStoredKeyEncryptionLevel(args[2]);
+
+  if (!PyStoredKeyEncryption_Check(args[3])) {
+    PyErr_SetString(PyExc_TypeError,
+                    "The arg 3 is not in type StoredKeyEncryption");
+    return nullptr;
+  }
+  auto arg3 = PyStoredKeyEncryption_GetTWStoredKeyEncryption(args[3]);
+
+  TWStoredKey* result =
+      TWStoredKeyCreateLevelAndEncryption(arg0.get(), arg1.get(), arg2, arg3);
   return PyStoredKey_FromTWStoredKey(result);
 }
 
@@ -807,14 +927,22 @@ static const PyMethodDef method_defs[] = {
      PyStoredKeyLoad_doc},
     {"import_private_key", (PyCFunction)PyStoredKeyImportPrivateKey,
      METH_FASTCALL | METH_STATIC, PyStoredKeyImportPrivateKey_doc},
+    {"import_private_key_with_encryption",
+     (PyCFunction)PyStoredKeyImportPrivateKeyWithEncryption,
+     METH_FASTCALL | METH_STATIC,
+     PyStoredKeyImportPrivateKeyWithEncryption_doc},
     {"import_hdwallet", (PyCFunction)PyStoredKeyImportHDWallet,
      METH_FASTCALL | METH_STATIC, PyStoredKeyImportHDWallet_doc},
+    {"import_hdwallet_with_encryption",
+     (PyCFunction)PyStoredKeyImportHDWalletWithEncryption,
+     METH_FASTCALL | METH_STATIC, PyStoredKeyImportHDWalletWithEncryption_doc},
     {"import_json", (PyCFunction)PyStoredKeyImportJSON,
      METH_FASTCALL | METH_STATIC, PyStoredKeyImportJSON_doc},
     {"create_level", (PyCFunction)PyStoredKeyCreateLevel,
      METH_FASTCALL | METH_STATIC, PyStoredKeyCreateLevel_doc},
-    {"create", (PyCFunction)PyStoredKeyCreate, METH_FASTCALL | METH_STATIC,
-     PyStoredKeyCreate_doc},
+    {"create_level_and_encryption",
+     (PyCFunction)PyStoredKeyCreateLevelAndEncryption,
+     METH_FASTCALL | METH_STATIC, PyStoredKeyCreateLevelAndEncryption_doc},
     {}};
 
 bool PyInit_StoredKey(PyObject* module) {

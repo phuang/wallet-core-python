@@ -20,8 +20,10 @@
 
 #include "Bool.h"
 #include "Data.h"
+#include "generated/CoinType.h"
 #include "generated/Curve.h"
 #include "generated/PublicKey.h"
+#include "generated/PublicKeyType.h"
 
 struct PyPrivateKeyObject {
   PyObject_HEAD;
@@ -91,6 +93,52 @@ static const char PyPrivateKeyData_doc[] =
 static PyObject* PyPrivateKeyData(PyPrivateKeyObject* self, void*) {
   TWDataPtr prop(TWPrivateKeyData(self->value));
   return PyBytes_FromTWData(prop);
+}
+
+// method function for GetPublicKey
+static const char PyPrivateKeyGetPublicKey_doc[] =
+    "struct TWPublicKey* TWPrivateKeyGetPublicKey(struct TWPrivateKey* pk, "
+    "enum TWCoinType coinType)";
+static PyObject* PyPrivateKeyGetPublicKey(PyPrivateKeyObject* self,
+                                          PyObject* const* args,
+                                          Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyCoinType_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg0 = PyCoinType_GetTWCoinType(args[0]);
+
+  TWPublicKey* result = TWPrivateKeyGetPublicKey(self->value, arg0);
+  return PyPublicKey_FromTWPublicKey(result);
+}
+
+// method function for GetPublicKeyByType
+static const char PyPrivateKeyGetPublicKeyByType_doc[] =
+    "struct TWPublicKey* TWPrivateKeyGetPublicKeyByType(struct TWPrivateKey* "
+    "pk, enum TWPublicKeyType pubkeyType)";
+static PyObject* PyPrivateKeyGetPublicKeyByType(PyPrivateKeyObject* self,
+                                                PyObject* const* args,
+                                                Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyPublicKeyType_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PublicKeyType");
+    return nullptr;
+  }
+  auto arg0 = PyPublicKeyType_GetTWPublicKeyType(args[0]);
+
+  TWPublicKey* result = TWPrivateKeyGetPublicKeyByType(self->value, arg0);
+  return PyPublicKey_FromTWPublicKey(result);
 }
 
 // method function for GetPublicKeySecp256k1
@@ -168,11 +216,11 @@ static PyObject* PyPrivateKeyGetPublicKeyEd25519Blake2b(
   return PyPublicKey_FromTWPublicKey(result);
 }
 
-// method function for GetPublicKeyEd25519Extended
-static const char PyPrivateKeyGetPublicKeyEd25519Extended_doc[] =
-    "struct TWPublicKey* TWPrivateKeyGetPublicKeyEd25519Extended(struct "
+// method function for GetPublicKeyEd25519Cardano
+static const char PyPrivateKeyGetPublicKeyEd25519Cardano_doc[] =
+    "struct TWPublicKey* TWPrivateKeyGetPublicKeyEd25519Cardano(struct "
     "TWPrivateKey* pk)";
-static PyObject* PyPrivateKeyGetPublicKeyEd25519Extended(
+static PyObject* PyPrivateKeyGetPublicKeyEd25519Cardano(
     PyPrivateKeyObject* self,
     PyObject* const* args,
     Py_ssize_t nargs) {
@@ -182,7 +230,7 @@ static PyObject* PyPrivateKeyGetPublicKeyEd25519Extended(
     return nullptr;
   }
 
-  TWPublicKey* result = TWPrivateKeyGetPublicKeyEd25519Extended(self->value);
+  TWPublicKey* result = TWPrivateKeyGetPublicKeyEd25519Cardano(self->value);
   return PyPublicKey_FromTWPublicKey(result);
 }
 
@@ -263,13 +311,12 @@ static PyObject* PyPrivateKeySign(PyPrivateKeyObject* self,
 
 // method function for SignAsDER
 static const char PyPrivateKeySignAsDER_doc[] =
-    "TWData* TWPrivateKeySignAsDER(struct TWPrivateKey* pk, TWData* digest, "
-    "enum TWCurve curve)";
+    "TWData* TWPrivateKeySignAsDER(struct TWPrivateKey* pk, TWData* digest)";
 static PyObject* PyPrivateKeySignAsDER(PyPrivateKeyObject* self,
                                        PyObject* const* args,
                                        Py_ssize_t nargs) {
-  if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
                  nargs);
     return nullptr;
   }
@@ -280,25 +327,19 @@ static PyObject* PyPrivateKeySignAsDER(PyPrivateKeyObject* self,
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  if (!PyCurve_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Curve");
-    return nullptr;
-  }
-  auto arg1 = PyCurve_GetTWCurve(args[1]);
-
-  TWDataPtr result(TWPrivateKeySignAsDER(self->value, arg0.get(), arg1));
+  TWDataPtr result(TWPrivateKeySignAsDER(self->value, arg0.get()));
   return PyBytes_FromTWData(result);
 }
 
-// method function for SignSchnorr
-static const char PyPrivateKeySignSchnorr_doc[] =
-    "TWData* TWPrivateKeySignSchnorr(struct TWPrivateKey* pk, TWData* message, "
-    "enum TWCurve curve)";
-static PyObject* PyPrivateKeySignSchnorr(PyPrivateKeyObject* self,
-                                         PyObject* const* args,
-                                         Py_ssize_t nargs) {
-  if (nargs != 2) {
-    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+// method function for SignZilliqaSchnorr
+static const char PyPrivateKeySignZilliqaSchnorr_doc[] =
+    "TWData* TWPrivateKeySignZilliqaSchnorr(struct TWPrivateKey* pk, TWData* "
+    "message)";
+static PyObject* PyPrivateKeySignZilliqaSchnorr(PyPrivateKeyObject* self,
+                                                PyObject* const* args,
+                                                Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
                  nargs);
     return nullptr;
   }
@@ -309,13 +350,7 @@ static PyObject* PyPrivateKeySignSchnorr(PyPrivateKeyObject* self,
   }
   auto arg0 = PyBytes_GetTWData(args[0]);
 
-  if (!PyCurve_Check(args[1])) {
-    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Curve");
-    return nullptr;
-  }
-  auto arg1 = PyCurve_GetTWCurve(args[1]);
-
-  TWDataPtr result(TWPrivateKeySignSchnorr(self->value, arg0.get(), arg1));
+  TWDataPtr result(TWPrivateKeySignZilliqaSchnorr(self->value, arg0.get()));
   return PyBytes_FromTWData(result);
 }
 
@@ -414,6 +449,10 @@ static const PyGetSetDef get_set_defs[] = {
     {}};
 
 static const PyMethodDef method_defs[] = {
+    {"get_public_key", (PyCFunction)PyPrivateKeyGetPublicKey, METH_FASTCALL,
+     PyPrivateKeyGetPublicKey_doc},
+    {"get_public_key_by_type", (PyCFunction)PyPrivateKeyGetPublicKeyByType,
+     METH_FASTCALL, PyPrivateKeyGetPublicKeyByType_doc},
     {"get_public_key_secp256k1", (PyCFunction)PyPrivateKeyGetPublicKeySecp256k1,
      METH_FASTCALL, PyPrivateKeyGetPublicKeySecp256k1_doc},
     {"get_public_key_nist256p1", (PyCFunction)PyPrivateKeyGetPublicKeyNist256p1,
@@ -423,9 +462,9 @@ static const PyMethodDef method_defs[] = {
     {"get_public_key_ed25519_blake2b",
      (PyCFunction)PyPrivateKeyGetPublicKeyEd25519Blake2b, METH_FASTCALL,
      PyPrivateKeyGetPublicKeyEd25519Blake2b_doc},
-    {"get_public_key_ed25519_extended",
-     (PyCFunction)PyPrivateKeyGetPublicKeyEd25519Extended, METH_FASTCALL,
-     PyPrivateKeyGetPublicKeyEd25519Extended_doc},
+    {"get_public_key_ed25519_cardano",
+     (PyCFunction)PyPrivateKeyGetPublicKeyEd25519Cardano, METH_FASTCALL,
+     PyPrivateKeyGetPublicKeyEd25519Cardano_doc},
     {"get_public_key_curve25519",
      (PyCFunction)PyPrivateKeyGetPublicKeyCurve25519, METH_FASTCALL,
      PyPrivateKeyGetPublicKeyCurve25519_doc},
@@ -435,8 +474,8 @@ static const PyMethodDef method_defs[] = {
      PyPrivateKeySign_doc},
     {"sign_as_der", (PyCFunction)PyPrivateKeySignAsDER, METH_FASTCALL,
      PyPrivateKeySignAsDER_doc},
-    {"sign_schnorr", (PyCFunction)PyPrivateKeySignSchnorr, METH_FASTCALL,
-     PyPrivateKeySignSchnorr_doc},
+    {"sign_zilliqa_schnorr", (PyCFunction)PyPrivateKeySignZilliqaSchnorr,
+     METH_FASTCALL, PyPrivateKeySignZilliqaSchnorr_doc},
     {"create", (PyCFunction)PyPrivateKeyCreate, METH_FASTCALL | METH_STATIC,
      PyPrivateKeyCreate_doc},
     {"create_with_data", (PyCFunction)PyPrivateKeyCreateWithData,

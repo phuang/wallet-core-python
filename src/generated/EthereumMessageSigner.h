@@ -21,24 +21,8 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-#include <TrustWalletCore/TWEthereumChainID.h>
+#include <TrustWalletCore/TWEthereumMessageSigner.h>
 
-struct PyEthereumChainIDObject {
-  PyObject_HEAD;
-  const TWEthereumChainID value;
-};
-
-// Returns true if the object is a PyEthereumChainID.
-bool PyEthereumChainID_Check(PyObject* object);
-
-// Create PyEthereumChainID from an enum TWEthereumChainID value.
-// Note: it returns the same PyEthereumChainID instance for the same enum
-// TWEthereumChainID value. the caller should release the reference after using.
-PyObject* PyEthereumChainID_FromTWEthereumChainID(TWEthereumChainID value);
-
-// Get enum TWEthereumChainID value from a PyEthereumChainID object.
-TWEthereumChainID PyEthereumChainID_GetTWEthereumChainID(PyObject* object);
-
-// Initialize for PyEthereumChainID. It is called by python module init
+// Initialize for PyEthereumMessageSigner. It is called by python module init
 // function.
-bool PyInit_EthereumChainID(PyObject* module);
+bool PyInit_EthereumMessageSigner(PyObject* module);

@@ -19,8 +19,10 @@
 #include "generated/AnyAddress.h"
 
 #include "Data.h"
+#include "Number.h"
 #include "String.h"
 #include "generated/CoinType.h"
+#include "generated/Derivation.h"
 #include "generated/PublicKey.h"
 
 struct PyAnyAddressObject {
@@ -166,6 +168,75 @@ static PyObject* PyAnyAddressIsValid(PyAnyAddressObject* self,
   return PyBool_FromLong(result);
 }
 
+// static method function for IsValidBech32
+static const char PyAnyAddressIsValidBech32_doc[] =
+    "bool TWAnyAddressIsValidBech32(TWString* string, enum TWCoinType coin, "
+    "TWString* hrp)";
+static PyObject* PyAnyAddressIsValidBech32(PyAnyAddressObject* self,
+                                           PyObject* const* args,
+                                           Py_ssize_t nargs) {
+  if (nargs != 3) {
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  if (!PyUnicode_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg2 = PyUnicode_GetTWString(args[2]);
+
+  bool result = TWAnyAddressIsValidBech32(arg0.get(), arg1, arg2.get());
+  return PyBool_FromLong(result);
+}
+
+// static method function for IsValidSS58
+static const char PyAnyAddressIsValidSS58_doc[] =
+    "bool TWAnyAddressIsValidSS58(TWString* string, enum TWCoinType coin, "
+    "uint32_t ss58Prefix)";
+static PyObject* PyAnyAddressIsValidSS58(PyAnyAddressObject* self,
+                                         PyObject* const* args,
+                                         Py_ssize_t nargs) {
+  if (nargs != 3) {
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  auto checked_arg2 = PyLongArg_ToNumber<uint32_t>(args[2], 2, "uint32_t");
+  if (!checked_arg2)
+    return nullptr;
+  const auto& arg2 = checked_arg2.value();
+
+  bool result = TWAnyAddressIsValidSS58(arg0.get(), arg1, arg2);
+  return PyBool_FromLong(result);
+}
+
 // static method function for CreateWithString
 static const char PyAnyAddressCreateWithString_doc[] =
     "struct TWAnyAddress* TWAnyAddressCreateWithString(TWString* string, enum "
@@ -192,6 +263,75 @@ static PyObject* PyAnyAddressCreateWithString(PyAnyAddressObject* self,
   auto arg1 = PyCoinType_GetTWCoinType(args[1]);
 
   TWAnyAddress* result = TWAnyAddressCreateWithString(arg0.get(), arg1);
+  return PyAnyAddress_FromTWAnyAddress(result);
+}
+
+// static method function for CreateBech32
+static const char PyAnyAddressCreateBech32_doc[] =
+    "struct TWAnyAddress* TWAnyAddressCreateBech32(TWString* string, enum "
+    "TWCoinType coin, TWString* hrp)";
+static PyObject* PyAnyAddressCreateBech32(PyAnyAddressObject* self,
+                                          PyObject* const* args,
+                                          Py_ssize_t nargs) {
+  if (nargs != 3) {
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  if (!PyUnicode_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg2 = PyUnicode_GetTWString(args[2]);
+
+  TWAnyAddress* result = TWAnyAddressCreateBech32(arg0.get(), arg1, arg2.get());
+  return PyAnyAddress_FromTWAnyAddress(result);
+}
+
+// static method function for CreateSS58
+static const char PyAnyAddressCreateSS58_doc[] =
+    "struct TWAnyAddress* TWAnyAddressCreateSS58(TWString* string, enum "
+    "TWCoinType coin, uint32_t ss58Prefix)";
+static PyObject* PyAnyAddressCreateSS58(PyAnyAddressObject* self,
+                                        PyObject* const* args,
+                                        Py_ssize_t nargs) {
+  if (nargs != 3) {
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyUnicode_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg0 = PyUnicode_GetTWString(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  auto checked_arg2 = PyLongArg_ToNumber<uint32_t>(args[2], 2, "uint32_t");
+  if (!checked_arg2)
+    return nullptr;
+  const auto& arg2 = checked_arg2.value();
+
+  TWAnyAddress* result = TWAnyAddressCreateSS58(arg0.get(), arg1, arg2);
   return PyAnyAddress_FromTWAnyAddress(result);
 }
 
@@ -224,6 +364,114 @@ static PyObject* PyAnyAddressCreateWithPublicKey(PyAnyAddressObject* self,
   return PyAnyAddress_FromTWAnyAddress(result);
 }
 
+// static method function for CreateWithPublicKeyDerivation
+static const char PyAnyAddressCreateWithPublicKeyDerivation_doc[] =
+    "struct TWAnyAddress* TWAnyAddressCreateWithPublicKeyDerivation(struct "
+    "TWPublicKey* publicKey, enum TWCoinType coin, enum TWDerivation "
+    "derivation)";
+static PyObject* PyAnyAddressCreateWithPublicKeyDerivation(
+    PyAnyAddressObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 3) {
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyPublicKey_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PublicKey");
+    return nullptr;
+  }
+  auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  if (!PyDerivation_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Derivation");
+    return nullptr;
+  }
+  auto arg2 = PyDerivation_GetTWDerivation(args[2]);
+
+  TWAnyAddress* result =
+      TWAnyAddressCreateWithPublicKeyDerivation(arg0, arg1, arg2);
+  return PyAnyAddress_FromTWAnyAddress(result);
+}
+
+// static method function for CreateBech32WithPublicKey
+static const char PyAnyAddressCreateBech32WithPublicKey_doc[] =
+    "struct TWAnyAddress* TWAnyAddressCreateBech32WithPublicKey(struct "
+    "TWPublicKey* publicKey, enum TWCoinType coin, TWString* hrp)";
+static PyObject* PyAnyAddressCreateBech32WithPublicKey(PyAnyAddressObject* self,
+                                                       PyObject* const* args,
+                                                       Py_ssize_t nargs) {
+  if (nargs != 3) {
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyPublicKey_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PublicKey");
+    return nullptr;
+  }
+  auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  if (!PyUnicode_Check(args[2])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 2 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg2 = PyUnicode_GetTWString(args[2]);
+
+  TWAnyAddress* result =
+      TWAnyAddressCreateBech32WithPublicKey(arg0, arg1, arg2.get());
+  return PyAnyAddress_FromTWAnyAddress(result);
+}
+
+// static method function for CreateSS58WithPublicKey
+static const char PyAnyAddressCreateSS58WithPublicKey_doc[] =
+    "struct TWAnyAddress* TWAnyAddressCreateSS58WithPublicKey(struct "
+    "TWPublicKey* publicKey, enum TWCoinType coin, uint32_t ss58Prefix)";
+static PyObject* PyAnyAddressCreateSS58WithPublicKey(PyAnyAddressObject* self,
+                                                     PyObject* const* args,
+                                                     Py_ssize_t nargs) {
+  if (nargs != 3) {
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyPublicKey_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PublicKey");
+    return nullptr;
+  }
+  auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
+
+  if (!PyCoinType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type CoinType");
+    return nullptr;
+  }
+  auto arg1 = PyCoinType_GetTWCoinType(args[1]);
+
+  auto checked_arg2 = PyLongArg_ToNumber<uint32_t>(args[2], 2, "uint32_t");
+  if (!checked_arg2)
+    return nullptr;
+  const auto& arg2 = checked_arg2.value();
+
+  TWAnyAddress* result = TWAnyAddressCreateSS58WithPublicKey(arg0, arg1, arg2);
+  return PyAnyAddress_FromTWAnyAddress(result);
+}
+
 // properties
 
 static const PyGetSetDef get_set_defs[] = {
@@ -238,10 +486,28 @@ static const PyMethodDef method_defs[] = {
      PyAnyAddressEqual_doc},
     {"is_valid", (PyCFunction)PyAnyAddressIsValid, METH_FASTCALL | METH_STATIC,
      PyAnyAddressIsValid_doc},
+    {"is_valid_bech32", (PyCFunction)PyAnyAddressIsValidBech32,
+     METH_FASTCALL | METH_STATIC, PyAnyAddressIsValidBech32_doc},
+    {"is_valid_ss58", (PyCFunction)PyAnyAddressIsValidSS58,
+     METH_FASTCALL | METH_STATIC, PyAnyAddressIsValidSS58_doc},
     {"create_with_string", (PyCFunction)PyAnyAddressCreateWithString,
      METH_FASTCALL | METH_STATIC, PyAnyAddressCreateWithString_doc},
+    {"create_bech32", (PyCFunction)PyAnyAddressCreateBech32,
+     METH_FASTCALL | METH_STATIC, PyAnyAddressCreateBech32_doc},
+    {"create_ss58", (PyCFunction)PyAnyAddressCreateSS58,
+     METH_FASTCALL | METH_STATIC, PyAnyAddressCreateSS58_doc},
     {"create_with_public_key", (PyCFunction)PyAnyAddressCreateWithPublicKey,
      METH_FASTCALL | METH_STATIC, PyAnyAddressCreateWithPublicKey_doc},
+    {"create_with_public_key_derivation",
+     (PyCFunction)PyAnyAddressCreateWithPublicKeyDerivation,
+     METH_FASTCALL | METH_STATIC,
+     PyAnyAddressCreateWithPublicKeyDerivation_doc},
+    {"create_bech32_with_public_key",
+     (PyCFunction)PyAnyAddressCreateBech32WithPublicKey,
+     METH_FASTCALL | METH_STATIC, PyAnyAddressCreateBech32WithPublicKey_doc},
+    {"create_ss58_with_public_key",
+     (PyCFunction)PyAnyAddressCreateSS58WithPublicKey,
+     METH_FASTCALL | METH_STATIC, PyAnyAddressCreateSS58WithPublicKey_doc},
     {}};
 
 bool PyInit_AnyAddress(PyObject* module) {

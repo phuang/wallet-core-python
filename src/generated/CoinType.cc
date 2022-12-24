@@ -21,6 +21,7 @@
 #include "String.h"
 #include "generated/Blockchain.h"
 #include "generated/Curve.h"
+#include "generated/Derivation.h"
 #include "generated/HDVersion.h"
 #include "generated/HRP.h"
 #include "generated/PrivateKey.h"
@@ -121,6 +122,7 @@ static Constant constants[] = {
     { TWCoinTypeRavencoin, "Ravencoin", nullptr },
     { TWCoinTypeWaves, "Waves", nullptr },
     { TWCoinTypeTerra, "Terra", nullptr },
+    { TWCoinTypeTerraV2, "TerraV2", nullptr },
     { TWCoinTypeHarmony, "Harmony", nullptr },
     { TWCoinTypeAlgorand, "Algorand", nullptr },
     { TWCoinTypeKusama, "Kusama", nullptr },
@@ -135,6 +137,7 @@ static Constant constants[] = {
     { TWCoinTypeTHORChain, "THORChain", nullptr },
     { TWCoinTypeBluzelle, "Bluzelle", nullptr },
     { TWCoinTypeOptimism, "Optimism", nullptr },
+    { TWCoinTypeZksync, "Zksync", nullptr },
     { TWCoinTypeArbitrum, "Arbitrum", nullptr },
     { TWCoinTypeECOChain, "ECOChain", nullptr },
     { TWCoinTypeAvalancheCChain, "AvalancheCChain", nullptr },
@@ -151,6 +154,19 @@ static Constant constants[] = {
     { TWCoinTypeBoba, "Boba", nullptr },
     { TWCoinTypeMetis, "Metis", nullptr },
     { TWCoinTypeAurora, "Aurora", nullptr },
+    { TWCoinTypeEvmos, "Evmos", nullptr },
+    { TWCoinTypeNativeEvmos, "NativeEvmos", nullptr },
+    { TWCoinTypeMoonriver, "Moonriver", nullptr },
+    { TWCoinTypeMoonbeam, "Moonbeam", nullptr },
+    { TWCoinTypeKavaEvm, "KavaEvm", nullptr },
+    { TWCoinTypeKlaytn, "Klaytn", nullptr },
+    { TWCoinTypeMeter, "Meter", nullptr },
+    { TWCoinTypeOKXChain, "OKXChain", nullptr },
+    { TWCoinTypeNervos, "Nervos", nullptr },
+    { TWCoinTypeEverscale, "Everscale", nullptr },
+    { TWCoinTypeAptos, "Aptos", nullptr },
+    { TWCoinTypeHedera, "Hedera", nullptr },
+    { TWCoinTypeSecret, "Secret", nullptr },
     // clang-format on
 };
 
@@ -277,11 +293,27 @@ static PyObject* PyCoinTypeStaticPrefix(PyCoinTypeObject* self, void*) {
   return PyLong_FromLong(prop);
 }
 
+// getter function for ChainId
+static const char PyCoinTypeChainId_doc[] =
+    "TWString* TWCoinTypeChainId(enum TWCoinType coin)";
+static PyObject* PyCoinTypeChainId(PyCoinTypeObject* self, void*) {
+  TWStringPtr prop(TWCoinTypeChainId(self->value));
+  return PyUnicode_FromTWString(prop);
+}
+
 // getter function for Slip44Id
 static const char PyCoinTypeSlip44Id_doc[] =
     "uint32_t TWCoinTypeSlip44Id(enum TWCoinType coin)";
 static PyObject* PyCoinTypeSlip44Id(PyCoinTypeObject* self, void*) {
   uint32_t prop = TWCoinTypeSlip44Id(self->value);
+  return PyLong_FromLong(prop);
+}
+
+// getter function for SS58Prefix
+static const char PyCoinTypeSS58Prefix_doc[] =
+    "uint32_t TWCoinTypeSS58Prefix(enum TWCoinType coin)";
+static PyObject* PyCoinTypeSS58Prefix(PyCoinTypeObject* self, void*) {
+  uint32_t prop = TWCoinTypeSS58Prefix(self->value);
   return PyLong_FromLong(prop);
 }
 
@@ -328,6 +360,29 @@ static PyObject* PyCoinTypeDerivationPath(PyCoinTypeObject* self,
   }
 
   TWStringPtr result(TWCoinTypeDerivationPath(self->value));
+  return PyUnicode_FromTWString(result);
+}
+
+// method function for DerivationPathWithDerivation
+static const char PyCoinTypeDerivationPathWithDerivation_doc[] =
+    "TWString* TWCoinTypeDerivationPathWithDerivation(enum TWCoinType coin, "
+    "enum TWDerivation derivation)";
+static PyObject* PyCoinTypeDerivationPathWithDerivation(PyCoinTypeObject* self,
+                                                        PyObject* const* args,
+                                                        Py_ssize_t nargs) {
+  if (nargs != 1) {
+    PyErr_Format(PyExc_TypeError, "Expect 1 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyDerivation_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type Derivation");
+    return nullptr;
+  }
+  auto arg0 = PyDerivation_GetTWDerivation(args[0]);
+
+  TWStringPtr result(TWCoinTypeDerivationPathWithDerivation(self->value, arg0));
   return PyUnicode_FromTWString(result);
 }
 
@@ -395,7 +450,10 @@ static const PyGetSetDef get_set_defs[] = {
      PyCoinTypeP2shPrefix_doc},
     {"static_prefix", (getter)PyCoinTypeStaticPrefix, nullptr,
      PyCoinTypeStaticPrefix_doc},
+    {"chain_id", (getter)PyCoinTypeChainId, nullptr, PyCoinTypeChainId_doc},
     {"slip44_id", (getter)PyCoinTypeSlip44Id, nullptr, PyCoinTypeSlip44Id_doc},
+    {"ss58_prefix", (getter)PyCoinTypeSS58Prefix, nullptr,
+     PyCoinTypeSS58Prefix_doc},
     {"public_key_type", (getter)PyCoinTypePublicKeyType, nullptr,
      PyCoinTypePublicKeyType_doc},
     {}};
@@ -405,6 +463,9 @@ static const PyMethodDef method_defs[] = {
      PyCoinTypeValidate_doc},
     {"derivation_path", (PyCFunction)PyCoinTypeDerivationPath, METH_FASTCALL,
      PyCoinTypeDerivationPath_doc},
+    {"derivation_path_with_derivation",
+     (PyCFunction)PyCoinTypeDerivationPathWithDerivation, METH_FASTCALL,
+     PyCoinTypeDerivationPathWithDerivation_doc},
     {"derive_address", (PyCFunction)PyCoinTypeDeriveAddress, METH_FASTCALL,
      PyCoinTypeDeriveAddress_doc},
     {"derive_address_from_public_key",
