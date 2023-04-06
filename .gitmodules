@@ -1,4 +1,4 @@
 [submodule "wallet-core"]
 	path = wallet-core
 	url = https://github.com/trustwallet/wallet-core.git
-	branch = 1a214bed421e14bc5893fba69e0d890628d8a853
+	branch = 3.1.23
