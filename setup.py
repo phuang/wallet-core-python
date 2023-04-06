@@ -16,7 +16,7 @@
 
 import os
 from glob import glob
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 # Use clang since wallet-core headers don't compile with gcc
 if 'CC' not in os.environ:
