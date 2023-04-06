@@ -21,8 +21,27 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-#include <TrustWalletCore/TWEthereumEip2645.h>
+#include <TrustWalletCore/TWFilecoinAddressType.h>
 
-// Initialize for PyEthereumEip2645. It is called by python module init
+struct PyFilecoinAddressTypeObject {
+  PyObject_HEAD;
+  const TWFilecoinAddressType value;
+};
+
+// Returns true if the object is a PyFilecoinAddressType.
+bool PyFilecoinAddressType_Check(PyObject* object);
+
+// Create PyFilecoinAddressType from an enum TWFilecoinAddressType value.
+// Note: it returns the same PyFilecoinAddressType instance for the same enum
+// TWFilecoinAddressType value. the caller should release the reference after
+// using.
+PyObject* PyFilecoinAddressType_FromTWFilecoinAddressType(
+    TWFilecoinAddressType value);
+
+// Get enum TWFilecoinAddressType value from a PyFilecoinAddressType object.
+TWFilecoinAddressType PyFilecoinAddressType_GetTWFilecoinAddressType(
+    PyObject* object);
+
+// Initialize for PyFilecoinAddressType. It is called by python module init
 // function.
-bool PyInit_EthereumEip2645(PyObject* module);
+bool PyInit_FilecoinAddressType(PyObject* module);

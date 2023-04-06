@@ -63,6 +63,7 @@ static Constant constants[] = {
     { TWDerivationCustom, "Custom", nullptr },
     { TWDerivationBitcoinSegwit, "BitcoinSegwit", nullptr },
     { TWDerivationBitcoinLegacy, "BitcoinLegacy", nullptr },
+    { TWDerivationBitcoinTestnet, "BitcoinTestnet", nullptr },
     { TWDerivationLitecoinLegacy, "LitecoinLegacy", nullptr },
     { TWDerivationSolanaSolana, "SolanaSolana", nullptr },
     // clang-format on
