@@ -37,14 +37,12 @@
 #include "generated/CoinTypeConfiguration.h"
 #include "generated/Curve.h"
 #include "generated/DataVector.h"
-#include "generated/Derivation.h"
 #include "generated/DerivationPath.h"
 #include "generated/DerivationPathIndex.h"
 #include "generated/Ethereum.h"
 #include "generated/EthereumAbi.h"
 #include "generated/EthereumAbiFunction.h"
 #include "generated/EthereumAbiValue.h"
-#include "generated/EthereumChainID.h"
 #include "generated/EthereumMessageSigner.h"
 #include "generated/FIOAccount.h"
 #include "generated/FilecoinAddressConverter.h"
@@ -52,7 +50,6 @@
 #include "generated/GroestlcoinAddress.h"
 #include "generated/HDVersion.h"
 #include "generated/HDWallet.h"
-#include "generated/HRP.h"
 #include "generated/Hash.h"
 #include "generated/Mnemonic.h"
 #include "generated/NEARAccount.h"
@@ -79,7 +76,6 @@
 #include "generated/TezosMessageSigner.h"
 #include "generated/TransactionCompiler.h"
 #include "generated/TronMessageSigner.h"
-#include "stdio.h"
 
 typedef bool (*InitProc)(PyObject* module);
 const InitProc init_functions[] = {
@@ -102,14 +98,12 @@ const InitProc init_functions[] = {
     PyInit_CoinTypeConfiguration,
     PyInit_Curve,
     PyInit_DataVector,
-    PyInit_Derivation,
     PyInit_DerivationPath,
     PyInit_DerivationPathIndex,
     PyInit_Ethereum,
     PyInit_EthereumAbi,
     PyInit_EthereumAbiFunction,
     PyInit_EthereumAbiValue,
-    PyInit_EthereumChainID,
     PyInit_EthereumMessageSigner,
     PyInit_FIOAccount,
     PyInit_FilecoinAddressConverter,
@@ -117,7 +111,6 @@ const InitProc init_functions[] = {
     PyInit_GroestlcoinAddress,
     PyInit_HDVersion,
     PyInit_HDWallet,
-    PyInit_HRP,
     PyInit_Hash,
     PyInit_Mnemonic,
     PyInit_NEARAccount,
@@ -148,17 +141,14 @@ const InitProc init_functions[] = {
 };
 
 PyMODINIT_FUNC PyInit_walletcore(void) {
-  printf("Wallet Core for Cuttle Systems\n");
-  
   static struct PyModuleDef enum_module_def = {
       PyModuleDef_HEAD_INIT, "walletcore", /* m_name */
       nullptr,                             /* m_doc */
       -1,                                  /* m_size */
-     nullptr                              /* m_methods */
+      nullptr                              /* m_methods */
   };
 
   PyObject* module = PyModule_Create(&enum_module_def);
-  
   if (module == nullptr) {
     return nullptr;
   }
@@ -169,8 +159,6 @@ PyMODINIT_FUNC PyInit_walletcore(void) {
       return nullptr;
     }
   }
-  
 
   return module;
-  //return NULL;
 }
