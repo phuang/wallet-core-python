@@ -1,4 +1,0 @@
-[submodule "wallet-core"]
-	path = wallet-core
-	url = https://github.com/cuttlesystems/wallet-core-cuttle.git
-	branch = cuttle_version_3.1.23
