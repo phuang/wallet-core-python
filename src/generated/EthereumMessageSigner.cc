@@ -18,6 +18,7 @@
 
 #include "generated/EthereumMessageSigner.h"
 
+#include "Number.h"
 #include "String.h"
 #include "generated/PrivateKey.h"
 #include "generated/PublicKey.h"
@@ -52,6 +53,72 @@ static PyTypeObject PyEthereumMessageSignerType = {
     nullptr,                               /* tp_doc */
 };
 
+// static method function for SignTypedMessage
+static const char PyEthereumMessageSignerSignTypedMessage_doc[] =
+    "TWString* TWEthereumMessageSignerSignTypedMessage(const struct "
+    "TWPrivateKey* privateKey, TWString* messageJson)";
+static PyObject* PyEthereumMessageSignerSignTypedMessage(
+    PyEthereumMessageSignerObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyPrivateKey_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PrivateKey");
+    return nullptr;
+  }
+  auto arg0 = PyPrivateKey_GetTWPrivateKey(args[0]);
+
+  if (!PyUnicode_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg1 = PyUnicode_GetTWString(args[1]);
+
+  TWStringPtr result(TWEthereumMessageSignerSignTypedMessage(arg0, arg1.get()));
+  return PyUnicode_FromTWString(result);
+}
+
+// static method function for SignTypedMessageEip155
+static const char PyEthereumMessageSignerSignTypedMessageEip155_doc[] =
+    "TWString* TWEthereumMessageSignerSignTypedMessageEip155(const struct "
+    "TWPrivateKey* privateKey, TWString* messageJson, int32_t chainId)";
+static PyObject* PyEthereumMessageSignerSignTypedMessageEip155(
+    PyEthereumMessageSignerObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 3) {
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyPrivateKey_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PrivateKey");
+    return nullptr;
+  }
+  auto arg0 = PyPrivateKey_GetTWPrivateKey(args[0]);
+
+  if (!PyUnicode_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg1 = PyUnicode_GetTWString(args[1]);
+
+  auto checked_arg2 = PyLongArg_ToNumber<int32_t>(args[2], 2, "int32_t");
+  if (!checked_arg2)
+    return nullptr;
+  const auto& arg2 = checked_arg2.value();
+
+  TWStringPtr result(
+      TWEthereumMessageSignerSignTypedMessageEip155(arg0, arg1.get(), arg2));
+  return PyUnicode_FromTWString(result);
+}
+
 // static method function for SignMessage
 static const char PyEthereumMessageSignerSignMessage_doc[] =
     "TWString* TWEthereumMessageSignerSignMessage(const struct TWPrivateKey* "
@@ -79,6 +146,73 @@ static PyObject* PyEthereumMessageSignerSignMessage(
   auto arg1 = PyUnicode_GetTWString(args[1]);
 
   TWStringPtr result(TWEthereumMessageSignerSignMessage(arg0, arg1.get()));
+  return PyUnicode_FromTWString(result);
+}
+
+// static method function for SignMessageImmutableX
+static const char PyEthereumMessageSignerSignMessageImmutableX_doc[] =
+    "TWString* TWEthereumMessageSignerSignMessageImmutableX(const struct "
+    "TWPrivateKey* privateKey, TWString* message)";
+static PyObject* PyEthereumMessageSignerSignMessageImmutableX(
+    PyEthereumMessageSignerObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyPrivateKey_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PrivateKey");
+    return nullptr;
+  }
+  auto arg0 = PyPrivateKey_GetTWPrivateKey(args[0]);
+
+  if (!PyUnicode_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg1 = PyUnicode_GetTWString(args[1]);
+
+  TWStringPtr result(
+      TWEthereumMessageSignerSignMessageImmutableX(arg0, arg1.get()));
+  return PyUnicode_FromTWString(result);
+}
+
+// static method function for SignMessageEip155
+static const char PyEthereumMessageSignerSignMessageEip155_doc[] =
+    "TWString* TWEthereumMessageSignerSignMessageEip155(const struct "
+    "TWPrivateKey* privateKey, TWString* message, int32_t chainId)";
+static PyObject* PyEthereumMessageSignerSignMessageEip155(
+    PyEthereumMessageSignerObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 3) {
+    PyErr_Format(PyExc_TypeError, "Expect 3 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyPrivateKey_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PrivateKey");
+    return nullptr;
+  }
+  auto arg0 = PyPrivateKey_GetTWPrivateKey(args[0]);
+
+  if (!PyUnicode_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 1 is not in type Unicode");
+    return nullptr;
+  }
+  auto arg1 = PyUnicode_GetTWString(args[1]);
+
+  auto checked_arg2 = PyLongArg_ToNumber<int32_t>(args[2], 2, "int32_t");
+  if (!checked_arg2)
+    return nullptr;
+  const auto& arg2 = checked_arg2.value();
+
+  TWStringPtr result(
+      TWEthereumMessageSignerSignMessageEip155(arg0, arg1.get(), arg2));
   return PyUnicode_FromTWString(result);
 }
 
@@ -124,8 +258,21 @@ static PyObject* PyEthereumMessageSignerVerifyMessage(
 static const PyGetSetDef get_set_defs[] = {{}};
 
 static const PyMethodDef method_defs[] = {
+    {"sign_typed_message", (PyCFunction)PyEthereumMessageSignerSignTypedMessage,
+     METH_FASTCALL | METH_STATIC, PyEthereumMessageSignerSignTypedMessage_doc},
+    {"sign_typed_message_eip155",
+     (PyCFunction)PyEthereumMessageSignerSignTypedMessageEip155,
+     METH_FASTCALL | METH_STATIC,
+     PyEthereumMessageSignerSignTypedMessageEip155_doc},
     {"sign_message", (PyCFunction)PyEthereumMessageSignerSignMessage,
      METH_FASTCALL | METH_STATIC, PyEthereumMessageSignerSignMessage_doc},
+    {"sign_message_immutable_x",
+     (PyCFunction)PyEthereumMessageSignerSignMessageImmutableX,
+     METH_FASTCALL | METH_STATIC,
+     PyEthereumMessageSignerSignMessageImmutableX_doc},
+    {"sign_message_eip155",
+     (PyCFunction)PyEthereumMessageSignerSignMessageEip155,
+     METH_FASTCALL | METH_STATIC, PyEthereumMessageSignerSignMessageEip155_doc},
     {"verify_message", (PyCFunction)PyEthereumMessageSignerVerifyMessage,
      METH_FASTCALL | METH_STATIC, PyEthereumMessageSignerVerifyMessage_doc},
     {}};

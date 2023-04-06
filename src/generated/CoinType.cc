@@ -84,6 +84,7 @@ static Constant constants[] = {
     { TWCoinTypeDigiByte, "DigiByte", nullptr },
     { TWCoinTypeDogecoin, "Dogecoin", nullptr },
     { TWCoinTypeEOS, "EOS", nullptr },
+    { TWCoinTypeWAX, "WAX", nullptr },
     { TWCoinTypeEthereum, "Ethereum", nullptr },
     { TWCoinTypeEthereumClassic, "EthereumClassic", nullptr },
     { TWCoinTypeFIO, "FIO", nullptr },
@@ -108,7 +109,7 @@ static Constant constants[] = {
     { TWCoinTypeStellar, "Stellar", nullptr },
     { TWCoinTypeTezos, "Tezos", nullptr },
     { TWCoinTypeTheta, "Theta", nullptr },
-    { TWCoinTypeThunderToken, "ThunderToken", nullptr },
+    { TWCoinTypeThunderCore, "ThunderCore", nullptr },
     { TWCoinTypeNEO, "NEO", nullptr },
     { TWCoinTypeTomoChain, "TomoChain", nullptr },
     { TWCoinTypeTron, "Tron", nullptr },
@@ -128,7 +129,7 @@ static Constant constants[] = {
     { TWCoinTypeKusama, "Kusama", nullptr },
     { TWCoinTypePolkadot, "Polkadot", nullptr },
     { TWCoinTypeFilecoin, "Filecoin", nullptr },
-    { TWCoinTypeElrond, "Elrond", nullptr },
+    { TWCoinTypeMultiversX, "MultiversX", nullptr },
     { TWCoinTypeBandChain, "BandChain", nullptr },
     { TWCoinTypeSmartChainLegacy, "SmartChainLegacy", nullptr },
     { TWCoinTypeSmartChain, "SmartChain", nullptr },
@@ -167,6 +168,12 @@ static Constant constants[] = {
     { TWCoinTypeAptos, "Aptos", nullptr },
     { TWCoinTypeHedera, "Hedera", nullptr },
     { TWCoinTypeSecret, "Secret", nullptr },
+    { TWCoinTypeNativeInjective, "NativeInjective", nullptr },
+    { TWCoinTypeAgoric, "Agoric", nullptr },
+    { TWCoinTypeTON, "TON", nullptr },
+    { TWCoinTypeSui, "Sui", nullptr },
+    { TWCoinTypeStargaze, "Stargaze", nullptr },
+    { TWCoinTypePolygonzkEVM, "PolygonzkEVM", nullptr },
     // clang-format on
 };
 

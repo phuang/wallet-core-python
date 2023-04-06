@@ -16,7 +16,7 @@
 
 import os
 from glob import glob
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 # Use clang since wallet-core headers don't compile with gcc
 if 'CC' not in os.environ:
@@ -28,6 +28,7 @@ WALLET_CORE_ROOT = 'wallet-core'
 WALLET_CORE_INCLUDE = os.path.join(WALLET_CORE_ROOT, 'include')
 WALLET_CORE_BUILD = os.path.join(WALLET_CORE_ROOT, 'build')
 TREZOR_CRYPTO = os.path.join(WALLET_CORE_BUILD, 'trezor-crypto')
+RUST_LIB_PATH = os.path.join(WALLET_CORE_ROOT, 'rust', 'target', 'release')
 
 link_args = []
 # Add --coverage link arg otherwise linking fails with undefined symbols
@@ -41,8 +42,8 @@ compile_args = ['-std=c++17']
 
 module = Extension('walletcore',
                    include_dirs=[WALLET_CORE_INCLUDE, 'src'],
-                   library_dirs=[WALLET_CORE_BUILD, TREZOR_CRYPTO],
-                   libraries=['TrustWalletCore', 'protobuf', 'TrezorCrypto'],
+                   library_dirs=[WALLET_CORE_BUILD, TREZOR_CRYPTO, RUST_LIB_PATH],
+                   libraries=['TrustWalletCore', 'protobuf', 'TrezorCrypto', 'wallet_core_rs'],
                    extra_compile_args=compile_args,
                    extra_link_args=link_args,
                    sources=glob('src/*.cc') + glob('src/generated/*.cc'))

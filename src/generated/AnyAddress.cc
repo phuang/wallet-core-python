@@ -23,6 +23,7 @@
 #include "String.h"
 #include "generated/CoinType.h"
 #include "generated/Derivation.h"
+#include "generated/FilecoinAddressType.h"
 #include "generated/PublicKey.h"
 
 struct PyAnyAddressObject {
@@ -472,6 +473,39 @@ static PyObject* PyAnyAddressCreateSS58WithPublicKey(PyAnyAddressObject* self,
   return PyAnyAddress_FromTWAnyAddress(result);
 }
 
+// static method function for CreateWithPublicKeyFilecoinAddressType
+static const char PyAnyAddressCreateWithPublicKeyFilecoinAddressType_doc[] =
+    "struct TWAnyAddress* "
+    "TWAnyAddressCreateWithPublicKeyFilecoinAddressType(struct TWPublicKey* "
+    "publicKey, enum TWFilecoinAddressType filecoinAddressType)";
+static PyObject* PyAnyAddressCreateWithPublicKeyFilecoinAddressType(
+    PyAnyAddressObject* self,
+    PyObject* const* args,
+    Py_ssize_t nargs) {
+  if (nargs != 2) {
+    PyErr_Format(PyExc_TypeError, "Expect 2 args, but %d args are passed in.",
+                 nargs);
+    return nullptr;
+  }
+
+  if (!PyPublicKey_Check(args[0])) {
+    PyErr_SetString(PyExc_TypeError, "The arg 0 is not in type PublicKey");
+    return nullptr;
+  }
+  auto arg0 = PyPublicKey_GetTWPublicKey(args[0]);
+
+  if (!PyFilecoinAddressType_Check(args[1])) {
+    PyErr_SetString(PyExc_TypeError,
+                    "The arg 1 is not in type FilecoinAddressType");
+    return nullptr;
+  }
+  auto arg1 = PyFilecoinAddressType_GetTWFilecoinAddressType(args[1]);
+
+  TWAnyAddress* result =
+      TWAnyAddressCreateWithPublicKeyFilecoinAddressType(arg0, arg1);
+  return PyAnyAddress_FromTWAnyAddress(result);
+}
+
 // properties
 
 static const PyGetSetDef get_set_defs[] = {
@@ -508,6 +542,10 @@ static const PyMethodDef method_defs[] = {
     {"create_ss58_with_public_key",
      (PyCFunction)PyAnyAddressCreateSS58WithPublicKey,
      METH_FASTCALL | METH_STATIC, PyAnyAddressCreateSS58WithPublicKey_doc},
+    {"create_with_public_key_filecoin_address_type",
+     (PyCFunction)PyAnyAddressCreateWithPublicKeyFilecoinAddressType,
+     METH_FASTCALL | METH_STATIC,
+     PyAnyAddressCreateWithPublicKeyFilecoinAddressType_doc},
     {}};
 
 bool PyInit_AnyAddress(PyObject* module) {

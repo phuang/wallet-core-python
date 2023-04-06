@@ -37,19 +37,19 @@
 #include "generated/CoinTypeConfiguration.h"
 #include "generated/Curve.h"
 #include "generated/DataVector.h"
-#include "generated/Derivation.h"
 #include "generated/DerivationPath.h"
 #include "generated/DerivationPathIndex.h"
+#include "generated/Ethereum.h"
 #include "generated/EthereumAbi.h"
 #include "generated/EthereumAbiFunction.h"
 #include "generated/EthereumAbiValue.h"
-#include "generated/EthereumEip2645.h"
 #include "generated/EthereumMessageSigner.h"
 #include "generated/FIOAccount.h"
+#include "generated/FilecoinAddressConverter.h"
+#include "generated/FilecoinAddressType.h"
 #include "generated/GroestlcoinAddress.h"
 #include "generated/HDVersion.h"
 #include "generated/HDWallet.h"
-#include "generated/HRP.h"
 #include "generated/Hash.h"
 #include "generated/Mnemonic.h"
 #include "generated/NEARAccount.h"
@@ -73,7 +73,9 @@
 #include "generated/StoredKeyEncryption.h"
 #include "generated/StoredKeyEncryptionLevel.h"
 #include "generated/THORChainSwap.h"
+#include "generated/TezosMessageSigner.h"
 #include "generated/TransactionCompiler.h"
+#include "generated/TronMessageSigner.h"
 
 typedef bool (*InitProc)(PyObject* module);
 const InitProc init_functions[] = {
@@ -96,19 +98,19 @@ const InitProc init_functions[] = {
     PyInit_CoinTypeConfiguration,
     PyInit_Curve,
     PyInit_DataVector,
-    PyInit_Derivation,
     PyInit_DerivationPath,
     PyInit_DerivationPathIndex,
+    PyInit_Ethereum,
     PyInit_EthereumAbi,
     PyInit_EthereumAbiFunction,
     PyInit_EthereumAbiValue,
-    PyInit_EthereumEip2645,
     PyInit_EthereumMessageSigner,
     PyInit_FIOAccount,
+    PyInit_FilecoinAddressConverter,
+    PyInit_FilecoinAddressType,
     PyInit_GroestlcoinAddress,
     PyInit_HDVersion,
     PyInit_HDWallet,
-    PyInit_HRP,
     PyInit_Hash,
     PyInit_Mnemonic,
     PyInit_NEARAccount,
@@ -132,7 +134,9 @@ const InitProc init_functions[] = {
     PyInit_StoredKeyEncryption,
     PyInit_StoredKeyEncryptionLevel,
     PyInit_THORChainSwap,
+    PyInit_TezosMessageSigner,
     PyInit_TransactionCompiler,
+    PyInit_TronMessageSigner,
     // clang-format on
 };
 

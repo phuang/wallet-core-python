@@ -91,6 +91,14 @@ static PyObject* PyAccountAddress(PyAccountObject* self, void*) {
   return PyUnicode_FromTWString(prop);
 }
 
+// getter function for Coin
+static const char PyAccountCoin_doc[] =
+    "enum TWCoinType TWAccountCoin(struct TWAccount* account)";
+static PyObject* PyAccountCoin(PyAccountObject* self, void*) {
+  TWCoinType prop = TWAccountCoin(self->value);
+  return PyCoinType_FromTWCoinType(prop);
+}
+
 // getter function for Derivation
 static const char PyAccountDerivation_doc[] =
     "enum TWDerivation TWAccountDerivation(struct TWAccount* account)";
@@ -121,14 +129,6 @@ static const char PyAccountExtendedPublicKey_doc[] =
 static PyObject* PyAccountExtendedPublicKey(PyAccountObject* self, void*) {
   TWStringPtr prop(TWAccountExtendedPublicKey(self->value));
   return PyUnicode_FromTWString(prop);
-}
-
-// getter function for Coin
-static const char PyAccountCoin_doc[] =
-    "enum TWCoinType TWAccountCoin(struct TWAccount* account)";
-static PyObject* PyAccountCoin(PyAccountObject* self, void*) {
-  TWCoinType prop = TWAccountCoin(self->value);
-  return PyCoinType_FromTWCoinType(prop);
 }
 
 // static method function for Create
@@ -190,6 +190,7 @@ static PyObject* PyAccountCreate(PyAccountObject* self,
 
 static const PyGetSetDef get_set_defs[] = {
     {"address", (getter)PyAccountAddress, nullptr, PyAccountAddress_doc},
+    {"coin", (getter)PyAccountCoin, nullptr, PyAccountCoin_doc},
     {"derivation", (getter)PyAccountDerivation, nullptr,
      PyAccountDerivation_doc},
     {"derivation_path", (getter)PyAccountDerivationPath, nullptr,
@@ -197,7 +198,6 @@ static const PyGetSetDef get_set_defs[] = {
     {"public_key", (getter)PyAccountPublicKey, nullptr, PyAccountPublicKey_doc},
     {"extended_public_key", (getter)PyAccountExtendedPublicKey, nullptr,
      PyAccountExtendedPublicKey_doc},
-    {"coin", (getter)PyAccountCoin, nullptr, PyAccountCoin_doc},
     {}};
 
 static const PyMethodDef method_defs[] = {
