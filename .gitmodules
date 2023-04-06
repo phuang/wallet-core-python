@@ -1,4 +1,0 @@
-[submodule "wallet-core"]
-	path = wallet-core
-	url = https://github.com/trustwallet/wallet-core.git
-	branch = master
