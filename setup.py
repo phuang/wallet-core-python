@@ -24,7 +24,7 @@ if 'CC' not in os.environ:
 if 'CXX' not in os.environ:
     os.environ['CXX'] = 'clang++'
 
-WALLET_CORE_ROOT = 'wallet-core'
+WALLET_CORE_ROOT = '/wallet-core'
 WALLET_CORE_INCLUDE = os.path.join(WALLET_CORE_ROOT, 'include')
 WALLET_CORE_BUILD = os.path.join(WALLET_CORE_ROOT, 'build')
 TREZOR_CRYPTO = os.path.join(WALLET_CORE_BUILD, 'trezor-crypto')
