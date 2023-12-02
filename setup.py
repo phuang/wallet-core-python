@@ -31,6 +31,9 @@ TREZOR_CRYPTO = os.path.join(WALLET_CORE_BUILD, 'trezor-crypto')
 
 link_args = []
 # Add --coverage link arg otherwise linking fails with undefined symbols
+print(WALLET_CORE_ROOT)
+os.listdir(WALLET_CORE_ROOT)
+print('axixaweqw')
 for line in open(os.path.join(WALLET_CORE_BUILD, 'CMakeCache.txt')):
     line = line.strip()
     if line == 'CODE_COVERAGE:BOOL=ON':
